@@ -27,7 +27,12 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: Node?, element: Ele
 }
 
 fun loadModel(document: Document) : PhysicalModel {
-    val physicalModel = PhysicalModel()
+    val rawName = document.documentElement.getAttribute("ref")
+
+    // TODO make it more robust
+    val nameInParens = rawName.substring(rawName.indexOf('(') + 1, rawName.indexOf(')'))
+
+    val physicalModel = PhysicalModel(nameInParens)
     document.documentElement.processAllNodes("concept") {
         val concept = Concept(it.getAttribute("id"),
                 it.getAttribute("name"))

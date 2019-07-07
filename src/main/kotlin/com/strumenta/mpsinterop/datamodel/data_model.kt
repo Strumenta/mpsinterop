@@ -109,7 +109,7 @@ class Node(val parent: Node?, val concept: Concept, val id: String) {
 
 }
 
-class Model {
+class Model(val name: String) {
     private val roots = LinkedList<Node>()
 
     val numberOfRoots: Int

@@ -9,12 +9,12 @@ import com.strumenta.mpsinterop.datamodel.Relation
  * Each concept is identified by an ID globally and by an index within a single mps file,
  * same is true for relations and properties.
  */
-class PhysicalModel : LanguageResolver {
+class PhysicalModel(name: String) : LanguageResolver {
     private val conceptsByIndex = HashMap<String, Concept>()
     private val conceptsByName = HashMap<String, Concept>()
     private val relationsByIndex = HashMap<String, Relation>()
     private val propertiesByIndex = HashMap<String, Property>()
-    val model = Model()
+    val model = Model(name)
 
     fun registerConcept(concept: Concept, index: String) {
         conceptsByIndex[index] = concept
