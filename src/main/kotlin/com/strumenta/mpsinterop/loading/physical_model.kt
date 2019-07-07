@@ -10,6 +10,9 @@ import com.strumenta.mpsinterop.datamodel.Relation
  * same is true for relations and properties.
  */
 class PhysicalModel(name: String) : LanguageResolver {
+    val name
+        get() = model.name
+
     private val conceptsByIndex = HashMap<String, Concept>()
     private val conceptsByName = HashMap<String, Concept>()
     private val relationsByIndex = HashMap<String, Relation>()

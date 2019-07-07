@@ -10,7 +10,9 @@ class MpsJarLoadingTest {
     fun loadConceptsStructure() {
         val inputStream = MpsFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.structure.jar")
         val languageRegistry = LanguageRegistry()
-        languageRegistry.loadJar(inputStream)
+        val models = languageRegistry.loadJar(inputStream)
+        assertEquals(3, models.size)
+        val structure = models.find { it.name == "jetbrains.mps.lang.structure.structure" }!!
     }
 
 }

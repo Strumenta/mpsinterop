@@ -30,7 +30,13 @@ fun loadModel(document: Document) : PhysicalModel {
     val rawName = document.documentElement.getAttribute("ref")
 
     // TODO make it more robust
-    val nameInParens = rawName.substring(rawName.indexOf('(') + 1, rawName.indexOf(')'))
+    var nameInParens = rawName.substring(rawName.indexOf('(') + 1, rawName.indexOf(')'))
+    if (nameInParens.lastIndexOf('/') != -1) {
+        nameInParens = nameInParens.substring(nameInParens.lastIndexOf('/') + 1, nameInParens.length)
+    }
+    if (nameInParens.lastIndexOf('@') != -1) {
+        nameInParens = nameInParens.substring(0, nameInParens.lastIndexOf('@'))
+    }
 
     val physicalModel = PhysicalModel(nameInParens)
     document.documentElement.processAllNodes("concept") {

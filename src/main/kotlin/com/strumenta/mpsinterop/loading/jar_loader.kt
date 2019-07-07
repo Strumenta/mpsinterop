@@ -6,18 +6,22 @@ import java.io.InputStream
 import java.util.jar.JarFile
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.*
 
 class LanguageRegistry {
-    fun loadJar(file: File) {
+
+    fun loadJar(file: File) : List<PhysicalModel> {
+        val models = LinkedList<PhysicalModel>()
         val jarFile = JarFile(file)
         val entries = jarFile.entries()
         while (entries.hasMoreElements()) {
             val entry = entries.nextElement()
             if (entry.name.endsWith(".mps")) {
                 val model = loadMpsModel(jarFile.getInputStream(entry))
-                println(model)
+                models.add(model)
             }
         }
+        return models
     }
 
     fun loadJar(inputStream: InputStream) = loadJar(dumpToTempFile(inputStream))
