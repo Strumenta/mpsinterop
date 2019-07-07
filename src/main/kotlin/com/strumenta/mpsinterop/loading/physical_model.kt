@@ -35,6 +35,8 @@ data class PhysicalRelation(val container: PhysicalConcept, val id: String, val 
 data class PhysicalProperty(val container: PhysicalConcept, val id: String, val name: String, val index: String)
 
 /**
+ * A model, as defined in a file.
+ *
  * Each concept is identified by an ID globally and by an index within a single mps file,
  * same is true for relations and properties.
  */
@@ -93,46 +95,35 @@ class PhysicalModel(val name: String) : LanguageResolver {
 class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: String) {
     val root: Boolean
         get() = parent == null
-    private val properties = java.util.HashMap<String, MutableList<String>>()
-    private val children = java.util.HashMap<String, MutableList<PhysicalNode>>()
-    private val references = java.util.HashMap<String, PhysicalNode>()
+    private val properties = java.util.HashMap<PhysicalProperty, MutableList<String>>()
+    private val children = java.util.HashMap<PhysicalRelation, MutableList<PhysicalNode>>()
+    private val references = java.util.HashMap<PhysicalRelation, PhysicalNode>()
 
     fun addChild(relation: PhysicalRelation, node: PhysicalNode) {
-//        if (relation.type != RelationType.CONTAINMENT) {
-//            throw IllegalArgumentException("The relation ${relation.name} should be of containment instead it is ${relation.type}" +
-//                    "")
-//        }
-        if (relation.name !in children) {
-            children[relation.name] = LinkedList()
+        if (relation !in children) {
+            children[relation] = LinkedList()
         }
-        children[relation.name]!!.add(node)
+        children[relation]!!.add(node)
     }
 
     fun addReference(relation: PhysicalRelation, node: PhysicalNode) {
-//        if (relation.type != RelationType.REFERENCE) {
-//            throw IllegalArgumentException("The relation ${relation.name} should be a reference instead it is ${relation.type}")
-//        }
-        references[relation.name] = node
+        references[relation] = node
     }
 
     fun addProperty(property: PhysicalProperty, propertyValue: String) {
-        if (property.name !in properties) {
-            properties[property.name] = LinkedList()
+        if (property !in properties) {
+            properties[property] = LinkedList()
         }
-        properties[property.name]!!.add(propertyValue)
+        properties[property]!!.add(propertyValue)
     }
 
     fun singlePropertyValue(property: PhysicalProperty) : String {
-        return properties[property.name]!![0]
+        return properties[property]!![0]
     }
 
-    fun singlePropertyValue(propertyName: String) : String {
-        return properties[propertyName]!![0]
-    }
+    fun children(relation: PhysicalRelation) = children[relation] ?: emptyList<PhysicalNode>()
 
-    fun children(relation: PhysicalRelation) = children[relation.name] ?: emptyList<PhysicalNode>()
-
-    fun reference(relation: PhysicalRelation) = references[relation.name]
+    fun reference(relation: PhysicalRelation) = references[relation]
 
     fun ancestor(condition: (PhysicalNode) -> Boolean ): PhysicalNode? {
         if (parent == null) {
