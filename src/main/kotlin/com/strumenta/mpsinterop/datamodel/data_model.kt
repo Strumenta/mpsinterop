@@ -5,12 +5,9 @@ import com.strumenta.mpsinterop.name
 import java.lang.IllegalArgumentException
 import java.util.*
 
-/**
- * Each concept is identified by an ID globally and by an index within a single mps file.
- */
 data class Concept(val id: String, val name: String) {
-    val properties = LinkedList<Property>()
-    val relations = LinkedList<Relation>()
+    private val properties = LinkedList<Property>()
+    private val relations = LinkedList<Relation>()
 
     fun addProperty(property: Property) {
         properties.add(property)
