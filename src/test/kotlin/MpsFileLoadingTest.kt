@@ -10,11 +10,11 @@ class MpsFileLoadingTest {
         val inputStream = MpsFileLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val model = loadMpsModel(inputStream)
 
-        assertEquals("Formats.structure", model.model.name)
+        assertEquals("Formats.structure", model.name)
 
-        assertEquals(36, model.model.numberOfRoots)
+        assertEquals(36, model.numberOfRoots)
 
-        val constraintNode = model.model.getRootByName("Constraint", model)
+        val constraintNode = model.getRootByName("Constraint", model)
         assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, constraintNode.concept.name)
         //assertEquals(constraintNode.singlePropertyValue())
         // TODO check it is abstract

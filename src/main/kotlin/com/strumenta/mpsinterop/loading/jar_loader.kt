@@ -19,12 +19,20 @@ class LanguageRegistry {
             if (entry.name.endsWith(".mps")) {
                 val model = loadMpsModel(jarFile.getInputStream(entry))
                 models.add(model)
+                processModel(model)
             }
         }
         return models
     }
 
     fun loadJar(inputStream: InputStream) = loadJar(dumpToTempFile(inputStream))
+
+    private fun processModel(physicalModel: PhysicalModel) {
+        //physicalModel.physicalConceptByName()
+        physicalModel.onRoots {
+            println(it.concept.name)
+        }
+    }
 }
 
 
