@@ -1,0 +1,69 @@
+package com.strumenta.mpsinterop.loading
+
+import com.strumenta.mpsinterop.datamodel.Concept
+import com.strumenta.mpsinterop.datamodel.Model
+import com.strumenta.mpsinterop.datamodel.Property
+import com.strumenta.mpsinterop.datamodel.Relation
+import org.w3c.dom.Document
+import org.w3c.dom.Element
+import org.w3c.dom.Node
+import java.io.ByteArrayInputStream
+import java.io.InputStream
+
+fun elementToModelNode(physicalModel: PhysicalModel, parent: Node?, element: Element) : Node {
+    val conceptIndex = element.getAttribute("concept")
+    val id = element.getAttribute("id")
+    val modelNode = Node(model, parent, physicalModel.conceptByIndex(conceptIndex), id)
+    element.processChildren("property") {
+        val value = it.getAttribute("value")
+        val property = model.propertyByIndex(it.getAttribute("role"))
+        modelNode.addProperty(property, value)
+    }
+    element.processChildren("node") {
+        val childModelNode = elementToModelNode(model, modelNode, it)
+        val role = model.roleByIndex(it.getAttribute("role"))
+        modelNode.addChild(role, childModelNode)
+    }
+    element.processChildren("ref") {
+        // TODO modelNode.addReference
+    }
+    return modelNode
+}
+
+fun loadModel(document: Document) : PhysicalModel {
+    val physicalModel = PhysicalModel()
+    document.documentElement.processAllNodes("concept") {
+        val concept = Concept(it.getAttribute("id"),
+                it.getAttribute("name"))
+        physicalModel.registerConcept(concept, it.getAttribute("index"))
+        it.processChildren("property") {
+            val property = Property(concept,
+                    it.getAttribute("id"),
+                    it.getAttribute("name"))
+            concept.addProperty(property)
+            physicalModel.registerProperty(property, it.getAttribute("index"))
+        }
+        it.processChildren("child") {
+            val relation = Relation(concept,
+                    it.getAttribute("id"),
+                    it.getAttribute("name"))
+            concept.addRelation(relation)
+            physicalModel.registerRelation(relation, it.getAttribute("index"))
+        }
+    }
+    document.documentElement.processChildren("node") {
+        val root = elementToModelNode(model, null, it)
+        physicalModel.model.addRoot(root)
+    }
+    return physicalModel
+}
+
+fun loadMpsModel(data: InputStream) : PhysicalModel {
+    val builderFactory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
+    val builder = builderFactory.newDocumentBuilder()
+
+    val document = builder.parse(data)
+    return loadModel(document)
+}
+
+fun loadMpsModel(data: ByteArray) = loadMpsModel(ByteArrayInputStream(data))
