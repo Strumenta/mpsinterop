@@ -1,27 +1,23 @@
 package com.strumenta.mpsinterop.loading
 
-import com.strumenta.mpsinterop.datamodel.Concept
-import com.strumenta.mpsinterop.datamodel.Model
-import com.strumenta.mpsinterop.datamodel.Property
-import com.strumenta.mpsinterop.datamodel.Relation
+import com.strumenta.mpsinterop.datamodel.*
 import org.w3c.dom.Document
 import org.w3c.dom.Element
-import org.w3c.dom.Node
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
 fun elementToModelNode(physicalModel: PhysicalModel, parent: Node?, element: Element) : Node {
     val conceptIndex = element.getAttribute("concept")
     val id = element.getAttribute("id")
-    val modelNode = Node(model, parent, physicalModel.conceptByIndex(conceptIndex), id)
+    val modelNode = Node(parent, physicalModel.conceptByIndex(conceptIndex), id)
     element.processChildren("property") {
         val value = it.getAttribute("value")
-        val property = model.propertyByIndex(it.getAttribute("role"))
+        val property = physicalModel.propertyByIndex(it.getAttribute("role"))
         modelNode.addProperty(property, value)
     }
     element.processChildren("node") {
-        val childModelNode = elementToModelNode(model, modelNode, it)
-        val role = model.roleByIndex(it.getAttribute("role"))
+        val childModelNode = elementToModelNode(physicalModel, modelNode, it)
+        val role = physicalModel.relationByIndex(it.getAttribute("role"))
         modelNode.addChild(role, childModelNode)
     }
     element.processChildren("ref") {
@@ -52,7 +48,7 @@ fun loadModel(document: Document) : PhysicalModel {
         }
     }
     document.documentElement.processChildren("node") {
-        val root = elementToModelNode(model, null, it)
+        val root = elementToModelNode(physicalModel, null, it)
         physicalModel.model.addRoot(root)
     }
     return physicalModel
