@@ -1,13 +1,5 @@
 package com.strumenta.mpsinterop.datamodel
 
-import com.strumenta.mpsinterop.loading.LanguageResolver
-import com.strumenta.mpsinterop.loading.PhysicalConcept
-import com.strumenta.mpsinterop.loading.PhysicalProperty
-import com.strumenta.mpsinterop.loading.PhysicalRelation
-import com.strumenta.mpsinterop.name
-import java.lang.IllegalArgumentException
-import java.util.*
-
 //data class Concept(val id: String, val name: String) {
 //    private val properties = LinkedList<Property>()
 //    private val relations = LinkedList<Relation>()

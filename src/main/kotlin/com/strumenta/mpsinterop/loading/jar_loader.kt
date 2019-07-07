@@ -1,11 +1,10 @@
 package com.strumenta.mpsinterop.loading
 
+import com.strumenta.mpsinterop.loading.loading.physicalmodel.PhysicalModel
 import java.io.File
-import java.io.FileInputStream
 import java.io.InputStream
 import java.util.jar.JarFile
 import java.io.FileOutputStream
-import java.io.IOException
 import java.util.*
 
 class LanguageRegistry {

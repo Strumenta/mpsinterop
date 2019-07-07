@@ -1,7 +1,6 @@
-package com.strumenta.mpsinterop
+package com.strumenta.mpsinterop.loading.loading.physicalmodel
 
 import com.strumenta.mpsinterop.loading.LanguageResolver
-import com.strumenta.mpsinterop.loading.PhysicalNode
 
 val INAMED_CONCEPT = "jetbrains.mps.lang.core.structure.INamedConcept"
 val NAME_PROPERTY = "name"

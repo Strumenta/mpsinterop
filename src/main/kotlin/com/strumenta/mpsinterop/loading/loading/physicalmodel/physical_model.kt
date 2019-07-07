@@ -1,6 +1,6 @@
-package com.strumenta.mpsinterop.loading
+package com.strumenta.mpsinterop.loading.loading.physicalmodel
 
-import com.strumenta.mpsinterop.name
+import com.strumenta.mpsinterop.loading.LanguageResolver
 import java.util.*
 import kotlin.collections.HashMap
 
