@@ -1,6 +1,6 @@
 package com.strumenta.mpsinterop.datamodel
 
-//data class Concept(val id: String, val name: String) {
+data class Concept(val id: String, val name: String) {
 //    private val properties = LinkedList<Property>()
 //    private val relations = LinkedList<Relation>()
 //
@@ -21,7 +21,7 @@ package com.strumenta.mpsinterop.datamodel
 //        return relations.find { it.name == name }!!
 //    }
 //
-//}
+}
 //
 //enum class RelationType {
 //    CONTAINMENT,
@@ -102,7 +102,7 @@ package com.strumenta.mpsinterop.datamodel
 //
 //}
 //
-//class Model(val name: String) {
+class Model(val name: String) {
 //    private val roots = LinkedList<Node>()
 //
 //    val numberOfRoots: Int
@@ -126,4 +126,4 @@ package com.strumenta.mpsinterop.datamodel
 //    fun getRootByName(name: String, languageResolver: LanguageResolver): Node {
 //        return roots.find { it.name(languageResolver) == name }!!
 //    }
-//}
+}

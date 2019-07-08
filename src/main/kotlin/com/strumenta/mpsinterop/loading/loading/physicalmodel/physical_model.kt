@@ -30,7 +30,13 @@ data class PhysicalConcept(val id: String, val name: String, val index: String) 
 
 }
 
-data class PhysicalRelation(val container: PhysicalConcept, val id: String, val name: String, val index: String)
+enum class RelationKind {
+    CONTAINMENT,
+    REFERENCE
+}
+
+data class PhysicalRelation(val container: PhysicalConcept, val id: String, val name: String, val index: String ,
+    val kind: RelationKind)
 
 data class PhysicalProperty(val container: PhysicalConcept, val id: String, val name: String, val index: String)
 
@@ -85,19 +91,27 @@ class PhysicalModel(val name: String) : LanguageResolver {
 
     fun conceptByIndex(index: String) : PhysicalConcept = conceptsByIndex[index]!!
 
-    fun relationByIndex(index: String) : PhysicalRelation = relationsByIndex[index]!!
+    fun relationByIndex(index: String) : PhysicalRelation = relationsByIndex[index]
+            ?: throw java.lang.IllegalArgumentException("Relation with index $index not found")
 
     fun propertyByIndex(index: String) : PhysicalProperty = propertiesByIndex[index]!!
 
     override fun physicalConceptByName(name: String): PhysicalConcept = conceptsByName[name]!!
 }
 
+interface ReferenceTarget
+
+data class InModelReferenceTarget(val nodeID: String) : ReferenceTarget
+data class OutsideModelReferenceTarget(val importIndex: String, val nodeIndex:String) : ReferenceTarget
+
+data class PhysicalReferenceValue(val target: ReferenceTarget, val resolve: String)
+
 class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: String) {
     val root: Boolean
         get() = parent == null
     private val properties = java.util.HashMap<PhysicalProperty, MutableList<String>>()
     private val children = java.util.HashMap<PhysicalRelation, MutableList<PhysicalNode>>()
-    private val references = java.util.HashMap<PhysicalRelation, PhysicalNode>()
+    private val references = java.util.HashMap<PhysicalRelation, PhysicalReferenceValue>()
 
     fun addChild(relation: PhysicalRelation, node: PhysicalNode) {
         if (relation !in children) {
@@ -106,7 +120,7 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         children[relation]!!.add(node)
     }
 
-    fun addReference(relation: PhysicalRelation, node: PhysicalNode) {
+    fun addReference(relation: PhysicalRelation, node: PhysicalReferenceValue) {
         references[relation] = node
     }
 
@@ -121,9 +135,27 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         return properties[property]!![0]
     }
 
+    fun singlePropertyValue(propertyName: String) : String {
+        val properties = properties.keys.filter { it.name == propertyName }
+        return when (properties.size) {
+            0 -> throw IllegalArgumentException("Unknown property name $propertyName")
+            1 -> singlePropertyValue(properties.first())
+            else -> throw IllegalArgumentException("Ambiguous property name $propertyName")
+        }
+    }
+
     fun children(relation: PhysicalRelation) = children[relation] ?: emptyList<PhysicalNode>()
 
     fun reference(relation: PhysicalRelation) = references[relation]
+
+    fun reference(relationName: String) : PhysicalReferenceValue? {
+        val rs = references.keys.filter { it.name == relationName }
+        return when (references.size) {
+            0 -> throw IllegalArgumentException("Unknown reference name $relationName. Known references: ${references.keys.joinToString(", ")}")
+            1 -> reference(rs.first())
+            else -> throw IllegalArgumentException("Ambiguous reference name $relationName")
+        }
+    }
 
     fun ancestor(condition: (PhysicalNode) -> Boolean ): PhysicalNode? {
         if (parent == null) {

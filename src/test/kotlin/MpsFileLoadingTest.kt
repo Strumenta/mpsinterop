@@ -1,7 +1,10 @@
 import com.strumenta.mpsinterop.loading.loading.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
 import com.strumenta.mpsinterop.loading.loadMpsModel
+import com.strumenta.mpsinterop.loading.loading.physicalmodel.OutsideModelReferenceTarget
+import com.strumenta.mpsinterop.loading.loading.physicalmodel.PhysicalReferenceValue
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class MpsFileLoadingTest {
 
@@ -15,10 +18,13 @@ class MpsFileLoadingTest {
         assertEquals(36, model.numberOfRoots)
 
         val constraintNode = model.getRootByName("Constraint", model)
+        assertEquals("6D8ZJLf0wUM", constraintNode.id)
         assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, constraintNode.concept.name)
-        //assertEquals(constraintNode.singlePropertyValue())
-        // TODO check it is abstract
-        // TODO check superclass
+        assertEquals("true", constraintNode.singlePropertyValue("abstract"))
+        val superConcept = constraintNode.reference("extends")
+        assertNotNull(superConcept)
+        assertEquals(PhysicalReferenceValue(OutsideModelReferenceTarget("tpck", "gw2VY9q"), "BaseConcept"), superConcept)
+        
         // TODO check it cannot be root
         // TODO check no properties
         // TODO check no references

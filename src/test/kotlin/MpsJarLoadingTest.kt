@@ -11,6 +11,7 @@ class MpsJarLoadingTest {
         val models = languageRegistry.loadJar(inputStream)
         assertEquals(3, models.size)
         val structure = models.find { it.name == "jetbrains.mps.lang.structure.structure" }!!
+        println(structure)
     }
 
 }
