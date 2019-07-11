@@ -1,26 +1,32 @@
 
 import com.strumenta.mpsinterop.loading.PhysicalToLogicalConverter
-import com.strumenta.mpsinterop.loading.loadJar
-import com.strumenta.mpsinterop.loading.loadMpsFile
+import com.strumenta.mpsinterop.loading.loadLanguageFromJar
 import com.strumenta.mpsinterop.loading.loadMpsModel
-import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
+import com.strumenta.mpsinterop.registries.LanguageRegistry
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class LogicalModelLoadingTest {
+class LanguageLoadingTest {
 
+    /**
+     * In this test we want to load the language from a given file and verify a certain concept looks as expected.
+     */
     @Test
-    fun loadLogicalModelOfConstraint() {
-        val physicalModelRegistry = PhysicalModelsRegistry()
-        val formatsStructurePhysicalModel = physicalModelRegistry.loadMpsFile(LogicalModelLoadingTest::class.java.getResourceAsStream("/formats-structure.mps"))
-        physicalModelRegistry.loadJar(MpsFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.structure.jar"))
+    fun loadConceptConstraint() {
+        val inputStream = LogicalModelLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
+        val languageRegistry = LanguageRegistry()
+        val language = languageRegistry.loadLanguageFromJar(inputStream)
+        val constraintConcept = TODO()
 
-        val converter = PhysicalToLogicalConverter(physicalModelRegistry)
-        val logicalModel = converter.toLogical(formatsStructurePhysicalModel)
 
-        assertEquals("Formats.structure", logicalModel.name)
-
-        assertEquals(36, logicalModel.numberOfRoots)
+//        val languageResolver = LanguageResolverCollector()
+//        languageResolver.loadJar(MpsFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.structure.jar"))
+//        val converter = PhysicalToLogicalConverter(languageResolver)
+//        val logicalModel = converter.toLogical(physicalModel)
+//
+//        assertEquals("Formats.structure", logicalModel.name)
+//
+//        assertEquals(36, physicalModel.numberOfRoots)
 //
 //        val constraintNode = logicalModel.getRootByName("Constraint")
 //        assertEquals("6D8ZJLf0wUM", constraintNode.id)

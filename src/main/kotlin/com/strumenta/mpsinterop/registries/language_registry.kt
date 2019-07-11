@@ -4,15 +4,15 @@ import com.strumenta.mpsinterop.logicalmodel.Language
 
 class LanguageRegistry {
 
+    private val languagesByName = HashMap<String, Language>()
+
     companion object {
         val DEFAULT = LanguageRegistry()
     }
 
-    operator fun get(name: String) {
-        TODO()
-    }
+    operator fun get(name: String) = languagesByName[name]
 
-    operator fun set(name: String, language: Language) {
-        TODO()
+    fun add(language: Language) {
+        languagesByName[language.name] = language
     }
 }

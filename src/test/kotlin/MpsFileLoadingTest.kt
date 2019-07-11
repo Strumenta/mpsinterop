@@ -17,7 +17,7 @@ class MpsFileLoadingTest {
 
         assertEquals(36, model.numberOfRoots)
 
-        val constraintNode = model.getRootByName("Constraint", model)
+        val constraintNode = model.getRootByName("Constraint")
         assertEquals("6D8ZJLf0wUM", constraintNode.id)
         assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, constraintNode.concept.name)
         assertEquals("true", constraintNode.singlePropertyValue("abstract"))

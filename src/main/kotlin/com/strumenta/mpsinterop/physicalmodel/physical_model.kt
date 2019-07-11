@@ -1,6 +1,6 @@
 package com.strumenta.mpsinterop.physicalmodel
 
-import com.strumenta.mpsinterop.loading.LanguageResolver
+import com.strumenta.mpsinterop.logicalmodel.Model
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -46,7 +46,7 @@ data class PhysicalProperty(val container: PhysicalConcept, val id: String, val 
  * Each concept is identified by an ID globally and by an index within a single mps file,
  * same is true for relations and properties.
  */
-class PhysicalModel(val name: String) : LanguageResolver {
+class PhysicalModel(val name: String){
 
     private val roots = LinkedList<PhysicalNode>()
 
@@ -57,6 +57,7 @@ class PhysicalModel(val name: String) : LanguageResolver {
         if (!root.root) {
             throw java.lang.IllegalArgumentException("The given node is not a root")
         }
+        root.modelOfWhichIsRoot = this
         roots.add(root)
     }
 
@@ -68,8 +69,8 @@ class PhysicalModel(val name: String) : LanguageResolver {
         roots.filter { it.concept == concept }.forEach { op(it) }
     }
 
-    fun getRootByName(name: String, languageResolver: LanguageResolver): PhysicalNode {
-        return roots.find { it.name(languageResolver) == name }!!
+    fun getRootByName(name: String): PhysicalNode {
+        return roots.find { it.name() == name }!!
     }
 
     private val conceptsByIndex = HashMap<String, PhysicalConcept>()
@@ -96,12 +97,24 @@ class PhysicalModel(val name: String) : LanguageResolver {
             ?: throw java.lang.IllegalArgumentException("Relation with index $index not found")
 
     fun propertyByIndex(index: String) : PhysicalProperty = propertiesByIndex[index]!!
-
-    override fun physicalConceptByName(name: String): PhysicalConcept? = conceptsByName[name]
-
-    override fun conceptDeclarationByName(name: String): PhysicalNode? {
-        TODO("not implemented $name") //To change body of created functions use File | Settings | File Templates.
+    fun getProperty(conceptName: String, propertyName: String): PhysicalProperty {
+        return conceptsByName[conceptName]!!.propertyByName(propertyName)
     }
+
+    fun conceptByName(conceptName: String): PhysicalConcept? {
+        return conceptsByName[conceptName]
+    }
+
+    fun allRoots(concept: PhysicalConcept): List<PhysicalNode> {
+        return roots.filter { it.concept == concept }
+    }
+
+
+//    override fun physicalConceptByName(name: String): PhysicalConcept? = conceptsByName[name]
+//
+//    override fun conceptDeclarationByName(name: String): PhysicalNode? {
+//        TODO("not implemented $name") //To change body of created functions use File | Settings | File Templates.
+//    }
 
 }
 
@@ -115,6 +128,9 @@ data class PhysicalReferenceValue(val target: ReferenceTarget, val resolve: Stri
 class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: String) {
     val root: Boolean
         get() = parent == null
+    internal var modelOfWhichIsRoot : PhysicalModel? = null
+    val model : PhysicalModel?
+        get() = if (root) modelOfWhichIsRoot else parent!!.model
     private val properties = java.util.HashMap<PhysicalProperty, MutableList<String>>()
     private val children = java.util.HashMap<PhysicalRelation, MutableList<PhysicalNode>>()
     private val references = java.util.HashMap<PhysicalRelation, PhysicalReferenceValue>()
