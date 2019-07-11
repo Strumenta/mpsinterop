@@ -4,6 +4,10 @@ import com.strumenta.mpsinterop.physicalmodel.INAMED_CONCEPT
 import com.strumenta.mpsinterop.physicalmodel.NAME_PROPERTY
 import java.util.*
 
+data class Language(val name: String) {
+    val concepts = LinkedList<Concept>()
+}
+
 data class Concept(val id: String, val name: String, val superConcept: Concept?, val implementedConcepts: List<Concept>) {
     fun findProperty(conceptName: String, propertyName: String): Property? {
         if (this.name == conceptName) {

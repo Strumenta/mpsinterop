@@ -12,6 +12,7 @@ class LogicalModelLoadingTest {
         val inputStream = LogicalModelLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val physicalModel = loadMpsModel(inputStream)
         val languageResolver = LanguageResolverCollector()
+        languageResolver.loadJar(MpsFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.structure.jar"))
         val converter = PhysicalToLogicalConverter(languageResolver)
         val logicalModel = converter.toLogical(physicalModel)
 

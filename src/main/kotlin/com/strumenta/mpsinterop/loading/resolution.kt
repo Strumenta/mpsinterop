@@ -6,10 +6,13 @@ import com.strumenta.mpsinterop.logicalmodel.Node
 import com.strumenta.mpsinterop.physicalmodel.PhysicalConcept
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
+import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
+import java.lang.RuntimeException
 import java.util.*
 import kotlin.collections.HashMap
 
-class PhysicalToLogicalConverter(val languageResolver: LanguageResolver) {
+class PhysicalToLogicalConverter(
+        val physicalModelsRegistry: PhysicalModelsRegistry = PhysicalModelsRegistry.DEFAULT) {
     private val convertedConcepts = HashMap<PhysicalConcept, Concept>()
     private val convertedNodes = HashMap<PhysicalNode, Node>()
 
@@ -31,7 +34,8 @@ class PhysicalToLogicalConverter(val languageResolver: LanguageResolver) {
 
     fun toLogical(physicalConcept: PhysicalConcept) : Concept {
         return convertedConcepts.computeIfAbsent(physicalConcept) { physicalConcept ->
-            val thisConceptDeclarationPhysical = languageResolver.conceptDeclarationByName(physicalConcept.name)!!
+            val thisConceptDeclarationPhysical =
+                    physicalModelsRegistry.findConceptDeclaration(physicalConcept.name) ?: throw RuntimeException("Concept declaration for ${physicalConcept.name} not found")
             val thisConceptDeclarationLogical = toLogical(thisConceptDeclarationPhysical)
 //            val thisConcept
 //            val superConcept = constraintNode.reference("extends")

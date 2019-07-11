@@ -1,36 +1,34 @@
 package com.strumenta.mpsinterop.loading
 
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
+import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.io.File
 import java.io.InputStream
 import java.util.jar.JarFile
 import java.io.FileOutputStream
 import java.util.*
 
-class LanguageRegistry {
-
-    fun loadJar(file: File) : List<PhysicalModel> {
-        val models = LinkedList<PhysicalModel>()
-        val jarFile = JarFile(file)
-        val entries = jarFile.entries()
-        while (entries.hasMoreElements()) {
-            val entry = entries.nextElement()
-            if (entry.name.endsWith(".mps")) {
-                val model = loadMpsModel(jarFile.getInputStream(entry))
-                models.add(model)
-                processModel(model)
-            }
+fun LanguageRegistry.loadJar(file: File) : List<PhysicalModel> {
+    val models = LinkedList<PhysicalModel>()
+    val jarFile = JarFile(file)
+    val entries = jarFile.entries()
+    while (entries.hasMoreElements()) {
+        val entry = entries.nextElement()
+        if (entry.name.endsWith(".mps")) {
+            val model = loadMpsModel(jarFile.getInputStream(entry))
+            models.add(model)
+            processModel(model)
         }
-        return models
     }
+    return models
+}
 
-    fun loadJar(inputStream: InputStream) = loadJar(dumpToTempFile(inputStream))
+fun LanguageRegistry.loadJar(inputStream: InputStream) = loadJar(dumpToTempFile(inputStream))
 
-    private fun processModel(physicalModel: PhysicalModel) {
-        //physicalModel.physicalConceptByName()
-        physicalModel.onRoots {
-            println(it.concept.name)
-        }
+private fun LanguageRegistry.processModel(physicalModel: PhysicalModel) {
+    physicalModel.onRoots {
+        println(it.concept.name)
+        TODO()
     }
 }
 
