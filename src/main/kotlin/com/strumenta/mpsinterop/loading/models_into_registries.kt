@@ -13,12 +13,14 @@ import java.util.*
 
 fun PhysicalModelsRegistry.loadMpsFile(file: File) : PhysicalModel {
     val model = loadMpsModel(FileInputStream(file))
+    this.add(model)
     return model
 }
 
 
 fun PhysicalModelsRegistry.loadMpsFile(inputStream: InputStream) : PhysicalModel {
     val model = loadMpsModel(inputStream)
+    this.add(model)
     return model
 }
 
@@ -31,21 +33,13 @@ fun PhysicalModelsRegistry.loadJar(file: File) : List<PhysicalModel> {
         if (entry.name.endsWith(".mps")) {
             val model = loadMpsModel(jarFile.getInputStream(entry))
             models.add(model)
-            processModel(model)
+            this.add(model)
         }
     }
     return models
 }
 
 fun PhysicalModelsRegistry.loadJar(inputStream: InputStream) = loadJar(dumpToTempFile(inputStream))
-
-private fun PhysicalModelsRegistry.processModel(physicalModel: PhysicalModel) {
-    physicalModel.onRoots {
-        println(it.concept.name)
-        this.add(physicalModel)
-    }
-}
-
 
 private fun dumpToTempFile(inputStream: InputStream): File {
     val tempFile = File.createTempFile("jar_file_from_input_stream", ".jar")
