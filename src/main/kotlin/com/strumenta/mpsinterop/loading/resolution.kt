@@ -2,13 +2,52 @@ package com.strumenta.mpsinterop.loading
 
 import com.strumenta.mpsinterop.logicalmodel.Concept
 import com.strumenta.mpsinterop.logicalmodel.Model
+import com.strumenta.mpsinterop.logicalmodel.Node
 import com.strumenta.mpsinterop.physicalmodel.PhysicalConcept
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
+import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
+import java.util.*
+import kotlin.collections.HashMap
 
-fun PhysicalModel.toModel() : Model {
-    TODO()
+class PhysicalToLogicalConverter(val languageResolver: LanguageResolver) {
+    private val convertedConcepts = HashMap<PhysicalConcept, Concept>()
+    private val convertedNodes = HashMap<PhysicalNode, Node>()
+
+    fun toLogical(physicalModel: PhysicalModel) : Model {
+        val logicalModel = Model(physicalModel.name)
+        physicalModel.onRoots { logicalModel.addRoot(this.toLogical(it)) }
+        return logicalModel
+    }
+
+    fun toLogical(physicalNode: PhysicalNode) : Node {
+        return convertedNodes.computeIfAbsent(physicalNode) { physicalNode ->
+            val logicalNode = Node(
+                    physicalNode.parent?.toLogical(this),
+                    this.toLogical(physicalNode.concept),
+                    physicalNode.id)
+            logicalNode
+        }
+    }
+
+    fun toLogical(physicalConcept: PhysicalConcept) : Concept {
+        return convertedConcepts.computeIfAbsent(physicalConcept) { physicalConcept ->
+            val thisConceptDeclarationPhysical = languageResolver.conceptDeclarationByName(physicalConcept.name)!!
+            val thisConceptDeclarationLogical = toLogical(thisConceptDeclarationPhysical)
+//            val thisConcept
+//            val superConcept = constraintNode.reference("extends")
+//            val implemented = LinkedList<Concept>()
+//            val logicalConcept = Concept(physicalConcept.id, physicalConcept.name,
+//                    superConcept, implemented)
+//            logicalConcept
+            loadConceptFromConceptDeclaration(thisConceptDeclarationLogical)
+        }
+    }
+
+    private fun loadConceptFromConceptDeclaration(conceptDeclaration: Node) : Concept {
+        TODO()
+    }
+
 }
 
-fun PhysicalConcept.toConcept() : Concept {
-    TODO()
-}
+fun PhysicalNode.toLogical(physicalToLogicalConverter: PhysicalToLogicalConverter) =
+        physicalToLogicalConverter.toLogical(this)

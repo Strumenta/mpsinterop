@@ -47,6 +47,7 @@ data class PhysicalProperty(val container: PhysicalConcept, val id: String, val 
  * same is true for relations and properties.
  */
 class PhysicalModel(val name: String) : LanguageResolver {
+
     private val roots = LinkedList<PhysicalNode>()
 
     val numberOfRoots: Int
@@ -96,7 +97,12 @@ class PhysicalModel(val name: String) : LanguageResolver {
 
     fun propertyByIndex(index: String) : PhysicalProperty = propertiesByIndex[index]!!
 
-    override fun physicalConceptByName(name: String): PhysicalConcept = conceptsByName[name]!!
+    override fun physicalConceptByName(name: String): PhysicalConcept? = conceptsByName[name]
+
+    override fun conceptDeclarationByName(name: String): PhysicalNode? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }
 
 interface ReferenceTarget

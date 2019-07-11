@@ -1,4 +1,4 @@
-import com.strumenta.mpsinterop.loading.loading.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
+import com.strumenta.mpsinterop.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
 import com.strumenta.mpsinterop.loading.loadMpsModel
 import com.strumenta.mpsinterop.physicalmodel.OutsideModelReferenceTarget
 import com.strumenta.mpsinterop.physicalmodel.PhysicalReferenceValue
@@ -9,7 +9,7 @@ import kotlin.test.assertNotNull
 class MpsFileLoadingTest {
 
     @Test
-    fun loadFormatsStructure() {
+    fun loadPhysicalModelOfConstraint() {
         val inputStream = MpsFileLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val model = loadMpsModel(inputStream)
 
