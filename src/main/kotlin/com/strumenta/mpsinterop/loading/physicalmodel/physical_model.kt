@@ -1,4 +1,4 @@
-package com.strumenta.mpsinterop.loading.loading.physicalmodel
+package com.strumenta.mpsinterop.loading.physicalmodel
 
 import com.strumenta.mpsinterop.loading.LanguageResolver
 import java.util.*
@@ -35,8 +35,8 @@ enum class RelationKind {
     REFERENCE
 }
 
-data class PhysicalRelation(val container: PhysicalConcept, val id: String, val name: String, val index: String ,
-    val kind: RelationKind)
+data class PhysicalRelation(val container: PhysicalConcept, val id: String, val name: String, val index: String,
+                            val kind: RelationKind)
 
 data class PhysicalProperty(val container: PhysicalConcept, val id: String, val name: String, val index: String)
 
@@ -138,7 +138,7 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     fun singlePropertyValue(propertyName: String) : String {
         val properties = properties.keys.filter { it.name == propertyName }
         return when (properties.size) {
-            0 -> throw IllegalArgumentException("Unknown property name $propertyName")
+            0 -> throw IllegalArgumentException("Unknown property name $propertyName. Known properties: $properties")
             1 -> singlePropertyValue(properties.first())
             else -> throw IllegalArgumentException("Ambiguous property name $propertyName")
         }

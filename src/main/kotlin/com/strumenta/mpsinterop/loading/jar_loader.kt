@@ -1,6 +1,6 @@
 package com.strumenta.mpsinterop.loading
 
-import com.strumenta.mpsinterop.loading.loading.physicalmodel.PhysicalModel
+import com.strumenta.mpsinterop.loading.physicalmodel.PhysicalModel
 import java.io.File
 import java.io.InputStream
 import java.util.jar.JarFile

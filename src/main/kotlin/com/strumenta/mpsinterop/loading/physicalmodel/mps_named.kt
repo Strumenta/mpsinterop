@@ -1,4 +1,4 @@
-package com.strumenta.mpsinterop.loading.loading.physicalmodel
+package com.strumenta.mpsinterop.loading.physicalmodel
 
 import com.strumenta.mpsinterop.loading.LanguageResolver
 

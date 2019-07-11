@@ -1,7 +1,7 @@
 import com.strumenta.mpsinterop.loading.loading.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
 import com.strumenta.mpsinterop.loading.loadMpsModel
-import com.strumenta.mpsinterop.loading.loading.physicalmodel.OutsideModelReferenceTarget
-import com.strumenta.mpsinterop.loading.loading.physicalmodel.PhysicalReferenceValue
+import com.strumenta.mpsinterop.loading.physicalmodel.OutsideModelReferenceTarget
+import com.strumenta.mpsinterop.loading.physicalmodel.PhysicalReferenceValue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -26,6 +26,9 @@ class MpsFileLoadingTest {
         assertEquals(PhysicalReferenceValue(OutsideModelReferenceTarget("tpck", "gw2VY9q"), "BaseConcept"), superConcept)
         
         // TODO check it cannot be root
+        // It is not present because it has the default value
+        //assertEquals("false", constraintNode.singlePropertyValue("rootable"))
+
         // TODO check no properties
         // TODO check no references
         // TODO check no children

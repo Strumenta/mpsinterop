@@ -1,6 +1,6 @@
 package com.strumenta.mpsinterop.loading
 
-import com.strumenta.mpsinterop.loading.loading.physicalmodel.*
+import com.strumenta.mpsinterop.loading.physicalmodel.*
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import java.io.ByteArrayInputStream
