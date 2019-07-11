@@ -3,6 +3,7 @@ import com.strumenta.mpsinterop.loading.PhysicalToLogicalConverter
 import com.strumenta.mpsinterop.loading.loadJar
 import com.strumenta.mpsinterop.loading.loadMpsFile
 import com.strumenta.mpsinterop.loading.loadMpsModel
+import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,11 +12,12 @@ class LogicalModelLoadingTest {
 
     @Test
     fun loadLogicalModelOfConstraint() {
+        val languageRegistry = LanguageRegistry()
         val physicalModelRegistry = PhysicalModelsRegistry()
         val formatsStructurePhysicalModel = physicalModelRegistry.loadMpsFile(LogicalModelLoadingTest::class.java.getResourceAsStream("/formats-structure.mps"))
         physicalModelRegistry.loadJar(MpsFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.structure.jar"))
 
-        val converter = PhysicalToLogicalConverter(physicalModelRegistry)
+        val converter = PhysicalToLogicalConverter(languageRegistry, physicalModelRegistry)
         val logicalModel = converter.toLogical(formatsStructurePhysicalModel)
 
         assertEquals("Formats.structure", logicalModel.name)

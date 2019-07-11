@@ -5,11 +5,34 @@ import com.strumenta.mpsinterop.physicalmodel.NAME_PROPERTY
 import java.util.*
 
 data class Language(val name: String) {
-    val concepts = LinkedList<Concept>()
+
+    fun add(concept: AbstractConcept) {
+        concepts.add(concept)
+        concept.language = this
+    }
+
+    val concepts = LinkedList<AbstractConcept>()
 }
 
-data class Concept(val id: String, val name: String, val superConcept: Concept?, val implementedConcepts: List<Concept>) {
-    fun findProperty(conceptName: String, propertyName: String): Property? {
+interface AbstractConcept {
+    abstract var language: Language?
+
+    fun findProperty(conceptName: String, propertyName: String): Property?
+}
+
+data class InterfaceConcept(val id: String, val name: String) : AbstractConcept {
+    override var language: Language? = null
+
+    override fun findProperty(conceptName: String, propertyName: String): Property? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+data class Concept(val id: String, val name: String, val superConcept: Concept?, val implementedConcepts: List<InterfaceConcept>) : AbstractConcept{
+    override var language: Language? = null
+
+    override fun findProperty(conceptName: String, propertyName: String): Property? {
         if (this.name == conceptName) {
             TODO()
         }
