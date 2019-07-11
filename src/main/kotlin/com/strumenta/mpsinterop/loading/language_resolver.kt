@@ -1,7 +1,7 @@
 package com.strumenta.mpsinterop.loading
 
-import com.strumenta.mpsinterop.datamodel.Concept
+import com.strumenta.mpsinterop.loading.loading.physicalmodel.PhysicalConcept
 
 interface LanguageResolver {
-    fun conceptByName(name: String): Concept
+    fun physicalConceptByName(name: String): PhysicalConcept
 }

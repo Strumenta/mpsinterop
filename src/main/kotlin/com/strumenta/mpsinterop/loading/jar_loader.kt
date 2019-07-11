@@ -1,11 +1,10 @@
 package com.strumenta.mpsinterop.loading
 
+import com.strumenta.mpsinterop.loading.loading.physicalmodel.PhysicalModel
 import java.io.File
-import java.io.FileInputStream
 import java.io.InputStream
 import java.util.jar.JarFile
 import java.io.FileOutputStream
-import java.io.IOException
 import java.util.*
 
 class LanguageRegistry {
@@ -19,12 +18,20 @@ class LanguageRegistry {
             if (entry.name.endsWith(".mps")) {
                 val model = loadMpsModel(jarFile.getInputStream(entry))
                 models.add(model)
+                processModel(model)
             }
         }
         return models
     }
 
     fun loadJar(inputStream: InputStream) = loadJar(dumpToTempFile(inputStream))
+
+    private fun processModel(physicalModel: PhysicalModel) {
+        //physicalModel.physicalConceptByName()
+        physicalModel.onRoots {
+            println(it.concept.name)
+        }
+    }
 }
 
 

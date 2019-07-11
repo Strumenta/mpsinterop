@@ -1,29 +1,50 @@
 package com.strumenta.mpsinterop.loading
 
-import com.strumenta.mpsinterop.datamodel.*
+import com.strumenta.mpsinterop.loading.loading.physicalmodel.*
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import java.io.ByteArrayInputStream
 import java.io.InputStream
+import java.lang.IllegalArgumentException
+import java.lang.RuntimeException
 
-fun elementToModelNode(physicalModel: PhysicalModel, parent: Node?, element: Element) : Node {
+fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, element: Element) : PhysicalNode {
     val conceptIndex = element.getAttribute("concept")
     val id = element.getAttribute("id")
-    val modelNode = Node(parent, physicalModel.conceptByIndex(conceptIndex), id)
-    element.processChildren("property") {
-        val value = it.getAttribute("value")
-        val property = physicalModel.propertyByIndex(it.getAttribute("role"))
-        modelNode.addProperty(property, value)
+    try {
+        val modelNode = PhysicalNode(parent, physicalModel.conceptByIndex(conceptIndex), id)
+        element.processChildren("property") {
+            val value = it.getAttribute("value")
+            val property = physicalModel.propertyByIndex(it.getAttribute("role"))
+            modelNode.addProperty(property, value)
+        }
+        element.processChildren("node") {
+            val childModelNode = elementToModelNode(physicalModel, modelNode, it)
+            val role = physicalModel.relationByIndex(it.getAttribute("role"))
+            modelNode.addChild(role, childModelNode)
+        }
+        element.processChildren("ref") {
+            val roleIndex = it.getAttribute("role")
+            val role = physicalModel.relationByIndex(roleIndex)
+            val target = when {
+                it.hasAttribute("to") -> {
+                    val to = it.getAttribute("to")
+                    val targetParts = to.split(":")
+                    if (targetParts.size != 2) {
+                        throw IllegalArgumentException("Illegal target: $to in reference with role index $roleIndex")
+                    }
+                    OutsideModelReferenceTarget(targetParts[0], targetParts[1])
+                }
+                it.hasAttribute("node") -> InModelReferenceTarget(element.getAttribute("node"))
+                else -> throw IllegalArgumentException("A reference should have either the to or node attributes")
+            }
+            val refValue = PhysicalReferenceValue(target, it.getAttribute("resolve"))
+            modelNode.addReference(role, refValue)
+        }
+        return modelNode
+    } catch (e : Exception) {
+        throw RuntimeException("Issue loading node with ID $id", e)
     }
-    element.processChildren("node") {
-        val childModelNode = elementToModelNode(physicalModel, modelNode, it)
-        val role = physicalModel.relationByIndex(it.getAttribute("role"))
-        modelNode.addChild(role, childModelNode)
-    }
-    element.processChildren("ref") {
-        // TODO modelNode.addReference
-    }
-    return modelNode
 }
 
 fun loadModel(document: Document) : PhysicalModel {
@@ -40,27 +61,38 @@ fun loadModel(document: Document) : PhysicalModel {
 
     val physicalModel = PhysicalModel(nameInParens)
     document.documentElement.processAllNodes("concept") {
-        val concept = Concept(it.getAttribute("id"),
-                it.getAttribute("name"))
-        physicalModel.registerConcept(concept, it.getAttribute("index"))
+        val concept = PhysicalConcept(it.getAttribute("id"),
+                it.getAttribute("name"), it.getAttribute("index"))
+        physicalModel.registerConcept(concept)
         it.processChildren("property") {
-            val property = Property(concept,
+            val property = PhysicalProperty(concept,
                     it.getAttribute("id"),
-                    it.getAttribute("name"))
+                    it.getAttribute("name"), it.getAttribute("index"))
             concept.addProperty(property)
-            physicalModel.registerProperty(property, it.getAttribute("index"))
+            physicalModel.registerProperty(property)
         }
         it.processChildren("child") {
-            val relation = Relation(concept,
+            val relation = PhysicalRelation(concept,
                     it.getAttribute("id"),
-                    it.getAttribute("name"))
+                    it.getAttribute("name"),
+                    it.getAttribute("index"),
+                    RelationKind.CONTAINMENT)
             concept.addRelation(relation)
-            physicalModel.registerRelation(relation, it.getAttribute("index"))
+            physicalModel.registerRelation(relation)
+        }
+        it.processChildren("reference") {
+            val relation = PhysicalRelation(concept,
+                    it.getAttribute("id"),
+                    it.getAttribute("name"),
+                    it.getAttribute("index"),
+                    RelationKind.REFERENCE)
+            concept.addRelation(relation)
+            physicalModel.registerRelation(relation)
         }
     }
     document.documentElement.processChildren("node") {
         val root = elementToModelNode(physicalModel, null, it)
-        physicalModel.model.addRoot(root)
+        physicalModel.addRoot(root)
     }
     return physicalModel
 }

@@ -1,6 +1,4 @@
-import com.strumenta.mpsinterop.CONCEPT_DECLARATION_CONCEPT_NAME
 import com.strumenta.mpsinterop.loading.LanguageRegistry
-import com.strumenta.mpsinterop.loading.loadMpsModel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -13,6 +11,7 @@ class MpsJarLoadingTest {
         val models = languageRegistry.loadJar(inputStream)
         assertEquals(3, models.size)
         val structure = models.find { it.name == "jetbrains.mps.lang.structure.structure" }!!
+        println(structure)
     }
 
 }
