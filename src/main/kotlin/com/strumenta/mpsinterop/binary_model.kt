@@ -15,6 +15,8 @@ private val REGISTRY_END = -0x5a5a5a5b
 private val STUB_NONE: Byte = 0x12
 private val STUB_ID: Byte = 0x13
 
+// see https://github.com/JetBrains/MPS/blob/4e050f99500d7781d3b0cc5756ec07f129dc3a54/core/persistence/source/jetbrains/mps/persistence/binary/BinaryPersistence.java
+
 class ModelInputStream(val inputStream: InputStream) {
     fun readInt() : Int {
         TODO()
