@@ -1,7 +1,7 @@
 import com.strumenta.mpsinterop.loading.loading.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
 import com.strumenta.mpsinterop.loading.loadMpsModel
-import com.strumenta.mpsinterop.loading.physicalmodel.OutsideModelReferenceTarget
-import com.strumenta.mpsinterop.loading.physicalmodel.PhysicalReferenceValue
+import com.strumenta.mpsinterop.physicalmodel.OutsideModelReferenceTarget
+import com.strumenta.mpsinterop.physicalmodel.PhysicalReferenceValue
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

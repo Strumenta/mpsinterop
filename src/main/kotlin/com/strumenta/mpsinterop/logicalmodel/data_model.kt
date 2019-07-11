@@ -1,4 +1,4 @@
-package com.strumenta.mpsinterop.datamodel
+package com.strumenta.mpsinterop.logicalmodel
 
 data class Concept(val id: String, val name: String) {
 //    private val properties = LinkedList<Property>()
