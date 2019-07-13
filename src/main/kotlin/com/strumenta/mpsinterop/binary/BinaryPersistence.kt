@@ -20,8 +20,6 @@ package com.strumenta.mpsinterop.binary
 
 import java.io.IOException;
 import java.util.*
-import jdk.vm.ci.sparc.SPARC.o2
-import jdk.vm.ci.sparc.SPARC.o1
 import java.util.HashMap
 import java.util.logging.LogManager
 
@@ -229,88 +227,88 @@ public final class BinaryPersistence(model: SModel) {
         val MODEL_SEPARATOR_CHAR = '.'
         val DYNAMIC_REFERENCE_ID = "^"
 
-        private var myModelRef: SModelReference
-        private var myModelByIx: Map<String, SModelReference>
-        private var myMaxImportIndex = 0
-        fun ReadHelper(modelRef: SModelReference): ??? {
-            myModelByIx = MapSequence.fromMap(HashMap<String, SModelReference>())
-            myModelRef = modelRef
-        }
-
-        fun addModelRef(index: String, modelRef: SModelReference) {
-            MapSequence.fromMap(myModelByIx).put(index, modelRef)
-        }
-
-        fun addImportToModel(model: SModel, index: String, modelUID: String?, version: Int, implicit: Boolean) {
-            if (modelUID == null) {
-                if (LOG.isEnabledFor(Level.ERROR)) {
-                    LOG.error("Error loading import element for index $index in $myModelRef")
-                }
-                return
-            }
-            val modelRef = VCSPersistenceUtil.createModelReference(modelUID)
-            val elem = SModel.ImportElement(modelRef, ++myMaxImportIndex, version)
-            if (implicit) {
-                model.getImplicitImportsSupport().addAdditionalModelVersion(elem)
-            } else {
-                model.addModelImport(elem)
-            }
-            addModelRef(index, modelRef)
-        }
-
-        fun getSModelReference(@NotNull ix: String?): SModelReference? {
-            return if (ix == null || ix.length == 0) myModelRef else MapSequence.fromMap(myModelByIx).get(ix)
-        }
-
-        @NotNull
-        fun readLink_internal(src: String?): Pair<Boolean, SNodeReference> {
-            // returns <true, xxx> - if src is Dynamic Reference
-            // [modelID.]nodeID | [modelID.]^
-            val result = Pair<Boolean, SNodeReference>(false, null)
-            if (src == null) {
-                return result
-            }
-            val dotIndex = src.indexOf(MODEL_SEPARATOR_CHAR.toInt())
-            val text = decode(src.substring(dotIndex + 1, src.length))
-            result.o1 = DYNAMIC_REFERENCE_ID == text
-            val modelRef = getSModelReference(if (dotIndex < 0) "" else src.substring(0, dotIndex))
-            val nodeId = if (result.o1) null else jetbrains.mps.smodel.SNodeId.fromString(text)
-            result.o2 = SNodePointer(modelRef, nodeId)
-            return result
-        }
-
-        fun readLinkId(src: String): SNodeReference {
-            // [modelID.]nodeID[:version] | [modelID.]^[:version]
-            return readLink_internal(src).o2
-        }
-
-        fun getStubConceptQualifiedName(type: String): String? {
-            val originalConcept = readType(type)
-            val lastDot = originalConcept.lastIndexOf('.')
-            return if (lastDot == -1) {
-                null
-            } else originalConcept.substring(0, lastDot + 1) + "Stub" + originalConcept.substring(lastDot + 1)
-        }
-
-        fun readType(s: String): String {
-            val ix = s.indexOf(MODEL_SEPARATOR_CHAR.toInt())
-            if (ix <= 0) {
-                // no model ID - fqName is here
+//        private var myModelRef: SModelReference
+//        private var myModelByIx: Map<String, SModelReference>
+//        private var myMaxImportIndex = 0
+//        fun ReadHelper(modelRef: SModelReference): ??? {
+//            myModelByIx = MapSequence.fromMap(HashMap<String, SModelReference>())
+//            myModelRef = modelRef
+//        }
+//
+//        fun addModelRef(index: String, modelRef: SModelReference) {
+//            MapSequence.fromMap(myModelByIx).put(index, modelRef)
+//        }
+//
+//        fun addImportToModel(model: SModel, index: String, modelUID: String?, version: Int, implicit: Boolean) {
+//            if (modelUID == null) {
 //                if (LOG.isEnabledFor(Level.ERROR)) {
-//                    LOG.error("Broken reference to type=$s in model $myModelRef")
+//                    LOG.error("Error loading import element for index $index in $myModelRef")
 //                }
-                return s.substring(ix + 1)
-            }
-            val modelRef = getSModelReference(s.substring(0, ix))
-            if (modelRef == null) {
-//                if (LOG.isEnabledFor(Level.ERROR)) {
-//                    LOG.error("couldn't create node '" + s.substring(ix + 1) + "' : import for index [" + s.substring(0, ix) + "] not found")
-//                }
-                return s.substring(ix + 1)
-            } else {
-                return modelRef.name.getLongName() + '.'.toString() + s.substring(ix + 1)
-            }
-        }
+//                return
+//            }
+//            val modelRef = VCSPersistenceUtil.createModelReference(modelUID)
+//            val elem = SModel.ImportElement(modelRef, ++myMaxImportIndex, version)
+//            if (implicit) {
+//                model.getImplicitImportsSupport().addAdditionalModelVersion(elem)
+//            } else {
+//                model.addModelImport(elem)
+//            }
+//            addModelRef(index, modelRef)
+//        }
+//
+//        fun getSModelReference(@NotNull ix: String?): SModelReference? {
+//            return if (ix == null || ix.length == 0) myModelRef else MapSequence.fromMap(myModelByIx).get(ix)
+//        }
+//
+//        @NotNull
+//        fun readLink_internal(src: String?): Pair<Boolean, SNodeReference> {
+//            // returns <true, xxx> - if src is Dynamic Reference
+//            // [modelID.]nodeID | [modelID.]^
+//            val result = Pair<Boolean, SNodeReference>(false, null)
+//            if (src == null) {
+//                return result
+//            }
+//            val dotIndex = src.indexOf(MODEL_SEPARATOR_CHAR.toInt())
+//            val text = decode(src.substring(dotIndex + 1, src.length))
+//            result.o1 = DYNAMIC_REFERENCE_ID == text
+//            val modelRef = getSModelReference(if (dotIndex < 0) "" else src.substring(0, dotIndex))
+//            val nodeId = if (result.o1) null else jetbrains.mps.smodel.SNodeId.fromString(text)
+//            result.o2 = SNodePointer(modelRef, nodeId)
+//            return result
+//        }
+//
+//        fun readLinkId(src: String): SNodeReference {
+//            // [modelID.]nodeID[:version] | [modelID.]^[:version]
+//            return readLink_internal(src).o2
+//        }
+//
+//        fun getStubConceptQualifiedName(type: String): String? {
+//            val originalConcept = readType(type)
+//            val lastDot = originalConcept.lastIndexOf('.')
+//            return if (lastDot == -1) {
+//                null
+//            } else originalConcept.substring(0, lastDot + 1) + "Stub" + originalConcept.substring(lastDot + 1)
+//        }
+//
+//        fun readType(s: String): String {
+//            val ix = s.indexOf(MODEL_SEPARATOR_CHAR.toInt())
+//            if (ix <= 0) {
+//                // no model ID - fqName is here
+////                if (LOG.isEnabledFor(Level.ERROR)) {
+////                    LOG.error("Broken reference to type=$s in model $myModelRef")
+////                }
+//                return s.substring(ix + 1)
+//            }
+//            val modelRef = getSModelReference(s.substring(0, ix))
+//            if (modelRef == null) {
+////                if (LOG.isEnabledFor(Level.ERROR)) {
+////                    LOG.error("couldn't create node '" + s.substring(ix + 1) + "' : import for index [" + s.substring(0, ix) + "] not found")
+////                }
+//                return s.substring(ix + 1)
+//            } else {
+//                return modelRef.name.getLongName() + '.'.toString() + s.substring(ix + 1)
+//            }
+//        }
 
         fun readRole(s: String): String {
             return s
@@ -468,48 +466,74 @@ public final class BinaryPersistence(model: SModel) {
 
         val rh = ReadHelper(myMetaInfoProvider)
         var langCount = mis.readShort().toInt()
+        println("langCount $langCount")
         while (langCount-- > 0) {
             val languageId = SLanguageId(mis.readUUID())
             val langName = mis.readString()
+            println("langName $langName")
 
-            rh.withLanguage(languageId, langName, langIndex++)
+            //rh.withLanguage(languageId, langName, langIndex++)
 //            //
-//            var conceptCount = mis.readShort().toInt()
-//            while (conceptCount-- > 0) {
-//                val conceptId = SConceptId(languageId, mis.readLong())
-//                val conceptName = NameUtil.conceptFQNameFromNamespaceAndShortName(langName, mis.readString())
-//                val flags = mis.readByte().toInt()
-//                val stubToken = mis.readByte().toInt()
-//                val stubId: SConceptId?
-//                if (stubToken == STUB_NONE) {
-//                    stubId = null
-//                } else {
-//                    assert(stubToken == STUB_ID)
-//                    stubId = SConceptId(languageId, mis.readLong())
-//                }
+            var conceptCount = mis.readShort().toInt()
+            println("conceptCount $conceptCount")
+            while (conceptCount-- > 0) {
+                val conceptId = SConceptId(languageId, mis.readLong())
+                println("conceptId $conceptId")
+                val conceptName = mis.readString()
+                println("  conceptName $conceptName")
+                val flags = mis.readByte().toInt()
+                println("  flags $flags")
+                val staticScopeValue = flags and 0x0f
+                val conceptKindValue = flags shr 4 and 0x0f
+                println("  staticScopeValue $staticScopeValue")
+                println("  conceptKindValue $conceptKindValue")
+                val stubToken = mis.readByte().toInt()
+                val stubId: SConceptId?
+                if (stubToken == STUB_NONE.toInt()) {
+                    stubId = null
+                } else {
+                    assert(stubToken == STUB_ID.toInt()) { "StubToken expected to be NONE ($STUB_NONE) or ID ($STUB_ID) instead it is $stubToken" }
+                    stubId = SConceptId(languageId, mis.readLong())
+                }
+
 //                rh.withConcept(conceptId, conceptName, StaticScope.values()[flags and 0x0f], ConceptKind.values()[flags shr 4 and 0x0f], stubId, conceptIndex++)
 //                //
-//                var propertyCount = mis.readShort().toInt()
-//                while (propertyCount-- > 0) {
-//                    rh.property(SPropertyId(conceptId, mis.readLong()), mis.readString(), propertyIndex++)
-//                }
+                conceptIndex++
+                var propertyCount = mis.readShort().toInt()
+                println("  propertyCount $propertyCount")
+                while (propertyCount-- > 0) {
+                    val propertyId = mis.readLong()
+                    val propertyName = mis.readString()
+                    //rh.property(SPropertyId(conceptId, mis.readLong()), mis.readString(), propertyIndex++)
+                    propertyIndex++
+                }
 //                //
-//                var associationCount = mis.readShort().toInt()
-//                while (associationCount-- > 0) {
+                var associationCount = mis.readShort().toInt()
+                println("  associationCount $associationCount")
+                while (associationCount-- > 0) {
+                    val id = mis.readLong()
+                    val name = mis.readString()
+                    println("     $id $name")
+                    associationIndex++
 //                    rh.association(SReferenceLinkId(conceptId, mis.readLong()), mis.readString(), associationIndex++)
-//                }
+                }
 //                //
-//                var aggregationCount = mis.readShort().toInt()
-//                while (aggregationCount-- > 0) {
+                var aggregationCount = mis.readShort().toInt()
+                println("  aggregationCount $aggregationCount")
+                while (aggregationCount-- > 0) {
+                    val id = mis.readLong()
+                    val name = mis.readString()
+                    println("     $id $name")
+                    aggregationIndex++
 //                    rh.aggregation(SContainmentLinkId(conceptId, mis.readLong()), mis.readString(), mis.readBoolean(), aggregationIndex++)
-//                }
-//            }
+                }
+            }
         }
         assertSyncToken(mis, REGISTRY_END)
         return rh
     }
 
-    class SConceptId(languageId: SLanguageId, readLong: Long) {
+    data class SConceptId(val languageId: SLanguageId, val readLong: Long) {
 
     }
 //
@@ -612,7 +636,6 @@ public final class BinaryPersistence(model: SModel) {
 //        return result.getModel()
 //    }
 
-    @Throws(IOException::class)
     private fun assertSyncToken(`is`: ModelInputStream, token: Int) {
         if (`is`.readInt() != token) {
             throw IOException("bad stream, no sync token")
@@ -620,11 +643,15 @@ public final class BinaryPersistence(model: SModel) {
     }
 }
 
-class SLanguageId(readUUID: UUID) {
+data class SLanguageId(val uuid: UUID) {
 
 }
 
 
 class SNodeReference {
+
+}
+
+class SConceptId(languageId: SLanguageId, idValue: Long) {
 
 }
