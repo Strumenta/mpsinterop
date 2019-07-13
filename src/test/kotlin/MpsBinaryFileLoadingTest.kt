@@ -1,11 +1,5 @@
-import com.strumenta.mpsinterop.loadMpsModelFromBinaryFile
-import com.strumenta.mpsinterop.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
-import com.strumenta.mpsinterop.loading.loadMpsModel
-import com.strumenta.mpsinterop.physicalmodel.OutsideModelReferenceTarget
-import com.strumenta.mpsinterop.physicalmodel.PhysicalReferenceValue
+import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class MpsBinaryFileLoadingTest {
 

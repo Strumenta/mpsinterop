@@ -1,4 +1,4 @@
-package com.strumenta.mpsinterop
+package com.strumenta.mpsinterop.binary
 
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import java.util.UUID
@@ -7,7 +7,6 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.io.IOException
 import java.sql.Types.REF
-import java.util.Collections.unmodifiableMap
 
 // From ModelPersistence
 
@@ -491,8 +490,20 @@ class SModelHeader {
 
 fun loadMpsModelFromBinaryFile(inputStream: InputStream) : PhysicalModel {
     val mis = ModelInputStream(inputStream)
-    loadHeader(mis)
+    val modelHeader = loadHeader(mis)
+    val model = SModel(modelHeader.getModelReference(), modelHeader)
+    val bp = BinaryPersistence(/*if (mmiProvider == null) RegularMetaModelInfo() else mmiProvider,*/ model)
+    val rh = bp.loadModelProperties(mis)
+//    rh.requestInterfaceOnly(interfaceOnly)
+//
+//    val reader = NodesReader(modelHeader.getModelReference(), mis, rh)
+//    reader.readNodesInto(model)
+//    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
     TODO()
+}
+
+class SModel(modelReference: SModelReference?, modelHeader: SModelHeader) {
+
 }
 
 @Throws(IOException::class)
@@ -526,6 +537,12 @@ private fun loadHeader(mis: ModelInputStream): SModelHeader {
     } else {
         mis.reset()
     }
-//    assertSyncToken(`is`, HEADER_END)
+    assertSyncToken(mis, HEADER_END)
     return result
+}
+
+private fun assertSyncToken(`is`: ModelInputStream, token: Int) {
+    if (`is`.readInt() != token) {
+        throw IOException("bad stream, no sync token")
+    }
 }
