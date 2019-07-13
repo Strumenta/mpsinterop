@@ -52,9 +52,9 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
 //     * Read nodes and register them as roots into supplied ModelData
 //     */
 //    @Throws(IOException::class)
-    fun readNodesInto(modelData: SModelData) {
+    fun readNodesInto(modelData: SModel) {
         for (r in readChildren(null)) {
-            modelData.addRootNode(r)
+            //modelData.addRootNode(r)
         }
     }
 //
@@ -65,6 +65,7 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
 //    @Throws(IOException::class)
     fun readChildren(parent: SNode?): List<SNode> {
         var size = myIn.readInt()
+        println("  readChildren, size $size")
         val rv = ArrayList<SNode>(size)
         while (size-- > 0) {
             rv.add(readNode(parent))
@@ -103,20 +104,22 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
         val c = myIn.readConcept()
         val nid = myIn.readNodeId()
         val link = myIn.readContainmentLink()
-        val node = jetbrains.mps.smodel.SNode(c, nid)
-        if (parent != null && link != null) {
-            parent!!.addChild(link, node)
-        }
-        return node
+//        val node = jetbrains.mps.smodel.SNode(c, nid)
+//        if (parent != null && link != null) {
+//            parent!!.addChild(link, node)
+//        }
+//        return node
+        TODO()
     }
 //
 //    @Throws(IOException::class)
     protected fun readProperties(node: SNode) {
         var properties = myIn.readShort().toInt()
+        println("  properties $properties")
         while (properties-- > 0) {
             val property = myIn.readProperty()
             val value = myIn.readString()
-            node.setProperty(property, value)
+            //node.setProperty(property, value)
         }
     }
 
@@ -124,48 +127,49 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
     protected fun readReferences(node: SNode) {
         var refs = myIn.readShort().toInt()
         while (refs-- > 0) {
-            readReference(myIn.readReferenceLink(), node)
+            readReference(myIn.readReferenceLink()!!, node)
         }
     }
 //
 //    @Throws(IOException::class)
-    protected fun readReference(sref: SReferenceLink, node: SNode): SReference {
+    protected fun readReference(sref: SReferenceLink, node: SNode)/*: SReference*/ {
         val kind = myIn.readByte().toInt()
-        assert(kind >= 1 && kind <= 3)
-        val targetNodeId = if (kind == 1) myIn.readNodeId() else null
-        val origin = if (kind == 3) DynamicReferenceOrigin(myIn.readNodePointer(), myIn.readNodePointer()) else null
-        val targetModelKind = myIn.readByte().toInt()
-        assert(targetModelKind == BareNodeWriter.REF_OTHER_MODEL || targetModelKind == BareNodeWriter.REF_THIS_MODEL)
-        val modelRef: SModelReference?
-        if (targetModelKind == BareNodeWriter.REF_OTHER_MODEL) {
-            modelRef = myIn.readModelReference()
-            externalNodeReferenceRead(modelRef, targetNodeId)
-        } else {
-            modelRef = myModelReference
-            localNodeReferenceRead(targetNodeId)
-        }
-        val resolveInfo = myIn.readString()
+        TODO()
+//        assert(kind >= 1 && kind <= 3)
+//        val targetNodeId = if (kind == 1) myIn.readNodeId() else null
+//        val origin = if (kind == 3) DynamicReferenceOrigin(myIn.readNodePointer(), myIn.readNodePointer()) else null
+//        val targetModelKind = myIn.readByte().toInt()
+//        assert(targetModelKind == BareNodeWriter.REF_OTHER_MODEL || targetModelKind == BareNodeWriter.REF_THIS_MODEL)
+//        val modelRef: SModelReference?
+//        if (targetModelKind == BareNodeWriter.REF_OTHER_MODEL) {
+//            modelRef = myIn.readModelReference()
+//            externalNodeReferenceRead(modelRef, targetNodeId)
+//        } else {
+//            modelRef = myModelReference
+//            localNodeReferenceRead(targetNodeId)
+//        }
+//        val resolveInfo = myIn.readString()
         if (kind == 1) {
-            val reference = StaticReference(
-                    sref,
-                    node,
-                    modelRef,
-                    targetNodeId,
-                    resolveInfo)
-            node.setReference(reference.getLink(), reference)
-            return reference
+//            val reference = StaticReference(
+//                    sref,
+//                    node,
+//                    modelRef,
+//                    targetNodeId,
+//                    resolveInfo)
+            //node.setReference(reference.getLink(), reference)
+            //return reference
         } else
             if (kind == 2 || kind == 3) {
-                val reference = DynamicReference(
-                        sref,
-                        node,
-                        modelRef,
-                        resolveInfo)
-                if (origin != null) {
-                    reference.setOrigin(origin)
-                }
-                node.setReference(sref, reference)
-                return reference
+//                val reference = DynamicReference(
+//                        sref,
+//                        node,
+//                        modelRef,
+//                        resolveInfo)
+//                if (origin != null) {
+//                    reference.setOrigin(origin)
+//                }
+//                node.setReference(sref, reference)
+                //return reference
             } else {
                 throw IOException("unknown reference type")
             }
@@ -180,23 +184,23 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
 //    }
 //
 //    @Throws(IOException::class)
-//    protected fun readUserObjects(node: SNode) {
-//        val userObjectCount = myIn.readShort().toInt()
-//        var i = 0
-//        while (i < userObjectCount) {
-//            val key = readUserObject()
-//            val value = readUserObject()
-//            if (key != null && value != null) {
-//                node.putUserObject(key, value)
-//            }
-//            i += 2
-//        }
-//    }
+    protected fun readUserObjects(node: SNode) {
+        val userObjectCount = myIn.readShort().toInt()
+        var i = 0
+        while (i < userObjectCount) {
+            val key = readUserObject()
+            val value = readUserObject()
+            if (key != null && value != null) {
+                //node.putUserObject(key, value)
+            }
+            i += 2
+        }
+    }
 //
 //    @Throws(IOException::class)
-//    private fun readUserObject(): Any? {
-//        val id = myIn.readByte().toInt()
-//        when (id) {
+    private fun readUserObject(): Any? {
+        val id = myIn.readByte().toInt()
+        when (id) {
 //            BareNodeWriter.USER_NODE_POINTER -> return myIn.readNodePointer()
 //            BareNodeWriter.USER_STRING -> return myIn.readString()
 //            BareNodeWriter.USER_NULL -> return null
@@ -213,7 +217,8 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
 //                }
 //
 //            }
-//        }
-//        throw IOException("Could not read user object")
-//    }
+            else -> TODO()
+        }
+        throw IOException("Could not read user object")
+    }
 }
