@@ -83,7 +83,7 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
     private val myModelRefs = ArrayList<SModelReference>(1024)
     private val myModuleRefs = ArrayList<SModuleReference>(128)
 //    private val myLanguages = ArrayList<SLanguage>(128)
-//    private val myConcepts = ArrayList<SConcept>(128)
+    private val myConcepts = ArrayList<SConcept>(128)
 //    private val myProperties = ArrayList<SProperty>(128)
 //    private val myAssociations = ArrayList<SReferenceLink>(128)
 //    private val myAggregations = ArrayList<SContainmentLink>(128)
@@ -250,21 +250,21 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
 //    }
 //
 //    @Throws(IOException::class)
-//    fun readConcept(): SConcept? {
-//        val b = readByte()
-//        if (b == NULL) {
-//            return null
-//        }
-//        if (b == CONCEPT_INDEX) {
-//            return myConcepts[readShort()]
-//        }
-//        if (b != CONCEPT) {
-//            throw IOException(Integer.toHexString(b.toInt()))
-//        }
-//        val c = MetaAdapterFactory.getConcept(readLong(), readLong(), readLong(), readString())
-//        myConcepts.add(c)
-//        return c
-//    }
+    fun readConcept(): SConcept? {
+        val b = readByte()
+        if (b == NULL) {
+            return null
+        }
+        if (b == CONCEPT_INDEX) {
+            return myConcepts[readShort()]
+        }
+        if (b != CONCEPT) {
+            throw IOException(Integer.toHexString(b.toInt()))
+        }
+        val c = MetaAdapterFactory.getConcept(readLong(), readLong(), readLong(), readString())
+        myConcepts.add(c)
+        return c
+    }
 //
 //    @Throws(IOException::class)
 //    fun readProperty(): SProperty? {
@@ -337,16 +337,16 @@ class IntegerSModelId(val id: Int) : SModelId() {
 
 }
 
-class ModuleId {
+open class ModuleId {
     companion object {
-        fun regular(uuid: UUID) : ModuleId {
-            TODO()
-        }
+        fun regular(uuid: UUID) : ModuleId = RegularModuleId(uuid)
         fun foreign(id: String) : ModuleId {
             TODO()
         }
     }
 }
+
+internal class RegularModuleId(val uuid: UUID) : ModuleId()
 
 data class SModelReference(val moduleRef : SModuleReference?, val id: SModelId, val name: String) {
 
@@ -496,8 +496,8 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream) : PhysicalModel {
     val rh = bp.loadModelProperties(mis)
 //    rh.requestInterfaceOnly(interfaceOnly)
 //
-//    val reader = NodesReader(modelHeader.getModelReference(), mis, rh)
-//    reader.readNodesInto(model)
+    val reader = NodesReader(modelHeader.getModelReference()!!, mis, rh)
+    reader.readNodesInto(model)
 //    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
     TODO()
 }

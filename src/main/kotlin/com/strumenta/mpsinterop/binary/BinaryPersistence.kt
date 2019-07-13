@@ -327,22 +327,25 @@ public final class BinaryPersistence(model: SModel) {
     fun loadModelProperties(mis: ModelInputStream): ReadHelper {
         val readHelper = loadRegistry(mis)
 //
-//        loadUsedLanguages(mis)
+        loadUsedLanguages(mis)
 //
-//        for (ref in loadModuleRefList(mis)) {
-//            // FIXME add temporary code to read both module ref and SLanguage in 3.4 (write SLangugae, read both)
-//            SModelLegacy(myModelData).addEngagedOnGenerationLanguage(ref)
+        for (ref in loadModuleRefList(mis)) {
+            // FIXME add temporary code to read both module ref and SLanguage in 3.4 (write SLangugae, read both)
+            //SModelLegacy(myModelData).addEngagedOnGenerationLanguage(ref)
+        }
+        for (ref in loadModuleRefList(mis)) {
+            //myModelData.addDevKit(ref)
+        }
+
+        loadImports(mis)
+//        for (imp in loadImports(mis)) {
+//            //myModelData.addModelImport(imp)
 //        }
-//        for (ref in loadModuleRefList(mis)) {
-//            myModelData.addDevKit(ref)
-//        }
+
+        assertSyncToken(mis, MODEL_START)
 //
-//        for (imp in loadImports(mis)) myModelData.addModelImport(imp)
-//
-//        assertSyncToken(mis, MODEL_START)
-//
-//        return readHelper
-        TODO()
+        return readHelper
+//        TODO()
     }
 //
 //    @Throws(IOException::class)
@@ -523,6 +526,7 @@ public final class BinaryPersistence(model: SModel) {
                 while (aggregationCount-- > 0) {
                     val id = mis.readLong()
                     val name = mis.readString()
+                    val b = mis.readBoolean()
                     println("     $id $name")
                     aggregationIndex++
 //                    rh.aggregation(SContainmentLinkId(conceptId, mis.readLong()), mis.readString(), mis.readBoolean(), aggregationIndex++)
@@ -549,15 +553,15 @@ public final class BinaryPersistence(model: SModel) {
 //    }
 //
 //    @Throws(IOException::class)
-//    private fun loadUsedLanguages(`is`: ModelInputStream) {
-//        val size = `is`.readShort().toInt()
-//        for (i in 0 until size) {
-//            val id = SLanguageId(`is`.readUUID())
-//            val name = `is`.readString()
-//            val l = MetaAdapterFactory.getLanguage(id, name)
-//            myModelData.addLanguage(l)
-//        }
-//    }
+    private fun loadUsedLanguages(`is`: ModelInputStream) {
+        val size = `is`.readShort().toInt()
+        for (i in 0 until size) {
+            val id = SLanguageId(`is`.readUUID())
+            val name = `is`.readString()
+            //val l = MetaAdapterFactory.getLanguage(id, name)
+            //myModelData.addLanguage(l)
+        }
+    }
 //
 //    @Throws(IOException::class)
 //    private fun saveModuleRefList(refs: Collection<SModuleReference>, os: ModelOutputStream) {
@@ -568,14 +572,14 @@ public final class BinaryPersistence(model: SModel) {
 //    }
 //
 //    @Throws(IOException::class)
-//    private fun loadModuleRefList(`is`: ModelInputStream): Collection<SModuleReference> {
-//        val size = `is`.readShort().toInt()
-//        val result = ArrayList<SModuleReference>(size)
-//        for (i in 0 until size) {
-//            result.add(`is`.readModuleReference())
-//        }
-//        return result
-//    }
+    private fun loadModuleRefList(`is`: ModelInputStream): Collection<SModuleReference> {
+        val size = `is`.readShort().toInt()
+        val result = ArrayList<SModuleReference>(size)
+        for (i in 0 until size) {
+            result.add(`is`.readModuleReference()!!)
+        }
+        return result
+    }
 //
 //    @Throws(IOException::class)
 //    private fun saveImports(elements: Collection<ImportElement>, os: ModelOutputStream) {
@@ -587,15 +591,16 @@ public final class BinaryPersistence(model: SModel) {
 //    }
 //
 //    @Throws(IOException::class)
-//    private fun loadImports(`is`: ModelInputStream): List<ImportElement> {
-//        val size = `is`.readInt()
-//        val result = ArrayList<ImportElement>()
-//        for (i in 0 until size) {
-//            val ref = `is`.readModelReference()
-//            result.add(ImportElement(ref, -1, `is`.readInt()))
-//        }
-//        return result
-//    }
+    private fun loadImports(`is`: ModelInputStream)/*: List<ImportElement>*/ {
+        val size = `is`.readInt()
+        //val result = ArrayList<ImportElement>()
+        for (i in 0 until size) {
+            val ref = `is`.readModelReference()
+            val i = `is`.readInt()
+            //result.add(ImportElement(ref, -1, `is`.readInt()))
+        }
+        //return result
+    }
 //
 //    @Throws(IOException::class)
 //    fun index(content: InputStream, consumer: Callback) {
