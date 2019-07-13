@@ -1,6 +1,47 @@
-package com.strumenta.mpsinterop.datamodel
+package com.strumenta.mpsinterop.logicalmodel
 
-data class Concept(val id: String, val name: String) {
+import com.strumenta.mpsinterop.physicalmodel.INAMED_CONCEPT
+import com.strumenta.mpsinterop.physicalmodel.NAME_PROPERTY
+import java.util.*
+
+data class Language(val name: String) {
+
+    fun add(concept: AbstractConcept) {
+        concepts.add(concept)
+        concept.language = this
+    }
+
+    val concepts = LinkedList<AbstractConcept>()
+}
+
+interface AbstractConcept {
+    abstract var language: Language?
+
+    fun findProperty(conceptName: String, propertyName: String): Property?
+}
+
+data class InterfaceConcept(val id: String, val name: String) : AbstractConcept {
+    override var language: Language? = null
+
+    override fun findProperty(conceptName: String, propertyName: String): Property? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+data class Concept(val id: String, val name: String, val superConcept: Concept?, val implementedConcepts: List<InterfaceConcept>) : AbstractConcept{
+    override var language: Language? = null
+
+    override fun findProperty(conceptName: String, propertyName: String): Property? {
+        if (this.name == conceptName) {
+            TODO()
+        }
+        val prop = this.superConcept?.findProperty(conceptName, propertyName)
+        if (prop != null) {
+            return prop
+        }
+        return this.implementedConcepts.map { it.findProperty(conceptName, propertyName) }.find { it != null }
+    }
 //    private val properties = LinkedList<Property>()
 //    private val relations = LinkedList<Relation>()
 //
@@ -44,11 +85,14 @@ data class Concept(val id: String, val name: String) {
 //    }
 //}
 //
-//data class Property(val container: Concept, val id: String, val name: String)
-//
-//class Node(val parent: Node?, val concept: Concept, val id: String) {
-//    val root: Boolean
-//        get() = parent == null
+
+interface PropertyType
+
+data class Property(val container: Concept, val id: String, val name: String, val type: PropertyType)
+
+class Node(val parent: Node?, val concept: Concept, val id: String) {
+    val root: Boolean
+        get() = parent == null
 //    private val properties = HashMap<String, MutableList<String>>()
 //    private val children = HashMap<String, MutableList<Node>>()
 //    private val references = HashMap<String, Node>()
@@ -100,30 +144,45 @@ data class Concept(val id: String, val name: String) {
 //        return parent.ancestor(condition)
 //    }
 //
-//}
+
+    fun singlePropertyValue(conceptName: String, propertyName: String) : String? {
+        val property = this.concept.findProperty(conceptName, propertyName)
+
+        if (property == null) {
+            throw java.lang.IllegalArgumentException("This node has not the property $conceptName/$propertyName")
+        }
+
+        // We should find the property definition first
+        TODO()
+    }
+}
 //
 class Model(val name: String) {
-//    private val roots = LinkedList<Node>()
-//
-//    val numberOfRoots: Int
-//        get() = this.roots.size
-//
-//    fun addRoot(root: Node) {
-//        if (!root.root) {
-//            throw IllegalArgumentException("The given node is not a root")
-//        }
-//        roots.add(root)
-//    }
-//
-//    fun onRoots(op: (Node)->Unit) {
-//        roots.forEach { op(it) }
-//    }
-//
-//    fun onRoots(concept: Concept, op: (Node)->Unit) {
-//        roots.filter { it.concept == concept }.forEach { op(it) }
-//    }
-//
-//    fun getRootByName(name: String, languageResolver: LanguageResolver): Node {
-//        return roots.find { it.name(languageResolver) == name }!!
-//    }
+    private val roots = LinkedList<Node>()
+
+    val numberOfRoots: Int
+        get() = this.roots.size
+
+    fun addRoot(root: Node) {
+        if (!root.root) {
+            throw IllegalArgumentException("The given node is not a root")
+        }
+        roots.add(root)
+    }
+
+    fun onRoots(op: (Node)->Unit) {
+        roots.forEach { op(it) }
+    }
+
+    fun onRoots(concept: Concept, op: (Node)->Unit) {
+        roots.filter { it.concept == concept }.forEach { op(it) }
+    }
+
+    fun getRootByName(name: String): Node {
+        return roots.find { it.name() == name }!!
+    }
+}
+
+fun Node.name() : String? {
+    return singlePropertyValue(INAMED_CONCEPT, NAME_PROPERTY)
 }

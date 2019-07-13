@@ -1,4 +1,4 @@
-package com.strumenta.mpsinterop.loading
+package com.strumenta.mpsinterop.utils
 
 import org.w3c.dom.Element
 
