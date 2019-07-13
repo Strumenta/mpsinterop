@@ -3,8 +3,29 @@ package com.strumenta.mpsinterop
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import java.util.UUID
 import java.io.*
-import java.io.DataInputStream.readUTF
 import java.util.ArrayList
+import java.util.HashMap
+import java.io.IOException
+import java.sql.Types.REF
+import java.util.Collections.unmodifiableMap
+
+// From ModelPersistence
+
+val MODEL = "model"
+val REF = "ref"
+val MODEL_UID = "modelUID"
+val NAME = "name"
+val VALUE = "value"
+
+val PERSISTENCE = "persistence"
+val PERSISTENCE_VERSION = "version"
+
+val FIRST_SUPPORTED_VERSION = 9
+val LAST_VERSION = 9
+
+private val HEADER_READ_LIMIT = 1 shl 16 // allow for huge headers
+
+
 
 
 private val HEADER_START = -0x6e545457
@@ -60,8 +81,8 @@ internal const val AGGREGATION_INDEX : Byte = 0x39
 class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedInputStream(inputStream, 65536)) {
 
     private val myStrings = ArrayList<String>(2048)
-//    private val myModelRefs = ArrayList<SModelReference>(1024)
-//    private val myModuleRefs = ArrayList<SModuleReference>(128)
+    private val myModelRefs = ArrayList<SModelReference>(1024)
+    private val myModuleRefs = ArrayList<SModuleReference>(128)
 //    private val myLanguages = ArrayList<SLanguage>(128)
 //    private val myConcepts = ArrayList<SConcept>(128)
 //    private val myProperties = ArrayList<SProperty>(128)
@@ -111,75 +132,76 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
         return res
     }
 
-//    @Throws(IOException::class)
-//    fun readModuleReference(): SModuleReference? {
-//        val c = readByte()
-//        if (c == NULL) {
-//            return null
-//        } else if (c == MODULEREF_INDEX) {
-//            val index = readInt()
-//            return myModuleRefs[index]
-//        }
-//
-//        var id: ModuleId? = null
-//        if (c == MODULEREF_MODULEID) {
-//            id = readModuleID()
-//        }
-//        val ref = jetbrains.mps.project.structure.modules.ModuleReference(readString(), id)
-//        myModuleRefs.add(ref)
-//        return ref
-//    }
+    fun readModuleReference(): SModuleReference? {
+        val c = readByte()
+        if (c == NULL) {
+            return null
+        } else if (c == MODULEREF_INDEX) {
+            val index = readInt()
+            return myModuleRefs[index]
+        }
 
-//    @Throws(IOException::class)
-//    fun readModuleID(): ModuleId? {
-//        val c = readByte()
-//        if (c == NULL) {
-//            return null
-//        } else if (c == MODULEID_REGULAR) {
-//            val uuid = UUID(readLong(), readLong())
-//            return ModuleId.regular(uuid)
-//        } else return if (c == MODULEID_FOREIGN) {
-//            ModuleId.foreign(readString())
-//        } else {
-//            throw IOException("unknown id")
-//        }
-//    }
-//
-//    @Throws(IOException::class)
-//    fun readModelReference(): SModelReference? {
-//        val c = readByte()
-//        if (c == NULL) {
-//            return null
-//        } else if (c == MODELREF_INDEX) {
-//            val index = readInt()
-//            return myModelRefs[index]
-//        }
-//
-//        val id = readModelID()
-//        val modelName = readString()
-//        val moduleRef = readModuleReference()
-//        val ref = jetbrains.mps.smodel.SModelReference(moduleRef, id, modelName)
-//        myModelRefs.add(ref)
-//        return ref
-//    }
-//
-//    @Throws(IOException::class)
-//    fun readModelID(): SModelId? {
-//        val c = readByte()
-//        return if (c == NULL) {
-//            null
-//        } else if (c == MODELID_REGULAR) {
-//            jetbrains.mps.smodel.SModelId.regular(readUUID())
-//        } else if (c == MODELID_FOREIGN) {
-//            jetbrains.mps.smodel.SModelId.foreign(readString())
-//        } else if (c == MODELID_STRING) {
-//            PersistenceFacade.getInstance().createModelId(readString())
-//        } else if (c == MODELID_INTEGER) {
-//            IntegerSModelId(readInt())
-//        } else {
-//            throw IOException("unknown id")
-//        }
-//    }
+        var id: ModuleId? = null
+        if (c == MODULEREF_MODULEID) {
+            id = readModuleID()
+        }
+        val ref = SModuleReference(readString()!!, id!!)
+        myModuleRefs.add(ref)
+        return ref
+    }
+
+    fun readModuleID(): ModuleId? {
+        val c = readByte()
+        return if (c == NULL) {
+            null
+        } else if (c == MODULEID_REGULAR) {
+            val uuid = UUID(readLong(), readLong())
+            ModuleId.regular(uuid)
+        } else if (c == MODULEID_FOREIGN) {
+            ModuleId.foreign(readString()!!)
+        } else {
+            throw IOException("unknown id")
+        }
+    }
+
+
+    fun readModelReference(): SModelReference? {
+        val c = readByte()
+        if (c == NULL) {
+            return null
+        } else if (c == MODELREF_INDEX) {
+            val index = readInt()
+            return myModelRefs[index]
+        }
+
+        val id = readModelID()
+        val modelName = readString()
+        val moduleRef = readModuleReference()
+        val ref = SModelReference(moduleRef, id!!, modelName!!)
+        myModelRefs.add(ref)
+        return ref
+    }
+
+    fun readModelID(): SModelId? {
+        val c = readByte()
+        return if (c == NULL) {
+            null
+        } else if (c == MODELID_REGULAR) {
+            SModelId.regular(readUUID())
+        } else if (c == MODELID_FOREIGN) {
+            SModelId.foreign(readString()!!)
+        } else if (c == MODELID_STRING) {
+            createModelId(readString()!!)
+        } else if (c == MODELID_INTEGER) {
+            IntegerSModelId(readInt())
+        } else {
+            throw IOException("unknown id")
+        }
+    }
+
+    private fun createModelId(readString: String): SModelId {
+        TODO()
+    }
 
 //    @Throws(IOException::class)
 //    fun readNodeId(): SNodeId? {
@@ -301,8 +323,170 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
 
 }
 
+open class SModelId {
+    companion object {
+        fun regular(uuid: UUID) : SModelId = RegularSModelId(uuid)
+        fun foreign(id: String) : SModelId {
+            TODO()
+        }
+    }
+}
+
+internal class RegularSModelId(val uuid: UUID) : SModelId()
+
+class IntegerSModelId(val id: Int) : SModelId() {
+
+}
+
+class ModuleId {
+    companion object {
+        fun regular(uuid: UUID) : ModuleId {
+            TODO()
+        }
+        fun foreign(id: String) : ModuleId {
+            TODO()
+        }
+    }
+}
+
+data class SModelReference(val moduleRef : SModuleReference?, val id: SModelId, val name: String) {
+
+}
+
+data class SModuleReference(val name: String, val id: ModuleId)
+
 class SModelHeader {
-    
+    val DO_NOT_GENERATE = "doNotGenerate"
+
+    /*
+   * Model is identified with SModelId, optional module id and has a name, these are elements we'd like to keep in header
+   * for quick consideration. Although SModelReference has all these, and it seems straightforward to use it here,
+   * it's not quite 'right' due to semantics attached - resolution of a model within a repository. However,
+   * exposing 3 getters/setters (modelId, modelName, moduleId) is cumbersome, and SModel#getReference is @NotNull regardless of model
+   * loaded/attached state, hence for the time being we decided to live with SModelReference here.
+   */
+    var modelRef: SModelReference? = null
+    private var myPersistenceVersion = -1
+    private var doNotGenerate = false
+    private val myOptionalProperties = HashMap<String, String>()
+    //private val myMetaInfoProvider: MetaModelInfoProvider? = null
+
+    fun getPersistenceVersion(): Int {
+        return myPersistenceVersion
+    }
+
+    fun setPersistenceVersion(persistenceVersion: Int) {
+        myPersistenceVersion = persistenceVersion
+    }
+
+    fun isDoNotGenerate(): Boolean {
+        return doNotGenerate
+    }
+
+    fun setDoNotGenerate(doNotGenerate: Boolean) {
+        this.doNotGenerate = doNotGenerate
+    }
+
+    /**
+     * DESIGN NOTE: SModelReference is not a persisted attribute of a model. Conceptually, reference emerges once we have
+     * an object to point to. The moment we got SModelHeader there's nothing to point to yet, although one could construct
+     * SModelReference with
+     * @return `null` if model header is not initialized with a model reference
+     */
+    fun getModelReference(): SModelReference? {
+        return modelRef
+    }
+
+//    fun setModelReference(@Nullable modelRef: SModelReference?) {
+//        myModelRef = modelRef
+//    }
+//
+//    fun getOptionalProperties(): Map<String, String> {
+//        return Collections.unmodifiableMap(myOptionalProperties)
+//    }
+//
+//    fun getOptionalProperty(key: String): String {
+//        return myOptionalProperties[key]
+//    }
+//
+    fun setOptionalProperty(key: String?, value: String?) {
+        assert(!DO_NOT_GENERATE.equals(key))
+        assert(!REF.equals(key))
+        // roughly following http://www.w3.org/TR/2008/PER-xml-20080205/#NT-Name
+        assert(key!!.matches("^[:A-Z_a-z][-:A-Z_a-z.0-9]*".toRegex())) { "bad key [$key]" }
+
+        myOptionalProperties[key] = value!!
+    }
+
+    fun removeOptionalProperty(key: String) {
+        myOptionalProperties.remove(key)
+    }
+
+    /**
+     * PROVISIONAL, DO NOT USE (unless your name starts with 'A' and you know what you're doing)
+     *
+     * This is per-model mechanism to alter meta-model (aka structure model) information used in persistence.
+     * Generally, this mechanism shall not be in use, and `null` value is legitimate default, which means
+     * native MPS mechanism of SConcept (and ConceptDescriptors) would be in use.
+     * However, certain scenarios (command-line merge and ant task to convert models to binary) can't yet afford starting whole
+     * MPS and thus shall rely on meta-information read from model files (which is generally sufficient to write the files back).
+     *
+     * For these scenarios, we used to have global [jetbrains.mps.persistence.ModelEnvironmentInfo], which is global and a bit
+     * outdated for modern persistence, hence it has been replaced with MetaModelInfoProvider, although this solution is provisional
+     * and likely to get changed in future (perhaps, class known now as IdInfoCollector would replace it).
+     */
+//    fun setMetaInfoProvider(@Nullable mmiProvider: MetaModelInfoProvider) {
+//        myMetaInfoProvider = mmiProvider
+//    }
+//
+//    fun getMetaInfoProvider(): MetaModelInfoProvider? {
+//        return myMetaInfoProvider
+//    }
+//
+//    fun create(persistenceVersion: Int): SModelHeader {
+//        val header = SModelHeader()
+//        header.setPersistenceVersion(persistenceVersion)
+//        return header
+//    }
+//
+//    // FIXME move save and load into respective class (binary persistence)
+//    @Throws(IOException::class)
+//    fun save(stream: ModelOutputStream) {
+//        stream.writeByte(77)
+//        stream.writeString(if (myModelRef == null) null else PersistenceFacade.getInstance().asString(myModelRef))
+//        stream.writeInt(myPersistenceVersion)
+//        stream.writeInt(0) //version was here
+//        stream.writeBoolean(doNotGenerate)
+//        stream.writeInt(myOptionalProperties.size())
+//        for (ss in myOptionalProperties.entrySet()) {
+//            stream.writeString(ss.key)
+//            stream.writeString(ss.value)
+//        }
+//    }
+//
+//    @Throws(IOException::class)
+//    fun load(stream: ModelInputStream): SModelHeader {
+//        if (stream.readByte().toInt() != 77) throw IOException("bad stream: no model header start marker")
+//        val result = SModelHeader()
+//        val s = stream.readString()
+//        result.setModelReference(if (s == null) null else PersistenceFacade.getInstance().createModelReference(s))
+//        result.setPersistenceVersion(stream.readInt())
+//        stream.readInt() //old model version was here
+//        result.setDoNotGenerate(stream.readBoolean())
+//        for (size in stream.readInt() downTo 1) {
+//            result.setOptionalProperty(stream.readString(), stream.readString())
+//        }
+//        return result
+//    }
+//
+//    fun createCopy(): SModelHeader {
+//        val copy = SModelHeader()
+//        copy.myModelRef = myModelRef
+//        copy.myPersistenceVersion = myPersistenceVersion
+//        copy.doNotGenerate = doNotGenerate
+//        copy.myOptionalProperties.putAll(myOptionalProperties)
+//        return copy
+//    }
 }
 
 fun loadMpsModelFromBinaryFile(inputStream: InputStream) : PhysicalModel {
@@ -312,12 +496,12 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream) : PhysicalModel {
 }
 
 @Throws(IOException::class)
-private fun loadHeader(`is`: ModelInputStream): SModelHeader {
-    if (`is`.readInt() !== HEADER_START) {
+private fun loadHeader(mis: ModelInputStream): SModelHeader {
+    if (mis.readInt() !== HEADER_START) {
         throw IOException("bad stream, no header")
     }
 
-    val streamId = `is`.readInt()
+    val streamId = mis.readInt()
     if (streamId == STREAM_ID_V1) {
         throw IOException(String.format("Can't read old binary persistence version (%x), please re-save models", streamId))
     }
@@ -325,23 +509,23 @@ private fun loadHeader(`is`: ModelInputStream): SModelHeader {
         throw IOException(String.format("bad stream, unknown version: %x", streamId))
     }
 
-    //val modelRef = `is`.readModelReference()
+    val modelRef = mis.readModelReference()
     val result = SModelHeader()
-//    result.setModelReference(modelRef)
-//    `is`.readInt() //left for compatibility: old version was here
-//    `is`.mark(4)
-//    if (`is`.readByte() === HEADER_ATTRIBUTES) {
-//        result.setDoNotGenerate(`is`.readBoolean())
-//        var propsCount = `is`.readShort()
-//        while (propsCount > 0) {
-//            val key = `is`.readString()
-//            val value = `is`.readString()
-//            result.setOptionalProperty(key, value)
-//            propsCount--
-//        }
-//    } else {
-//        `is`.reset()
-//    }
+    result.modelRef = modelRef
+    mis.readInt() //left for compatibility: old version was here
+    mis.mark(4)
+    if (mis.readByte() === HEADER_ATTRIBUTES) {
+        result.setDoNotGenerate(mis.readBoolean())
+        var propsCount = mis.readShort()
+        while (propsCount > 0) {
+            val key = mis.readString()
+            val value = mis.readString()
+            result.setOptionalProperty(key, value)
+            propsCount--
+        }
+    } else {
+        mis.reset()
+    }
 //    assertSyncToken(`is`, HEADER_END)
     return result
 }
