@@ -3,6 +3,7 @@ import com.strumenta.mpsinterop.loading.PhysicalToLogicalConverter
 import com.strumenta.mpsinterop.loading.loadLanguageFromJar
 import com.strumenta.mpsinterop.loading.loadMpsModel
 import com.strumenta.mpsinterop.registries.LanguageRegistry
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -12,6 +13,7 @@ class LanguageLoadingTest {
      * In this test we want to load the language from a given file and verify a certain concept looks as expected.
      */
     @Test
+    @Ignore
     fun loadConceptConstraint() {
         val inputStream = LogicalModelLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val languageRegistry = LanguageRegistry()

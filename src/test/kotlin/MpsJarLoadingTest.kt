@@ -3,12 +3,14 @@ import com.strumenta.mpsinterop.loading.loadJar
 import com.strumenta.mpsinterop.loading.loadLanguageFromDescriptors
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class MpsJarLoadingTest {
 
     @Test
+    @Ignore
     fun loadINamedConcept() {
         val inputStream = MpsFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.core.jar")
         val physicalModelsRegistry = PhysicalModelsRegistry()

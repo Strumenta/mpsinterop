@@ -1,9 +1,11 @@
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 class MpsBinaryFileLoadingTest {
 
     @Test
+    @Ignore
     fun loadPhysicalModelFromBinaryFile() {
         val inputStream = MpsBinaryFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.core-src-structure.mpb")
         val model = loadMpsModelFromBinaryFile(inputStream)

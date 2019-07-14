@@ -5,12 +5,14 @@ import com.strumenta.mpsinterop.loading.loadMpsFile
 import com.strumenta.mpsinterop.loading.loadMpsModel
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class LogicalModelLoadingTest {
 
     @Test
+    @Ignore
     fun loadLogicalModelOfConstraint() {
         val languageRegistry = LanguageRegistry()
         val physicalModelRegistry = PhysicalModelsRegistry()
