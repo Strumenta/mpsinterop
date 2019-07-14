@@ -1,5 +1,5 @@
 package com.strumenta.mpsinterop.binary
-import com.strumenta.mpsinterop.binary.BinaryPersistence.ReadHelper
+
 import com.strumenta.mpsinterop.binary.SModelReference
 import com.strumenta.mpsinterop.binary.ModelInputStream
 
@@ -54,8 +54,9 @@ class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, priva
 //    }
 //
 //    @Throws(IOException::class)
-//    protected fun instantiate(parent: SNode?): SNode {
-//        val concept = myReadHelper.readConcept(myIn.readShort())
+    protected override fun instantiate(parent: SNode?): SNode {
+        val concept = myReadHelper.readConcept(myIn.readShort().toInt())
+    TODO()
 //        val nodeId = myIn.readNodeId()
 //        val link = myReadHelper.readAggregation(myIn.readShort())
 //
@@ -77,7 +78,7 @@ class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, priva
 //            hasSkippedNodes = true
 //        }
 //        return node
-//    }
+    }
 //
 //    protected fun localNodeReferenceRead(nodeId: SNodeId?) {
 //        if (nodeId != null && myLocalRefs != null) {

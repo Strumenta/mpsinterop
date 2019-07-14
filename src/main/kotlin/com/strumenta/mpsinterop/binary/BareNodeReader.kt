@@ -100,7 +100,7 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
     }
 //
 //    @Throws(IOException::class)
-    protected fun instantiate(parent: SNode?): SNode {
+    protected open fun instantiate(parent: SNode?): SNode {
         val c = myIn.readConcept()
         val nid = myIn.readNodeId()
         val link = myIn.readContainmentLink()

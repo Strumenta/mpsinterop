@@ -35,7 +35,7 @@ public interface MetaModelInfoProvider {
  * @author evgeny, 11/21/12
  * @author Artem Tikhomirov
  */
-public final class BinaryPersistence(model: SModel) {
+public final class BinaryPersistence {
 
     private var myMetaInfoProvider: MetaModelInfoProvider? = null
     private var myModelData: SModel? = null
@@ -217,111 +217,12 @@ public final class BinaryPersistence(model: SModel) {
 //        NodesWriter(model.getReference(), os, meta).writeNodes(roots)
 //    }
 
-    private fun BinaryPersistence(mmiProvider: MetaModelInfoProvider, modelData: SModel) {
+    private constructor(mmiProvider: MetaModelInfoProvider, modelData: SModel) {
         myMetaInfoProvider = mmiProvider
         myModelData = modelData
     }
-    
-    class ReadHelper(myMetaInfoProvider: MetaModelInfoProvider?) {
-        //private val LOG = LogManager.getLogger(ReadHelper::class.java)
-        val MODEL_SEPARATOR_CHAR = '.'
-        val DYNAMIC_REFERENCE_ID = "^"
 
-//        private var myModelRef: SModelReference
-//        private var myModelByIx: Map<String, SModelReference>
-//        private var myMaxImportIndex = 0
-//        fun ReadHelper(modelRef: SModelReference): ??? {
-//            myModelByIx = MapSequence.fromMap(HashMap<String, SModelReference>())
-//            myModelRef = modelRef
-//        }
-//
-//        fun addModelRef(index: String, modelRef: SModelReference) {
-//            MapSequence.fromMap(myModelByIx).put(index, modelRef)
-//        }
-//
-//        fun addImportToModel(model: SModel, index: String, modelUID: String?, version: Int, implicit: Boolean) {
-//            if (modelUID == null) {
-//                if (LOG.isEnabledFor(Level.ERROR)) {
-//                    LOG.error("Error loading import element for index $index in $myModelRef")
-//                }
-//                return
-//            }
-//            val modelRef = VCSPersistenceUtil.createModelReference(modelUID)
-//            val elem = SModel.ImportElement(modelRef, ++myMaxImportIndex, version)
-//            if (implicit) {
-//                model.getImplicitImportsSupport().addAdditionalModelVersion(elem)
-//            } else {
-//                model.addModelImport(elem)
-//            }
-//            addModelRef(index, modelRef)
-//        }
-//
-//        fun getSModelReference(@NotNull ix: String?): SModelReference? {
-//            return if (ix == null || ix.length == 0) myModelRef else MapSequence.fromMap(myModelByIx).get(ix)
-//        }
-//
-//        @NotNull
-//        fun readLink_internal(src: String?): Pair<Boolean, SNodeReference> {
-//            // returns <true, xxx> - if src is Dynamic Reference
-//            // [modelID.]nodeID | [modelID.]^
-//            val result = Pair<Boolean, SNodeReference>(false, null)
-//            if (src == null) {
-//                return result
-//            }
-//            val dotIndex = src.indexOf(MODEL_SEPARATOR_CHAR.toInt())
-//            val text = decode(src.substring(dotIndex + 1, src.length))
-//            result.o1 = DYNAMIC_REFERENCE_ID == text
-//            val modelRef = getSModelReference(if (dotIndex < 0) "" else src.substring(0, dotIndex))
-//            val nodeId = if (result.o1) null else jetbrains.mps.smodel.SNodeId.fromString(text)
-//            result.o2 = SNodePointer(modelRef, nodeId)
-//            return result
-//        }
-//
-//        fun readLinkId(src: String): SNodeReference {
-//            // [modelID.]nodeID[:version] | [modelID.]^[:version]
-//            return readLink_internal(src).o2
-//        }
-//
-//        fun getStubConceptQualifiedName(type: String): String? {
-//            val originalConcept = readType(type)
-//            val lastDot = originalConcept.lastIndexOf('.')
-//            return if (lastDot == -1) {
-//                null
-//            } else originalConcept.substring(0, lastDot + 1) + "Stub" + originalConcept.substring(lastDot + 1)
-//        }
-//
-//        fun readType(s: String): String {
-//            val ix = s.indexOf(MODEL_SEPARATOR_CHAR.toInt())
-//            if (ix <= 0) {
-//                // no model ID - fqName is here
-////                if (LOG.isEnabledFor(Level.ERROR)) {
-////                    LOG.error("Broken reference to type=$s in model $myModelRef")
-////                }
-//                return s.substring(ix + 1)
-//            }
-//            val modelRef = getSModelReference(s.substring(0, ix))
-//            if (modelRef == null) {
-////                if (LOG.isEnabledFor(Level.ERROR)) {
-////                    LOG.error("couldn't create node '" + s.substring(ix + 1) + "' : import for index [" + s.substring(0, ix) + "] not found")
-////                }
-//                return s.substring(ix + 1)
-//            } else {
-//                return modelRef.name.getLongName() + '.'.toString() + s.substring(ix + 1)
-//            }
-//        }
 
-        fun readRole(s: String): String {
-            return s
-        }
-
-        fun readName(s: String): String {
-            return s
-        }
-
-        fun decode(s: String): String {
-            return s.replace("%d", ".").replace("%c", ":").replace("%p", "%")
-        }
-    }
 
 
     fun loadModelProperties(mis: ModelInputStream): ReadHelper {
@@ -467,7 +368,7 @@ public final class BinaryPersistence(model: SModel) {
         conceptIndex = propertyIndex
         langIndex = conceptIndex
 
-        val rh = ReadHelper(myMetaInfoProvider)
+        val rh = ReadHelper(myMetaInfoProvider!!)
         var langCount = mis.readShort().toInt()
         println("langCount $langCount")
         while (langCount-- > 0) {
@@ -558,6 +459,7 @@ public final class BinaryPersistence(model: SModel) {
         for (i in 0 until size) {
             val id = SLanguageId(`is`.readUUID())
             val name = `is`.readString()
+            println("used language $id $name")
             //val l = MetaAdapterFactory.getLanguage(id, name)
             //myModelData.addLanguage(l)
         }
