@@ -2,9 +2,19 @@
 
 The goal of this project is to permit interoperability with MPS model from outside MPS. 
 
-## MPS Loading
+## Use cases
 
-This API permits to load MPS nodes and MPS language definitions in Kotlin.
+* Fix and refactor MPS models outside MPS
+* Process MPS models in CI
+* Load MPS models in larger pipelines, for example to generate artifacts out of it
+* Edit MPS models in external editors, for example web editors
+* Perform analysis on MPS models from outside MPS
+
+## Planned features
+
+**Homogeneous API:** API to load MPS models using common classes like Node, Property, Relation, etc. to interact with those models
+
+**Heterogeneous API:** API to work with MPS nodes through classes which are specific for concepts. Those classes could be either generated as source code or as in-memory classes using frameworks like Manifold
 
 ## Supported platforms
 
