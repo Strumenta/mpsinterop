@@ -126,7 +126,7 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
     }
 
     @Throws(IOException::class)
-    protected fun readReferences(node: SNode) {
+    protected open fun readReferences(node: SNode) {
         var refs = myIn.readShort().toInt()
         while (refs-- > 0) {
             readReference(myIn.readReferenceLink()!!, node)

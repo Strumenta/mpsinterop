@@ -228,17 +228,18 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
 
     @Throws(IOException::class)
     fun readReferenceLink(): SReferenceLink? {
-//        val b = readByte()
-//        if (b == NULL) {
-//            return null
-//        }
-//        if (b == ASSOCIATION_INDEX) {
-//            return myAssociations[readShort()]
-//        }
-//        if (b != ASSOCIATION) {
-//            throw IOException(Integer.toHexString(b.toInt()))
-//        }
-//        val c = readConcept()
+        val b = readByte()
+        if (b == NULL) {
+            return null
+        }
+        if (b == ASSOCIATION_INDEX) {
+            TODO()
+            //return myAssociations[readShort()]
+        }
+        if (b != ASSOCIATION) {
+            throw IOException(Integer.toHexString(b.toInt()))
+        }
+        val c = readConcept()
 //        val l = MetaAdapterFactory.getReferenceLink(SReferenceLinkId(MetaIdHelper.getConcept(c), readLong()), readString())
 //        myAssociations.add(l)
 //        return l

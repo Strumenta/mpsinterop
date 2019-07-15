@@ -90,14 +90,13 @@ class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, priva
 //        }
 //    }
 //
-//    @Throws(IOException::class)
-//    protected fun readReferences(node: SNode) {
-//        var refs = myIn.readShort()
-//        while (refs-- > 0) {
-//            val link = myReadHelper.readAssociation(myIn.readShort())
-//            readReference(link, node)
-//        }
-//    }
+    protected override fun readReferences(node: SNode) {
+        var refs = myIn.readShort()
+        while (refs-- > 0) {
+            val link = myReadHelper.readAssociation(myIn.readShort().toInt())
+            readReference(link, node)
+        }
+    }
 //
 //    @Throws(IOException::class)
     protected override fun readProperties(node: SNode) {
