@@ -132,36 +132,41 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
             readReference(myIn.readReferenceLink()!!, node)
         }
     }
+
+    val REF_THIS_MODEL: Byte = 17
+    val REF_OTHER_MODEL: Byte = 18
 //
 //    @Throws(IOException::class)
-    protected fun readReference(sref: SReferenceLink, node: SNode)/*: SReference*/ {
+    protected fun readReference(sref: SReferenceLink, node: SNode): SReference {
         val kind = myIn.readByte().toInt()
-        TODO()
-//        assert(kind >= 1 && kind <= 3)
-//        val targetNodeId = if (kind == 1) myIn.readNodeId() else null
-//        val origin = if (kind == 3) DynamicReferenceOrigin(myIn.readNodePointer(), myIn.readNodePointer()) else null
-//        val targetModelKind = myIn.readByte().toInt()
-//        assert(targetModelKind == BareNodeWriter.REF_OTHER_MODEL || targetModelKind == BareNodeWriter.REF_THIS_MODEL)
-//        val modelRef: SModelReference?
-//        if (targetModelKind == BareNodeWriter.REF_OTHER_MODEL) {
-//            modelRef = myIn.readModelReference()
-//            externalNodeReferenceRead(modelRef, targetNodeId)
-//        } else {
-//            modelRef = myModelReference
-//            localNodeReferenceRead(targetNodeId)
-//        }
-//        val resolveInfo = myIn.readString()
+        assert(kind >= 1 && kind <= 3)
+        val targetNodeId = if (kind == 1) myIn.readNodeId() else null
+        //val origin = if (kind == 3) DynamicReferenceOrigin(myIn.readNodePointer(), myIn.readNodePointer()) else null
+        val origin = if (kind == 3) TODO() else null
+        val targetModelKind = myIn.readByte().toInt()
+        assert(targetModelKind == REF_OTHER_MODEL.toInt() || targetModelKind == REF_THIS_MODEL.toInt())
+        val modelRef: SModelReference?
+        if (targetModelKind == REF_OTHER_MODEL.toInt()) {
+            modelRef = myIn.readModelReference()
+            TODO()
+            //externalNodeReferenceRead(modelRef, targetNodeId)
+        } else {
+            modelRef = myModelReference
+            localNodeReferenceRead(targetNodeId)
+        }
+        val resolveInfo = myIn.readString()
         if (kind == 1) {
-//            val reference = StaticReference(
-//                    sref,
-//                    node,
-//                    modelRef,
-//                    targetNodeId,
-//                    resolveInfo)
+            val reference = StaticReference(
+                    sref,
+                    node,
+                    modelRef,
+                    targetNodeId,
+                    resolveInfo)
             //node.setReference(reference.getLink(), reference)
-            //return reference
+            return reference
         } else
             if (kind == 2 || kind == 3) {
+                TODO()
 //                val reference = DynamicReference(
 //                        sref,
 //                        node,
@@ -177,9 +182,9 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
             }
     }
 //
-//    protected fun localNodeReferenceRead(nodeId: SNodeId?) {
-//        // no-op, left for subclasses  to override
-//    }
+    protected fun localNodeReferenceRead(nodeId: SNodeId?) {
+        // no-op, left for subclasses  to override
+    }
 //
 //    protected fun externalNodeReferenceRead(targetModel: SModelReference?, nodeId: SNodeId?) {
 //        // no-op, left for subclasses  to override

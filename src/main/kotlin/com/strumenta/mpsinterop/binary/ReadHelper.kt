@@ -107,11 +107,12 @@ class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider?) {
         //myMetaInfoProvider.setPropertyName(property, name)
     }
 //
-//    fun association(link: SReferenceLinkId, name: String, index: Int) {
-//        myActualConcept!!.addLink(link, name).setIntIndex(index)
-//        myAssociations.put(index, MetaAdapterFactory.getReferenceLink(link, name))
-//        myMetaInfoProvider.setAssociationName(link, name)
-//    }
+    fun association(link: SReferenceLinkId, name: String, index: Int) {
+
+        //myActualConcept!!.addLink(link, name).setIntIndex(index)
+       myAssociations[index] = SReferenceLink(link, name)
+       //myMetaInfoProvider.setAssociationName(link, name)
+    }
 //
     fun aggregation(link: SContainmentLinkId, name: String, unordered: Boolean, index: Int) {
 //        myActualConcept!!.addLink(link, name, unordered).setIntIndex(index)

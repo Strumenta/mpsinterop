@@ -1,6 +1,7 @@
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import kotlin.test.Ignore
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class MpsBinaryFileLoadingTest {
 
@@ -10,7 +11,7 @@ class MpsBinaryFileLoadingTest {
         val inputStream = MpsBinaryFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.core-src-structure.mpb")
         val model = loadMpsModelFromBinaryFile(inputStream)
 
-//        assertEquals("Formats.structure", model.name)
+        assertEquals("jetbrains.mps.lang.core.structure", model.name)
 //
 //        assertEquals(36, model.numberOfRoots)
 //

@@ -239,7 +239,7 @@ class SModelHeader {
 //    }
 }
 
-fun loadMpsModelFromBinaryFile(inputStream: InputStream) : PhysicalModel {
+fun loadMpsModelFromBinaryFile(inputStream: InputStream) : SModel {
     val mis = ModelInputStream(inputStream)
     val modelHeader = loadHeader(mis)
     val model = SModel(modelHeader.getModelReference(), modelHeader)
@@ -253,11 +253,14 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream) : PhysicalModel {
     println()
     reader.readNodesInto(model)
 //    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
-    TODO()
+            //TODO()
+    return model
 }
 
-class SModel(modelReference: SModelReference?, modelHeader: SModelHeader) {
+class SModel(modelReference: SModelReference?, val modelHeader: SModelHeader) {
 
+    val name: String
+        get() = modelHeader.modelRef!!.name
 }
 
 @Throws(IOException::class)

@@ -1,5 +1,5 @@
 package com.strumenta.mpsinterop.binary
 
-class SReferenceLink {
+class SReferenceLink(link: SReferenceLinkId, name: String) {
 
 }
