@@ -83,7 +83,7 @@ class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider?) {
 //    }
 
 
-    fun withConcept(conceptIndex: Int, conceptId: SConceptId, conceptName: String) {
+    fun withConcept(conceptIndex: Int, conceptId: SConceptId, conceptName: String, kind: ConceptKind) {
         currentConcept = SConcept(conceptId, conceptName)
         myConcepts[conceptIndex] = currentConcept!!
     }
@@ -100,11 +100,12 @@ class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider?) {
 //        myMetaInfoProvider.setStubConcept(concept, stub)
 //    }
 //
-//    fun property(property: SPropertyId, name: String, index: Int) {
-//        myActualConcept!!.addProperty(property, name).setIntIndex(index)
-//        myProperties.put(index, MetaAdapterFactory.getProperty(property, name))
-//        myMetaInfoProvider.setPropertyName(property, name)
-//    }
+    fun property(property: SPropertyId, name: String, index: Int) {
+        //myActualConcept!!.addProperty(property, name).setIntIndex(index)
+        val property = SProperty(property, name)
+        myProperties[index] = property
+        //myMetaInfoProvider.setPropertyName(property, name)
+    }
 //
 //    fun association(link: SReferenceLinkId, name: String, index: Int) {
 //        myActualConcept!!.addLink(link, name).setIntIndex(index)
@@ -125,7 +126,7 @@ class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider?) {
 
     fun readProperty(index: Int): SProperty {
         require(index >= 0)
-        return myProperties[index]!!
+        return myProperties[index]?: throw IllegalArgumentException("Property with index $index not found. Known indexes: ${myProperties.keys.joinToString(separator = ", ")}")
     }
 
     fun readAssociation(index: Int): SReferenceLink {

@@ -115,7 +115,7 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
     }
 //
 //    @Throws(IOException::class)
-    protected fun readProperties(node: SNode) {
+    protected open fun readProperties(node: SNode) {
         var properties = myIn.readShort().toInt()
         println("  properties $properties")
         while (properties-- > 0) {

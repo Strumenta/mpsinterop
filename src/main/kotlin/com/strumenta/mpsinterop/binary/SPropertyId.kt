@@ -1,5 +1,5 @@
 package com.strumenta.mpsinterop.binary
 
-class SPropertyId(c: SConcept?, propertyId: Long) {
+class SPropertyId(c: SConceptId, propertyId: Long) {
 
 }

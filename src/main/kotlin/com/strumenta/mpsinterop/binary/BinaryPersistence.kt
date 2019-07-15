@@ -399,7 +399,9 @@ public final class BinaryPersistence {
                     stubId = SConceptId(languageId, mis.readLong())
                 }
 
-                rh.withConcept(conceptIndex, conceptId, conceptName!!)
+                val conceptKind = ConceptKind.values()[flags shr 4 and 0x0f]
+
+                rh.withConcept(conceptIndex, conceptId, conceptName!!, conceptKind)
 //                rh.withConcept(conceptId, conceptName, StaticScope.values()[flags and 0x0f], ConceptKind.values()[flags shr 4 and 0x0f], stubId, conceptIndex++)
 //                //
                 conceptIndex++
@@ -407,8 +409,8 @@ public final class BinaryPersistence {
                 println("  propertyCount $propertyCount")
                 while (propertyCount-- > 0) {
                     val propertyId = mis.readLong()
-                    val propertyName = mis.readString()
-                    //rh.property(SPropertyId(conceptId, mis.readLong()), mis.readString(), propertyIndex++)
+                    val propertyName = mis.readString()!!
+                    rh.property(SPropertyId(conceptId!!, propertyId), propertyName, propertyIndex)
                     propertyIndex++
                 }
 //                //

@@ -100,12 +100,12 @@ class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, priva
 //    }
 //
 //    @Throws(IOException::class)
-//    protected fun readProperties(node: SNode) {
-//        var properties = myIn.readShort()
-//        while (properties-- > 0) {
-//            val property = myReadHelper.readProperty(myIn.readShort())
-//            val value = myIn.readString()
-//            node.setProperty(property, value)
-//        }
-//    }
+    protected override fun readProperties(node: SNode) {
+        var properties = myIn.readShort()
+        while (properties-- > 0) {
+            val property = myReadHelper.readProperty(myIn.readShort().toInt())
+            val value = myIn.readString()
+            //node.setProperty(property, value)
+        }
+    }
 }

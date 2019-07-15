@@ -207,6 +207,7 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
 //    @Throws(IOException::class)
     fun readProperty(): SProperty? {
         val b = readByte()
+        println("readProperty $b")
         if (b == NULL) {
             return null
         }
@@ -220,7 +221,7 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
         val propertyId = readLong()
         val propertyName = readString()
         //val p = MetaAdapterFactory.getProperty(SPropertyId(MetaIdHelper.getConcept(c), readLong()), readString())
-        val p = SProperty(SPropertyId(c, propertyId), propertyName)
+        val p = SProperty(SPropertyId(c!!.id, propertyId), propertyName)
         myProperties.add(p)
         return p
     }
