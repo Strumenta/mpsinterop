@@ -20,10 +20,6 @@ package com.strumenta.mpsinterop.binary
 
 import java.io.IOException;
 import java.util.*
-import java.util.HashMap
-import java.util.logging.LogManager
-
-
 
 
 public interface MetaModelInfoProvider {
@@ -217,12 +213,15 @@ public final class BinaryPersistence {
 //        NodesWriter(model.getReference(), os, meta).writeNodes(roots)
 //    }
 
-    private constructor(mmiProvider: MetaModelInfoProvider, modelData: SModel) {
-        myMetaInfoProvider = mmiProvider
+//    constructor(mmiProvider: MetaModelInfoProvider, modelData: SModel) {
+//        myMetaInfoProvider = mmiProvider
+//        myModelData = modelData
+//    }
+
+    constructor(modelData: SModel) {
+        myMetaInfoProvider = null
         myModelData = modelData
     }
-
-
 
 
     fun loadModelProperties(mis: ModelInputStream): ReadHelper {
@@ -368,7 +367,7 @@ public final class BinaryPersistence {
         conceptIndex = propertyIndex
         langIndex = conceptIndex
 
-        val rh = ReadHelper(myMetaInfoProvider!!)
+        val rh = ReadHelper(myMetaInfoProvider)
         var langCount = mis.readShort().toInt()
         println("langCount $langCount")
         while (langCount-- > 0) {
@@ -400,6 +399,7 @@ public final class BinaryPersistence {
                     stubId = SConceptId(languageId, mis.readLong())
                 }
 
+                rh.withConcept(conceptIndex, conceptId, conceptName!!)
 //                rh.withConcept(conceptId, conceptName, StaticScope.values()[flags and 0x0f], ConceptKind.values()[flags shr 4 and 0x0f], stubId, conceptIndex++)
 //                //
                 conceptIndex++
@@ -425,12 +425,7 @@ public final class BinaryPersistence {
                 var aggregationCount = mis.readShort().toInt()
                 println("  aggregationCount $aggregationCount")
                 while (aggregationCount-- > 0) {
-                    val id = mis.readLong()
-                    val name = mis.readString()
-                    val b = mis.readBoolean()
-                    println("     $id $name")
-                    aggregationIndex++
-//                    rh.aggregation(SContainmentLinkId(conceptId, mis.readLong()), mis.readString(), mis.readBoolean(), aggregationIndex++)
+                    rh.aggregation(SContainmentLinkId(conceptId, mis.readLong()), mis.readString()!!, mis.readBoolean(), aggregationIndex++)
                 }
             }
         }
@@ -438,9 +433,9 @@ public final class BinaryPersistence {
         return rh
     }
 
-    data class SConceptId(val languageId: SLanguageId, val readLong: Long) {
-
-    }
+//    data class SConceptId(val languageId: SLanguageId, val readLong: Long) {
+//
+//    }
 //
 //    @Throws(IOException::class)
 //    private fun saveUsedLanguages(os: ModelOutputStream) {
@@ -559,6 +554,3 @@ class SNodeReference {
 
 }
 
-class SConceptId(languageId: SLanguageId, idValue: Long) {
-
-}

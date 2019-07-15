@@ -1,5 +1,13 @@
 package com.strumenta.mpsinterop.binary
 
-class SNodeId {
-
+abstract class SNodeId {
+    companion object {
+        fun regular(idValue: Long): SNodeId {
+            return RegularSNodeId(idValue)
+        }
+    }
 }
+
+internal data class RegularSNodeId(val value: Long) : SNodeId()
+
+

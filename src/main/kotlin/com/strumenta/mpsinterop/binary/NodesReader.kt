@@ -1,8 +1,5 @@
 package com.strumenta.mpsinterop.binary
 
-import com.strumenta.mpsinterop.binary.SModelReference
-import com.strumenta.mpsinterop.binary.ModelInputStream
-
 
 /*
  * Copyright 2003-2015 JetBrains s.r.o.
@@ -34,8 +31,6 @@ import com.strumenta.mpsinterop.binary.ModelInputStream
 //import org.jetbrains.mps.openapi.model.SNode
 //import org.jetbrains.mps.openapi.model.SNodeId
 
-import java.io.IOException
-
 class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, private val myReadHelper: ReadHelper) : BareNodeReader(modelReference, `is`) {
 //    private var hasSkippedNodes = false
 //    private var myExternalRefs: MutableCollection<SNodeId>? = null
@@ -55,29 +50,32 @@ class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, priva
 //
 //    @Throws(IOException::class)
     protected override fun instantiate(parent: SNode?): SNode {
-        val concept = myReadHelper.readConcept(myIn.readShort().toInt())
-    TODO()
-//        val nodeId = myIn.readNodeId()
-//        val link = myReadHelper.readAggregation(myIn.readShort())
-//
-//        var interfaceNode = false
+        val conceptIndex = myIn.readShort().toInt()
+        val concept = myReadHelper.readConcept(conceptIndex)
+        println("Concept $concept (index $conceptIndex)")
+        val nodeId = myIn.readNodeId()
+        println("NodeId $nodeId")
+        val linkId = myIn.readShort().toInt()
+        val link = if (linkId == -1) null else myReadHelper.readAggregation(linkId)
+
+        var interfaceNode = false
 //        if (myReadHelper.isRequestedInterfaceOnly()) {
 //            interfaceNode = myReadHelper.isInterface(concept) || link == null
 //        }
 //        // TODO report if (nodeInfo != 0 && myEnv != null) .. myEnv.nodeRoleRead/conceptRead();
 //
-//        val node = if (interfaceNode) InterfaceSNode(concept, nodeId) else jetbrains.mps.smodel.SNode(concept, nodeId)
+        val node = if (interfaceNode) InterfaceSNode(concept, nodeId) else SNode(concept, nodeId)
 //
-//        if (parent == null) {
-//            return node
-//        }
-//        if (parent !is InterfaceSNode || node is InterfaceSNode) {
-//            parent!!.addChild(link, node)
-//        } else {
-//            (parent as InterfaceSNode).skipRole(link)
-//            hasSkippedNodes = true
-//        }
-//        return node
+        if (parent == null) {
+            return node
+        }
+        if (parent !is InterfaceSNode || node is InterfaceSNode) {
+            parent!!.addChild(link!!, node)
+        } else {
+            (parent as InterfaceSNode).skipRole(link!!)
+            //hasSkippedNodes = true
+        }
+        return node
     }
 //
 //    protected fun localNodeReferenceRead(nodeId: SNodeId?) {

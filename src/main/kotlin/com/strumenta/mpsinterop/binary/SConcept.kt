@@ -1,5 +1,5 @@
 package com.strumenta.mpsinterop.binary
 
-class SConcept {
+data class SConcept(val id: SConceptId, val name: String) {
 
 }

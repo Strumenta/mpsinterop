@@ -1,5 +1,7 @@
 package com.strumenta.mpsinterop.binary
 
+import java.lang.IllegalArgumentException
+
 /*
  * Copyright 2003-2014 JetBrains s.r.o.
  *
@@ -35,25 +37,23 @@ package com.strumenta.mpsinterop.binary
 //import org.jetbrains.mps.openapi.language.SProperty;
 //import org.jetbrains.mps.openapi.language.SReferenceLink;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * [jetbrains.mps.smodel.persistence.def.v9.IdInfoReadHelper] counterpart for binary persistence.
  * FIXME consider refactoring to remove duplicating code (e.g. #isInterface or #isRequestedInterfaceOnly)
  * @author Artem Tikhomirov
  */
-class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider) {
+class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider?) {
 //    private val myMetaInfo: IdInfoRegistry
-//    var isRequestedInterfaceOnly: Boolean = false
-//        private set
+    var isRequestedInterfaceOnly: Boolean = false
+        private set
 //    private var myActualConcept: ConceptInfo? = null
 //    // TODO with indices being just a persistence position, shall use arrays instead
-//    private val myConcepts = TIntObjectHashMap<SConcept>()
-//    private val myProperties = TIntObjectHashMap<SProperty>()
-//    private val myAssociations = TIntObjectHashMap<SReferenceLink>()
-//    private val myAggregations = TIntObjectHashMap<SContainmentLink>()
+    private val myConcepts = HashMap<Int, SConcept>()
+    private val myProperties = HashMap<Int, SProperty>()
+    private val myAssociations = HashMap<Int, SReferenceLink>()
+    private val myAggregations = HashMap<Int, SContainmentLink>()
+    private var currentConcept : SConcept? = null
 
 
 //    /*package*/ // FIXME could I use myMetaInfo.registry.keySet() instead?
@@ -72,19 +72,26 @@ class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider) {
 //        myMetaInfo = IdInfoRegistry()
 //    }
 //
-//    /**/ fun requestInterfaceOnly(interfaceOnly: Boolean) {
-//        isRequestedInterfaceOnly = interfaceOnly
-//    }
+    /**/ fun requestInterfaceOnly(interfaceOnly: Boolean) {
+        isRequestedInterfaceOnly = interfaceOnly
+    }
 //
 //    fun withLanguage(lang: SLanguageId, name: String, index: Int) {
 //        val langInfo = myMetaInfo.registerLanguage(lang, name)
 //        langInfo.setIntIndex(index)
 //        myMetaInfoProvider.setLanguageName(lang, name)
 //    }
+
+
+    fun withConcept(conceptIndex: Int, conceptId: SConceptId, conceptName: String) {
+        currentConcept = SConcept(conceptId, conceptName)
+        myConcepts[conceptIndex] = currentConcept!!
+    }
+
 //
 //    // @param stub is optional
 //    fun withConcept(concept: SConceptId, name: String, scope: StaticScope, kind: ConceptKind, stub: SConceptId, index: Int) {
-//        myActualConcept = myMetaInfo.registerConcept(concept, name)
+//        myActualConcept = myMetaInfo.withConcept(concept, name)
 //        myActualConcept!!.setImplementationKind(scope, kind)
 //        myActualConcept!!.setIntIndex(index)
 //        myConcepts.put(index, MetaAdapterFactory.getConcept(concept, name))
@@ -105,28 +112,31 @@ class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider) {
 //        myMetaInfoProvider.setAssociationName(link, name)
 //    }
 //
-//    fun aggregation(link: SContainmentLinkId, name: String, unordered: Boolean, index: Int) {
+    fun aggregation(link: SContainmentLinkId, name: String, unordered: Boolean, index: Int) {
 //        myActualConcept!!.addLink(link, name, unordered).setIntIndex(index)
-//        myAggregations.put(index, MetaAdapterFactory.getContainmentLink(link, name))
+        myAggregations[index] = SContainmentLink(link, name)
 //        myMetaInfoProvider.setAggregationName(link, name)
-//    }
-//
-    fun readConcept(index: Int): SConcept {
-        TODO()
-        //return myConcepts.get(index)
     }
 //
-//    fun readProperty(index: Int): SProperty {
-//        return myProperties.get(index)
-//    }
+    fun readConcept(index: Int): SConcept {
+        require(index >= 0)
+        return myConcepts[index]!!
+    }
+
+    fun readProperty(index: Int): SProperty {
+        require(index >= 0)
+        return myProperties[index]!!
+    }
+
+    fun readAssociation(index: Int): SReferenceLink {
+        require(index >= 0)
+        return myAssociations[index]!!
+    }
 //
-//    fun readAssociation(index: Int): SReferenceLink {
-//        return myAssociations.get(index)
-//    }
-//
-//    fun readAggregation(index: Int): SContainmentLink {
-//        return myAggregations.get(index)
-//    }
+    fun readAggregation(index: Int): SContainmentLink {
+        require(index >= 0) { "Index should be equal or greater to 0"}
+        return myAggregations[index] ?: throw IllegalArgumentException("Aggregation with index $index not found. Known indexes: ${myAggregations.keys.joinToString(separator = ", ")}")
+    }
 //
 //    fun isInterface(@NotNull concept: SConcept): Boolean {
 //        return ConceptKind.INTERFACE === myMetaInfo.find(concept).getKind()

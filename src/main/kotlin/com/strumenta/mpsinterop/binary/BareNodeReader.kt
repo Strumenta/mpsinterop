@@ -78,6 +78,7 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
 //     */
 //    @Throws(IOException::class)
     fun readNode(parent: SNode?): SNode {
+        println("Reading node with parent $parent")
 
         val node = instantiate(parent)
 
@@ -104,6 +105,7 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
         val c = myIn.readConcept()
         val nid = myIn.readNodeId()
         val link = myIn.readContainmentLink()
+        println("Instantiate concept $c, id $nid, link $link")
 //        val node = jetbrains.mps.smodel.SNode(c, nid)
 //        if (parent != null && link != null) {
 //            parent!!.addChild(link, node)

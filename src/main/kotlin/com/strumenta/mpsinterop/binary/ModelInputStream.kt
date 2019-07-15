@@ -16,7 +16,7 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
     private val myModuleRefs = ArrayList<SModuleReference>(128)
 //    private val myLanguages = ArrayList<SLanguage>(128)
     private val myConcepts = ArrayList<SConcept>(128)
-//    private val myProperties = ArrayList<SProperty>(128)
+    private val myProperties = ArrayList<SProperty>(128)
 //    private val myAssociations = ArrayList<SReferenceLink>(128)
 //    private val myAggregations = ArrayList<SContainmentLink>(128)
 
@@ -140,8 +140,7 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
         if (c == NULL) {
             return null
         } else if (c == NODEID_LONG) {
-            TODO()
-            //return Regular(readLong())
+            return SNodeId.regular(readLong())
         } else if (c == NODEID_STRING) {
             //return PersistenceFacade.getInstance().createNodeId(readString())
             TODO()
@@ -206,22 +205,24 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
     }
 //
 //    @Throws(IOException::class)
-    fun readProperty()/*: SProperty?*/ {
-//        val b = readByte()
-//        if (b == NULL) {
-//            return null
-//        }
-//        if (b == PROPERTY_INDEX) {
-//            return myProperties[readShort()]
-//        }
-//        if (b != PROPERTY) {
-//            throw IOException(Integer.toHexString(b.toInt()))
-//        }
-//        val c = readConcept()
-//        val p = MetaAdapterFactory.getProperty(SPropertyId(MetaIdHelper.getConcept(c), readLong()), readString())
-//        myProperties.add(p)
-//        return p
-        TODO()
+    fun readProperty(): SProperty? {
+        val b = readByte()
+        if (b == NULL) {
+            return null
+        }
+        if (b == PROPERTY_INDEX) {
+            return myProperties[readShort().toInt()]
+        }
+        if (b != PROPERTY) {
+            throw IOException(Integer.toHexString(b.toInt()))
+        }
+        val c = readConcept()
+        val propertyId = readLong()
+        val propertyName = readString()
+        //val p = MetaAdapterFactory.getProperty(SPropertyId(MetaIdHelper.getConcept(c), readLong()), readString())
+        val p = SProperty(SPropertyId(c, propertyId), propertyName)
+        myProperties.add(p)
+        return p
     }
 
     @Throws(IOException::class)
@@ -244,18 +245,19 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
     }
 
     @Throws(IOException::class)
-    fun readContainmentLink()/*: SContainmentLink?*/ {
+    fun readContainmentLink(): SContainmentLink? {
         val b = readByte()
-//        if (b == NULL) {
-//            return null
-//        }
-//        if (b == AGGREGATION_INDEX) {
-//            return myAggregations[readShort()]
-//        }
-//        if (b != AGGREGATION) {
-//            throw IOException(Integer.toHexString(b.toInt()))
-//        }
-//        val c = readConcept()
+        if (b == NULL) {
+            return null
+        }
+        if (b == AGGREGATION_INDEX) {
+            TODO()
+            //return myAggregations[readShort()]
+        }
+        if (b != AGGREGATION) {
+            throw IOException(Integer.toHexString(b.toInt()))
+        }
+        val c = readConcept()
 //        val l = MetaAdapterFactory.getContainmentLink(SContainmentLinkId(MetaIdHelper.getConcept(c), readLong()), readString())
 //        myAggregations.add(l)
 //        return l

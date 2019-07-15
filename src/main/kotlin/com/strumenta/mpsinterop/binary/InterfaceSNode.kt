@@ -1,8 +1,7 @@
 package com.strumenta.mpsinterop.binary
 
-open class SNode(concept: SConcept, nodeId: SNodeId?) {
-    fun addChild(link: SContainmentLink, node: SNode) {
+class InterfaceSNode(concept: SConcept, nodeId: SNodeId?) :SNode(concept, nodeId) {
+    fun skipRole(link: SContainmentLink) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
 }
