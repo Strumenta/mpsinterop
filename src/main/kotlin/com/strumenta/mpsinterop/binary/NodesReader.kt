@@ -104,7 +104,7 @@ class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, priva
         while (properties-- > 0) {
             val property = myReadHelper.readProperty(myIn.readShort().toInt())
             val value = myIn.readString()
-            //node.setProperty(property, value)
+            node.setProperty(property, value!!)
         }
     }
 }

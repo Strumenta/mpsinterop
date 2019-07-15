@@ -1,11 +1,10 @@
 package com.strumenta.mpsinterop.binary
 
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
-import java.util.UUID
 import java.io.*
-import java.util.HashMap
 import java.io.IOException
 import java.sql.Types.REF
+import java.util.*
 
 // From ModelPersistence
 
@@ -258,6 +257,14 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream) : SModel {
 }
 
 class SModel(modelReference: SModelReference?, val modelHeader: SModelHeader) {
+    val numberOfRoots: Int
+        get() = roots.size
+    val roots = LinkedList<SNode>()
+    fun addRootNode(root: SNode) {
+        roots.add(root)
+    }
+
+    fun named(name: String) = roots.find { it.name == name }
 
     val name: String
         get() = modelHeader.modelRef!!.name

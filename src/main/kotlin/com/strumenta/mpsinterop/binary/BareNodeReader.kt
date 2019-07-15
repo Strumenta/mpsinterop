@@ -54,7 +54,7 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
 //    @Throws(IOException::class)
     fun readNodesInto(modelData: SModel) {
         for (r in readChildren(null)) {
-            //modelData.addRootNode(r)
+            modelData.addRootNode(r)
         }
     }
 //

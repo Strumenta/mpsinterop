@@ -1,3 +1,5 @@
+import com.strumenta.mpsinterop.binary.SConceptId
+import com.strumenta.mpsinterop.binary.SNodeId
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -12,8 +14,16 @@ class MpsBinaryFileLoadingTest {
         val model = loadMpsModelFromBinaryFile(inputStream)
 
         assertEquals("jetbrains.mps.lang.core.structure", model.name)
-//
-//        assertEquals(36, model.numberOfRoots)
+
+        assertEquals(42, model.numberOfRoots)
+        //model.roots.forEach { println(it.name) }
+
+        val INamedConcept = model.named("INamedConcept")!!
+
+        assertEquals("INamedConcept", INamedConcept.name)
+        assertEquals(SNodeId.regular(1169194658468L), INamedConcept.nodeId)
+        assertEquals(1169125989551L, INamedConcept.concept.id.idValue)
+        assertEquals(1, INamedConcept.numberOfProperties)
 //
 //        val constraintNode = model.getRootByName("Constraint")
 //        assertEquals("6D8ZJLf0wUM", constraintNode.id)

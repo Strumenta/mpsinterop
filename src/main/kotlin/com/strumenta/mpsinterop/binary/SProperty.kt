@@ -1,5 +1,5 @@
 package com.strumenta.mpsinterop.binary
 
-class SProperty(sPropertyId: SPropertyId, propertyName: String?) {
+class SProperty(val sPropertyId: SPropertyId, val propertyName: String?) {
 
 }
