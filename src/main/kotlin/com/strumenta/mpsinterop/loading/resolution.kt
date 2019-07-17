@@ -3,6 +3,7 @@ package com.strumenta.mpsinterop.loading
 import com.strumenta.mpsinterop.logicalmodel.Concept
 import com.strumenta.mpsinterop.logicalmodel.Model
 import com.strumenta.mpsinterop.logicalmodel.Node
+import com.strumenta.mpsinterop.logicalmodel.SConcept
 import com.strumenta.mpsinterop.physicalmodel.PhysicalConcept
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
@@ -15,7 +16,7 @@ import kotlin.collections.HashMap
 class PhysicalToLogicalConverter(
         val languageRegistry: LanguageRegistry = LanguageRegistry.DEFAULT,
         val physicalModelsRegistry: PhysicalModelsRegistry = PhysicalModelsRegistry.DEFAULT) {
-    private val convertedConcepts = HashMap<PhysicalConcept, Concept>()
+    private val convertedConcepts = HashMap<PhysicalConcept, SConcept>()
     private val convertedNodes = HashMap<PhysicalNode, Node>()
 
     fun toLogical(physicalModel: PhysicalModel) : Model {
@@ -34,7 +35,7 @@ class PhysicalToLogicalConverter(
         }
     }
 
-    fun toLogical(physicalConcept: PhysicalConcept) : Concept {
+    fun toLogical(physicalConcept: PhysicalConcept) : SConcept {
         return convertedConcepts.computeIfAbsent(physicalConcept) { physicalConcept ->
             val concept = languageRegistry.getConcept(physicalConcept.name)
             if (concept != null) {
@@ -55,7 +56,7 @@ class PhysicalToLogicalConverter(
         }
     }
 
-    private fun loadConceptFromConceptDeclaration(conceptDeclaration: Node) : Concept {
+    private fun loadConceptFromConceptDeclaration(conceptDeclaration: Node) : SConcept {
         TODO()
     }
 

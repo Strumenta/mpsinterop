@@ -2,6 +2,7 @@ package com.strumenta.mpsinterop.registries
 
 import com.strumenta.mpsinterop.logicalmodel.Concept
 import com.strumenta.mpsinterop.logicalmodel.Language
+import com.strumenta.mpsinterop.logicalmodel.SConcept
 
 class LanguageRegistry {
 
@@ -17,7 +18,7 @@ class LanguageRegistry {
         languagesByName[language.name] = language
     }
 
-    fun getConcept(conceptName: String): Concept? {
+    fun getConcept(conceptName: String): SConcept? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

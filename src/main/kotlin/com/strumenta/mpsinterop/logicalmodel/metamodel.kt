@@ -7,7 +7,12 @@ enum class ConceptKind {
     IMPLEMENTATION_WITH_STUB
 }
 
-data class SConcept(val id: SConceptId, val name: String)
+data class SConcept(val id: SConceptId, val name: String) {
+    fun findProperty(conceptName: String, propertyName: String): SProperty {
+        TODO()
+    }
+}
+
 data class SConceptId(val languageId: SLanguageId, val idValue: Long)
 data class SContainmentLink(val link: SContainmentLinkId, val name: String)
 data class SContainmentLinkId(val conceptId: SConceptId, val idValue: Long)

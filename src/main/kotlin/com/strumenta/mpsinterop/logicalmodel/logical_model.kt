@@ -79,9 +79,9 @@ data class Concept(val id: String, val name: String, val superConcept: Concept?,
 
 interface PropertyType
 
-data class Property(val container: Concept, val id: String, val name: String, val type: PropertyType)
+data class Property(val container: SConcept, val id: String, val name: String, val type: PropertyType)
 
-class Node(val parent: Node?, val concept: Concept, val id: String) {
+class Node(val parent: Node?, val concept: SConcept, val id: String) {
     val root: Boolean
         get() = parent == null
 //    private val properties = HashMap<String, MutableList<String>>()
@@ -165,7 +165,7 @@ class Model(val name: String) {
         roots.forEach { op(it) }
     }
 
-    fun onRoots(concept: Concept, op: (Node)->Unit) {
+    fun onRoots(concept: SConcept, op: (Node)->Unit) {
         roots.filter { it.concept == concept }.forEach { op(it) }
     }
 
