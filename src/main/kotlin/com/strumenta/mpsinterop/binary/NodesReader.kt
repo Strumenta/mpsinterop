@@ -1,5 +1,9 @@
 package com.strumenta.mpsinterop.binary
 
+import com.strumenta.mpsinterop.logicalmodel.InterfaceSNode
+import com.strumenta.mpsinterop.logicalmodel.SModelReference
+import com.strumenta.mpsinterop.logicalmodel.SNode
+
 
 /*
  * Copyright 2003-2015 JetBrains s.r.o.

@@ -4,15 +4,6 @@ import com.strumenta.mpsinterop.physicalmodel.INAMED_CONCEPT
 import com.strumenta.mpsinterop.physicalmodel.NAME_PROPERTY
 import java.util.*
 
-data class Language(val name: String) {
-
-    fun add(concept: AbstractConcept) {
-        concepts.add(concept)
-        concept.language = this
-    }
-
-    val concepts = LinkedList<AbstractConcept>()
-}
 
 interface AbstractConcept {
     abstract var language: Language?

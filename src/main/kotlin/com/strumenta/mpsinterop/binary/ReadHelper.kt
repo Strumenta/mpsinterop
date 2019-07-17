@@ -1,5 +1,6 @@
 package com.strumenta.mpsinterop.binary
 
+import com.strumenta.mpsinterop.logicalmodel.*
 import java.lang.IllegalArgumentException
 
 /*

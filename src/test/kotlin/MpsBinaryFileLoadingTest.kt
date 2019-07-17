@@ -1,5 +1,4 @@
-import com.strumenta.mpsinterop.binary.SConceptId
-import com.strumenta.mpsinterop.binary.SNodeId
+import com.strumenta.mpsinterop.logicalmodel.SNodeId
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import kotlin.test.Ignore
 import kotlin.test.Test

@@ -1,5 +1,6 @@
 package com.strumenta.mpsinterop.binary
 
+import com.strumenta.mpsinterop.logicalmodel.*
 import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.io.IOException

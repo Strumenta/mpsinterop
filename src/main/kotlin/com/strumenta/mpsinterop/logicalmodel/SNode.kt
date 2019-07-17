@@ -1,7 +1,24 @@
-package com.strumenta.mpsinterop.binary
+package com.strumenta.mpsinterop.logicalmodel
 
 import java.util.*
 import kotlin.collections.HashMap
+
+abstract class SNodeId {
+    companion object {
+        fun regular(idValue: Long): SNodeId {
+            return RegularSNodeId(idValue)
+        }
+    }
+}
+
+internal data class RegularSNodeId(val value: Long) : SNodeId()
+
+class InterfaceSNode(concept: SConcept, nodeId: SNodeId?) : SNode(concept, nodeId) {
+    fun skipRole(link: SContainmentLink) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+}
+
 
 open class SNode(val concept: SConcept, val nodeId: SNodeId?) {
     val numberOfChildren: Int

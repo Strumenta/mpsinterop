@@ -18,6 +18,7 @@ package com.strumenta.mpsinterop.binary
 
 
 
+import com.strumenta.mpsinterop.logicalmodel.*
 import java.io.IOException;
 import java.util.*
 
@@ -546,9 +547,6 @@ public final class BinaryPersistence {
     }
 }
 
-data class SLanguageId(val uuid: UUID) {
-
-}
 
 
 class SNodeReference {

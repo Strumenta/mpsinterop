@@ -1,6 +1,5 @@
 package com.strumenta.mpsinterop.binary
-import com.strumenta.mpsinterop.binary.SModelReference
-import com.strumenta.mpsinterop.binary.ModelInputStream
+import com.strumenta.mpsinterop.logicalmodel.*
 
 
 /*
@@ -37,7 +36,6 @@ import com.strumenta.mpsinterop.binary.ModelInputStream
 //import org.jetbrains.mps.openapi.model.SReference
 
 import java.io.IOException
-import java.io.ObjectInputStream
 import java.util.ArrayList
 
 /**
