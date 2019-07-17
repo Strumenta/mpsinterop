@@ -1,5 +1,4 @@
 package com.strumenta.mpsinterop.binary
 
-class SContainmentLink(link: SContainmentLinkId, name: String) {
-
+class SContainmentLink(val link: SContainmentLinkId, val name: String) {
 }
