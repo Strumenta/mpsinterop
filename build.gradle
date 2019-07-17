@@ -34,3 +34,9 @@ dependencies {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
