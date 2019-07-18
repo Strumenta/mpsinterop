@@ -1,6 +1,5 @@
 package com.strumenta.mpsinterop.registries
 
-import com.strumenta.mpsinterop.logicalmodel.Concept
 import com.strumenta.mpsinterop.logicalmodel.Language
 import com.strumenta.mpsinterop.logicalmodel.SConcept
 

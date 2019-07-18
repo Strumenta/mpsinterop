@@ -6,10 +6,10 @@ typealias LanguageId = UUID
 
 data class Language(val id: LanguageId, val name: String) {
 
-    fun add(concept: AbstractConcept) {
+    fun add(concept: SConcept) {
         concepts.add(concept)
-        concept.language = this
+        //concept.language = this
     }
 
-    val concepts = LinkedList<AbstractConcept>()
+    val concepts = LinkedList<SConcept>()
 }
