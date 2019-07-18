@@ -1,8 +1,6 @@
 package com.strumenta.mpsinterop.loading
 
-import com.strumenta.mpsinterop.logicalmodel.Model
-import com.strumenta.mpsinterop.logicalmodel.Node
-import com.strumenta.mpsinterop.logicalmodel.SConcept
+import com.strumenta.mpsinterop.logicalmodel.*
 import com.strumenta.mpsinterop.physicalmodel.PhysicalConcept
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
@@ -13,7 +11,7 @@ class PhysicalToLogicalConverter(
         val languageRegistry: LanguageRegistry = LanguageRegistry.DEFAULT,
         val physicalModelsRegistry: PhysicalModelsRegistry = PhysicalModelsRegistry.DEFAULT) {
     private val convertedConcepts = HashMap<PhysicalConcept, SConcept>()
-    private val convertedNodes = HashMap<PhysicalNode, Node>()
+    private val convertedNodes = HashMap<PhysicalNode, SNode>()
 
     fun toLogical(physicalModel: PhysicalModel) : Model {
         val logicalModel = Model(physicalModel.name)
@@ -21,12 +19,13 @@ class PhysicalToLogicalConverter(
         return logicalModel
     }
 
-    fun toLogical(physicalNode: PhysicalNode) : Node {
+    fun toLogical(physicalNode: PhysicalNode) : SNode {
         return convertedNodes.computeIfAbsent(physicalNode) { physicalNode ->
-            val logicalNode = Node(
-                    physicalNode.parent?.toLogical(this),
+            val id = SNodeId.regular(physicalNode.id.toLong())
+            val logicalNode = SNode(
+                    /*physicalNode.parent?.toLogical(this),*/
                     this.toLogical(physicalNode.concept),
-                    physicalNode.id)
+                    id)
             logicalNode
         }
     }
@@ -52,7 +51,7 @@ class PhysicalToLogicalConverter(
         }
     }
 
-    private fun loadConceptFromConceptDeclaration(conceptDeclaration: Node) : SConcept {
+    private fun loadConceptFromConceptDeclaration(conceptDeclaration: SNode) : SConcept {
         TODO()
     }
 

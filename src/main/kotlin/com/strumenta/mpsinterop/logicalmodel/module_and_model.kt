@@ -35,27 +35,27 @@ data class SModelReference(val moduleRef : SModuleReference?, val id: SModelId, 
 data class SModuleReference(val name: String, val id: ModuleId)
 
 class Model(val name: String) {
-    private val roots = LinkedList<Node>()
+    private val roots = LinkedList<SNode>()
 
     val numberOfRoots: Int
         get() = this.roots.size
 
-    fun addRoot(root: Node) {
+    fun addRoot(root: SNode) {
         if (!root.root) {
             throw IllegalArgumentException("The given node is not a root")
         }
         roots.add(root)
     }
 
-    fun onRoots(op: (Node) -> Unit) {
+    fun onRoots(op: (SNode) -> Unit) {
         roots.forEach { op(it) }
     }
 
-    fun onRoots(concept: SConcept, op: (Node) -> Unit) {
+    fun onRoots(concept: SConcept, op: (SNode) -> Unit) {
         roots.filter { it.concept == concept }.forEach { op(it) }
     }
 
-    fun getRootByName(name: String): Node {
-        return roots.find { it.name() == name }!!
+    fun getRootByName(name: String): SNode {
+        return roots.find { it.name == name }!!
     }
 }

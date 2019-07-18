@@ -23,3 +23,4 @@ data class SReferenceLinkId(val conceptId: SConceptId, val idValue: Long)
 interface SReference
 data class StaticReference(val sref: SReferenceLink, val node: SNode, val modelRef: SModelReference,
                            val targetNodeId: SNodeId?, val resolveInfo: String?) : SReference
+

@@ -21,6 +21,8 @@ class InterfaceSNode(concept: SConcept, nodeId: SNodeId?) : SNode(concept, nodeI
 
 
 open class SNode(val concept: SConcept, val nodeId: SNodeId?) {
+    val root: Boolean
+        get() = TODO()
     val numberOfChildren: Int
         get() = childrenMap.values.fold(0) { acc, mutableList -> acc + mutableList.size  }
     val numberOfProperties: Int
