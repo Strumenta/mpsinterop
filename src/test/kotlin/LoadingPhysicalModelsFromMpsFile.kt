@@ -6,16 +6,23 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class MpsFileLoadingTest {
+class LoadingPhysicalModelsFromMpsFile {
 
     @Test
-    fun loadPhysicalModelOfConstraint() {
-        val inputStream = MpsFileLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
+    fun loadPhysicalModelOfFormatsStructure() {
+        val inputStream = LoadingPhysicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/formats-structure.mps")
         val model = loadMpsModel(inputStream)
 
         assertEquals("Formats.structure", model.name)
-
         assertEquals(36, model.numberOfRoots)
+    }
+
+    @Test
+    fun loadPhysicalModelOfConstraint() {
+        val inputStream = LoadingPhysicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/formats-structure.mps")
+        val model = loadMpsModel(inputStream)
 
         val constraintNode = model.getRootByName("Constraint")
         assertEquals("6D8ZJLf0wUM", constraintNode.id)
@@ -24,14 +31,6 @@ class MpsFileLoadingTest {
         val superConcept = constraintNode.reference("extends")
         assertNotNull(superConcept)
         assertEquals(PhysicalReferenceValue(OutsideModelReferenceTarget("tpck", "gw2VY9q"), "BaseConcept"), superConcept)
-        
-        // TODO check it cannot be root
-        // It is not present because it has the default value
-        //assertEquals("false", constraintNode.singlePropertyValue("rootable"))
-
-        // TODO check no properties
-        // TODO check no references
-        // TODO check no children
     }
 
 }

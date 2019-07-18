@@ -6,6 +6,7 @@ import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
+import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
 
 class PhysicalToLogicalConverter(
         val languageRegistry: LanguageRegistry = LanguageRegistry.DEFAULT,
@@ -21,7 +22,7 @@ class PhysicalToLogicalConverter(
 
     fun toLogical(physicalNode: PhysicalNode) : SNode {
         return convertedNodes.computeIfAbsent(physicalNode) { physicalNode ->
-            val id = SNodeId.regular(physicalNode.id.toLong())
+            val id = SNodeId.regular(JavaFriendlyBase64.parseLong(physicalNode.id))
             val logicalNode = SNode(
                     /*physicalNode.parent?.toLogical(this),*/
                     this.toLogical(physicalNode.concept),

@@ -15,7 +15,7 @@ class LanguageLoadingTest {
     @Test
     @Ignore
     fun loadConceptConstraint() {
-        val inputStream = LogicalModelLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
+        val inputStream = LanguageLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val languageRegistry = LanguageRegistry()
         val language = languageRegistry.loadLanguageFromJar(inputStream)
         val constraintConcept = TODO()

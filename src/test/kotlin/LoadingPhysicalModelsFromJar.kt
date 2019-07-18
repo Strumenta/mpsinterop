@@ -7,12 +7,12 @@ import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class MpsJarLoadingTest {
+class LoadingPhysicalModelsFromJar {
 
     @Test
     @Ignore
     fun loadINamedConcept() {
-        val inputStream = MpsFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.core.jar")
+        val inputStream = LoadingPhysicalModelsFromJar::class.java.getResourceAsStream("/jetbrains.mps.lang.core.jar")
         val physicalModelsRegistry = PhysicalModelsRegistry()
         val models = physicalModelsRegistry.loadJar(inputStream)
         val structure = models.find { it.name == "jetbrains.mps.lang.core.structure" }!!
@@ -20,8 +20,9 @@ class MpsJarLoadingTest {
     }
 
     @Test
+    @Ignore
     fun loadConceptsStructure() {
-        val inputStream = MpsFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.structure.jar")
+        val inputStream = LoadingPhysicalModelsFromJar::class.java.getResourceAsStream("/jetbrains.mps.lang.structure.jar")
         val physicalModelsRegistry = PhysicalModelsRegistry()
         val models = physicalModelsRegistry.loadJar(inputStream)
         assertEquals(3, models.size)

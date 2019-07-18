@@ -9,15 +9,16 @@ import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class LogicalModelLoadingTest {
+class LoadingLogicalModelsFromMpsFile {
 
     @Test
-    @Ignore
     fun loadLogicalModelOfConstraint() {
         val languageRegistry = LanguageRegistry()
         val physicalModelRegistry = PhysicalModelsRegistry()
-        val formatsStructurePhysicalModel = physicalModelRegistry.loadMpsFile(LogicalModelLoadingTest::class.java.getResourceAsStream("/formats-structure.mps"))
-        physicalModelRegistry.loadJar(MpsFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.structure.jar"))
+        val formatsStructurePhysicalModel = physicalModelRegistry.loadMpsFile(
+                LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream("/formats-structure.mps"))
+        physicalModelRegistry.loadJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.structure.jar"))
 
         val converter = PhysicalToLogicalConverter(languageRegistry, physicalModelRegistry)
         val logicalModel = converter.toLogical(formatsStructurePhysicalModel)
