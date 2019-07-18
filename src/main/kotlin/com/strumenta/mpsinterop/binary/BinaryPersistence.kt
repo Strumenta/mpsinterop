@@ -372,7 +372,7 @@ public final class BinaryPersistence {
         var langCount = mis.readShort().toInt()
         println("langCount $langCount")
         while (langCount-- > 0) {
-            val languageId = SLanguageId(mis.readUUID())
+            val languageId = mis.readUUID()
             val langName = mis.readString()
             println("langName $langName")
 
@@ -435,7 +435,7 @@ public final class BinaryPersistence {
         return rh
     }
 
-//    data class SConceptId(val languageId: SLanguageId, val readLong: Long) {
+//    data class SConceptId(val languageId: LanguageId, val readLong: Long) {
 //
 //    }
 //
@@ -454,7 +454,7 @@ public final class BinaryPersistence {
     private fun loadUsedLanguages(`is`: ModelInputStream) {
         val size = `is`.readShort().toInt()
         for (i in 0 until size) {
-            val id = SLanguageId(`is`.readUUID())
+            val id = `is`.readUUID()
             val name = `is`.readString()
             println("used language $id $name")
             //val l = MetaAdapterFactory.getLanguage(id, name)

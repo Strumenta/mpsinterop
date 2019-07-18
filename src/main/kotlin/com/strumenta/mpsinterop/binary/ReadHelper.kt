@@ -26,7 +26,7 @@ import java.lang.IllegalArgumentException
 //import jetbrains.mps.persistence.registry.LangInfo;
 //import jetbrains.mps.smodel.adapter.ids.SConceptId;
 //import jetbrains.mps.smodel.adapter.ids.SContainmentLinkId;
-//import jetbrains.mps.smodel.adapter.ids.SLanguageId;
+//import jetbrains.mps.smodel.adapter.ids.LanguageId;
 //import jetbrains.mps.smodel.adapter.ids.SPropertyId;
 //import jetbrains.mps.smodel.adapter.ids.SReferenceLinkId;
 //import jetbrains.mps.smodel.adapter.structure.MetaAdapterFactory;
@@ -77,7 +77,7 @@ class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider?) {
         isRequestedInterfaceOnly = interfaceOnly
     }
 //
-//    fun withLanguage(lang: SLanguageId, name: String, index: Int) {
+//    fun withLanguage(lang: LanguageId, name: String, index: Int) {
 //        val langInfo = myMetaInfo.registerLanguage(lang, name)
 //        langInfo.setIntIndex(index)
 //        myMetaInfoProvider.setLanguageName(lang, name)

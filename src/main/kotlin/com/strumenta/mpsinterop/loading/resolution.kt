@@ -1,6 +1,5 @@
 package com.strumenta.mpsinterop.loading
 
-import com.strumenta.mpsinterop.logicalmodel.Concept
 import com.strumenta.mpsinterop.logicalmodel.Model
 import com.strumenta.mpsinterop.logicalmodel.Node
 import com.strumenta.mpsinterop.logicalmodel.SConcept
@@ -9,9 +8,6 @@ import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
-import java.lang.RuntimeException
-import java.util.*
-import kotlin.collections.HashMap
 
 class PhysicalToLogicalConverter(
         val languageRegistry: LanguageRegistry = LanguageRegistry.DEFAULT,

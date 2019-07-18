@@ -2,9 +2,9 @@ package com.strumenta.mpsinterop.logicalmodel
 
 import java.util.*
 
-data class SLanguageId(val uuid: UUID)
+typealias LanguageId = UUID
 
-data class Language(val name: String) {
+data class Language(val id: LanguageId, val name: String) {
 
     fun add(concept: AbstractConcept) {
         concepts.add(concept)

@@ -13,7 +13,7 @@ data class SConcept(val id: SConceptId, val name: String) {
     }
 }
 
-data class SConceptId(val languageId: SLanguageId, val idValue: Long)
+data class SConceptId(val languageId: LanguageId, val idValue: Long)
 data class SContainmentLink(val link: SContainmentLinkId, val name: String)
 data class SContainmentLinkId(val conceptId: SConceptId, val idValue: Long)
 data class SProperty(val sPropertyId: SPropertyId, val propertyName: String?)
