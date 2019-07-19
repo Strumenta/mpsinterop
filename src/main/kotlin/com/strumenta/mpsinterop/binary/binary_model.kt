@@ -10,22 +10,19 @@ import java.util.*
 
 // From ModelPersistence
 
-val MODEL = "model"
-val REF = "ref"
-val MODEL_UID = "modelUID"
-val NAME = "name"
-val VALUE = "value"
+private val MODEL = "model"
+private val REF = "ref"
+private val MODEL_UID = "modelUID"
+private val NAME = "name"
+private val VALUE = "value"
 
-val PERSISTENCE = "persistence"
-val PERSISTENCE_VERSION = "version"
+private val PERSISTENCE = "persistence"
+private val PERSISTENCE_VERSION = "version"
 
-val FIRST_SUPPORTED_VERSION = 9
-val LAST_VERSION = 9
+private val FIRST_SUPPORTED_VERSION = 9
+private val LAST_VERSION = 9
 
 private val HEADER_READ_LIMIT = 1 shl 16 // allow for huge headers
-
-
-
 
 private val HEADER_START = -0x6e545457
 private val STREAM_ID_V1 = 0x00000300
@@ -66,19 +63,6 @@ internal const val ASSOCIATION : Byte = 0x36
 internal const val ASSOCIATION_INDEX : Byte = 0x37
 internal const val AGGREGATION : Byte = 0x38
 internal const val AGGREGATION_INDEX : Byte = 0x39
-
-///**
-// * Evgeny Gryaznov, Sep 27, 2010
-// */
-//class ModelOutputStream : DataOutputStream {
-//
-//}
-
-
-
-
-
-
 
 class SModelHeader {
     val DO_NOT_GENERATE = "doNotGenerate"

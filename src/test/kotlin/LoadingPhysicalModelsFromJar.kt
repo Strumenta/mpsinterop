@@ -1,6 +1,5 @@
 
 import com.strumenta.mpsinterop.loading.loadJar
-import com.strumenta.mpsinterop.loading.loadLanguageFromDescriptors
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
 import kotlin.test.Ignore
@@ -16,7 +15,6 @@ class LoadingPhysicalModelsFromJar {
         val physicalModelsRegistry = PhysicalModelsRegistry()
         val models = physicalModelsRegistry.loadJar(inputStream)
         val structure = models.find { it.name == "jetbrains.mps.lang.core.structure" }!!
-        val language = loadLanguageFromDescriptors(structure)
     }
 
     @Test

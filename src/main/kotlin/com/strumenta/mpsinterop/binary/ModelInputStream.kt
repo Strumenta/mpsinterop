@@ -10,7 +10,7 @@ import java.util.*
 /**
  * Original code written by Evgeny Gryaznov
  */
-class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedInputStream(inputStream, 65536)) {
+internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedInputStream(inputStream, 65536)) {
 
     private val myStrings = ArrayList<String>(2048)
     private val myModelRefs = ArrayList<SModelReference>(1024)

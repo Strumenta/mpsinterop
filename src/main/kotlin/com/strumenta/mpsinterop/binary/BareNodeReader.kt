@@ -44,7 +44,7 @@ import java.util.ArrayList
  *
  * @author Artem Tikhomirov
  */
-open class BareNodeReader(protected val myModelReference: SModelReference, protected val myIn: ModelInputStream) {
+internal open class BareNodeReader(protected val myModelReference: SModelReference, protected val myIn: ModelInputStream) {
 
 //    /**
 //     * Read nodes and register them as roots into supplied ModelData

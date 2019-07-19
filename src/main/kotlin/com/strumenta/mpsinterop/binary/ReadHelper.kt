@@ -3,48 +3,13 @@ package com.strumenta.mpsinterop.binary
 import com.strumenta.mpsinterop.logicalmodel.*
 import java.lang.IllegalArgumentException
 
-/*
- * Copyright 2003-2014 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-//import gnu.trove.TIntObjectHashMap;
-//import jetbrains.mps.persistence.MetaModelInfoProvider;
-//import jetbrains.mps.persistence.registry.ConceptInfo;
-//import jetbrains.mps.persistence.registry.IdInfoRegistry;
-//import jetbrains.mps.persistence.registry.LangInfo;
-//import jetbrains.mps.smodel.adapter.ids.SConceptId;
-//import jetbrains.mps.smodel.adapter.ids.SContainmentLinkId;
-//import jetbrains.mps.smodel.adapter.ids.LanguageId;
-//import jetbrains.mps.smodel.adapter.ids.SPropertyId;
-//import jetbrains.mps.smodel.adapter.ids.SReferenceLinkId;
-//import jetbrains.mps.smodel.adapter.structure.MetaAdapterFactory;
-//import jetbrains.mps.smodel.runtime.ConceptKind;
-//import jetbrains.mps.smodel.runtime.StaticScope;
-//import org.jetbrains.annotations.NotNull;
-//import org.jetbrains.mps.openapi.language.SConcept;
-//import org.jetbrains.mps.openapi.language.SContainmentLink;
-//import org.jetbrains.mps.openapi.language.SProperty;
-//import org.jetbrains.mps.openapi.language.SReferenceLink;
-
 
 /**
  * [jetbrains.mps.smodel.persistence.def.v9.IdInfoReadHelper] counterpart for binary persistence.
  * FIXME consider refactoring to remove duplicating code (e.g. #isInterface or #isRequestedInterfaceOnly)
  * @author Artem Tikhomirov
  */
-class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider?) {
+internal class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider?) {
 //    private val myMetaInfo: IdInfoRegistry
     var isRequestedInterfaceOnly: Boolean = false
         private set
