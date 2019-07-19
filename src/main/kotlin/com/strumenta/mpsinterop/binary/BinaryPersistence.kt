@@ -46,7 +46,7 @@ internal class LanguageLoaderHelper {
  * @author evgeny, 11/21/12
  * @author Artem Tikhomirov
  */
-public final class BinaryPersistence {
+internal class BinaryPersistence {
 
     private var myMetaInfoProvider: MetaModelInfoProvider? = null
     private var myModelData: SModel? = null
@@ -561,11 +561,5 @@ public final class BinaryPersistence {
             throw IOException("bad stream, no sync token")
         }
     }
-}
-
-
-
-class SNodeReference {
-
 }
 
