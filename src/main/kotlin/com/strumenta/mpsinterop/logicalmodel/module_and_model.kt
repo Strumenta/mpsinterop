@@ -28,9 +28,8 @@ open class ModuleId {
 
 internal class RegularModuleId(val uuid: UUID) : ModuleId()
 
-data class SModelReference(val moduleRef : SModuleReference?, val id: SModelId, val name: String) {
-
-}
+data class SModelReference(val moduleRef : SModuleReference?,
+                           val id: SModelId, val name: String)
 
 data class SModuleReference(val name: String, val id: ModuleId)
 

@@ -1,6 +1,5 @@
 package com.strumenta.mpsinterop.physicalmodel
 
-import com.strumenta.mpsinterop.logicalmodel.Model
 import java.util.*
 import kotlin.collections.HashMap
 

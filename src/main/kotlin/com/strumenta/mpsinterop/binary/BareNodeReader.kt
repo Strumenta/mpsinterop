@@ -44,115 +44,69 @@ import java.util.ArrayList
  *
  * @author Artem Tikhomirov
  */
-internal open class BareNodeReader(protected val myModelReference: SModelReference, protected val myIn: ModelInputStream) {
+internal abstract class BareNodeReader(private val modelReference: SModelReference,
+                                   protected val modelInputStream: ModelInputStream) {
 
-//    /**
-//     * Read nodes and register them as roots into supplied ModelData
-//     */
-//    @Throws(IOException::class)
-    fun readNodesInto(modelData: SModel) {
-        for (r in readChildren(null)) {
-            modelData.addRootNode(r)
-        }
+    companion object {
+        private const val REF_THIS_MODEL: Byte = 17
+        private const val REF_OTHER_MODEL: Byte = 18
     }
-//
-//    /**
-//     * Read nodes and register them as children into supplied parent SNode (if any)
-//     * @return list of nodes read
-//     */
-//    @Throws(IOException::class)
-    fun readChildren(parent: SNode?): List<SNode> {
-        var size = myIn.readInt()
-        //println("  readChildren, size $size")
+
+    fun readNodesInto(modelData: SModel) {
+        readChildren(null).forEach { modelData.addRootNode(it) }
+    }
+
+    private fun readChildren(parent: SNode?): List<SNode> {
+        var size = modelInputStream.readInt()
         val rv = ArrayList<SNode>(size)
         while (size-- > 0) {
             rv.add(readNode(parent))
         }
         return rv
     }
-//
-//    /**
-//     * Read a single node and register it with optional parent
-//     */
-//    @Throws(IOException::class)
-    fun readNode(parent: SNode?): SNode {
-        //println("Reading node with parent $parent")
 
+    private fun readNode(parent: SNode?): SNode {
         val node = instantiate(parent)
 
-        if (myIn.readByte() != '{'.toByte()) {
+        if (modelInputStream.readByte() != '{'.toByte()) {
             throw IOException("bad stream, no '{'")
         }
 
         readProperties(node)
-
         readUserObjects(node)
-
         readReferences(node)
-
         readChildren(node)
 
-        if (myIn.readByte() != '}'.toByte()) {
+        if (modelInputStream.readByte() != '}'.toByte()) {
             throw IOException("bad stream, no '}'")
         }
         return node
     }
-//
-//    @Throws(IOException::class)
-    protected open fun instantiate(parent: SNode?): SNode {
-        val c = myIn.readConcept()
-        val nid = myIn.readNodeId()
-        val link = myIn.readContainmentLink()
-        //println("Instantiate concept $c, id $nid, link $link")
-//        val node = jetbrains.mps.smodel.SNode(c, nid)
-//        if (parent != null && link != null) {
-//            parent!!.addChild(link, node)
-//        }
-//        return node
-        TODO()
-    }
-//
-//    @Throws(IOException::class)
-    protected open fun readProperties(node: SNode) {
-        var properties = myIn.readShort().toInt()
-        //println("  properties $properties")
-        while (properties-- > 0) {
-            val property = myIn.readProperty()
-            val value = myIn.readString()
-            //node.setProperty(property, value)
-        }
-    }
 
-    @Throws(IOException::class)
-    protected open fun readReferences(node: SNode) {
-        var refs = myIn.readShort().toInt()
-        while (refs-- > 0) {
-            readReference(myIn.readReferenceLink()!!, node)
-        }
-    }
+    protected abstract fun instantiate(parent: SNode?): SNode
 
-    val REF_THIS_MODEL: Byte = 17
-    val REF_OTHER_MODEL: Byte = 18
-//
-//    @Throws(IOException::class)
+    protected abstract fun readProperties(node: SNode)
+
+    protected abstract fun readReferences(node: SNode)
+
     protected fun readReference(sref: SReferenceLink, node: SNode): SReference {
-        val kind = myIn.readByte().toInt()
+        val kind = modelInputStream.readByte().toInt()
         assert(kind >= 1 && kind <= 3)
-        val targetNodeId = if (kind == 1) myIn.readNodeId() else null
-        //val origin = if (kind == 3) DynamicReferenceOrigin(myIn.readNodePointer(), myIn.readNodePointer()) else null
+        val targetNodeId = if (kind == 1) modelInputStream.readNodeId() else null
+        //val origin = if (kind == 3) DynamicReferenceOrigin(modelInputStream.readNodePointer(), modelInputStream.readNodePointer()) else null
         val origin = if (kind == 3) TODO() else null
-        val targetModelKind = myIn.readByte().toInt()
+        val targetModelKind = modelInputStream.readByte().toInt()
         assert(targetModelKind == REF_OTHER_MODEL.toInt() || targetModelKind == REF_THIS_MODEL.toInt())
         val modelRef: SModelReference?
         if (targetModelKind == REF_OTHER_MODEL.toInt()) {
-            modelRef = myIn.readModelReference()
+            modelRef = modelInputStream.readModelReference()
             TODO()
             //externalNodeReferenceRead(modelRef, targetNodeId)
         } else {
-            modelRef = myModelReference
+            modelRef = modelReference
             localNodeReferenceRead(targetNodeId)
         }
-        val resolveInfo = myIn.readString()
+        val resolveInfo = modelInputStream.readString()
         if (kind == 1) {
             val reference = StaticReference(
                     sref,
@@ -188,9 +142,8 @@ internal open class BareNodeReader(protected val myModelReference: SModelReferen
 //        // no-op, left for subclasses  to override
 //    }
 //
-//    @Throws(IOException::class)
     protected fun readUserObjects(node: SNode) {
-        val userObjectCount = myIn.readShort().toInt()
+        val userObjectCount = modelInputStream.readShort().toInt()
         var i = 0
         while (i < userObjectCount) {
             val key = readUserObject()
@@ -201,19 +154,18 @@ internal open class BareNodeReader(protected val myModelReference: SModelReferen
             i += 2
         }
     }
-//
-//    @Throws(IOException::class)
+
     private fun readUserObject(): Any? {
-        val id = myIn.readByte().toInt()
+        val id = modelInputStream.readByte().toInt()
         when (id) {
-//            BareNodeWriter.USER_NODE_POINTER -> return myIn.readNodePointer()
-//            BareNodeWriter.USER_STRING -> return myIn.readString()
+//            BareNodeWriter.USER_NODE_POINTER -> return modelInputStream.readNodePointer()
+//            BareNodeWriter.USER_STRING -> return modelInputStream.readString()
 //            BareNodeWriter.USER_NULL -> return null
-//            BareNodeWriter.USER_NODE_ID -> return myIn.readNodeId()
-//            BareNodeWriter.USER_MODEL_ID -> return myIn.readModelID()
-//            BareNodeWriter.USER_MODEL_REFERENCE -> return myIn.readModelReference()
+//            BareNodeWriter.USER_NODE_ID -> return modelInputStream.readNodeId()
+//            BareNodeWriter.USER_MODEL_ID -> return modelInputStream.readModelID()
+//            BareNodeWriter.USER_MODEL_REFERENCE -> return modelInputStream.readModelReference()
 //            BareNodeWriter.USER_SERIALIZABLE -> {
-//                val stream = ObjectInputStream(myIn)
+//                val stream = ObjectInputStream(modelInputStream)
 //                try {
 //                    return stream.readObject()
 //                } catch (ignore: ClassNotFoundException) {
