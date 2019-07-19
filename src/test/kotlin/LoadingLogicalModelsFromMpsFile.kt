@@ -12,7 +12,7 @@ class LoadingLogicalModelsFromMpsFile {
 
         val inputStream = LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.core-src-structure.mpb")
-        val model = loadMpsModelFromBinaryFile(inputStream)
+        val model = loadMpsModelFromBinaryFile(inputStream, languageRegistry)
         languageRegistry.loadLanguageFromModel(model)
 
         return languageRegistry

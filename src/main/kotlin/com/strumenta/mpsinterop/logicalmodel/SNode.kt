@@ -52,6 +52,10 @@ open class SNode(val concept: SConcept, val nodeId: SNodeId?) {
 //    }
 
     val name : String?
-        get() = this.properties.entries.first { it.key.propertyName == "name" }?.value
+        get() = this.properties.entries.firstOrNull { it.key.propertyName == "name" }?.value
+
+    override fun toString(): String {
+        return "Node $name [${concept.name}] ($nodeId)"
+    }
 }
 

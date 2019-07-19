@@ -2,6 +2,7 @@ package com.strumenta.mpsinterop.binary
 
 import com.strumenta.mpsinterop.logicalmodel.SModelReference
 import com.strumenta.mpsinterop.logicalmodel.SNode
+import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.io.*
 import java.io.IOException
 import java.sql.Types.REF
@@ -213,12 +214,13 @@ class SModelHeader {
 //    }
 }
 
-fun loadMpsModelFromBinaryFile(inputStream: InputStream) : SModel {
+fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: LanguageRegistry? = null) : SModel {
     val mis = ModelInputStream(inputStream)
     val modelHeader = loadHeader(mis)
     val model = SModel(modelHeader.getModelReference(), modelHeader)
     val bp = BinaryPersistence(/*if (mmiProvider == null) RegularMetaModelInfo() else mmiProvider,*/ model)
-    val rh = bp.loadModelProperties(mis)
+    val languageLoaderHelper = LanguageLoaderHelper()
+    val rh = bp.loadModelProperties(mis, languageLoaderHelper)
 //    rh.requestInterfaceOnly(interfaceOnly)
 //
     val reader = NodesReader(modelHeader.getModelReference()!!, mis, rh)
@@ -228,6 +230,11 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream) : SModel {
     reader.readNodesInto(model)
 //    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
             //TODO()
+
+    if (languageRegistry != null) {
+        languageLoaderHelper.loadedLanguages().forEach { languageRegistry.add(it) }
+    }
+
     return model
 }
 

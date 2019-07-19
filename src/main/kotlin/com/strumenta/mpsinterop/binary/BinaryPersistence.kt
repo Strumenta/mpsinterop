@@ -27,6 +27,20 @@ public interface MetaModelInfoProvider {
 
 }
 
+internal class LanguageLoaderHelper {
+    //private val languageNamesByID = HashMap<LanguageId, String>()
+    private val languageByID = HashMap<LanguageId, Language>()
+    fun registerLanguage(id: UUID, name: String) {
+        if (id in languageByID) {
+            require(languageByID[id]!!.name == name)
+        } else {
+            languageByID[id] = Language(id, name)
+        }
+    }
+    fun loadedLanguages() : Set<Language> {
+        return languageByID.values.toSet()
+    }
+}
 
 /**
  * @author evgeny, 11/21/12
@@ -225,8 +239,8 @@ public final class BinaryPersistence {
     }
 
 
-    fun loadModelProperties(mis: ModelInputStream): ReadHelper {
-        val readHelper = loadRegistry(mis)
+    internal fun loadModelProperties(mis: ModelInputStream, languageLoaderHelper: LanguageLoaderHelper): ReadHelper {
+        val readHelper = loadRegistry(mis, languageLoaderHelper)
 //
         loadUsedLanguages(mis)
 //
@@ -354,7 +368,8 @@ public final class BinaryPersistence {
 //    }
 //
 
-    private fun loadRegistry(mis: ModelInputStream): ReadHelper {
+    private fun loadRegistry(mis: ModelInputStream,
+                             languageLoaderHelper: LanguageLoaderHelper): ReadHelper {
         assertSyncToken(mis, REGISTRY_START)
         // see #saveRegistry, we use position of an element in persistence as its index
         var langIndex: Int
@@ -374,6 +389,7 @@ public final class BinaryPersistence {
         while (langCount-- > 0) {
             val languageId = mis.readUUID()
             val langName = mis.readString()
+            languageLoaderHelper.registerLanguage(languageId, langName!!)
             println("langName $langName")
 
             //rh.withLanguage(languageId, langName, langIndex++)

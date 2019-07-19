@@ -1,5 +1,7 @@
 package com.strumenta.mpsinterop.logicalmodel
 
+import com.strumenta.mpsinterop.registries.LanguageRegistry
+
 enum class ConceptKind {
     NORMAL,
     INTERFACE,
@@ -8,6 +10,19 @@ enum class ConceptKind {
 }
 
 data class SConcept(val id: SConceptId, val name: String) {
+    fun qname(languageRegistry: LanguageRegistry) : String {
+        val languageName = languageName(languageRegistry)
+        return "$languageName.$name"
+    }
+
+    fun language(languageRegistry: LanguageRegistry) : Language {
+        return languageRegistry.get(id.languageId)!!
+    }
+
+    fun languageName(languageRegistry: LanguageRegistry) : String {
+        return languageRegistry.getName(id.languageId)!!
+    }
+
     fun findProperty(conceptName: String, propertyName: String): SProperty {
         TODO()
     }
