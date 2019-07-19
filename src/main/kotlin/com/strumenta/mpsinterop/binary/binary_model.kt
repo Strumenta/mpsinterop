@@ -224,9 +224,6 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: Langu
 //    rh.requestInterfaceOnly(interfaceOnly)
 //
     val reader = NodesReader(modelHeader.getModelReference()!!, mis, rh)
-    println()
-    println("readNodesInto")
-    println()
     reader.readNodesInto(model)
 //    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
             //TODO()

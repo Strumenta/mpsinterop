@@ -385,28 +385,28 @@ public final class BinaryPersistence {
 
         val rh = ReadHelper(myMetaInfoProvider)
         var langCount = mis.readShort().toInt()
-        println("langCount $langCount")
+        //println("langCount $langCount")
         while (langCount-- > 0) {
             val languageId = mis.readUUID()
             val langName = mis.readString()
             languageLoaderHelper.registerLanguage(languageId, langName!!)
-            println("langName $langName")
+            //println("langName $langName")
 
             //rh.withLanguage(languageId, langName, langIndex++)
 //            //
             var conceptCount = mis.readShort().toInt()
-            println("conceptCount $conceptCount")
+            //println("conceptCount $conceptCount")
             while (conceptCount-- > 0) {
                 val conceptId = SConceptId(languageId, mis.readLong())
-                println("conceptId $conceptId")
+                //println("conceptId $conceptId")
                 val conceptName = mis.readString()
-                println("  conceptName $conceptName")
+                //println("  conceptName $conceptName")
                 val flags = mis.readByte().toInt()
-                println("  flags $flags")
+                //println("  flags $flags")
                 val staticScopeValue = flags and 0x0f
                 val conceptKindValue = flags shr 4 and 0x0f
-                println("  staticScopeValue $staticScopeValue")
-                println("  conceptKindValue $conceptKindValue")
+                //println("  staticScopeValue $staticScopeValue")
+                //println("  conceptKindValue $conceptKindValue")
                 val stubToken = mis.readByte().toInt()
                 val stubId: SConceptId?
                 if (stubToken == STUB_NONE.toInt()) {
@@ -423,7 +423,7 @@ public final class BinaryPersistence {
 //                //
                 conceptIndex++
                 var propertyCount = mis.readShort().toInt()
-                println("  propertyCount $propertyCount")
+                //println("  propertyCount $propertyCount")
                 while (propertyCount-- > 0) {
                     val propertyId = mis.readLong()
                     val propertyName = mis.readString()!!
@@ -432,16 +432,16 @@ public final class BinaryPersistence {
                 }
 //                //
                 var associationCount = mis.readShort().toInt()
-                println("  associationCount $associationCount")
+                //println("  associationCount $associationCount")
                 while (associationCount-- > 0) {
                     val id = mis.readLong()
                     val name = mis.readString()
-                    println("     $id $name")
+                    //println("     $id $name")
                     rh.association(SReferenceLinkId(conceptId, id), name!!, associationIndex++)
                 }
 //                //
                 var aggregationCount = mis.readShort().toInt()
-                println("  aggregationCount $aggregationCount")
+                //println("  aggregationCount $aggregationCount")
                 while (aggregationCount-- > 0) {
                     rh.aggregation(SContainmentLinkId(conceptId, mis.readLong()), mis.readString()!!, mis.readBoolean(), aggregationIndex++)
                 }
@@ -472,7 +472,7 @@ public final class BinaryPersistence {
         for (i in 0 until size) {
             val id = `is`.readUUID()
             val name = `is`.readString()
-            println("used language $id $name")
+            //println("used language $id $name")
             //val l = MetaAdapterFactory.getLanguage(id, name)
             //myModelData.addLanguage(l)
         }

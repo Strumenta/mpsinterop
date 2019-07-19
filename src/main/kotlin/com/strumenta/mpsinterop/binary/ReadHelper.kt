@@ -104,6 +104,7 @@ class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider?) {
     fun property(property: SPropertyId, name: String, index: Int) {
         //myActualConcept!!.addProperty(property, name).setIntIndex(index)
         val property = SProperty(property, name)
+        currentConcept!!.addProperty(property)
         myProperties[index] = property
         //myMetaInfoProvider.setPropertyName(property, name)
     }

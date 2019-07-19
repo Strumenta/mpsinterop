@@ -21,6 +21,7 @@ class InterfaceSNode(concept: SConcept, nodeId: SNodeId?) : SNode(concept, nodeI
 
 
 open class SNode(val concept: SConcept, val nodeId: SNodeId?) {
+
     val root: Boolean
         get() = TODO()
     val numberOfChildren: Int
@@ -47,15 +48,28 @@ open class SNode(val concept: SConcept, val nodeId: SNodeId?) {
         properties[id] = value
     }
 
-//    fun property(name: String): SProperty {
-//        properties.keys.find { it.name == name }!!
-//    }
+    fun propertyValue(name: String): String {
+        return properties[property(name)] ?: "No value for property $name"
+    }
+
+    fun property(name: String): SProperty {
+        return properties.keys.find { it.name == name } ?: concept.findProperty(name)
+    }
 
     val name : String?
-        get() = this.properties.entries.firstOrNull { it.key.propertyName == "name" }?.value
+        get() = this.properties.entries.firstOrNull { it.key.name == "name" }?.value
 
     override fun toString(): String {
         return "Node $name [${concept.name}] ($nodeId)"
+    }
+
+    fun booleanPropertyValue(name: String): Boolean {
+        val p = properties.keys.find { it.name == name }
+        return if (p == null) {
+            false
+        } else {
+            properties[p]!!.toBoolean()
+        }
     }
 }
 

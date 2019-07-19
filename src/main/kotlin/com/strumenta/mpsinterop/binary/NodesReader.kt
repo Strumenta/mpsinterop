@@ -56,9 +56,9 @@ class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, priva
     protected override fun instantiate(parent: SNode?): SNode {
         val conceptIndex = myIn.readShort().toInt()
         val concept = myReadHelper.readConcept(conceptIndex)
-        println("Concept $concept (index $conceptIndex)")
+        //println("Concept $concept (index $conceptIndex)")
         val nodeId = myIn.readNodeId()
-        println("NodeId $nodeId")
+        //println("NodeId $nodeId")
         val linkId = myIn.readShort().toInt()
         val link = if (linkId == -1) null else myReadHelper.readAggregation(linkId)
 

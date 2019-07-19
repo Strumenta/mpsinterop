@@ -63,7 +63,7 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
 //    @Throws(IOException::class)
     fun readChildren(parent: SNode?): List<SNode> {
         var size = myIn.readInt()
-        println("  readChildren, size $size")
+        //println("  readChildren, size $size")
         val rv = ArrayList<SNode>(size)
         while (size-- > 0) {
             rv.add(readNode(parent))
@@ -76,7 +76,7 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
 //     */
 //    @Throws(IOException::class)
     fun readNode(parent: SNode?): SNode {
-        println("Reading node with parent $parent")
+        //println("Reading node with parent $parent")
 
         val node = instantiate(parent)
 
@@ -103,7 +103,7 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
         val c = myIn.readConcept()
         val nid = myIn.readNodeId()
         val link = myIn.readContainmentLink()
-        println("Instantiate concept $c, id $nid, link $link")
+        //println("Instantiate concept $c, id $nid, link $link")
 //        val node = jetbrains.mps.smodel.SNode(c, nid)
 //        if (parent != null && link != null) {
 //            parent!!.addChild(link, node)
@@ -115,7 +115,7 @@ open class BareNodeReader(protected val myModelReference: SModelReference, prote
 //    @Throws(IOException::class)
     protected open fun readProperties(node: SNode) {
         var properties = myIn.readShort().toInt()
-        println("  properties $properties")
+        //println("  properties $properties")
         while (properties-- > 0) {
             val property = myIn.readProperty()
             val value = myIn.readString()
