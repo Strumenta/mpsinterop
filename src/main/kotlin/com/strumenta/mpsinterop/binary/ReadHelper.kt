@@ -9,7 +9,7 @@ import java.lang.IllegalArgumentException
  * FIXME consider refactoring to remove duplicating code (e.g. #isInterface or #isRequestedInterfaceOnly)
  * @author Artem Tikhomirov
  */
-internal class ReadHelper(private val myMetaInfoProvider: MetaModelInfoProvider?) {
+internal class ReadHelper() {
 //    private val myMetaInfo: IdInfoRegistry
     var isRequestedInterfaceOnly: Boolean = false
         private set

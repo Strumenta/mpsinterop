@@ -1,31 +1,9 @@
 package com.strumenta.mpsinterop.binary
 
-/*
- * Copyright 2003-2019 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
 import com.strumenta.mpsinterop.logicalmodel.*
+import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import java.io.IOException;
 import java.util.*
-
-
-public interface MetaModelInfoProvider {
-
-}
 
 internal class LanguageLoaderHelper {
     //private val languageNamesByID = HashMap<LanguageId, String>()
@@ -43,13 +21,11 @@ internal class LanguageLoaderHelper {
 }
 
 /**
- * @author evgeny, 11/21/12
+ * @author evgeny
  * @author Artem Tikhomirov
  */
 internal class BinaryPersistence {
 
-    private var myMetaInfoProvider: MetaModelInfoProvider? = null
-    private var myModelData: SModel? = null
 
 //    @Throws(ModelReadException::class)
 //    fun readHeader(@NotNull source: StreamDataSource): SModelHeader {
@@ -229,15 +205,9 @@ internal class BinaryPersistence {
 //    }
 
 //    constructor(mmiProvider: MetaModelInfoProvider, modelData: SModel) {
-//        myMetaInfoProvider = mmiProvider
-//        myModelData = modelData
+//        metaInfoProvider = mmiProvider
+//        loadingModel = modelData
 //    }
-
-    constructor(modelData: SModel) {
-        myMetaInfoProvider = null
-        myModelData = modelData
-    }
-
 
     internal fun loadModelProperties(mis: ModelInputStream, languageLoaderHelper: LanguageLoaderHelper): ReadHelper {
         val readHelper = loadRegistry(mis, languageLoaderHelper)
@@ -246,15 +216,15 @@ internal class BinaryPersistence {
 //
         for (ref in loadModuleRefList(mis)) {
             // FIXME add temporary code to read both module ref and SLanguage in 3.4 (write SLangugae, read both)
-            //SModelLegacy(myModelData).addEngagedOnGenerationLanguage(ref)
+            //SModelLegacy(loadingModel).addEngagedOnGenerationLanguage(ref)
         }
         for (ref in loadModuleRefList(mis)) {
-            //myModelData.addDevKit(ref)
+            //loadingModel.addDevKit(ref)
         }
 
         loadImports(mis)
 //        for (imp in loadImports(mis)) {
-//            //myModelData.addModelImport(imp)
+//            //loadingModel.addModelImport(imp)
 //        }
 
         assertSyncToken(mis, MODEL_START)
@@ -268,11 +238,11 @@ internal class BinaryPersistence {
 //        // header
 //        os.writeInt(HEADER_START)
 //        os.writeInt(STREAM_ID)
-//        os.writeModelReference(myModelData.getReference())
+//        os.writeModelReference(loadingModel.getReference())
 //        os.writeInt(-1)  //old model version
-//        if (myModelData is DefaultSModel) {
+//        if (loadingModel is DefaultSModel) {
 //            os.writeByte(HEADER_ATTRIBUTES)
-//            val mh = (myModelData as DefaultSModel).getSModelHeader()
+//            val mh = (loadingModel as DefaultSModel).getSModelHeader()
 //            os.writeBoolean(mh.isDoNotGenerate())
 //            val props = HashMap(mh.getOptionalProperties())
 //            os.writeShort(props.size)
@@ -287,11 +257,11 @@ internal class BinaryPersistence {
 //
 //        //languages
 //        saveUsedLanguages(os)
-//        saveModuleRefList(myModelData.engagedOnGenerationLanguages(), os)
-//        saveModuleRefList(myModelData.importedDevkits(), os)
+//        saveModuleRefList(loadingModel.engagedOnGenerationLanguages(), os)
+//        saveModuleRefList(loadingModel.importedDevkits(), os)
 //
 //        // imports
-//        saveImports(myModelData.importedModels(), os)
+//        saveImports(loadingModel.importedModels(), os)
 //        // no need to save implicit imports as we serialize them ad-hoc, the moment we find external reference from a node
 //
 //        os.writeInt(MODEL_START)
@@ -302,7 +272,7 @@ internal class BinaryPersistence {
 //    private fun saveRegistry(os: ModelOutputStream): IdInfoRegistry {
 //        os.writeInt(REGISTRY_START)
 //        val metaInfo = IdInfoRegistry()
-//        IdInfoCollector(metaInfo, myMetaInfoProvider).fill(myModelData.getRootNodes())
+//        IdInfoCollector(metaInfo, metaInfoProvider).fill(loadingModel.getRootNodes())
 //        val languagesInUse = metaInfo.getLanguagesInUse()
 //        os.writeShort(languagesInUse.size)
 //        // We use position of an element during persistence as its index, thus don't need to
@@ -383,7 +353,7 @@ internal class BinaryPersistence {
         conceptIndex = propertyIndex
         langIndex = conceptIndex
 
-        val rh = ReadHelper(myMetaInfoProvider)
+        val rh = ReadHelper()
         var langCount = mis.readShort().toInt()
         //println("langCount $langCount")
         while (langCount-- > 0) {
@@ -457,7 +427,7 @@ internal class BinaryPersistence {
 //
 //    @Throws(IOException::class)
 //    private fun saveUsedLanguages(os: ModelOutputStream) {
-//        val refs = myModelData.usedLanguages()
+//        val refs = loadingModel.usedLanguages()
 //        os.writeShort(refs.size)
 //        for (l in refs) {
 //            // id, name, version
@@ -474,7 +444,7 @@ internal class BinaryPersistence {
             val name = `is`.readString()
             //println("used language $id $name")
             //val l = MetaAdapterFactory.getLanguage(id, name)
-            //myModelData.addLanguage(l)
+            //loadingModel.addLanguage(l)
         }
     }
 //
