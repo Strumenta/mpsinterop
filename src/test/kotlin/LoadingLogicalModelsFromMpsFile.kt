@@ -13,28 +13,24 @@ class LoadingLogicalModelsFromMpsFile {
         val inputStream = LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.core-src-structure.mpb")
         val model = loadMpsModelFromBinaryFile(inputStream, languageRegistry)
-        //languageRegistry.loadLanguageFromModel(model)
+        languageRegistry.loadLanguageFromModel(model)
 
-        //return languageRegistry
-        TODO()
+        return languageRegistry
     }
 
     @Test
-    @Ignore
     fun loadLangStructureIntoLanguageRegistryConceptsAreLoaded() {
         val languageRegistry = loadBasicLanguageRegistry()
         assertNotNull(languageRegistry.getConcept("jetbrains.mps.lang.core.BaseConcept"))
     }
 
     @Test
-    @Ignore
     fun loadLangStructureIntoLanguageRegistryInterfaceConceptsAreLoaded() {
         val languageRegistry = loadBasicLanguageRegistry()
         assertNotNull(languageRegistry.getConcept("jetbrains.mps.lang.core.INamedConcept"))
     }
 
     @Test
-    @Ignore
     fun loadBaseConceptIntoLanguageRegistry() {
         val languageRegistry = loadBasicLanguageRegistry()
         val baseConcept = languageRegistry.getConcept("jetbrains.mps.lang.core.BaseConcept")!!
@@ -65,14 +61,14 @@ class LoadingLogicalModelsFromMpsFile {
 //        val constraintNode = logicalModel.getRootByName("Constraint")
 //        assertEquals("6D8ZJLf0wUM", constraintNode.id)
 //        assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, constraintNode.concept.name)
-//        assertEquals("true", constraintNode.singlePropertyValue("abstract"))
+//        assertEquals("true", constraintNode.propertyValue("abstract"))
 //        val superConcept = constraintNode.reference("extends")
 //        assertNotNull(superConcept)
 //        assertEquals(PhysicalReferenceValue(OutsideModelReferenceTarget("tpck", "gw2VY9q"), "BaseConcept"), superConcept)
 //
 //        // TODO check it cannot be root
 //        // It is not present because it has the default value
-//        //assertEquals("false", constraintNode.singlePropertyValue("rootable"))
+//        //assertEquals("false", constraintNode.propertyValue("rootable"))
 //
 //        // TODO check no properties
 //        // TODO check no references

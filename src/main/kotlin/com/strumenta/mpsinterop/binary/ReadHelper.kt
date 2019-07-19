@@ -54,7 +54,9 @@ internal class ReadHelper() {
 
 
     fun withConcept(conceptIndex: Int, conceptId: SConceptId, conceptName: String, kind: ConceptKind) {
-        currentConcept = PhysicalConcept(conceptId.idValue, conceptName, conceptIndex.toString())
+        currentConcept = PhysicalConcept(
+                conceptId.languageId,
+                conceptId.idValue, conceptName, conceptIndex.toString())
         myConcepts[conceptIndex] = currentConcept!!
     }
 

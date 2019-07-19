@@ -5,6 +5,7 @@ import com.strumenta.mpsinterop.logicalmodel.Language
 import com.strumenta.mpsinterop.logicalmodel.LanguageId
 import com.strumenta.mpsinterop.logicalmodel.SConcept
 import com.strumenta.mpsinterop.logicalmodel.SConceptId
+import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -34,7 +35,7 @@ class LanguageRegistry {
         return null
     }
 
-    fun loadLanguageFromModel(model: SModel) {
+    fun loadLanguageFromModel(model: PhysicalModel) {
         model.roots.forEach {
             if (it.concept.qname(this) == "jetbrains.mps.lang.structure.ConceptDeclaration") {
                 val languageName = model.name.removeSuffix(".structure")

@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
+import java.util.*
 
 fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, element: Element) : PhysicalNode {
     val conceptIndex = element.getAttribute("concept")
@@ -65,7 +66,10 @@ fun loadModel(document: Document) : PhysicalModel {
 
     val physicalModel = PhysicalModel(nameInParens)
     document.documentElement.processAllNodes("concept") {
-        val concept = PhysicalConcept(it.getAttribute("id").toLong(),
+        val languageId = UUID.fromString((it.parentNode as Element).getAttribute("id"))
+        val concept = PhysicalConcept(
+                languageId,
+                it.getAttribute("id").toLong(),
                 it.getAttribute("name"), it.getAttribute("index"))
         physicalModel.registerConcept(concept)
         it.processChildren("property") {

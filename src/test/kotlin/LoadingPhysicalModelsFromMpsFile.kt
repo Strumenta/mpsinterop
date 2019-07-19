@@ -27,7 +27,7 @@ class LoadingPhysicalModelsFromMpsFile {
         val constraintNode = model.getRootByName("Constraint")
         assertEquals("6D8ZJLf0wUM", constraintNode.id.toBase64())
         assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, constraintNode.concept.name)
-        assertEquals("true", constraintNode.singlePropertyValue("abstract"))
+        assertEquals("true", constraintNode.propertyValue("abstract"))
         val superConcept = constraintNode.reference("extends")
         assertNotNull(superConcept)
         assertEquals(PhysicalReferenceValue(OutsideModelReferenceTarget("tpck", "gw2VY9q"), "BaseConcept"), superConcept)

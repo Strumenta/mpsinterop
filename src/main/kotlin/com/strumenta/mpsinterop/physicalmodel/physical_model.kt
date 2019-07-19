@@ -1,14 +1,15 @@
 package com.strumenta.mpsinterop.physicalmodel
 
+import com.strumenta.mpsinterop.logicalmodel.LanguageId
 import com.strumenta.mpsinterop.logicalmodel.SNodeId
-import com.strumenta.mpsinterop.logicalmodel.SProperty
+import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.util.*
 import kotlin.collections.HashMap
 
 /**
  * Simplified concept, as it appears in a model
  */
-data class PhysicalConcept(val id: Long, val name: String, val index: String) {
+data class PhysicalConcept(val languageId: LanguageId, val id: Long, val name: String, val index: String) {
     private val properties = LinkedList<PhysicalProperty>()
     private val relations = LinkedList<PhysicalRelation>()
 
@@ -27,6 +28,11 @@ data class PhysicalConcept(val id: Long, val name: String, val index: String) {
 
     fun relationByName(name: String): PhysicalRelation {
         return relations.find { it.name == name }!!
+    }
+
+    fun qname(languageRegistry: LanguageRegistry): String {
+        val languageName = languageRegistry.getName(languageId)
+        return "$languageName.$name"
     }
 
 }
@@ -49,7 +55,7 @@ data class PhysicalProperty(val container: PhysicalConcept, val id: Long, val na
  */
 class PhysicalModel(val name: String){
 
-    private val roots = LinkedList<PhysicalNode>()
+    val roots = LinkedList<PhysicalNode>()
 
     val numberOfRoots: Int
         get() = this.roots.size
@@ -132,9 +138,9 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     internal var modelOfWhichIsRoot : PhysicalModel? = null
     val model : PhysicalModel?
         get() = if (root) modelOfWhichIsRoot else parent!!.model
-    private val properties = java.util.HashMap<PhysicalProperty, MutableList<String>>()
-    private val children = java.util.HashMap<PhysicalRelation, MutableList<PhysicalNode>>()
-    private val references = java.util.HashMap<PhysicalRelation, PhysicalReferenceValue>()
+    private val properties = HashMap<PhysicalProperty, String>()
+    private val children = HashMap<PhysicalRelation, MutableList<PhysicalNode>>()
+    private val references = HashMap<PhysicalRelation, PhysicalReferenceValue>()
 
     fun addChild(relation: PhysicalRelation, node: PhysicalNode) {
         if (relation !in children) {
@@ -148,21 +154,18 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     }
 
     fun addProperty(property: PhysicalProperty, propertyValue: String) {
-        if (property !in properties) {
-            properties[property] = LinkedList()
-        }
-        properties[property]!!.add(propertyValue)
+        properties[property] = propertyValue
     }
 
-    fun singlePropertyValue(property: PhysicalProperty) : String {
-        return properties[property]!![0]
+    fun propertyValue(property: PhysicalProperty) : String {
+        return properties[property]!!
     }
 
-    fun singlePropertyValue(propertyName: String) : String {
+    fun propertyValue(propertyName: String) : String {
         val properties = properties.keys.filter { it.name == propertyName }
         return when (properties.size) {
             0 -> throw IllegalArgumentException("Unknown property name $propertyName. Known properties: $properties")
-            1 -> singlePropertyValue(properties.first())
+            1 -> propertyValue(properties.first())
             else -> throw IllegalArgumentException("Ambiguous property name $propertyName")
         }
     }
@@ -191,7 +194,16 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     }
 
     fun setProperty(property: PhysicalProperty, value: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        properties[property] = value
+    }
+
+    fun booleanPropertyValue(propertyName: String): Boolean {
+        val prop = properties.keys.find { it.name == propertyName }
+        return if (prop == null) {
+            false
+        } else {
+            properties[prop]!!.toBoolean()
+        }
     }
 
 }

@@ -33,14 +33,14 @@ class LanguageLoadingTest {
 //        val constraintNode = logicalModel.getRootByName("Constraint")
 //        assertEquals("6D8ZJLf0wUM", constraintNode.id)
 //        assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, constraintNode.concept.name)
-//        assertEquals("true", constraintNode.singlePropertyValue("abstract"))
+//        assertEquals("true", constraintNode.propertyValue("abstract"))
 //        val superConcept = constraintNode.reference("extends")
 //        assertNotNull(superConcept)
 //        assertEquals(PhysicalReferenceValue(OutsideModelReferenceTarget("tpck", "gw2VY9q"), "BaseConcept"), superConcept)
 //
 //        // TODO check it cannot be root
 //        // It is not present because it has the default value
-//        //assertEquals("false", constraintNode.singlePropertyValue("rootable"))
+//        //assertEquals("false", constraintNode.propertyValue("rootable"))
 //
 //        // TODO check no properties
 //        // TODO check no references
