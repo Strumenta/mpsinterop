@@ -206,4 +206,13 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         }
     }
 
+    fun longPropertyValue(propertyName: String): Long {
+        val prop = properties.keys.find { it.name == propertyName }
+        return if (prop == null) {
+            0L
+        } else {
+            properties[prop]!!.toLong()
+        }
+    }
+
 }
