@@ -199,18 +199,18 @@ class SModelHeader {
 //    }
 }
 
-fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: LanguageRegistry? = null) : SModel {
+fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: LanguageRegistry? = null) : PhysicalModel {
     val mis = ModelInputStream(inputStream)
     val modelHeader = loadHeader(mis)
-    val model = SModel(modelHeader.getModelReference(), modelHeader)
-    //val pModel = PhysicalModel(modelHeader.getModelReference()!!.name)
+    //val model = SModel(modelHeader.getModelReference(), modelHeader)
+    val pModel = PhysicalModel(modelHeader.getModelReference()!!.name)
     val bp = BinaryPersistence()
     val languageLoaderHelper = LanguageLoaderHelper()
     val rh = bp.loadModelProperties(mis, languageLoaderHelper)
 //    rh.requestInterfaceOnly(interfaceOnly)
 //
     val reader = NodesReader(modelHeader.getModelReference()!!, mis, rh)
-    reader.readNodesInto(model)
+    reader.readNodesInto(pModel)
 //    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
             //TODO()
 
@@ -218,7 +218,7 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: Langu
         languageLoaderHelper.loadedLanguages().forEach { languageRegistry.add(it) }
     }
 
-    return model
+    return pModel
 }
 
 class SModel(modelReference: SModelReference?, val modelHeader: SModelHeader) {

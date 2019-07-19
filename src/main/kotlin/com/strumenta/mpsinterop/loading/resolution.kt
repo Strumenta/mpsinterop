@@ -22,7 +22,7 @@ class PhysicalToLogicalConverter(
 
     fun toLogical(physicalNode: PhysicalNode) : SNode {
         return convertedNodes.computeIfAbsent(physicalNode) { physicalNode ->
-            val id = SNodeId.regular(JavaFriendlyBase64.parseLong(physicalNode.id))
+            val id = physicalNode.id//SNodeId.regular(JavaFriendlyBase64.parseLong(physicalNode.id))
             val logicalNode = SNode(
                     /*physicalNode.parent?.toLogical(this),*/
                     this.toLogical(physicalNode.concept),

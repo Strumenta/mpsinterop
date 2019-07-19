@@ -1,9 +1,12 @@
 package com.strumenta.mpsinterop.logicalmodel
 
+import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
 import java.util.*
 import kotlin.collections.HashMap
 
 abstract class SNodeId {
+    abstract fun toBase64(): String
+
     companion object {
         fun regular(idValue: Long): SNodeId {
             return RegularSNodeId(idValue)
@@ -11,7 +14,9 @@ abstract class SNodeId {
     }
 }
 
-internal data class RegularSNodeId(val value: Long) : SNodeId()
+internal data class RegularSNodeId(val value: Long) : SNodeId() {
+    override fun toBase64() = JavaFriendlyBase64.toString(value)
+}
 
 class InterfaceSNode(concept: SConcept, nodeId: SNodeId?) : SNode(concept, nodeId) {
     fun skipRole(link: SContainmentLink) {

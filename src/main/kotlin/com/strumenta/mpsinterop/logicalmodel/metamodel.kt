@@ -1,5 +1,7 @@
 package com.strumenta.mpsinterop.logicalmodel
 
+import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
+import com.strumenta.mpsinterop.physicalmodel.PhysicalRelation
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.util.*
 
@@ -57,6 +59,6 @@ data class SPropertyId(val conceptId: SConceptId, val idValue: Long)
 data class SReferenceLink(val link: SReferenceLinkId, val name: String)
 data class SReferenceLinkId(val conceptId: SConceptId, val idValue: Long)
 interface SReference
-data class StaticReference(val sref: SReferenceLink, val node: SNode, val modelRef: SModelReference,
+data class StaticReference(val sref: PhysicalRelation, val node: PhysicalNode, val modelRef: SModelReference,
                            val targetNodeId: SNodeId?, val resolveInfo: String?) : SReference
 

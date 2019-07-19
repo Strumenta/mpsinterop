@@ -1,5 +1,8 @@
 package com.strumenta.mpsinterop.binary
 import com.strumenta.mpsinterop.logicalmodel.*
+import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
+import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
+import com.strumenta.mpsinterop.physicalmodel.PhysicalRelation
 
 
 /*
@@ -52,20 +55,20 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
         private const val REF_OTHER_MODEL: Byte = 18
     }
 
-    fun readNodesInto(modelData: SModel) {
-        readChildren(null).forEach { modelData.addRootNode(it) }
+    fun readNodesInto(modelData: PhysicalModel) {
+        readChildren(null).forEach { modelData.addRoot(it) }
     }
 
-    private fun readChildren(parent: SNode?): List<SNode> {
+    private fun readChildren(parent: PhysicalNode?): List<PhysicalNode> {
         var size = modelInputStream.readInt()
-        val rv = ArrayList<SNode>(size)
+        val rv = ArrayList<PhysicalNode>(size)
         while (size-- > 0) {
             rv.add(readNode(parent))
         }
         return rv
     }
 
-    private fun readNode(parent: SNode?): SNode {
+    private fun readNode(parent: PhysicalNode?): PhysicalNode {
         val node = instantiate(parent)
 
         if (modelInputStream.readByte() != '{'.toByte()) {
@@ -83,13 +86,13 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
         return node
     }
 
-    protected abstract fun instantiate(parent: SNode?): SNode
+    protected abstract fun instantiate(parent: PhysicalNode?): PhysicalNode
 
-    protected abstract fun readProperties(node: SNode)
+    protected abstract fun readProperties(node: PhysicalNode)
 
-    protected abstract fun readReferences(node: SNode)
+    protected abstract fun readReferences(node: PhysicalNode)
 
-    protected fun readReference(sref: SReferenceLink, node: SNode): SReference {
+    protected fun readReference(sref: PhysicalRelation, node: PhysicalNode): SReference {
         val kind = modelInputStream.readByte().toInt()
         assert(kind >= 1 && kind <= 3)
         val targetNodeId = if (kind == 1) modelInputStream.readNodeId() else null
@@ -142,7 +145,7 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
 //        // no-op, left for subclasses  to override
 //    }
 //
-    protected fun readUserObjects(node: SNode) {
+    protected fun readUserObjects(node: PhysicalNode) {
         val userObjectCount = modelInputStream.readShort().toInt()
         var i = 0
         while (i < userObjectCount) {

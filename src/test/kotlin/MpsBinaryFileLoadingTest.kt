@@ -16,18 +16,19 @@ class MpsBinaryFileLoadingTest {
 
         assertEquals(42, model.numberOfRoots)
 
-        val INamedConcept = model.named("INamedConcept")!!
+        TODO()
+        //val INamedConcept = model.named("INamedConcept")!!
 
-        assertEquals("INamedConcept", INamedConcept.name)
-        assertEquals(SNodeId.regular(1169194658468L), INamedConcept.nodeId)
-        assertEquals(1169125989551L, INamedConcept.concept.id.idValue)
-        assertEquals(2, INamedConcept.numberOfProperties)
-
-        assertEquals(1, INamedConcept.numberOfChildren)
-
-        val propertyName = INamedConcept.children.first()
-        assertEquals("PropertyDeclaration", propertyName.concept.name)
-        assertEquals("name", propertyName.name!!)
+//        assertEquals("INamedConcept", INamedConcept.name)
+//        assertEquals(SNodeId.regular(1169194658468L), INamedConcept.nodeId)
+//        assertEquals(1169125989551L, INamedConcept.concept.id.idValue)
+//        assertEquals(2, INamedConcept.numberOfProperties)
+//
+//        assertEquals(1, INamedConcept.numberOfChildren)
+//
+//        val propertyName = INamedConcept.children.first()
+//        assertEquals("PropertyDeclaration", propertyName.concept.name)
+//        assertEquals("name", propertyName.name!!)
     }
 
 }

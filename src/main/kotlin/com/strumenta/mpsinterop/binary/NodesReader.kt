@@ -3,12 +3,13 @@ package com.strumenta.mpsinterop.binary
 import com.strumenta.mpsinterop.logicalmodel.InterfaceSNode
 import com.strumenta.mpsinterop.logicalmodel.SModelReference
 import com.strumenta.mpsinterop.logicalmodel.SNode
+import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 
 internal class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, private val myReadHelper: ReadHelper) : BareNodeReader(modelReference, `is`) {
 //    private var myExternalRefs: MutableCollection<SNodeId>? = null
 //    private var myLocalRefs: MutableCollection<SNodeId>? = null
 
-    override fun instantiate(parent: SNode?): SNode {
+    override fun instantiate(parent: PhysicalNode?): PhysicalNode {
         val conceptIndex = modelInputStream.readShort().toInt()
         val concept = myReadHelper.readConcept(conceptIndex)
         //println("Concept $concept (index $conceptIndex)")
@@ -23,17 +24,18 @@ internal class NodesReader(modelReference: SModelReference, `is`: ModelInputStre
 //        }
 //        // TODO report if (nodeInfo != 0 && myEnv != null) .. myEnv.nodeRoleRead/conceptRead();
 //
-        val node = if (interfaceNode) InterfaceSNode(concept, nodeId) else SNode(concept, nodeId)
+        val node = PhysicalNode(parent, concept, nodeId!!)
 //
         if (parent == null) {
             return node
         }
-        if (parent !is InterfaceSNode || node is InterfaceSNode) {
-            parent!!.addChild(link!!, node)
-        } else {
-            (parent as InterfaceSNode).skipRole(link!!)
-            //hasSkippedNodes = true
-        }
+        parent!!.addChild(link!!, node)
+//        if (parent !is InterfaceSNode || node is InterfaceSNode) {
+//            parent!!.addChild(link!!, node)
+//        } else {
+//            (parent as InterfaceSNode).skipRole(link!!)
+//            //hasSkippedNodes = true
+//        }
         return node
     }
 //
@@ -49,7 +51,7 @@ internal class NodesReader(modelReference: SModelReference, `is`: ModelInputStre
 //        }
 //    }
 //
-    override fun readReferences(node: SNode) {
+    override fun readReferences(node: PhysicalNode) {
         var refs = modelInputStream.readShort()
         while (refs-- > 0) {
             val link = myReadHelper.readAssociation(modelInputStream.readShort().toInt())
@@ -57,7 +59,7 @@ internal class NodesReader(modelReference: SModelReference, `is`: ModelInputStre
         }
     }
 
-    override fun readProperties(node: SNode) {
+    override fun readProperties(node: PhysicalNode) {
         var properties = modelInputStream.readShort()
         while (properties-- > 0) {
             val property = myReadHelper.readProperty(modelInputStream.readShort().toInt())

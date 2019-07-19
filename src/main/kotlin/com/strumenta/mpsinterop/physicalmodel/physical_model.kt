@@ -1,12 +1,14 @@
 package com.strumenta.mpsinterop.physicalmodel
 
+import com.strumenta.mpsinterop.logicalmodel.SNodeId
+import com.strumenta.mpsinterop.logicalmodel.SProperty
 import java.util.*
 import kotlin.collections.HashMap
 
 /**
  * Simplified concept, as it appears in a model
  */
-data class PhysicalConcept(val id: String, val name: String, val index: String) {
+data class PhysicalConcept(val id: Long, val name: String, val index: String) {
     private val properties = LinkedList<PhysicalProperty>()
     private val relations = LinkedList<PhysicalRelation>()
 
@@ -34,10 +36,10 @@ enum class RelationKind {
     REFERENCE
 }
 
-data class PhysicalRelation(val container: PhysicalConcept, val id: String, val name: String, val index: String,
+data class PhysicalRelation(val container: PhysicalConcept, val id: Long, val name: String, val index: String,
                             val kind: RelationKind)
 
-data class PhysicalProperty(val container: PhysicalConcept, val id: String, val name: String, val index: String)
+data class PhysicalProperty(val container: PhysicalConcept, val id: Long, val name: String, val index: String)
 
 /**
  * A model, as defined in a file.
@@ -124,7 +126,7 @@ data class OutsideModelReferenceTarget(val importIndex: String, val nodeIndex:St
 
 data class PhysicalReferenceValue(val target: ReferenceTarget, val resolve: String)
 
-class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: String) {
+class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: SNodeId) {
     val root: Boolean
         get() = parent == null
     internal var modelOfWhichIsRoot : PhysicalModel? = null
@@ -186,6 +188,10 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
             return parent
         }
         return parent.ancestor(condition)
+    }
+
+    fun setProperty(property: PhysicalProperty, value: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

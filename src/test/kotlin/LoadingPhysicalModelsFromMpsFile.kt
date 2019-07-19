@@ -1,5 +1,5 @@
-import com.strumenta.mpsinterop.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
 import com.strumenta.mpsinterop.loading.loadMpsModel
+import com.strumenta.mpsinterop.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
 import com.strumenta.mpsinterop.physicalmodel.OutsideModelReferenceTarget
 import com.strumenta.mpsinterop.physicalmodel.PhysicalReferenceValue
 import kotlin.test.Test
@@ -25,7 +25,7 @@ class LoadingPhysicalModelsFromMpsFile {
         val model = loadMpsModel(inputStream)
 
         val constraintNode = model.getRootByName("Constraint")
-        assertEquals("6D8ZJLf0wUM", constraintNode.id)
+        assertEquals("6D8ZJLf0wUM", constraintNode.id.toBase64())
         assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, constraintNode.concept.name)
         assertEquals("true", constraintNode.singlePropertyValue("abstract"))
         val superConcept = constraintNode.reference("extends")

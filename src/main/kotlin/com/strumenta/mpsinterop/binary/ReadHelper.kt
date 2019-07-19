@@ -1,6 +1,10 @@
 package com.strumenta.mpsinterop.binary
 
 import com.strumenta.mpsinterop.logicalmodel.*
+import com.strumenta.mpsinterop.physicalmodel.PhysicalConcept
+import com.strumenta.mpsinterop.physicalmodel.PhysicalProperty
+import com.strumenta.mpsinterop.physicalmodel.PhysicalRelation
+import com.strumenta.mpsinterop.physicalmodel.RelationKind
 import java.lang.IllegalArgumentException
 
 
@@ -15,11 +19,11 @@ internal class ReadHelper() {
         private set
 //    private var myActualConcept: ConceptInfo? = null
 //    // TODO with indices being just a persistence position, shall use arrays instead
-    private val myConcepts = HashMap<Int, SConcept>()
-    private val myProperties = HashMap<Int, SProperty>()
-    private val myAssociations = HashMap<Int, SReferenceLink>()
-    private val myAggregations = HashMap<Int, SContainmentLink>()
-    private var currentConcept : SConcept? = null
+    private val myConcepts = HashMap<Int, PhysicalConcept>()
+    private val myProperties = HashMap<Int, PhysicalProperty>()
+    private val myAssociations = HashMap<Int, PhysicalRelation>()
+    private val myAggregations = HashMap<Int, PhysicalRelation>()
+    private var currentConcept : PhysicalConcept? = null
 
 
 //    /*package*/ // FIXME could I use myMetaInfo.registry.keySet() instead?
@@ -50,7 +54,7 @@ internal class ReadHelper() {
 
 
     fun withConcept(conceptIndex: Int, conceptId: SConceptId, conceptName: String, kind: ConceptKind) {
-        currentConcept = SConcept(conceptId, conceptName)
+        currentConcept = PhysicalConcept(conceptId.idValue, conceptName, conceptIndex.toString())
         myConcepts[conceptIndex] = currentConcept!!
     }
 
@@ -68,7 +72,7 @@ internal class ReadHelper() {
 //
     fun property(property: SPropertyId, name: String, index: Int) {
         //myActualConcept!!.addProperty(property, name).setIntIndex(index)
-        val property = SProperty(property, name)
+        val property = PhysicalProperty(currentConcept!!, property.idValue, name, index.toString())
         currentConcept!!.addProperty(property)
         myProperties[index] = property
         //myMetaInfoProvider.setPropertyName(property, name)
@@ -77,32 +81,32 @@ internal class ReadHelper() {
     fun association(link: SReferenceLinkId, name: String, index: Int) {
 
         //myActualConcept!!.addLink(link, name).setIntIndex(index)
-       myAssociations[index] = SReferenceLink(link, name)
+       myAssociations[index] = PhysicalRelation(currentConcept!!, link.idValue, name, index.toString(), RelationKind.REFERENCE)
        //myMetaInfoProvider.setAssociationName(link, name)
     }
 //
     fun aggregation(link: SContainmentLinkId, name: String, unordered: Boolean, index: Int) {
 //        myActualConcept!!.addLink(link, name, unordered).setIntIndex(index)
-        myAggregations[index] = SContainmentLink(link, name)
+        myAggregations[index] = PhysicalRelation(currentConcept!!, link.idValue, name, index.toString(), RelationKind.CONTAINMENT)
 //        myMetaInfoProvider.setAggregationName(link, name)
     }
 //
-    fun readConcept(index: Int): SConcept {
+    fun readConcept(index: Int): PhysicalConcept {
         require(index >= 0)
         return myConcepts[index]!!
     }
 
-    fun readProperty(index: Int): SProperty {
+    fun readProperty(index: Int): PhysicalProperty {
         require(index >= 0)
         return myProperties[index]?: throw IllegalArgumentException("Property with index $index not found. Known indexes: ${myProperties.keys.joinToString(separator = ", ")}")
     }
 
-    fun readAssociation(index: Int): SReferenceLink {
+    fun readAssociation(index: Int): PhysicalRelation {
         require(index >= 0)
         return myAssociations[index]!!
     }
 //
-    fun readAggregation(index: Int): SContainmentLink {
+    fun readAggregation(index: Int): PhysicalRelation {
         require(index >= 0) { "Index should be equal or greater to 0"}
         return myAggregations[index] ?: throw IllegalArgumentException("Aggregation with index $index not found. Known indexes: ${myAggregations.keys.joinToString(separator = ", ")}")
     }

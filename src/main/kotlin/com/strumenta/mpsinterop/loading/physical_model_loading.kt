@@ -1,6 +1,8 @@
 package com.strumenta.mpsinterop.loading
 
+import com.strumenta.mpsinterop.logicalmodel.SNodeId
 import com.strumenta.mpsinterop.physicalmodel.*
+import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
 import com.strumenta.mpsinterop.utils.processAllNodes
 import com.strumenta.mpsinterop.utils.processChildren
 import org.w3c.dom.Document
@@ -14,7 +16,7 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, elem
     val conceptIndex = element.getAttribute("concept")
     val id = element.getAttribute("id")
     try {
-        val modelNode = PhysicalNode(parent, physicalModel.conceptByIndex(conceptIndex), id)
+        val modelNode = PhysicalNode(parent, physicalModel.conceptByIndex(conceptIndex), SNodeId.regular(JavaFriendlyBase64.parseLong(id)))
         element.processChildren("property") {
             val value = it.getAttribute("value")
             val property = physicalModel.propertyByIndex(it.getAttribute("role"))
@@ -63,19 +65,19 @@ fun loadModel(document: Document) : PhysicalModel {
 
     val physicalModel = PhysicalModel(nameInParens)
     document.documentElement.processAllNodes("concept") {
-        val concept = PhysicalConcept(it.getAttribute("id"),
+        val concept = PhysicalConcept(it.getAttribute("id").toLong(),
                 it.getAttribute("name"), it.getAttribute("index"))
         physicalModel.registerConcept(concept)
         it.processChildren("property") {
             val property = PhysicalProperty(concept,
-                    it.getAttribute("id"),
+                    it.getAttribute("id").toLong(),
                     it.getAttribute("name"), it.getAttribute("index"))
             concept.addProperty(property)
             physicalModel.registerProperty(property)
         }
         it.processChildren("child") {
             val relation = PhysicalRelation(concept,
-                    it.getAttribute("id"),
+                    it.getAttribute("id").toLong(),
                     it.getAttribute("name"),
                     it.getAttribute("index"),
                     RelationKind.CONTAINMENT)
@@ -84,7 +86,7 @@ fun loadModel(document: Document) : PhysicalModel {
         }
         it.processChildren("reference") {
             val relation = PhysicalRelation(concept,
-                    it.getAttribute("id"),
+                    it.getAttribute("id").toLong(),
                     it.getAttribute("name"),
                     it.getAttribute("index"),
                     RelationKind.REFERENCE)
