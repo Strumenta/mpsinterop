@@ -25,61 +25,27 @@ class LoadingPhysicalModelsFromMpbFile {
         val iNamedConceptNode = model.getRootByName("INamedConcept")
 
         // Basis
-//        assertEquals("INamedConcept", iNamedConceptNode.name())
-//        assertEquals("6D8ZJLf0wUM", iNamedConceptNode.id.toBase64())
-//        assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, iNamedConceptNode.concept.name)
+        assertEquals("INamedConcept", iNamedConceptNode.name())
+        assertEquals(1169194658468L, iNamedConceptNode.id.toLong())
+        assertEquals("jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration", iNamedConceptNode.concept.qname)
 
         // Properties
-//        assertEquals(true, iNamedConceptNode.booleanPropertyValue("abstract"))
-//        assertEquals(false, iNamedConceptNode.booleanPropertyValue("final"))
-//        assertEquals(false, iNamedConceptNode.booleanPropertyValue("rootable"))
-//        assertEquals(1169194658468L, iNamedConceptNode.longPropertyValue("conceptId"))
-//        assertEquals("", iNamedConceptNode.stringPropertyValue("languageId"))
-//        assertEquals("", iNamedConceptNode.stringPropertyValue("iconPath"))
-//        // static scope global has the value null (empty string)
-//        assertEquals("", iNamedConceptNode.stringPropertyValue("staticScope"))
-//        assertEquals("", iNamedConceptNode.stringPropertyValue("conceptAlias"))
-//        assertEquals("", iNamedConceptNode.stringPropertyValue("conceptShortDescription"))
-//
-//        // Structure
-//        val superConcept = iNamedConceptNode.reference("extends")
-//        assertEquals(PhysicalReferenceValue(
-//                OutsideModelReferenceTarget("tpck", "gw2VY9q"),
-//                "BaseConcept"),
-//                superConcept)
-//        val sourceNode = iNamedConceptNode.reference("sourceNode")
-//        assertEquals(null, sourceNode)
-//        assertEquals(0, iNamedConceptNode.numberOfChildren("implements"))
-//
-//        // Relations
-//        assertEquals(0, iNamedConceptNode.numberOfChildren("linkDeclaration"))
-//        assertEquals(0, iNamedConceptNode.numberOfChildren("propertyDeclaration"))
-//        assertEquals(0, iNamedConceptNode.numberOfChildren("helpURL"))
-    }
+        assertEquals(false, iNamedConceptNode.booleanPropertyValue("abstract"))
+        assertEquals(false, iNamedConceptNode.booleanPropertyValue("final"))
+        assertEquals(1169194658468L, iNamedConceptNode.longPropertyValue("conceptId"))
+        assertEquals("", iNamedConceptNode.stringPropertyValue("languageId"))
+        assertEquals("", iNamedConceptNode.stringPropertyValue("conceptAlias"))
+        assertEquals("", iNamedConceptNode.stringPropertyValue("conceptShortDescription"))
 
-//    @Test
-//    @Ignore
-//    fun loadPhysicalModelFromBinaryFile() {
-//        val inputStream = LoadingPhysicalModelsFromMpbFile::class.java.getResourceAsStream("/jetbrains.mps.lang.core-src-structure.mpb")
-//        val model = loadMpsModelFromBinaryFile(inputStream)
-//
-//        assertEquals("jetbrains.mps.lang.core.structure", model.name)
-//
-//        assertEquals(42, model.numberOfRoots)
-//
-//        TODO()
-//        //val INamedConcept = model.named("INamedConcept")!!
-//
-////        assertEquals("INamedConcept", INamedConcept.name)
-////        assertEquals(SNodeId.regular(1169194658468L), INamedConcept.nodeId)
-////        assertEquals(1169125989551L, INamedConcept.concept.id.idValue)
-////        assertEquals(2, INamedConcept.numberOfProperties)
-////
-////        assertEquals(1, INamedConcept.numberOfChildren)
-////
-////        val propertyName = INamedConcept.children.first()
-////        assertEquals("PropertyDeclaration", propertyName.concept.name)
-////        assertEquals("name", propertyName.name!!)
-//    }
+        // Structure
+        val sourceNode = iNamedConceptNode.reference("sourceNode")
+        assertEquals(null, sourceNode)
+        assertEquals(0, iNamedConceptNode.numberOfChildren("extends"))
+
+        // Relations
+        assertEquals(0, iNamedConceptNode.numberOfChildren("linkDeclaration"))
+        assertEquals(1, iNamedConceptNode.numberOfChildren("propertyDeclaration"))
+        assertEquals(0, iNamedConceptNode.numberOfChildren("helpURL"))
+    }
 
 }

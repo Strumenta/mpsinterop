@@ -6,6 +6,7 @@ import kotlin.collections.HashMap
 
 abstract class SNodeId {
     abstract fun toBase64(): String
+    abstract fun toLong(): Long
 
     companion object {
         fun regular(idValue: Long): SNodeId {
@@ -16,6 +17,7 @@ abstract class SNodeId {
 
 internal data class RegularSNodeId(val value: Long) : SNodeId() {
     override fun toBase64() = JavaFriendlyBase64.toString(value)
+    override fun toLong() = value
 }
 
 class InterfaceSNode(concept: SConcept, nodeId: SNodeId?) : SNode(concept, nodeId) {
