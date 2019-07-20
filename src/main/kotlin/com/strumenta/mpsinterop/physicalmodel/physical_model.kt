@@ -176,8 +176,8 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
 
     fun reference(relationName: String) : PhysicalReferenceValue? {
         val rs = references.keys.filter { it.name == relationName }
-        return when (references.size) {
-            0 -> throw IllegalArgumentException("Unknown reference name $relationName. Known references: ${references.keys.joinToString(", ")}")
+        return when (rs.size) {
+            0 -> null
             1 -> reference(rs.first())
             else -> throw IllegalArgumentException("Ambiguous reference name $relationName")
         }
@@ -212,6 +212,24 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
             0L
         } else {
             properties[prop]!!.toLong()
+        }
+    }
+
+    fun stringPropertyValue(propertyName: String): String {
+        val prop = properties.keys.find { it.name == propertyName }
+        return if (prop == null) {
+            ""
+        } else {
+            properties[prop]!!
+        }
+    }
+
+    fun numberOfChildren(relationName: String): Int {
+        val rs = children.keys.filter { it.name == relationName }
+        return when (rs.size) {
+            0 -> 0
+            1 -> children[rs[0]]!!.size
+            else -> throw IllegalArgumentException("Ambiguous reference name $relationName")
         }
     }
 

@@ -37,11 +37,12 @@ class LoadingPhysicalModelsFromMpsFile {
         assertEquals(false, constraintNode.booleanPropertyValue("final"))
         assertEquals(false, constraintNode.booleanPropertyValue("rootable"))
         assertEquals(7658651525954277042L, constraintNode.longPropertyValue("conceptId"))
-        // TODO language id
-        // TODO icon path
-        // TODO static scope
-        // TODO concept alias
-        // TODO concept short description
+        assertEquals("", constraintNode.stringPropertyValue("languageId"))
+        assertEquals("", constraintNode.stringPropertyValue("iconPath"))
+        // static scope global has the value null (empty string)
+        assertEquals("", constraintNode.stringPropertyValue("staticScope"))
+        assertEquals("", constraintNode.stringPropertyValue("conceptAlias"))
+        assertEquals("", constraintNode.stringPropertyValue("conceptShortDescription"))
 
         // Structure
         val superConcept = constraintNode.reference("extends")
@@ -49,15 +50,14 @@ class LoadingPhysicalModelsFromMpsFile {
                 OutsideModelReferenceTarget("tpck", "gw2VY9q"),
                 "BaseConcept"),
                 superConcept)
-        // TODO sourceNode null
-        // TODO implements
+        val sourceNode = constraintNode.reference("sourceNode")
+        assertEquals(null, sourceNode)
+        assertEquals(0, constraintNode.numberOfChildren("implements"))
 
         // Relations
-        // TODO link declarations
-        // TODO property declarations
-        // TODO help URL
-
-        assertNotNull(superConcept)
+        assertEquals(0, constraintNode.numberOfChildren("linkDeclaration"))
+        assertEquals(0, constraintNode.numberOfChildren("propertyDeclaration"))
+        assertEquals(0, constraintNode.numberOfChildren("helpURL"))
     }
 
 }
