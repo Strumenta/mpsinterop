@@ -4,6 +4,7 @@ import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+// Perhaps not so useful
 class LoadingPhysicalModelsFromJar {
 
     @Test

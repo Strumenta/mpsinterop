@@ -1,15 +1,24 @@
-import com.strumenta.mpsinterop.logicalmodel.SNodeId
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
+import com.strumenta.mpsinterop.loading.loadMpsModel
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class MpsBinaryFileLoadingTest {
+class LoadingPhysicalModelsFromMpbFile {
+
+    @Test
+    fun loadPhysicalModelOfLangCoreStructureBasicSanityCheck() {
+        val inputStream = LoadingPhysicalModelsFromMpbFile::class.java.getResourceAsStream("/jetbrains.mps.lang.core-src-structure.mpb")
+        val model = loadMpsModelFromBinaryFile(inputStream)
+
+        assertEquals("jetbrains.mps.lang.core.structure", model.name)
+        assertEquals(42, model.numberOfRoots)
+    }
 
     @Test
     @Ignore
     fun loadPhysicalModelFromBinaryFile() {
-        val inputStream = MpsBinaryFileLoadingTest::class.java.getResourceAsStream("/jetbrains.mps.lang.core-src-structure.mpb")
+        val inputStream = LoadingPhysicalModelsFromMpbFile::class.java.getResourceAsStream("/jetbrains.mps.lang.core-src-structure.mpb")
         val model = loadMpsModelFromBinaryFile(inputStream)
 
         assertEquals("jetbrains.mps.lang.core.structure", model.name)
