@@ -1,18 +1,16 @@
 package com.strumenta.mpsinterop.registries
 
-import com.strumenta.mpsinterop.binary.SModel
 import com.strumenta.mpsinterop.logicalmodel.Language
-import com.strumenta.mpsinterop.logicalmodel.LanguageId
+import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.SConcept
 import com.strumenta.mpsinterop.logicalmodel.SConceptId
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
-import java.util.*
 import kotlin.collections.HashMap
 
 class LanguageRegistry {
 
     private val languagesByName = HashMap<String, Language>()
-    private val languagesByID = HashMap<LanguageId, Language>()
+    private val languagesByID = HashMap<LanguageUUID, Language>()
 
     companion object {
         val DEFAULT = LanguageRegistry()
@@ -37,7 +35,7 @@ class LanguageRegistry {
 
     fun loadLanguageFromModel(model: PhysicalModel) {
         model.roots.forEach {
-            if (it.concept.qname(this) == "jetbrains.mps.lang.structure.ConceptDeclaration") {
+            if (it.concept.qname == "jetbrains.mps.lang.structure.ConceptDeclaration") {
                 val languageName = model.name.removeSuffix(".structure")
                 val language = this.languagesByName[languageName]!!
                 val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
@@ -49,7 +47,7 @@ class LanguageRegistry {
                 concept.final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
                 concept.rootable = it.booleanPropertyValue("rootable")
-            } else if (it.concept.qname(this) == "jetbrains.mps.lang.structure.InterfaceConceptDeclaration") {
+            } else if (it.concept.qname == "jetbrains.mps.lang.structure.InterfaceConceptDeclaration") {
                 val languageName = model.name.removeSuffix(".structure")
                 val language = this.languagesByName[languageName]!!
                 val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
@@ -68,11 +66,11 @@ class LanguageRegistry {
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    operator fun get(id: LanguageId): Language? {
+    operator fun get(id: LanguageUUID): Language? {
         return languagesByID[id]
     }
 
-    fun getName(id: LanguageId): String? {
+    fun getName(id: LanguageUUID): String? {
         return this[id]?.name
     }
 

@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.*
 
 internal class LanguageLoaderHelper {
-    //private val languageNamesByID = HashMap<LanguageId, String>()
-    private val languageByID = HashMap<LanguageId, Language>()
+    //private val languageNamesByID = HashMap<LanguageUUID, String>()
+    private val languageByID = HashMap<LanguageUUID, Language>()
     fun registerLanguage(id: UUID, name: String) {
         if (id in languageByID) {
             require(languageByID[id]!!.name == name)
@@ -209,8 +209,10 @@ internal class BinaryPersistence {
 //        loadingModel = modelData
 //    }
 
-    internal fun loadModelProperties(mis: ModelInputStream, languageLoaderHelper: LanguageLoaderHelper): ReadHelper {
-        val readHelper = loadRegistry(mis, languageLoaderHelper)
+    internal fun loadModelProperties(mis: ModelInputStream,
+                                     languageLoaderHelper: LanguageLoaderHelper,
+                                     model: PhysicalModel): ReadHelper {
+        val readHelper = loadRegistry(mis, languageLoaderHelper, model)
 //
         loadUsedLanguages(mis)
 //
@@ -339,7 +341,8 @@ internal class BinaryPersistence {
 //
 
     private fun loadRegistry(mis: ModelInputStream,
-                             languageLoaderHelper: LanguageLoaderHelper): ReadHelper {
+                             languageLoaderHelper: LanguageLoaderHelper,
+                             model: PhysicalModel): ReadHelper {
         assertSyncToken(mis, REGISTRY_START)
         // see #saveRegistry, we use position of an element in persistence as its index
         var langIndex: Int
@@ -388,7 +391,10 @@ internal class BinaryPersistence {
 
                 val conceptKind = ConceptKind.values()[flags shr 4 and 0x0f]
 
-                rh.withConcept(conceptIndex, conceptId, conceptName!!, conceptKind)
+                val concept = rh.withConcept(conceptIndex, conceptId,
+                        langName,
+                        conceptName!!, conceptKind)
+                model.registerConcept(concept)
 //                rh.withConcept(conceptId, conceptName, StaticScope.values()[flags and 0x0f], ConceptKind.values()[flags shr 4 and 0x0f], stubId, conceptIndex++)
 //                //
                 conceptIndex++
@@ -397,7 +403,8 @@ internal class BinaryPersistence {
                 while (propertyCount-- > 0) {
                     val propertyId = mis.readLong()
                     val propertyName = mis.readString()!!
-                    rh.property(SPropertyId(conceptId!!, propertyId), propertyName, propertyIndex)
+                    //println("PROP $conceptId $propertyName")
+                    rh.property(SPropertyId(conceptId, propertyId), propertyName, propertyIndex)
                     propertyIndex++
                 }
 //                //
@@ -421,7 +428,7 @@ internal class BinaryPersistence {
         return rh
     }
 
-//    data class SConceptId(val languageId: LanguageId, val readLong: Long) {
+//    data class SConceptId(val languageId: LanguageUUID, val readLong: Long) {
 //
 //    }
 //

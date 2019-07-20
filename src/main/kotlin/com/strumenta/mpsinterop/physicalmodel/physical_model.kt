@@ -1,6 +1,7 @@
 package com.strumenta.mpsinterop.physicalmodel
 
 import com.strumenta.mpsinterop.logicalmodel.LanguageId
+import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.SNodeId
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.util.*
@@ -9,7 +10,11 @@ import kotlin.collections.HashMap
 /**
  * Simplified concept, as it appears in a model
  */
-data class PhysicalConcept(val languageId: LanguageId, val id: Long, val name: String, val index: String) {
+data class PhysicalConcept(val languageId: LanguageId, val id: Long,
+                           val name: String, val index: String) {
+    init {
+        require(name.indexOf('.') == -1) { "A concept name should not be qualified ($name)" }
+    }
     private val properties = LinkedList<PhysicalProperty>()
     private val relations = LinkedList<PhysicalRelation>()
 
@@ -30,10 +35,11 @@ data class PhysicalConcept(val languageId: LanguageId, val id: Long, val name: S
         return relations.find { it.name == name }!!
     }
 
-    fun qname(languageRegistry: LanguageRegistry): String {
-        val languageName = languageRegistry.getName(languageId)
-        return "$languageName.$name"
-    }
+    val qname: String
+        get() {
+            val languageName = languageId.name
+            return "$languageName.structure.$name"
+        }
 
 }
 
@@ -81,13 +87,13 @@ class PhysicalModel(val name: String){
     }
 
     private val conceptsByIndex = HashMap<String, PhysicalConcept>()
-    private val conceptsByName = HashMap<String, PhysicalConcept>()
+    private val conceptsByQName = HashMap<String, PhysicalConcept>()
     private val relationsByIndex = HashMap<String, PhysicalRelation>()
     private val propertiesByIndex = HashMap<String, PhysicalProperty>()
 
     fun registerConcept(concept: PhysicalConcept) {
         conceptsByIndex[concept.index] = concept
-        conceptsByName[concept.name] = concept
+        conceptsByQName[concept.qname] = concept
     }
 
     fun registerProperty(property: PhysicalProperty) {
@@ -105,12 +111,12 @@ class PhysicalModel(val name: String){
 
     fun propertyByIndex(index: String) : PhysicalProperty = propertiesByIndex[index]!!
     fun getProperty(conceptName: String, propertyName: String): PhysicalProperty {
-        return conceptsByName[conceptName]?.propertyByName(propertyName) ?:
-        throw java.lang.IllegalArgumentException("Property $conceptName.$propertyName not found")
+        return conceptsByQName[conceptName]?.propertyByName(propertyName) ?:
+                throw java.lang.IllegalArgumentException("Property $conceptName.$propertyName not found")
     }
 
     fun conceptByName(conceptName: String): PhysicalConcept? {
-        return conceptsByName[conceptName]
+        return conceptsByQName[conceptName]
     }
 
     fun allRoots(concept: PhysicalConcept): List<PhysicalNode> {
@@ -118,7 +124,7 @@ class PhysicalModel(val name: String){
     }
 
 
-//    override fun physicalConceptByName(name: String): PhysicalConcept? = conceptsByName[name]
+//    override fun physicalConceptByName(name: String): PhysicalConcept? = conceptsByQName[name]
 //
 //    override fun conceptDeclarationByName(name: String): PhysicalNode? {
 //        TODO("not implemented $name") //To change body of created functions use File | Settings | File Templates.

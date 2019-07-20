@@ -26,7 +26,7 @@ class LoadingPhysicalModelsFromMpsFile {
         // Basis
         assertEquals("Constraint", constraintNode.name())
         assertEquals("6D8ZJLf0wUM", constraintNode.id.toBase64())
-        assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, constraintNode.concept.name)
+        assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, constraintNode.concept.qname)
 
         // Properties
         assertEquals(true, constraintNode.booleanPropertyValue("abstract"))
@@ -66,7 +66,7 @@ class LoadingPhysicalModelsFromMpsFile {
 
         // Basis
         assertEquals("EqualTo", equalTo.name())
-        assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, equalTo.concept.name)
+        assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, equalTo.concept.qname)
 
         // Properties
         assertEquals("=", equalTo.stringPropertyValue("conceptAlias"))

@@ -1,5 +1,6 @@
 package com.strumenta.mpsinterop.loading
 
+import com.strumenta.mpsinterop.logicalmodel.LanguageId
 import com.strumenta.mpsinterop.logicalmodel.SNodeId
 import com.strumenta.mpsinterop.physicalmodel.*
 import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
@@ -67,10 +68,12 @@ fun loadModel(document: Document) : PhysicalModel {
     val physicalModel = PhysicalModel(nameInParens)
     document.documentElement.processAllNodes("concept") {
         val languageId = UUID.fromString((it.parentNode as Element).getAttribute("id"))
+        val languageName =  (it.parentNode as Element).getAttribute("name")
+        val simpleConceptName = it.getAttribute("name").split(".").last()
         val concept = PhysicalConcept(
-                languageId,
+                LanguageId(languageId, languageName),
                 it.getAttribute("id").toLong(),
-                it.getAttribute("name"), it.getAttribute("index"))
+                simpleConceptName, it.getAttribute("index"))
         physicalModel.registerConcept(concept)
         it.processChildren("property") {
             val property = PhysicalProperty(concept,

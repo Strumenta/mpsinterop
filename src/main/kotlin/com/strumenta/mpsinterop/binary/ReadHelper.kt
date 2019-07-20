@@ -46,18 +46,22 @@ internal class ReadHelper() {
         isRequestedInterfaceOnly = interfaceOnly
     }
 //
-//    fun withLanguage(lang: LanguageId, name: String, index: Int) {
+//    fun withLanguage(lang: LanguageUUID, name: String, index: Int) {
 //        val langInfo = myMetaInfo.registerLanguage(lang, name)
 //        langInfo.setIntIndex(index)
 //        myMetaInfoProvider.setLanguageName(lang, name)
 //    }
 
 
-    fun withConcept(conceptIndex: Int, conceptId: SConceptId, conceptName: String, kind: ConceptKind) {
+    fun withConcept(conceptIndex: Int, conceptId: SConceptId,
+                    languageName: String,
+                    conceptName: String, kind: ConceptKind)
+            : PhysicalConcept {
         currentConcept = PhysicalConcept(
-                conceptId.languageId,
+                LanguageId(conceptId.languageId, languageName),
                 conceptId.idValue, conceptName, conceptIndex.toString())
         myConcepts[conceptIndex] = currentConcept!!
+        return currentConcept!!
     }
 
 //
