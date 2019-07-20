@@ -105,7 +105,8 @@ class PhysicalModel(val name: String){
 
     fun propertyByIndex(index: String) : PhysicalProperty = propertiesByIndex[index]!!
     fun getProperty(conceptName: String, propertyName: String): PhysicalProperty {
-        return conceptsByName[conceptName]!!.propertyByName(propertyName)
+        return conceptsByName[conceptName]?.propertyByName(propertyName) ?:
+        throw java.lang.IllegalArgumentException("Property $conceptName.$propertyName not found")
     }
 
     fun conceptByName(conceptName: String): PhysicalConcept? {
