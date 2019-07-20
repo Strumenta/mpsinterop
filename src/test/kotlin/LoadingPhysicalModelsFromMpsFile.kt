@@ -1,11 +1,7 @@
 import com.strumenta.mpsinterop.loading.loadMpsModel
-import com.strumenta.mpsinterop.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
-import com.strumenta.mpsinterop.physicalmodel.OutsideModelReferenceTarget
-import com.strumenta.mpsinterop.physicalmodel.PhysicalReferenceValue
-import com.strumenta.mpsinterop.physicalmodel.name
+import com.strumenta.mpsinterop.physicalmodel.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class LoadingPhysicalModelsFromMpsFile {
 
@@ -58,6 +54,34 @@ class LoadingPhysicalModelsFromMpsFile {
         assertEquals(0, constraintNode.numberOfChildren("linkDeclaration"))
         assertEquals(0, constraintNode.numberOfChildren("propertyDeclaration"))
         assertEquals(0, constraintNode.numberOfChildren("helpURL"))
+    }
+
+    @Test
+    fun loadPhysicalModelOfEqualTo() {
+        val inputStream = LoadingPhysicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/formats-structure.mps")
+        val model = loadMpsModel(inputStream)
+
+        val equalTo = model.getRootByName("EqualTo")
+
+        // Basis
+        assertEquals("EqualTo", equalTo.name())
+        assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, equalTo.concept.name)
+
+        // Properties
+        assertEquals("=", equalTo.stringPropertyValue("conceptAlias"))
+
+        // Structure
+        val superConcept = equalTo.reference("extends")
+        assertEquals(PhysicalReferenceValue(
+                InModelReferenceTarget("6D8ZJLf0wUM"),
+                "Constraint"),
+                superConcept)
+
+        // Relations
+        assertEquals(1, equalTo.numberOfChildren("linkDeclaration"))
+        assertEquals(0, equalTo.numberOfChildren("propertyDeclaration"))
+        assertEquals(0, equalTo.numberOfChildren("helpURL"))
     }
 
 }

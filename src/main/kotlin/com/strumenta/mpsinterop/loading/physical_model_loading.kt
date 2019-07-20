@@ -40,7 +40,7 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, elem
                     }
                     OutsideModelReferenceTarget(targetParts[0], targetParts[1])
                 }
-                it.hasAttribute("node") -> InModelReferenceTarget(element.getAttribute("node"))
+                it.hasAttribute("node") -> InModelReferenceTarget(it.getAttribute("node"))
                 else -> throw IllegalArgumentException("A reference should have either the to or node attributes")
             }
             val refValue = PhysicalReferenceValue(target, it.getAttribute("resolve"))
