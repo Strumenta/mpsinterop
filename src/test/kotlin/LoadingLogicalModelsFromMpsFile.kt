@@ -19,29 +19,25 @@ class LoadingLogicalModelsFromMpsFile {
     }
 
     @Test
-    @Ignore
     fun loadLangStructureIntoLanguageRegistryConceptsAreLoaded() {
         val languageRegistry = loadBasicLanguageRegistry()
         assertNotNull(languageRegistry.getConcept("jetbrains.mps.lang.core.structure.BaseConcept"))
     }
 
     @Test
-    @Ignore
     fun loadLangStructureIntoLanguageRegistryInterfaceConceptsAreLoaded() {
         val languageRegistry = loadBasicLanguageRegistry()
         assertNotNull(languageRegistry.getConcept("jetbrains.mps.lang.core.structure.INamedConcept"))
     }
 
     @Test
-    @Ignore
     fun loadBaseConceptIntoLanguageRegistry() {
         val languageRegistry = loadBasicLanguageRegistry()
-        val baseConcept = languageRegistry.getConcept("jetbrains.mps.lang.core.BaseConcept")!!
+        val baseConcept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.BaseConcept")!!
         assertEquals("BaseConcept", baseConcept.name)
         assertEquals(false, baseConcept.rootable)
         assertEquals(false, baseConcept.final)
         assertEquals(true, baseConcept.abstract)
-//        assertEquals("AbstractConceptDeclaration", baseConcept.extended!!.name)
     }
 
     @Test

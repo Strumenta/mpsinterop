@@ -35,7 +35,7 @@ class LanguageRegistry {
 
     fun loadLanguageFromModel(model: PhysicalModel) {
         model.roots.forEach {
-            if (it.concept.qname == "jetbrains.mps.lang.structure.ConceptDeclaration") {
+            if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
                 val languageName = model.name.removeSuffix(".structure")
                 val language = this.languagesByName[languageName]!!
                 val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
@@ -47,7 +47,7 @@ class LanguageRegistry {
                 concept.final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
                 concept.rootable = it.booleanPropertyValue("rootable")
-            } else if (it.concept.qname == "jetbrains.mps.lang.structure.InterfaceConceptDeclaration") {
+            } else if (it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration") {
                 val languageName = model.name.removeSuffix(".structure")
                 val language = this.languagesByName[languageName]!!
                 val conceptIdValue : Long = it.propertyValue("conceptId").toLong()

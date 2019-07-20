@@ -22,7 +22,7 @@ data class SConcept(val id: SConceptId, val name: String, val isInterface : Bool
 
     fun qname(languageRegistry: LanguageRegistry) : String {
         val languageName = languageName(languageRegistry)
-        return "$languageName.$name"
+        return "$languageName.structure.$name"
     }
 
     fun language(languageRegistry: LanguageRegistry) : Language {
