@@ -103,8 +103,6 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
         val modelRef: SModelReference?
         if (targetModelKind == REF_OTHER_MODEL.toInt()) {
             modelRef = modelInputStream.readModelReference()
-            TODO()
-            //externalNodeReferenceRead(modelRef, targetNodeId)
         } else {
             modelRef = modelReference
             localNodeReferenceRead(targetNodeId)
@@ -114,7 +112,7 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
             val reference = StaticReference(
                     sref,
                     node,
-                    modelRef,
+                    modelRef!!,
                     targetNodeId,
                     resolveInfo)
             //node.setReference(reference.getLink(), reference)

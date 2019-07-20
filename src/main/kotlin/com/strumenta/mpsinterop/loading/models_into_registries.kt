@@ -1,5 +1,6 @@
 package com.strumenta.mpsinterop.loading
 
+import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import com.strumenta.mpsinterop.logicalmodel.Language
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.registries.LanguageRegistry
@@ -61,7 +62,33 @@ private fun dumpToTempFile(inputStream: InputStream): File {
     return tempFile
 }
 
-fun LanguageRegistry.loadLanguageFromJar(inputStream: InputStream) : Language {
-    val language = TODO()
-    this.add(language)
+fun LanguageRegistry.loadLanguageFromJar(inputStream: InputStream)  {
+    loadJar(inputStream).forEach { this.loadLanguageFromModel(it) }
+}
+
+fun LanguageRegistry.loadMpsFile(inputStream: InputStream): PhysicalModel {
+    val model = loadMpsModel(inputStream)
+    return model
+}
+
+private fun LanguageRegistry.loadJar(inputStream: InputStream) : List<PhysicalModel> {
+    val file = dumpToTempFile(inputStream)
+    return loadJar(file)
+}
+
+private fun LanguageRegistry.loadJar(file: File) : List<PhysicalModel> {
+    val models = LinkedList<PhysicalModel>()
+    val jarFile = JarFile(file)
+    val entries = jarFile.entries()
+    while (entries.hasMoreElements()) {
+        val entry = entries.nextElement()
+        if (entry.name.endsWith(".mps")) {
+            val model = loadMpsModel(jarFile.getInputStream(entry))
+            models.add(model)
+        } else if (entry.name.endsWith(".mpb")) {
+            val model = loadMpsModelFromBinaryFile(jarFile.getInputStream(entry))
+            models.add(model)
+        }
+    }
+    return models
 }

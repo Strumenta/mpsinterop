@@ -33,13 +33,13 @@ class PhysicalToLogicalConverter(
 
     fun toLogical(physicalConcept: PhysicalConcept) : SConcept {
         return convertedConcepts.computeIfAbsent(physicalConcept) { physicalConcept ->
-            val concept = languageRegistry.getConcept(physicalConcept.name)
+            val concept = languageRegistry.getConcept(physicalConcept.qname)
             if (concept != null) {
                 concept
             } else {
                 val thisConceptDeclarationPhysical =
-                        physicalModelsRegistry.findConceptDeclaration(physicalConcept.name)
-                                ?: throw RuntimeException("Concept declaration for ${physicalConcept.name} not found")
+                        physicalModelsRegistry.findConceptDeclaration(physicalConcept.qname)
+                                ?: throw RuntimeException("Concept declaration for ${physicalConcept.qname} not found")
                 val thisConceptDeclarationLogical = toLogical(thisConceptDeclarationPhysical)
                 //            val thisConcept
                 //            val superConcept = constraintNode.reference("extends")

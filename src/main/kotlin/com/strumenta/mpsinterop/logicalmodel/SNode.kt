@@ -12,7 +12,22 @@ abstract class SNodeId {
         fun regular(idValue: Long): SNodeId {
             return RegularSNodeId(idValue)
         }
+
+        fun fromString(s: String): SNodeId {
+            return StringSNodeId(s)
+        }
     }
+}
+
+internal data class StringSNodeId(val value: String) : SNodeId() {
+    override fun toBase64(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun toLong(): Long {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }
 
 internal data class RegularSNodeId(val value: Long) : SNodeId() {

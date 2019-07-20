@@ -131,22 +131,25 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
         }
     }
 
-    private fun createModelId(readString: String): SModelId {
-        TODO()
+    private fun createModelId(s: String): SModelId {
+        return when {
+            s.startsWith("java:") -> SModelId.foreign(s)
+            else -> TODO(s)
+        }
     }
 
 //    @Throws(IOException::class)
     fun readNodeId(): SNodeId? {
         val c = readByte()
-        if (c == NULL) {
-            return null
-        } else if (c == NODEID_LONG) {
-            return SNodeId.regular(readLong())
-        } else if (c == NODEID_STRING) {
-            //return PersistenceFacade.getInstance().createNodeId(readString())
-            TODO()
+        return when (c) {
+            NULL -> null
+            NODEID_LONG -> SNodeId.regular(readLong())
+            NODEID_STRING -> {
+                SNodeId.fromString(readString()!!)
+            }//return PersistenceFacade.getInstance().createNodeId(readString())
+
+            else -> throw IOException("no id")
         }
-        throw IOException("no id")
     }
 //
 //    @Throws(IOException::class)

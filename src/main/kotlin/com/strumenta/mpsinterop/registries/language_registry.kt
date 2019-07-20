@@ -5,6 +5,7 @@ import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.SConcept
 import com.strumenta.mpsinterop.logicalmodel.SConceptId
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
+import java.lang.RuntimeException
 import kotlin.collections.HashMap
 
 class LanguageRegistry {
@@ -37,7 +38,8 @@ class LanguageRegistry {
         model.roots.forEach {
             if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
                 val languageName = model.name.removeSuffix(".structure")
-                val language = this.languagesByName[languageName]!!
+                val language = this.languagesByName[languageName]
+                        ?: throw RuntimeException("Language $languageName not found")
                 val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
                 val conceptId = SConceptId(language.id, conceptIdValue)
                 val conceptName = it.propertyValue("name")

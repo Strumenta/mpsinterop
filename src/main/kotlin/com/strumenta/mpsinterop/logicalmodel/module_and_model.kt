@@ -5,17 +5,14 @@ import java.util.*
 open class SModelId {
     companion object {
         fun regular(uuid: UUID) : SModelId = RegularSModelId(uuid)
-        fun foreign(id: String) : SModelId {
-            TODO()
-        }
+        fun foreign(id: String) : SModelId = ForeignSModelId(id)
     }
 }
 
 internal class RegularSModelId(val uuid: UUID) : SModelId()
+internal class ForeignSModelId(val id: String) : SModelId()
 
-class IntegerSModelId(val id: Int) : SModelId() {
-
-}
+class IntegerSModelId(val id: Int) : SModelId()
 
 open class ModuleId {
     companion object {

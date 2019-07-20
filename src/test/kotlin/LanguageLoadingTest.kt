@@ -1,13 +1,20 @@
 
-import com.strumenta.mpsinterop.loading.PhysicalToLogicalConverter
-import com.strumenta.mpsinterop.loading.loadLanguageFromJar
-import com.strumenta.mpsinterop.loading.loadMpsModel
+import com.strumenta.mpsinterop.loading.*
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class LanguageLoadingTest {
+
+    @Test
+    fun loadConceptDeclaration() {
+        val languageRegistry = LanguageRegistry()
+        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"))
+        assertNotNull(languageRegistry.getConcept("jetbrains.mps.lang.structure.structure.ConceptDeclaration"))
+    }
 
     /**
      * In this test we want to load the language from a given file and verify a certain concept looks as expected.

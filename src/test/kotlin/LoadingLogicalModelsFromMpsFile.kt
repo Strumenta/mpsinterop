@@ -1,8 +1,13 @@
 
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import com.strumenta.mpsinterop.loading.*
+import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
+import java.io.File
+import java.io.InputStream
+import java.util.*
+import java.util.jar.JarFile
 import kotlin.test.*
 
 class LoadingLogicalModelsFromMpsFile {
@@ -44,13 +49,13 @@ class LoadingLogicalModelsFromMpsFile {
     @Ignore
     fun loadLogicalModelOfConstraint() {
         val languageRegistry = loadBasicLanguageRegistry()
-        val physicalModelRegistry = PhysicalModelsRegistry()
-        val formatsStructurePhysicalModel = physicalModelRegistry.loadMpsFile(
+        //val physicalModelRegistry = PhysicalModelsRegistry()
+        val formatsStructurePhysicalModel = languageRegistry.loadMpsFile(
                 LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream("/formats-structure.mps"))
-        physicalModelRegistry.loadJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.structure.jar"))
 
-        val converter = PhysicalToLogicalConverter(languageRegistry, physicalModelRegistry)
+        val converter = PhysicalToLogicalConverter(languageRegistry)
         val logicalModel = converter.toLogical(formatsStructurePhysicalModel)
 
         assertEquals("Formats.structure", logicalModel.name)
@@ -76,3 +81,4 @@ class LoadingLogicalModelsFromMpsFile {
     }
 
 }
+
