@@ -1,19 +1,21 @@
 
-import com.strumenta.mpsinterop.loading.*
+import com.strumenta.mpsinterop.loading.loadLanguageFromJar
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import kotlin.test.Ignore
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 class LanguageLoadingTest {
 
     @Test
-    fun loadConceptDeclaration() {
+    fun loadBaseConcept() {
         val languageRegistry = LanguageRegistry()
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.core-src.jar"))
-        assertNotNull(languageRegistry.getConcept("jetbrains.mps.lang.structure.structure.ConceptDeclaration"))
+        val concept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.BaseConcept")
+        assertNotNull(concept)
+
+        
     }
 
     /**
@@ -21,7 +23,7 @@ class LanguageLoadingTest {
      */
     @Test
     @Ignore
-    fun loadConceptConstraint() {
+    fun loadINamedConcept() {
         val inputStream = LanguageLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val languageRegistry = LanguageRegistry()
         val language = languageRegistry.loadLanguageFromJar(inputStream)

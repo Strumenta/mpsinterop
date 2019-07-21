@@ -363,6 +363,7 @@ internal class BinaryPersistence {
             val languageId = mis.readUUID()
             val langName = mis.readString()
             languageLoaderHelper.registerLanguage(languageId, langName!!)
+            model.putLanguageInRegistry(languageId, langName)
             //println("langName $langName")
 
             //rh.withLanguage(languageId, langName, langIndex++)

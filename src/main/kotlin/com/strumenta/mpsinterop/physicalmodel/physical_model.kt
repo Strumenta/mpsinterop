@@ -3,7 +3,6 @@ package com.strumenta.mpsinterop.physicalmodel
 import com.strumenta.mpsinterop.logicalmodel.LanguageId
 import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.SNodeId
-import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -90,6 +89,7 @@ class PhysicalModel(val name: String){
     private val conceptsByQName = HashMap<String, PhysicalConcept>()
     private val relationsByIndex = HashMap<String, PhysicalRelation>()
     private val propertiesByIndex = HashMap<String, PhysicalProperty>()
+    private val languageUUIDsFromName = HashMap<String, LanguageUUID>()
 
     fun registerConcept(concept: PhysicalConcept) {
         conceptsByIndex[concept.index] = concept
@@ -121,6 +121,14 @@ class PhysicalModel(val name: String){
 
     fun allRoots(concept: PhysicalConcept): List<PhysicalNode> {
         return roots.filter { it.concept == concept }
+    }
+
+    fun languageUuidFromName(languageName: String): LanguageUUID {
+        return languageUUIDsFromName[languageName]!!
+    }
+
+    fun putLanguageInRegistry(languageUUID: LanguageUUID, languageName: String) {
+        languageUUIDsFromName[languageName] = languageUUID
     }
 
 
