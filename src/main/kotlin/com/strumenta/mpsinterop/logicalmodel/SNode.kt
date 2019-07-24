@@ -44,8 +44,30 @@ class InterfaceSNode(concept: SConcept, nodeId: SNodeId?) : SNode(concept, nodeI
 
 open class SNode(val concept: SConcept, val nodeId: SNodeId?) {
 
+    private var _parent: SNode? = null
+    var parent: SNode?
+        get() = _parent
+        set(value) {
+            if (value != null) {
+                require(value.hasChild(this))
+            }
+            if (_parent != null) {
+                _parent!!.removeChild(this)
+            }
+            _parent = value
+        }
+
+    private fun removeChild(child: SNode) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun hasChild(child: SNode): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
     val root: Boolean
-        get() = TODO()
+        get() = parent == null
     val numberOfChildren: Int
         get() = childrenMap.values.fold(0) { acc, mutableList -> acc + mutableList.size  }
     val numberOfProperties: Int
@@ -61,6 +83,7 @@ open class SNode(val concept: SConcept, val nodeId: SNodeId?) {
     private val properties = HashMap<SProperty, String>()
 
     fun addChild(link: SContainmentLink, node: SNode) {
+        node.parent = this
         childrenMap.computeIfAbsent(link) {
             LinkedList<SNode>()
         }.add(node)

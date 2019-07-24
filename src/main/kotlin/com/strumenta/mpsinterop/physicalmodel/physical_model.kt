@@ -57,7 +57,7 @@ data class PhysicalProperty(val container: PhysicalConcept, val id: Long, val na
  * A model, as defined in a file.
  *
  * Each concept is identified by an ID globally and by an index within a single mps file,
- * same is true for relations and properties.
+ * same is true for relations and declaredProperties.
  */
 class PhysicalModel(val name: String){
 
@@ -180,7 +180,7 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     fun propertyValue(propertyName: String) : String {
         val properties = properties.keys.filter { it.name == propertyName }
         return when (properties.size) {
-            0 -> throw IllegalArgumentException("Unknown property name $propertyName. Known properties: $properties")
+            0 -> throw IllegalArgumentException("Unknown property name $propertyName. Known declaredProperties: $properties")
             1 -> propertyValue(properties.first())
             else -> throw IllegalArgumentException("Ambiguous property name $propertyName")
         }

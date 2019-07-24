@@ -5,6 +5,7 @@ import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.SConcept
 import com.strumenta.mpsinterop.logicalmodel.SConceptId
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
+import com.strumenta.mpsinterop.physicalmodel.ReferenceTarget
 import kotlin.collections.HashMap
 
 class LanguageRegistry {
@@ -53,6 +54,12 @@ class LanguageRegistry {
                 concept.final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
                 concept.rootable = it.booleanPropertyValue("rootable")
+
+                // extends
+                val extendsValue = it.reference("extends")
+                if (extendsValue != null) {
+                    concept.extended = this.resolveAsConcept(extendsValue.target)
+                }
             } else if (it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration") {
                 val languageName = model.name.removeSuffix(".structure")
                 val language = this.languagesByName[languageName]!!
@@ -70,6 +77,10 @@ class LanguageRegistry {
         }
         //val language = model.
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun resolveAsConcept(target: ReferenceTarget): SConcept? {
+
     }
 
     operator fun get(id: LanguageUUID): Language? {

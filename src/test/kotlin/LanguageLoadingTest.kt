@@ -33,9 +33,34 @@ class LanguageLoadingTest {
         val concept = languageRegistry.getConcept("Formats.structure.Constraint")
         assertNotNull(concept)
         assertEquals(true, concept.abstract)
-        assertEquals(null, concept.extended)
+        assertNotNull(concept.extended)
         assertEquals(0, concept.implemented.size)
         assertEquals(null, concept.alias)
+
+        assertEquals(0, concept.declaredProperties.size)
+        assertEquals(2, concept.allProperties.size)
+    }
+
+    @Test
+    fun loadConceptDeclaredProperties() {
+        val inputStream = LanguageLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
+        val languageRegistry = LanguageRegistry()
+        languageRegistry.loadLanguageFromMpsInputStream(inputStream)
+        val concept = languageRegistry.getConcept("Formats.structure.Constraint")
+        assertNotNull(concept)
+
+        assertEquals(0, concept.declaredProperties.size)
+    }
+
+    @Test
+    fun loadConceptAllProperties() {
+        val inputStream = LanguageLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
+        val languageRegistry = LanguageRegistry()
+        languageRegistry.loadLanguageFromMpsInputStream(inputStream)
+        val concept = languageRegistry.getConcept("Formats.structure.Constraint")
+        assertNotNull(concept)
+
+        assertEquals(2, concept.allProperties.size)
     }
 
 }

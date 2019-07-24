@@ -46,14 +46,17 @@ class LoadingLogicalModelsFromMpsFile {
     }
 
     @Test
-    @Ignore
     fun loadLogicalModelOfConstraint() {
         val languageRegistry = loadBasicLanguageRegistry()
         //val physicalModelRegistry = PhysicalModelsRegistry()
         val formatsStructurePhysicalModel = languageRegistry.loadMpsFile(
                 LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream("/formats-structure.mps"))
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/jetbrains.mps.lang.structure.jar"))
+                "/jetbrains.mps.lang.structure-src.jar"))
+
+        // At this point we expect the language registry to contain the basic concepts needed for the conversion
+        // of the Formats language
+        assertNotNull(languageRegistry.getConcept("jetbrains.mps.lang.structure.structure.ConceptDeclaration"))
 
         val converter = PhysicalToLogicalConverter(languageRegistry)
         val logicalModel = converter.toLogical(formatsStructurePhysicalModel)
@@ -61,8 +64,8 @@ class LoadingLogicalModelsFromMpsFile {
         assertEquals("Formats.structure", logicalModel.name)
 
         assertEquals(36, logicalModel.numberOfRoots)
-//
-//        val constraintNode = logicalModel.getRootByName("Constraint")
+
+        val constraintNode = logicalModel.getRootByName("Constraint")
 //        assertEquals("6D8ZJLf0wUM", constraintNode.id)
 //        assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, constraintNode.concept.name)
 //        assertEquals("true", constraintNode.propertyValue("abstract"))
@@ -74,10 +77,10 @@ class LoadingLogicalModelsFromMpsFile {
 //        // It is not present because it has the default value
 //        //assertEquals("false", constraintNode.propertyValue("rootable"))
 //
-//        // TODO check no properties
+//        // TODO check no declaredProperties
 //        // TODO check no references
 //        // TODO check no children
-        TODO()
+//        TODO()
     }
 
 }

@@ -1,5 +1,6 @@
 package com.strumenta.mpsinterop.logicalmodel
 
+import java.lang.RuntimeException
 import java.util.*
 
 open class SModelId {
@@ -52,6 +53,8 @@ class Model(val name: String) {
     }
 
     fun getRootByName(name: String): SNode {
-        return roots.find { it.name == name }!!
+        return roots.find { it.name == name } ?: throw RuntimeException(
+                "No root found with name $name. Roots have these names: ${roots.map { it.name
+        }.joinToString(", ")}")
     }
 }

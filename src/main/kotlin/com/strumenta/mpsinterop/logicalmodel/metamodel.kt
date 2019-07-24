@@ -19,7 +19,20 @@ data class SConcept(val id: SConceptId, val name: String, val isInterface : Bool
     var abstract: Boolean = false
     var extended: SConcept? = null
     val implemented: MutableList<SConcept> = LinkedList<SConcept>()
-    val properties : MutableList<SProperty> = LinkedList<SProperty>()
+    val declaredProperties : MutableList<SProperty> = LinkedList<SProperty>()
+
+    val allProperties : List<SProperty>
+        get() {
+            val props = LinkedList<SProperty>()
+            if (extended != null) {
+                props.addAll(extended!!.allProperties)
+            }
+            implemented.forEach {
+                props.addAll(it.allProperties)
+            }
+            props.addAll(declaredProperties)
+            return props
+        }
 
     fun qname(languageRegistry: LanguageRegistry) : String {
         val languageName = languageName(languageRegistry)
@@ -39,7 +52,7 @@ data class SConcept(val id: SConceptId, val name: String, val isInterface : Bool
     }
 
     fun findProperty(propertyName: String): SProperty {
-        val p = properties.find { it.name == propertyName }
+        val p = declaredProperties.find { it.name == propertyName }
         if (p != null) {
             return p
         } else {
@@ -48,14 +61,14 @@ data class SConcept(val id: SConceptId, val name: String, val isInterface : Bool
     }
 
     fun addProperty(property: SProperty) {
-        properties.add(property)
+        declaredProperties.add(property)
     }
 }
 
 data class SConceptId(val languageId: LanguageUUID, val idValue: Long)
 data class SContainmentLink(val link: SContainmentLinkId, val name: String)
 data class SContainmentLinkId(val conceptId: SConceptId, val idValue: Long)
-data class SProperty(val sPropertyId: SPropertyId, val name: String?)
+data class SProperty(val sPropertyId: SPropertyId, val name: String)
 data class SPropertyId(val conceptId: SConceptId, val idValue: Long)
 data class SReferenceLink(val link: SReferenceLinkId, val name: String)
 data class SReferenceLinkId(val conceptId: SConceptId, val idValue: Long)
