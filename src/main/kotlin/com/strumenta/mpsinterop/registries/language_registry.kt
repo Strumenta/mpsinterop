@@ -4,6 +4,8 @@ import com.strumenta.mpsinterop.logicalmodel.Language
 import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.SConcept
 import com.strumenta.mpsinterop.logicalmodel.SConceptId
+import com.strumenta.mpsinterop.physicalmodel.InModelReferenceTarget
+import com.strumenta.mpsinterop.physicalmodel.OutsideModelReferenceTarget
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.ReferenceTarget
 import kotlin.collections.HashMap
@@ -80,7 +82,10 @@ class LanguageRegistry {
     }
 
     private fun resolveAsConcept(target: ReferenceTarget): SConcept? {
-
+        return when (target) {
+            is InModelReferenceTarget -> TODO()
+            is OutsideModelReferenceTarget -> TODO("OUTSIDE ${target.importIndex} ${target.nodeIndex}")
+        }
     }
 
     operator fun get(id: LanguageUUID): Language? {

@@ -43,7 +43,7 @@ class LoadingPhysicalModelsFromMpsFile {
         // Structure
         val superConcept = constraintNode.reference("extends")
         assertEquals(PhysicalReferenceValue(
-                OutsideModelReferenceTarget("tpck", "gw2VY9q"),
+                OutsideModelReferenceTarget(model,"tpck", "gw2VY9q"),
                 "BaseConcept"),
                 superConcept)
         val sourceNode = constraintNode.reference("sourceNode")

@@ -91,6 +91,7 @@ class PhysicalModel(val name: String){
     private val relationsByIndex = HashMap<String, PhysicalRelation>()
     private val propertiesByIndex = HashMap<String, PhysicalProperty>()
     private val languageUUIDsFromName = HashMap<String, LanguageUUID>()
+    private val languageUUIDsFromIndex = HashMap<String, LanguageUUID>()
 
     fun registerConcept(concept: PhysicalConcept) {
         conceptsByIndex[concept.index] = concept
@@ -106,6 +107,7 @@ class PhysicalModel(val name: String){
     }
 
     fun conceptByIndex(index: String) : PhysicalConcept = conceptsByIndex[index]!!
+    fun languageUUIDByIndex(index: String) : LanguageUUID = languageUUIDsFromIndex[index]!!
 
     fun relationByIndex(index: String) : PhysicalRelation = relationsByIndex[index]
             ?: throw java.lang.IllegalArgumentException("Relation with index $index not found")
@@ -141,10 +143,18 @@ class PhysicalModel(val name: String){
 
 }
 
-interface ReferenceTarget
+sealed class ReferenceTarget
 
-data class InModelReferenceTarget(val nodeID: String) : ReferenceTarget
-data class OutsideModelReferenceTarget(val importIndex: String, val nodeIndex:String) : ReferenceTarget
+data class InModelReferenceTarget(val nodeID: String) : ReferenceTarget()
+data class OutsideModelReferenceTarget(val physicalModel: PhysicalModel,
+                                       val importIndex: String, val nodeIndex:String) : ReferenceTarget() {
+    val nodeID : String
+        get() {
+            TODO()
+            //physicalModel. get the language UUID from the importIndex (=languageIndex)
+        }
+
+}
 
 data class PhysicalReferenceValue(val target: ReferenceTarget, val resolve: String)
 

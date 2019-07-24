@@ -39,7 +39,7 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, elem
                     if (targetParts.size != 2) {
                         throw IllegalArgumentException("Illegal target: $to in reference with role index $roleIndex")
                     }
-                    OutsideModelReferenceTarget(targetParts[0], targetParts[1])
+                    OutsideModelReferenceTarget(physicalModel, targetParts[0], targetParts[1])
                 }
                 it.hasAttribute("node") -> InModelReferenceTarget(it.getAttribute("node"))
                 else -> throw IllegalArgumentException("A reference should have either the to or node attributes")
@@ -83,6 +83,9 @@ fun loadModel(document: Document) : PhysicalModel {
         throw RuntimeException("Issue deriving UUID from $uuidStr")
     }
     physicalModel.putLanguageInRegistry(uuid, nameInParens.removeSuffix(".structure"))
+    document.documentElement.processAllNodes("import") {
+        TODO("import languages and put the association index -> UUID")
+    }
     document.documentElement.processAllNodes("concept") {
         val languageId = UUID.fromString((it.parentNode as Element).getAttribute("id"))
         val languageName =  (it.parentNode as Element).getAttribute("name")
