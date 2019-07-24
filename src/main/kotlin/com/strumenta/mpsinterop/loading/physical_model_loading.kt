@@ -64,16 +64,25 @@ fun loadModel(document: Document) : PhysicalModel {
     if (nameInParens.lastIndexOf('@') != -1) {
         nameInParens = nameInParens.substring(0, nameInParens.lastIndexOf('@'))
     }
-    var uuid = rawName
-    if (uuid.startsWith("r:")) {
-        uuid = uuid.removePrefix("r:")
+    var uuidStr = rawName
+    if (uuidStr.startsWith("r:")) {
+        uuidStr = uuidStr.removePrefix("r:")
     }
-    if (uuid.indexOf('(') != -1) {
-        uuid = uuid.substring(0, uuid.indexOf('('))
+    if (uuidStr.indexOf('(') != -1) {
+        uuidStr = uuidStr.substring(0, uuidStr.indexOf('('))
+    }
+    if (uuidStr.indexOf('/') != -1) {
+        uuidStr = uuidStr.substring(0, uuidStr.indexOf('/'))
     }
 
     val physicalModel = PhysicalModel(nameInParens)
-    physicalModel.putLanguageInRegistry(UUID.fromString(uuid), nameInParens.removeSuffix(".structure"))
+    var uuid : UUID?
+    try {
+        uuid = UUID.fromString(uuidStr)
+    } catch (e: RuntimeException) {
+        throw RuntimeException("Issue deriving UUID from $uuidStr")
+    }
+    physicalModel.putLanguageInRegistry(uuid, nameInParens.removeSuffix(".structure"))
     document.documentElement.processAllNodes("concept") {
         val languageId = UUID.fromString((it.parentNode as Element).getAttribute("id"))
         val languageName =  (it.parentNode as Element).getAttribute("name")
