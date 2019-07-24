@@ -3,6 +3,7 @@ package com.strumenta.mpsinterop.physicalmodel
 import com.strumenta.mpsinterop.logicalmodel.LanguageId
 import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.SNodeId
+import java.lang.RuntimeException
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -124,7 +125,7 @@ class PhysicalModel(val name: String){
     }
 
     fun languageUuidFromName(languageName: String): LanguageUUID {
-        return languageUUIDsFromName[languageName]!!
+        return languageUUIDsFromName[languageName] ?: throw RuntimeException("Unable to find UUID for language $languageName")
     }
 
     fun putLanguageInRegistry(languageUUID: LanguageUUID, languageName: String) {

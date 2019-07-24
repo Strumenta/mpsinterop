@@ -11,6 +11,7 @@ import java.io.InputStream
 import java.util.jar.JarFile
 import java.io.FileOutputStream
 import java.util.*
+import java.util.zip.ZipException
 
 fun PhysicalModelsRegistry.loadMpsFile(file: File) : PhysicalModel {
     val model = loadMpsModel(FileInputStream(file))
@@ -73,22 +74,35 @@ fun LanguageRegistry.loadMpsFile(inputStream: InputStream): PhysicalModel {
 
 private fun LanguageRegistry.loadJar(inputStream: InputStream) : List<PhysicalModel> {
     val file = dumpToTempFile(inputStream)
-    return loadJar(file)
+    try {
+        return loadJar(file)
+    } catch (e: RuntimeException) {
+        throw RuntimeException("Issue loading JAR from inputstream", e)
+    }
 }
 
 private fun LanguageRegistry.loadJar(file: File) : List<PhysicalModel> {
     val models = LinkedList<PhysicalModel>()
-    val jarFile = JarFile(file)
-    val entries = jarFile.entries()
-    while (entries.hasMoreElements()) {
-        val entry = entries.nextElement()
-        if (entry.name.endsWith(".mps")) {
-            val model = loadMpsModel(jarFile.getInputStream(entry))
-            models.add(model)
-        } else if (entry.name.endsWith(".mpb")) {
-            val model = loadMpsModelFromBinaryFile(jarFile.getInputStream(entry))
-            models.add(model)
+    try {
+        val jarFile = JarFile(file)
+        val entries = jarFile.entries()
+        while (entries.hasMoreElements()) {
+            val entry = entries.nextElement()
+            if (entry.name.endsWith(".mps")) {
+                val model = loadMpsModel(jarFile.getInputStream(entry))
+                models.add(model)
+            } else if (entry.name.endsWith(".mpb")) {
+                val model = loadMpsModelFromBinaryFile(jarFile.getInputStream(entry))
+                models.add(model)
+            }
         }
+    } catch (e: ZipException) {
+        throw RuntimeException("Problem loading JAR from file $file", e)
     }
     return models
+}
+
+fun LanguageRegistry.loadLanguageFromMpsInputStream(inputStream: InputStream) {
+    val model = loadMpsModel(inputStream)
+    this.loadLanguageFromModel(model)
 }

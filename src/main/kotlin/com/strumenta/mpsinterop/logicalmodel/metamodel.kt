@@ -13,6 +13,7 @@ enum class ConceptKind {
 }
 
 data class SConcept(val id: SConceptId, val name: String, val isInterface : Boolean = false) {
+    val alias: String? = null
     var rootable: Boolean = false
     var final: Boolean = false
     var abstract: Boolean = false

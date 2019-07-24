@@ -64,11 +64,20 @@ fun loadModel(document: Document) : PhysicalModel {
     if (nameInParens.lastIndexOf('@') != -1) {
         nameInParens = nameInParens.substring(0, nameInParens.lastIndexOf('@'))
     }
+    var uuid = rawName
+    if (uuid.startsWith("r:")) {
+        uuid = uuid.removePrefix("r:")
+    }
+    if (uuid.indexOf('(') != -1) {
+        uuid = uuid.substring(0, uuid.indexOf('('))
+    }
 
     val physicalModel = PhysicalModel(nameInParens)
+    physicalModel.putLanguageInRegistry(UUID.fromString(uuid), nameInParens.removeSuffix(".structure"))
     document.documentElement.processAllNodes("concept") {
         val languageId = UUID.fromString((it.parentNode as Element).getAttribute("id"))
         val languageName =  (it.parentNode as Element).getAttribute("name")
+        physicalModel.putLanguageInRegistry(languageId, languageName)
         val simpleConceptName = it.getAttribute("name").split(".").last()
         val concept = PhysicalConcept(
                 LanguageId(languageId, languageName),
