@@ -53,10 +53,7 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, elem
     }
 }
 
-fun loadModel(document: Document) : PhysicalModel {
-    val rawName = document.documentElement.getAttribute("ref")
-
-    // TODO make it more robust
+private fun rawNameToUuid(rawName: String) : UUID {
     var nameInParens = rawName.substring(rawName.indexOf('(') + 1, rawName.indexOf(')'))
     if (nameInParens.lastIndexOf('/') != -1) {
         nameInParens = nameInParens.substring(nameInParens.lastIndexOf('/') + 1, nameInParens.length)
@@ -75,16 +72,41 @@ fun loadModel(document: Document) : PhysicalModel {
         uuidStr = uuidStr.substring(0, uuidStr.indexOf('/'))
     }
 
-    val physicalModel = PhysicalModel(nameInParens)
     var uuid : UUID?
     try {
         uuid = UUID.fromString(uuidStr)
     } catch (e: RuntimeException) {
         throw RuntimeException("Issue deriving UUID from $uuidStr")
     }
+    return uuid
+}
+
+private fun rawNameToLanguageName(rawName: String) : String {
+    var nameInParens = rawName.substring(rawName.indexOf('(') + 1, rawName.indexOf(')'))
+    if (nameInParens.lastIndexOf('/') != -1) {
+        nameInParens = nameInParens.substring(nameInParens.lastIndexOf('/') + 1, nameInParens.length)
+    }
+    if (nameInParens.lastIndexOf('@') != -1) {
+        nameInParens = nameInParens.substring(0, nameInParens.lastIndexOf('@'))
+    }
+    return nameInParens
+}
+
+fun loadModel(document: Document) : PhysicalModel {
+    val rawName = document.documentElement.getAttribute("ref")
+
+    val nameInParens = rawNameToLanguageName(rawName)
+    val uuid = rawNameToUuid(rawName)
+
+    val physicalModel = PhysicalModel(nameInParens, uuid)
     physicalModel.putLanguageInRegistry(uuid, nameInParens.removeSuffix(".structure"))
     document.documentElement.processAllNodes("import") {
-        TODO("import languages and put the association index -> UUID")
+        val index = it.getAttribute("index")
+        val rawName = it.getAttribute("ref")
+        val nameInParens = rawNameToLanguageName(rawName)
+        val uuid = rawNameToUuid(rawName)
+        physicalModel.putLanguageInRegistry(uuid, nameInParens.removeSuffix(".structure"))
+        physicalModel.putLanguageIndexInRegistry(uuid, index)
     }
     document.documentElement.processAllNodes("concept") {
         val languageId = UUID.fromString((it.parentNode as Element).getAttribute("id"))

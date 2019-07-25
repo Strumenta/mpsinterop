@@ -8,6 +8,8 @@ import com.strumenta.mpsinterop.physicalmodel.InModelReferenceTarget
 import com.strumenta.mpsinterop.physicalmodel.OutsideModelReferenceTarget
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.ReferenceTarget
+import java.lang.RuntimeException
+import java.util.*
 import kotlin.collections.HashMap
 
 class LanguageRegistry {
@@ -44,6 +46,7 @@ class LanguageRegistry {
                     this.languagesByName[languageName]!!
                 } else {
                     val l = Language(model.languageUuidFromName(languageName), languageName)
+                    languagesByID[model.uuid] = l
                     this.add(l)
                     l
                 }
@@ -84,7 +87,16 @@ class LanguageRegistry {
     private fun resolveAsConcept(target: ReferenceTarget): SConcept? {
         return when (target) {
             is InModelReferenceTarget -> TODO()
-            is OutsideModelReferenceTarget -> TODO("OUTSIDE ${target.importIndex} ${target.nodeIndex}")
+            is OutsideModelReferenceTarget -> {
+                println(target.nodeID)
+                val uuid = target.modelUIID
+                if (uuid !in languagesByID) {
+                    throw RuntimeException("Unknown language UUID $uuid")
+                }
+                val language = languagesByID[uuid]!!
+                val concept = language.concepts.find { it.id.idValue == target.nodeID }!!
+                return concept
+            }
         }
     }
 
@@ -95,6 +107,8 @@ class LanguageRegistry {
     fun getName(id: LanguageUUID): String? {
         return this[id]?.name
     }
+
+    fun knowsLanguageUUID(uuid: UUID) = uuid in languagesByID
 
 //    fun registerLanguage(languageId: UUID, langName: String) {
 //        languageNamesByID[languageId] = langName

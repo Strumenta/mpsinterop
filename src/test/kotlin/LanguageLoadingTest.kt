@@ -2,10 +2,8 @@
 import com.strumenta.mpsinterop.loading.loadLanguageFromJar
 import com.strumenta.mpsinterop.loading.loadLanguageFromMpsInputStream
 import com.strumenta.mpsinterop.registries.LanguageRegistry
-import kotlin.test.Ignore
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
+import java.util.*
+import kotlin.test.*
 
 class LanguageLoadingTest {
 
@@ -29,6 +27,12 @@ class LanguageLoadingTest {
     fun loadConstraintConcept() {
         val inputStream = LanguageLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val languageRegistry = LanguageRegistry()
+        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"))
+
+        // jetbrains.mps.lang.core should be registered
+        assertTrue(languageRegistry.knowsLanguageUUID(UUID.fromString("00000000-0000-4000-0000-011c89590288")))
+
         languageRegistry.loadLanguageFromMpsInputStream(inputStream)
         val concept = languageRegistry.getConcept("Formats.structure.Constraint")
         assertNotNull(concept)

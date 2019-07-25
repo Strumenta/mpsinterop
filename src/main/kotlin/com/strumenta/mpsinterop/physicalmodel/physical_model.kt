@@ -3,6 +3,7 @@ package com.strumenta.mpsinterop.physicalmodel
 import com.strumenta.mpsinterop.logicalmodel.LanguageId
 import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.SNodeId
+import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
 import java.lang.RuntimeException
 import java.util.*
 import kotlin.collections.HashMap
@@ -59,7 +60,7 @@ data class PhysicalProperty(val container: PhysicalConcept, val id: Long, val na
  * Each concept is identified by an ID globally and by an index within a single mps file,
  * same is true for relations and declaredProperties.
  */
-class PhysicalModel(val name: String){
+class PhysicalModel(val name: String, val uuid: UUID){
 
     val roots = LinkedList<PhysicalNode>()
 
@@ -107,7 +108,8 @@ class PhysicalModel(val name: String){
     }
 
     fun conceptByIndex(index: String) : PhysicalConcept = conceptsByIndex[index]!!
-    fun languageUUIDByIndex(index: String) : LanguageUUID = languageUUIDsFromIndex[index]!!
+    fun languageUUIDByIndex(index: String) : LanguageUUID = languageUUIDsFromIndex[index]
+            ?: throw java.lang.IllegalArgumentException("Unknown language index $index. Known indexes: ${languageUUIDsFromIndex.keys.joinToString(", ")}")
 
     fun relationByIndex(index: String) : PhysicalRelation = relationsByIndex[index]
             ?: throw java.lang.IllegalArgumentException("Relation with index $index not found")
@@ -134,6 +136,10 @@ class PhysicalModel(val name: String){
         languageUUIDsFromName[languageName] = languageUUID
     }
 
+    fun putLanguageIndexInRegistry(languageUUID: LanguageUUID, languageIndex: String) {
+        languageUUIDsFromIndex[languageIndex] = languageUUID
+    }
+
 
 //    override fun physicalConceptByName(name: String): PhysicalConcept? = conceptsByQName[name]
 //
@@ -148,12 +154,11 @@ sealed class ReferenceTarget
 data class InModelReferenceTarget(val nodeID: String) : ReferenceTarget()
 data class OutsideModelReferenceTarget(val physicalModel: PhysicalModel,
                                        val importIndex: String, val nodeIndex:String) : ReferenceTarget() {
-    val nodeID : String
+    val modelUIID : UUID = physicalModel.languageUUIDByIndex(importIndex)
+    val nodeID : Long
         get() {
-            TODO()
-            //physicalModel. get the language UUID from the importIndex (=languageIndex)
+            return JavaFriendlyBase64.parseLong(nodeIndex)
         }
-
 }
 
 data class PhysicalReferenceValue(val target: ReferenceTarget, val resolve: String)

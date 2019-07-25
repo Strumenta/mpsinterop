@@ -1,6 +1,7 @@
 package com.strumenta.mpsinterop.logicalmodel
 
 import java.lang.RuntimeException
+import java.lang.UnsupportedOperationException
 import java.util.*
 
 open class SModelId {
@@ -8,9 +9,14 @@ open class SModelId {
         fun regular(uuid: UUID) : SModelId = RegularSModelId(uuid)
         fun foreign(id: String) : SModelId = ForeignSModelId(id)
     }
+    open fun uuid() : UUID {
+        throw UnsupportedOperationException()
+    }
 }
 
-internal class RegularSModelId(val uuid: UUID) : SModelId()
+internal class RegularSModelId(val uuid: UUID) : SModelId() {
+    override fun uuid() = uuid
+}
 internal class ForeignSModelId(val id: String) : SModelId()
 
 class IntegerSModelId(val id: Int) : SModelId()
