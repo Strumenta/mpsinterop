@@ -74,7 +74,9 @@ class LoadingPhysicalModelsFromMpsFile {
         // Structure
         val superConcept = equalTo.reference("extends")
         assertEquals(PhysicalReferenceValue(
-                InModelReferenceTarget("6D8ZJLf0wUM"),
+                InModelReferenceTarget(
+                        model,
+                        "6D8ZJLf0wUM"),
                 "Constraint"),
                 superConcept)
 

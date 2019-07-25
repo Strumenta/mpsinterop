@@ -4,10 +4,8 @@ import com.strumenta.mpsinterop.logicalmodel.Language
 import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.SConcept
 import com.strumenta.mpsinterop.logicalmodel.SConceptId
-import com.strumenta.mpsinterop.physicalmodel.InModelReferenceTarget
-import com.strumenta.mpsinterop.physicalmodel.OutsideModelReferenceTarget
-import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
-import com.strumenta.mpsinterop.physicalmodel.ReferenceTarget
+import com.strumenta.mpsinterop.physicalmodel.*
+import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
 import java.lang.RuntimeException
 import java.util.*
 import kotlin.collections.HashMap
@@ -39,6 +37,8 @@ class LanguageRegistry {
     }
 
     fun loadLanguageFromModel(model: PhysicalModel) {
+        // We solve stuff in two rounds, because there could be dependency between concepts
+        val concepts = HashMap<PhysicalNode, SConcept>()
         model.roots.forEach {
             if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
                 val languageName = model.name.removeSuffix(".structure")
@@ -53,8 +53,42 @@ class LanguageRegistry {
                 val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
                 val conceptId = SConceptId(language.id, conceptIdValue)
                 val conceptName = it.propertyValue("name")
+                //println(conceptName)
                 val concept = SConcept(conceptId, conceptName)
+                concepts[it] = concept
                 language.concepts.add(concept)
+
+//                concept.final = it.booleanPropertyValue("final")
+//                concept.abstract = it.booleanPropertyValue("abstract")
+//                concept.rootable = it.booleanPropertyValue("rootable")
+//
+//                // extends
+//                val extendsValue = it.reference("extends")
+//                if (extendsValue != null) {
+//                    concept.extended = this.resolveAsConcept(extendsValue.target)
+//                }
+            } else if (it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration") {
+                val languageName = model.name.removeSuffix(".structure")
+                val language = this.languagesByName[languageName]!!
+                val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
+                val conceptId = SConceptId(language.id, conceptIdValue)
+                val conceptName = it.propertyValue("name")
+                val concept = SConcept(conceptId, conceptName, true)
+                language.concepts.add(concept)
+                concepts[it] = concept
+
+//                concept.final = it.booleanPropertyValue("final")
+//                concept.abstract = it.booleanPropertyValue("abstract")
+//                concept.rootable = it.booleanPropertyValue("rootable")
+            }
+            //println(it.concept.qname(this))
+        }
+
+
+        model.roots.forEach {
+            if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
+
+                val concept = concepts[it]!!
 
                 concept.final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
@@ -66,13 +100,7 @@ class LanguageRegistry {
                     concept.extended = this.resolveAsConcept(extendsValue.target)
                 }
             } else if (it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration") {
-                val languageName = model.name.removeSuffix(".structure")
-                val language = this.languagesByName[languageName]!!
-                val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
-                val conceptId = SConceptId(language.id, conceptIdValue)
-                val conceptName = it.propertyValue("name")
-                val concept = SConcept(conceptId, conceptName, true)
-                language.concepts.add(concept)
+                val concept = concepts[it]!!
 
                 concept.final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
@@ -86,9 +114,18 @@ class LanguageRegistry {
 
     private fun resolveAsConcept(target: ReferenceTarget): SConcept? {
         return when (target) {
-            is InModelReferenceTarget -> TODO()
+            is InModelReferenceTarget -> {
+                val uuid = target.physicalModel.uuid
+                if (uuid !in languagesByID) {
+                    throw RuntimeException("Unknown language UUID $uuid")
+                }
+                val language = languagesByID[uuid]!!
+                val concept = language.concepts.find {
+                    it.id.idValue == JavaFriendlyBase64.parseLong(target.nodeID)
+                } ?: throw RuntimeException("Concept not found (ID ${target.nodeID})")
+                return concept
+            }
             is OutsideModelReferenceTarget -> {
-                println(target.nodeID)
                 val uuid = target.modelUIID
                 if (uuid !in languagesByID) {
                     throw RuntimeException("Unknown language UUID $uuid")

@@ -151,7 +151,8 @@ class PhysicalModel(val name: String, val uuid: UUID){
 
 sealed class ReferenceTarget
 
-data class InModelReferenceTarget(val nodeID: String) : ReferenceTarget()
+data class InModelReferenceTarget(val physicalModel: PhysicalModel,
+                                  val nodeID: String) : ReferenceTarget()
 data class OutsideModelReferenceTarget(val physicalModel: PhysicalModel,
                                        val importIndex: String, val nodeIndex:String) : ReferenceTarget() {
     val modelUIID : UUID = physicalModel.languageUUIDByIndex(importIndex)
