@@ -202,6 +202,15 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         }
     }
 
+    fun children(relationName: String) : List<PhysicalNode> {
+        val relation = children.keys.find { it.name == relationName }
+        return if (relation == null) {
+            emptyList()
+        } else {
+            children[relation]!!
+        }
+    }
+
     fun children(relation: PhysicalRelation) = children[relation] ?: emptyList<PhysicalNode>()
 
     fun reference(relation: PhysicalRelation) = references[relation]

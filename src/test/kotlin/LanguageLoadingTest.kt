@@ -18,6 +18,7 @@ class LanguageLoadingTest {
         assertEquals(null, concept.extended)
         assertEquals(0, concept.implemented.size)
         assertEquals(null, concept.alias)
+        assertEquals(2, concept.declaredProperties.size)
     }
 
     /**
@@ -42,6 +43,7 @@ class LanguageLoadingTest {
         assertEquals(null, concept.alias)
 
         assertEquals(0, concept.declaredProperties.size)
+        assertEquals(2, concept.extended!!.declaredProperties.size)
         assertEquals(2, concept.allProperties.size)
     }
 
@@ -49,6 +51,9 @@ class LanguageLoadingTest {
     fun loadConceptDeclaredProperties() {
         val inputStream = LanguageLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val languageRegistry = LanguageRegistry()
+        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"))
+
         languageRegistry.loadLanguageFromMpsInputStream(inputStream)
         val concept = languageRegistry.getConcept("Formats.structure.Constraint")
         assertNotNull(concept)
@@ -60,6 +65,9 @@ class LanguageLoadingTest {
     fun loadConceptAllProperties() {
         val inputStream = LanguageLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val languageRegistry = LanguageRegistry()
+        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"))
+
         languageRegistry.loadLanguageFromMpsInputStream(inputStream)
         val concept = languageRegistry.getConcept("Formats.structure.Constraint")
         assertNotNull(concept)

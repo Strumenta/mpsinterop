@@ -1,9 +1,6 @@
 package com.strumenta.mpsinterop.registries
 
-import com.strumenta.mpsinterop.logicalmodel.Language
-import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
-import com.strumenta.mpsinterop.logicalmodel.SConcept
-import com.strumenta.mpsinterop.logicalmodel.SConceptId
+import com.strumenta.mpsinterop.logicalmodel.*
 import com.strumenta.mpsinterop.physicalmodel.*
 import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
 import java.lang.RuntimeException
@@ -98,6 +95,16 @@ class LanguageRegistry {
                 val extendsValue = it.reference("extends")
                 if (extendsValue != null) {
                     concept.extended = this.resolveAsConcept(extendsValue.target)
+                }
+
+                it.children("propertyDeclaration").forEach {
+                    val name = it.propertyValue("name")
+                    val conceptId = concept.id
+                    val idValue: Long = it.propertyValue("propertyId").toLong()
+                    concept.addProperty(SProperty(SPropertyId(conceptId, idValue), name))
+                }
+                it.children("linkDeclaration").forEach {
+                    //TODO()
                 }
             } else if (it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration") {
                 val concept = concepts[it]!!
