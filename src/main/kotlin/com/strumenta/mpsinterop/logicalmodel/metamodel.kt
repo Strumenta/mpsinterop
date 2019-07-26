@@ -68,7 +68,15 @@ data class SConcept(val id: SConceptId, val name: String, val isInterface : Bool
 data class SConceptId(val languageId: LanguageUUID, val idValue: Long)
 data class SContainmentLink(val link: SContainmentLinkId, val name: String)
 data class SContainmentLinkId(val conceptId: SConceptId, val idValue: Long)
-data class SProperty(val sPropertyId: SPropertyId, val name: String)
+
+interface SPropertyType
+enum class PrimitiveSPropertyType : SPropertyType {
+    BOOLEAN,
+    INTEGER,
+    STRING
+}
+
+data class SProperty(val sPropertyId: SPropertyId, val name: String, val type: SPropertyType)
 data class SPropertyId(val conceptId: SConceptId, val idValue: Long)
 data class SReferenceLink(val link: SReferenceLinkId, val name: String)
 data class SReferenceLinkId(val conceptId: SConceptId, val idValue: Long)

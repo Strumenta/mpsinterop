@@ -101,7 +101,11 @@ class LanguageRegistry {
                     val name = it.propertyValue("name")
                     val conceptId = concept.id
                     val idValue: Long = it.propertyValue("propertyId").toLong()
-                    concept.addProperty(SProperty(SPropertyId(conceptId, idValue), name))
+                    val dataType = it.reference("dataType")
+                            ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
+                    dataType.target
+                    val propertyType = TODO()
+                    concept.addProperty(SProperty(SPropertyId(conceptId, idValue), name, propertyType))
                 }
                 it.children("linkDeclaration").forEach {
                     //TODO()
@@ -141,6 +145,8 @@ class LanguageRegistry {
                 val concept = language.concepts.find { it.id.idValue == target.nodeID }!!
                 return concept
             }
+            is NullReferenceTarget -> null
+            else -> TODO()
         }
     }
 

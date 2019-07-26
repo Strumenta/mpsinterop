@@ -140,6 +140,10 @@ class PhysicalModel(val name: String, val uuid: UUID){
         languageUUIDsFromIndex[languageIndex] = languageUUID
     }
 
+    fun findNodeByID(nodeID: Long): PhysicalNode? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 
 //    override fun physicalConceptByName(name: String): PhysicalConcept? = conceptsByQName[name]
 //
@@ -161,6 +165,10 @@ data class OutsideModelReferenceTarget(val physicalModel: PhysicalModel,
             return JavaFriendlyBase64.parseLong(nodeIndex)
         }
 }
+class ExplicitReferenceTarget(val model: UUID, val nodeId: Long) : ReferenceTarget() {
+
+}
+object NullReferenceTarget : ReferenceTarget()
 
 data class PhysicalReferenceValue(val target: ReferenceTarget, val resolve: String)
 

@@ -39,7 +39,11 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, elem
                     if (targetParts.size != 2) {
                         throw IllegalArgumentException("Illegal target: $to in reference with role index $roleIndex")
                     }
-                    OutsideModelReferenceTarget(physicalModel, targetParts[0], targetParts[1])
+                    if (targetParts[0].isEmpty() && targetParts[1] == "^") {
+                        NullReferenceTarget
+                    } else {
+                        OutsideModelReferenceTarget(physicalModel, targetParts[0], targetParts[1])
+                    }
                 }
                 it.hasAttribute("node") -> InModelReferenceTarget(
                         physicalModel,

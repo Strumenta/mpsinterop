@@ -1,8 +1,6 @@
 package com.strumenta.mpsinterop.binary
 import com.strumenta.mpsinterop.logicalmodel.*
-import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
-import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
-import com.strumenta.mpsinterop.physicalmodel.PhysicalRelation
+import com.strumenta.mpsinterop.physicalmodel.*
 
 
 /*
@@ -39,6 +37,7 @@ import com.strumenta.mpsinterop.physicalmodel.PhysicalRelation
 //import org.jetbrains.mps.openapi.model.SReference
 
 import java.io.IOException
+import java.lang.UnsupportedOperationException
 import java.util.ArrayList
 
 /**
@@ -115,7 +114,14 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
                     modelRef!!,
                     targetNodeId,
                     resolveInfo)
-            //node.setReference(reference.getLink(), reference)
+            val value = when (targetModelKind) {
+                REF_OTHER_MODEL.toInt() -> ExplicitReferenceTarget(
+                        modelRef.id.uuid(), targetNodeId!!.toLong())
+                REF_THIS_MODEL.toInt() -> ExplicitReferenceTarget(
+                        modelRef.id.uuid(), targetNodeId!!.toLong())
+                else -> throw UnsupportedOperationException()
+            }
+            node.addReference(sref, PhysicalReferenceValue(value, resolveInfo!!))
             return reference
         } else
             if (kind == 2 || kind == 3) {

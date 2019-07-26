@@ -224,8 +224,9 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
         val c = readConcept()
         val propertyId = readLong()
         val propertyName = readString()
+        val propertyType = TODO()
         //val p = MetaAdapterFactory.getProperty(SPropertyId(MetaIdHelper.getConcept(c), readLong()), readString())
-        val p = SProperty(SPropertyId(c!!.id, propertyId), propertyName!!)
+        val p = SProperty(SPropertyId(c!!.id, propertyId), propertyName!!, propertyType)
         myProperties.add(p)
         return p
     }
