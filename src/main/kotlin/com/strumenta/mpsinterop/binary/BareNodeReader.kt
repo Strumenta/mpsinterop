@@ -37,6 +37,8 @@ import com.strumenta.mpsinterop.physicalmodel.*
 //import org.jetbrains.mps.openapi.model.SReference
 
 import java.io.IOException
+import java.lang.Exception
+import java.lang.RuntimeException
 import java.lang.UnsupportedOperationException
 import java.util.ArrayList
 
@@ -92,40 +94,41 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
     protected abstract fun readReferences(node: PhysicalNode)
 
     protected fun readReference(sref: PhysicalRelation, node: PhysicalNode): SReference {
-        val kind = modelInputStream.readByte().toInt()
-        assert(kind >= 1 && kind <= 3)
-        val targetNodeId = if (kind == 1) modelInputStream.readNodeId() else null
-        //val origin = if (kind == 3) DynamicReferenceOrigin(modelInputStream.readNodePointer(), modelInputStream.readNodePointer()) else null
-        val origin = if (kind == 3) TODO() else null
-        val targetModelKind = modelInputStream.readByte().toInt()
-        assert(targetModelKind == REF_OTHER_MODEL.toInt() || targetModelKind == REF_THIS_MODEL.toInt())
-        val modelRef: SModelReference?
-        if (targetModelKind == REF_OTHER_MODEL.toInt()) {
-            modelRef = modelInputStream.readModelReference()
-        } else {
-            modelRef = modelReference
-            localNodeReferenceRead(targetNodeId)
-        }
-        val resolveInfo = modelInputStream.readString()
-        if (kind == 1) {
-            val reference = StaticReference(
-                    sref,
-                    node,
-                    modelRef!!,
-                    targetNodeId,
-                    resolveInfo)
-            val value = when (targetModelKind) {
-                REF_OTHER_MODEL.toInt() -> ExplicitReferenceTarget(
-                        modelRef.id.uuid(), targetNodeId!!.toLong())
-                REF_THIS_MODEL.toInt() -> ExplicitReferenceTarget(
-                        modelRef.id.uuid(), targetNodeId!!.toLong())
-                else -> throw UnsupportedOperationException()
+        try {
+            val kind = modelInputStream.readByte().toInt()
+            assert(kind in 1..3)
+            val targetNodeId = if (kind == 1) modelInputStream.readNodeId() else null
+            //val origin = if (kind == 3) DynamicReferenceOrigin(modelInputStream.readNodePointer(), modelInputStream.readNodePointer()) else null
+            val origin = if (kind == 3) TODO() else null
+            val targetModelKind = modelInputStream.readByte().toInt()
+            assert(targetModelKind == REF_OTHER_MODEL.toInt() || targetModelKind == REF_THIS_MODEL.toInt())
+            val modelRef: SModelReference?
+            if (targetModelKind == REF_OTHER_MODEL.toInt()) {
+                modelRef = modelInputStream.readModelReference()
+            } else {
+                modelRef = modelReference
+                localNodeReferenceRead(targetNodeId)
             }
-            node.addReference(sref, PhysicalReferenceValue(value, resolveInfo!!))
-            return reference
-        } else
-            if (kind == 2 || kind == 3) {
-                TODO()
+            val resolveInfo = modelInputStream.readString()
+            if (kind == 1) {
+                val reference = StaticReference(
+                        sref,
+                        node,
+                        modelRef!!,
+                        targetNodeId,
+                        resolveInfo)
+                val value = when (targetModelKind) {
+                    REF_OTHER_MODEL.toInt() -> ExplicitReferenceTarget(
+                            modelRef.id.uuid(), targetNodeId!!.toLong())
+                    REF_THIS_MODEL.toInt() -> ExplicitReferenceTarget(
+                            modelRef.id.uuid(), targetNodeId!!.toLong())
+                    else -> throw UnsupportedOperationException()
+                }
+                node.addReference(sref, PhysicalReferenceValue(value, resolveInfo!!))
+                return reference
+            } else
+                if (kind == 2 || kind == 3) {
+                    TODO()
 //                val reference = DynamicReference(
 //                        sref,
 //                        node,
@@ -135,10 +138,13 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
 //                    reference.setOrigin(origin)
 //                }
 //                node.setReference(sref, reference)
-                //return reference
-            } else {
-                throw IOException("unknown reference type")
-            }
+                    //return reference
+                } else {
+                    throw IOException("unknown reference type")
+                }
+        } catch (e: Exception) {
+            throw RuntimeException("Issue while reading reference $sref")
+        }
     }
 //
     protected fun localNodeReferenceRead(nodeId: SNodeId?) {

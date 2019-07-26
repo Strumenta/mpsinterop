@@ -1,5 +1,8 @@
 package com.strumenta.mpsinterop.registries
 
+import com.strumenta.mpsinterop.loading.ModelLocator
+import com.strumenta.mpsinterop.loading.NodeLocator
+import com.strumenta.mpsinterop.loading.SimpleNodeLocator
 import com.strumenta.mpsinterop.logicalmodel.*
 import com.strumenta.mpsinterop.physicalmodel.*
 import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
@@ -7,10 +10,15 @@ import java.lang.RuntimeException
 import java.util.*
 import kotlin.collections.HashMap
 
-class LanguageRegistry {
+class LanguageRegistry : ModelLocator {
+    override fun locate(modelUUID: UUID): PhysicalModel? {
+        return modelsByID[modelUUID]
+    }
 
     private val languagesByName = HashMap<String, Language>()
     private val languagesByID = HashMap<LanguageUUID, Language>()
+    private val modelsByID = HashMap<LanguageUUID, PhysicalModel>()
+    private val nodeLocator: NodeLocator = SimpleNodeLocator(this)
 
     companion object {
         val DEFAULT = LanguageRegistry()
@@ -36,6 +44,7 @@ class LanguageRegistry {
     fun loadLanguageFromModel(model: PhysicalModel) {
         // We solve stuff in two rounds, because there could be dependency between concepts
         val concepts = HashMap<PhysicalNode, SConcept>()
+        modelsByID[model.uuid] = model
         model.roots.forEach {
             if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
                 val languageName = model.name.removeSuffix(".structure")
@@ -94,7 +103,11 @@ class LanguageRegistry {
                 // extends
                 val extendsValue = it.reference("extends")
                 if (extendsValue != null) {
-                    concept.extended = this.resolveAsConcept(extendsValue.target)
+                    try {
+                        concept.extended = this.resolveAsConcept(extendsValue.target)
+                    } catch (e: Exception) {
+
+                    }
                 }
 
                 it.children("propertyDeclaration").forEach {
@@ -103,8 +116,8 @@ class LanguageRegistry {
                     val idValue: Long = it.propertyValue("propertyId").toLong()
                     val dataType = it.reference("dataType")
                             ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
-                    dataType.target
-                    val propertyType = TODO()
+                    val propertyTypeNode = nodeLocator.resolve(dataType.target)!!
+                    val propertyType = loadPropertyTypeFromNode(propertyTypeNode)
                     concept.addProperty(SProperty(SPropertyId(conceptId, idValue), name, propertyType))
                 }
                 it.children("linkDeclaration").forEach {
@@ -121,6 +134,31 @@ class LanguageRegistry {
         }
         //val language = model.
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun loadPropertyTypeFromNode(node: PhysicalNode) : SPropertyType {
+        if (node.concept.qname == "jetbrains.mps.lang.structure.structure.PrimitiveDataTypeDeclaration") {
+            val name = node.name()!!
+            return PrimitiveSPropertyType.valueOf(name.toUpperCase())
+        } else if (node.concept.qname == "jetbrains.mps.lang.structure.structure.EnumerationDataTypeDeclaration") {
+            val baseTypeNode = nodeLocator.resolve(node.reference("memberDataType")!!.target)!!
+            val alternatives = node.children("member").map {
+                loadEnumerationAlternative(it)
+            }.toList()
+            val enumerationType = EnumerationSPropertyType(
+                    node.name()!!,
+                    loadPropertyTypeFromNode(baseTypeNode) as PrimitiveSPropertyType,
+                    alternatives
+            )
+            return enumerationType
+        } else {
+            TODO(node.concept.qname)
+        }
+    }
+
+    private fun loadEnumerationAlternative(node: PhysicalNode) : EnumerationAlternative {
+        return EnumerationAlternative(node.propertyValue("externalValue"),
+                node.propertyValue("internalValue"))
     }
 
     private fun resolveAsConcept(target: ReferenceTarget): SConcept? {
@@ -146,6 +184,15 @@ class LanguageRegistry {
                 return concept
             }
             is NullReferenceTarget -> null
+            is ExplicitReferenceTarget -> {
+                val uuid = target.model
+                if (uuid !in languagesByID) {
+                    throw RuntimeException("Unknown language UUID $uuid (looking for node ${target.nodeId})")
+                }
+                val language = languagesByID[uuid]!!
+                val concept = language.concepts.find { it.id.idValue == target.nodeId }!!
+                return concept
+            }
             else -> TODO()
         }
     }

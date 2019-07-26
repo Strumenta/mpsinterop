@@ -10,14 +10,18 @@ open class SModelId {
         fun foreign(id: String) : SModelId = ForeignSModelId(id)
     }
     open fun uuid() : UUID {
-        throw UnsupportedOperationException()
+        throw UnsupportedOperationException("No UUID for ${this.javaClass.canonicalName}")
     }
 }
 
 internal class RegularSModelId(val uuid: UUID) : SModelId() {
     override fun uuid() = uuid
 }
-internal class ForeignSModelId(val id: String) : SModelId()
+internal class ForeignSModelId(val id: String) : SModelId() {
+    override fun uuid(): UUID {
+        TODO("FOREIGN SModelID $id")
+    }
+}
 
 class IntegerSModelId(val id: Int) : SModelId()
 

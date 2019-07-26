@@ -141,7 +141,13 @@ class PhysicalModel(val name: String, val uuid: UUID){
     }
 
     fun findNodeByID(nodeID: Long): PhysicalNode? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        for (root in roots) {
+            val res = root.findNodeByID(nodeID)
+            if (res != null) {
+                return res
+            }
+        }
+        return null
     }
 
 
@@ -280,6 +286,21 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
             1 -> children[rs[0]]!!.size
             else -> throw IllegalArgumentException("Ambiguous reference name $relationName")
         }
+    }
+
+    fun findNodeByID(nodeID: Long): PhysicalNode? {
+        if (this.id.toLong() == nodeID) {
+            return this
+        }
+        for (cl in children.values) {
+            for (c in cl) {
+                val res = c.findNodeByID(nodeID)
+                if (res != null) {
+                    return res
+                }
+            }
+        }
+        return null
     }
 
 }

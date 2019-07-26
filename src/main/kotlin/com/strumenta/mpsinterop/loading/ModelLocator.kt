@@ -32,7 +32,7 @@ class SimpleNodeLocator(val modelLocator: ModelLocator) : NodeLocator {
                     JavaFriendlyBase64.parseLong(target.nodeID))
             is OutsideModelReferenceTarget -> resolve(target.modelUIID, target.nodeID)
             is NullReferenceTarget -> null
-            else -> TODO()
+            is ExplicitReferenceTarget -> resolve(target.model, target.nodeId)
         }
     }
 }

@@ -76,6 +76,11 @@ enum class PrimitiveSPropertyType : SPropertyType {
     STRING
 }
 
+data class EnumerationAlternative(val name: String, val value: String)
+data class EnumerationSPropertyType(val name: String,
+                                    val baseType: PrimitiveSPropertyType,
+                                    val alternatives: List<EnumerationAlternative>) : SPropertyType
+
 data class SProperty(val sPropertyId: SPropertyId, val name: String, val type: SPropertyType)
 data class SPropertyId(val conceptId: SConceptId, val idValue: Long)
 data class SReferenceLink(val link: SReferenceLinkId, val name: String)
