@@ -110,6 +110,14 @@ class LanguageRegistry : ModelLocator {
                     }
                 }
 
+                // implements
+                val implementsValue = it.children("implements")
+                concept.implemented.clear()
+                concept.implemented.addAll(implementsValue.map {
+                    val interfaceDeclaration = this.resolveAsConcept(it.reference("intfc")!!.target)
+                    interfaceDeclaration!!
+                })
+
                 it.children("propertyDeclaration").forEach {
                     val name = it.propertyValue("name")
                     val conceptId = concept.id

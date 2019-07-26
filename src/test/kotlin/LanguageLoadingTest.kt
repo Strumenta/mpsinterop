@@ -21,6 +21,25 @@ class LanguageLoadingTest {
         assertEquals(2, concept.declaredProperties.size)
     }
 
+    @Test
+    fun loadConceptDeclaration() {
+        val languageRegistry = LanguageRegistry()
+        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"))
+        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.structure-src.jar"))
+        val concept = languageRegistry.getConcept("jetbrains.mps.lang.structure.structure.ConceptDeclaration")
+        assertNotNull(concept)
+        assertEquals(false, concept.abstract)
+        assertEquals(true, concept.final)
+        assertNotNull(concept.extended)
+        assertEquals(1, concept.implemented.size)
+        assertEquals("Concept", concept.alias)
+        assertEquals(3, concept.declaredProperties.size)
+        // probably more than 10...
+        assertEquals(10, concept.allProperties.size)
+    }
+
     /**
      * In this test we want to load the language from a given file and verify a certain concept looks as expected.
      */
