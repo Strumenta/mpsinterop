@@ -94,7 +94,6 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
     protected abstract fun readReferences(node: PhysicalNode)
 
     protected fun readReference(sref: PhysicalRelation, node: PhysicalNode): SReference {
-        try {
             val kind = modelInputStream.readByte().toInt()
             assert(kind in 1..3)
             val targetNodeId = if (kind == 1) modelInputStream.readNodeId() else null
@@ -117,14 +116,18 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
                         modelRef!!,
                         targetNodeId,
                         resolveInfo)
-                val value = when (targetModelKind) {
-                    REF_OTHER_MODEL.toInt() -> ExplicitReferenceTarget(
-                            modelRef.id.uuid(), targetNodeId!!.toLong())
-                    REF_THIS_MODEL.toInt() -> ExplicitReferenceTarget(
-                            modelRef.id.uuid(), targetNodeId!!.toLong())
-                    else -> throw UnsupportedOperationException()
+                try {
+                    val value = when (targetModelKind) {
+                        REF_OTHER_MODEL.toInt() -> ExplicitReferenceTarget(
+                                modelRef.id.uuid(), targetNodeId!!.toLong())
+                        REF_THIS_MODEL.toInt() -> ExplicitReferenceTarget(
+                                modelRef.id.uuid(), targetNodeId!!.toLong())
+                        else -> throw UnsupportedOperationException()
+                    }
+                    node.addReference(sref, PhysicalReferenceValue(value, resolveInfo!!))
+                } catch (e: Throwable) {
+                    node.addReference(sref, PhysicalReferenceValue(FailedLoadingReferenceTarget(e), resolveInfo))
                 }
-                node.addReference(sref, PhysicalReferenceValue(value, resolveInfo!!))
                 return reference
             } else
                 if (kind == 2 || kind == 3) {
@@ -142,9 +145,6 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
                 } else {
                     throw IOException("unknown reference type")
                 }
-        } catch (e: Exception) {
-            throw RuntimeException("Issue while reading reference $sref")
-        }
     }
 //
     protected fun localNodeReferenceRead(nodeId: SNodeId?) {

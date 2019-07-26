@@ -33,6 +33,7 @@ class SimpleNodeLocator(val modelLocator: ModelLocator) : NodeLocator {
             is OutsideModelReferenceTarget -> resolve(target.modelUIID, target.nodeID)
             is NullReferenceTarget -> null
             is ExplicitReferenceTarget -> resolve(target.model, target.nodeId)
+            else -> TODO()
         }
     }
 }

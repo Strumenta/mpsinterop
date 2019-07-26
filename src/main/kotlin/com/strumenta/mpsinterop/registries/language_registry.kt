@@ -151,6 +151,9 @@ class LanguageRegistry : ModelLocator {
                     alternatives
             )
             return enumerationType
+        } else if (node.concept.qname == "jetbrains.mps.lang.structure.structure.ConstrainedDataTypeDeclaration") {
+            val qname = node.qname()
+            return ConstrainedDataTypeDeclaration(qname)
         } else {
             TODO(node.concept.qname)
         }

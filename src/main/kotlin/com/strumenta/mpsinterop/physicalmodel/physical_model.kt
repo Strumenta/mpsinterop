@@ -5,6 +5,7 @@ import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.SNodeId
 import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
 import java.lang.RuntimeException
+import java.lang.UnsupportedOperationException
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -174,9 +175,10 @@ data class OutsideModelReferenceTarget(val physicalModel: PhysicalModel,
 class ExplicitReferenceTarget(val model: UUID, val nodeId: Long) : ReferenceTarget() {
 
 }
+class FailedLoadingReferenceTarget(val e: Throwable) : ReferenceTarget()
 object NullReferenceTarget : ReferenceTarget()
 
-data class PhysicalReferenceValue(val target: ReferenceTarget, val resolve: String)
+data class PhysicalReferenceValue(val target: ReferenceTarget, val resolve: String?)
 
 class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: SNodeId) {
     val root: Boolean
@@ -187,6 +189,14 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     private val properties = HashMap<PhysicalProperty, String>()
     private val children = HashMap<PhysicalRelation, MutableList<PhysicalNode>>()
     private val references = HashMap<PhysicalRelation, PhysicalReferenceValue>()
+
+    fun qname(): String {
+        if (root) {
+            return model!!.name + "." + name()
+        } else {
+            throw UnsupportedOperationException()
+        }
+    }
 
     fun addChild(relation: PhysicalRelation, node: PhysicalNode) {
         if (relation !in children) {
