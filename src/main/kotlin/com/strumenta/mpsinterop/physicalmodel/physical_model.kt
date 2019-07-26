@@ -217,6 +217,15 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         return properties[property]!!
     }
 
+    fun propertyValue(propertyName: String, defaultValue: String?) : String? {
+        val properties = properties.keys.filter { it.name == propertyName }
+        return when (properties.size) {
+            0 -> defaultValue
+            1 -> propertyValue(properties.first())
+            else -> throw IllegalArgumentException("Ambiguous property name $propertyName")
+        }
+    }
+
     fun propertyValue(propertyName: String) : String {
         val properties = properties.keys.filter { it.name == propertyName }
         return when (properties.size) {

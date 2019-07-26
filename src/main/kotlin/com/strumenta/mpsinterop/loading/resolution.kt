@@ -28,7 +28,7 @@ class PhysicalToLogicalConverter(
                     concept,
                     id)
             concept.declaredProperties.forEach {
-                val value = physicalNode.propertyValue(it.name)
+                val value = physicalNode.propertyValue(it.name, null)
                 logicalNode.setProperty(it, value)
             }
 

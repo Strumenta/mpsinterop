@@ -161,7 +161,7 @@ class LanguageRegistry : ModelLocator {
 
     private fun loadEnumerationAlternative(node: PhysicalNode) : EnumerationAlternative {
         return EnumerationAlternative(node.propertyValue("externalValue"),
-                node.propertyValue("internalValue"))
+                node.propertyValue("internalValue", null))
     }
 
     private fun resolveAsConcept(target: ReferenceTarget): SConcept? {

@@ -80,7 +80,7 @@ open class SNode(val concept: SConcept, val nodeId: SNodeId?) {
         }
 
     private val childrenMap = HashMap<SContainmentLink, MutableList<SNode>>()
-    private val properties = HashMap<SProperty, String>()
+    private val properties = HashMap<SProperty, String?>()
 
     fun addChild(link: SContainmentLink, node: SNode) {
         node.parent = this
@@ -89,7 +89,7 @@ open class SNode(val concept: SConcept, val nodeId: SNodeId?) {
         }.add(node)
     }
 
-    fun setProperty(id: SProperty, value: String) {
+    fun setProperty(id: SProperty, value: String?) {
         properties[id] = value
     }
 

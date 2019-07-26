@@ -76,7 +76,7 @@ enum class PrimitiveSPropertyType : SPropertyType {
     STRING
 }
 
-data class EnumerationAlternative(val name: String, val value: String)
+data class EnumerationAlternative(val name: String, val value: String?)
 data class EnumerationSPropertyType(val name: String,
                                     val baseType: PrimitiveSPropertyType,
                                     val alternatives: List<EnumerationAlternative>) : SPropertyType
