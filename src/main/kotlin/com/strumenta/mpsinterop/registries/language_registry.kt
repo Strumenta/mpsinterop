@@ -41,28 +41,30 @@ class LanguageRegistry : ModelLocator {
         return null
     }
 
-    fun loadLanguageFromModel(model: PhysicalModel) {
-        // We solve stuff in two rounds, because there could be dependency between concepts
-        val concepts = HashMap<PhysicalNode, SConcept>()
-        modelsByID[model.uuid] = model
-        model.roots.forEach {
-            if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
-                val languageName = model.name.removeSuffix(".structure")
-                val language = if (languageName in this.languagesByName) {
-                    this.languagesByName[languageName]!!
-                } else {
-                    val l = Language(model.languageUuidFromName(languageName), languageName)
-                    languagesByID[model.uuid] = l
-                    this.add(l)
-                    l
-                }
-                val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
-                val conceptId = SConceptId(language.id, conceptIdValue)
-                val conceptName = it.propertyValue("name")
-                //println(conceptName)
-                val concept = SConcept(conceptId, conceptName)
-                concepts[it] = concept
-                language.concepts.add(concept)
+    fun languageIDforConceptNode(it: PhysicalNode) = it.model!!.uuid
+    fun conceptIDforConceptNode(it: PhysicalNode) = it.propertyValue("conceptId").toLong()
+
+    fun preloadConcept(it: PhysicalNode) : SConcept? {
+        val model = it.model!!
+        if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
+            val languageName = model.name.removeSuffix(".structure")
+            val language = if (languageName in this.languagesByName) {
+                val l = this.languagesByName[languageName]!!
+                languagesByID[l.id] = l
+                l
+            } else {
+                val l = Language(model.languageUuidFromName(languageName), languageName)
+                languagesByID[model.uuid] = l
+                this.add(l)
+                l
+            }
+            val conceptIdValue : Long = conceptIDforConceptNode(it)
+            val conceptId = SConceptId(language.id, conceptIdValue)
+            val conceptName = it.propertyValue("name")
+            //println(conceptName)
+            val concept = SConcept(conceptId, conceptName)
+            //concepts[it] = concept
+            language.concepts.add(concept)
 
 //                concept.final = it.booleanPropertyValue("final")
 //                concept.abstract = it.booleanPropertyValue("abstract")
@@ -73,28 +75,93 @@ class LanguageRegistry : ModelLocator {
 //                if (extendsValue != null) {
 //                    concept.extended = this.resolveAsConcept(extendsValue.target)
 //                }
-            } else if (it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration") {
-                val languageName = model.name.removeSuffix(".structure")
-                val language = this.languagesByName[languageName]!!
-                val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
-                val conceptId = SConceptId(language.id, conceptIdValue)
-                val conceptName = it.propertyValue("name")
-                val concept = SConcept(conceptId, conceptName, true)
-                language.concepts.add(concept)
-                concepts[it] = concept
+            return concept
+        } else if (it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration") {
+            val languageName = model.name.removeSuffix(".structure")
+            val language = this.languagesByName[languageName]!!
+            val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
+            val conceptId = SConceptId(language.id, conceptIdValue)
+            val conceptName = it.propertyValue("name")
+            val concept = SConcept(conceptId, conceptName, true)
+            language.concepts.add(concept)
+            //concepts[it] = concept
 
 //                concept.final = it.booleanPropertyValue("final")
 //                concept.abstract = it.booleanPropertyValue("abstract")
 //                concept.rootable = it.booleanPropertyValue("rootable")
+            return concept
+        }
+        return null
+    }
+
+    fun loadLanguageFromModel(model: PhysicalModel) {
+        // We solve stuff in two rounds, because there could be dependency between concepts
+        val concepts = HashMap<PhysicalNode, SConcept>()
+        modelsByID[model.uuid] = model
+        model.roots.forEach {
+            val concept = preloadConcept(it)
+            if (concept != null) {
+                concepts[it] = concept
             }
             //println(it.concept.qname(this))
         }
 
 
         model.roots.forEach {
-            if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
+            loadConceptFromNode(it)
+            //println(it.concept.qname(this))
+        }
+        //val language = model.
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
-                val concept = concepts[it]!!
+
+    private fun loadPropertyTypeFromNode(node: PhysicalNode) : SPropertyType {
+        when {
+            node.concept.qname == "jetbrains.mps.lang.structure.structure.PrimitiveDataTypeDeclaration" -> {
+                val name = node.name()!!
+                return PrimitiveSPropertyType.valueOf(name.toUpperCase())
+            }
+            node.concept.qname == "jetbrains.mps.lang.structure.structure.EnumerationDataTypeDeclaration" -> {
+                val baseTypeNode = nodeLocator.resolve(node.reference("memberDataType")!!.target)!!
+                val alternatives = node.children("member").map {
+                    loadEnumerationAlternative(it)
+                }.toList()
+                val enumerationType = EnumerationSPropertyType(
+                        node.name()!!,
+                        loadPropertyTypeFromNode(baseTypeNode) as PrimitiveSPropertyType,
+                        alternatives
+                )
+                return enumerationType
+            }
+            node.concept.qname == "jetbrains.mps.lang.structure.structure.ConstrainedDataTypeDeclaration" -> {
+                val qname = node.qname()
+                return ConstrainedDataTypeDeclaration(qname)
+            }
+            else -> TODO(node.concept.qname)
+        }
+    }
+
+    private fun loadEnumerationAlternative(node: PhysicalNode) : EnumerationAlternative {
+        return EnumerationAlternative(node.propertyValue("externalValue"),
+                node.propertyValue("internalValue", null))
+    }
+
+    private fun loadConceptFromNode(it: PhysicalNode) : SConcept? {
+        val langUUID = languageIDforConceptNode(it)
+        var concept = languagesByID[langUUID]?.conceptByID(conceptIDforConceptNode(it))
+        if (concept == null) {
+            concept = preloadConcept(it)
+            if (concept == null) {
+                return null
+            }
+            val l = languagesByID[langUUID]
+                    ?: throw RuntimeException("Language with ID $langUUID not found")
+            l.add(concept)
+        }
+
+        when {
+            it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration" -> {
 
                 concept.final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
@@ -131,45 +198,15 @@ class LanguageRegistry : ModelLocator {
                 it.children("linkDeclaration").forEach {
                     //TODO()
                 }
-            } else if (it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration") {
-                val concept = concepts[it]!!
+            }
+            it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration" -> {
 
                 concept.final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
                 concept.rootable = it.booleanPropertyValue("rootable")
             }
-            //println(it.concept.qname(this))
         }
-        //val language = model.
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun loadPropertyTypeFromNode(node: PhysicalNode) : SPropertyType {
-        if (node.concept.qname == "jetbrains.mps.lang.structure.structure.PrimitiveDataTypeDeclaration") {
-            val name = node.name()!!
-            return PrimitiveSPropertyType.valueOf(name.toUpperCase())
-        } else if (node.concept.qname == "jetbrains.mps.lang.structure.structure.EnumerationDataTypeDeclaration") {
-            val baseTypeNode = nodeLocator.resolve(node.reference("memberDataType")!!.target)!!
-            val alternatives = node.children("member").map {
-                loadEnumerationAlternative(it)
-            }.toList()
-            val enumerationType = EnumerationSPropertyType(
-                    node.name()!!,
-                    loadPropertyTypeFromNode(baseTypeNode) as PrimitiveSPropertyType,
-                    alternatives
-            )
-            return enumerationType
-        } else if (node.concept.qname == "jetbrains.mps.lang.structure.structure.ConstrainedDataTypeDeclaration") {
-            val qname = node.qname()
-            return ConstrainedDataTypeDeclaration(qname)
-        } else {
-            TODO(node.concept.qname)
-        }
-    }
-
-    private fun loadEnumerationAlternative(node: PhysicalNode) : EnumerationAlternative {
-        return EnumerationAlternative(node.propertyValue("externalValue"),
-                node.propertyValue("internalValue", null))
+        return concept
     }
 
     private fun resolveAsConcept(target: ReferenceTarget): SConcept? {
@@ -198,6 +235,10 @@ class LanguageRegistry : ModelLocator {
             is ExplicitReferenceTarget -> {
                 val uuid = target.model
                 if (uuid !in languagesByID) {
+                    if (uuid in modelsByID) {
+                        val conceptNode = modelsByID[uuid]!!.findNodeByID(target.nodeId)
+                        return loadConceptFromNode(conceptNode!!)
+                    }
                     throw RuntimeException("Unknown language UUID $uuid (looking for node ${target.nodeId})")
                 }
                 val language = languagesByID[uuid]!!

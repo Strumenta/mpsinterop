@@ -46,7 +46,18 @@ class LoadingLogicalModelsFromMpsFile {
     }
 
     @Test
+    fun loadBaseConceptHasRightLanguageID() {
+        val languageRegistry = loadBasicLanguageRegistry()
+        val langCore = languageRegistry["jetbrains.mps.lang.core"]
+        assertNotNull(langCore)
+        val expectedLangUUID = UUID.fromString("00000000-0000-4000-0000-011c89590288")
+        assertEquals(expectedLangUUID, langCore.id)
+    }
+
+    @Test
     fun loadLogicalModelOfConstraint() {
+        // The right language ID for jetbrains.mps.lang.core.structure is 00000000-0000-4000-0000-011c89590288
+        // however it has been loaded with the wrong language ID. Why is this the case?
         val languageRegistry = loadBasicLanguageRegistry()
         //val physicalModelRegistry = PhysicalModelsRegistry()
         val formatsStructurePhysicalModel = languageRegistry.loadMpsFile(

@@ -13,5 +13,11 @@ data class Language(val id: LanguageUUID, val name: String) {
         //concept.language = this
     }
 
+    fun hasConceptWithID(conceptID: Long): Boolean {
+        return conceptByID(conceptID) != null
+    }
+
+    fun conceptByID(conceptID: Long) = concepts.find { it.id.idValue == conceptID }
+
     val concepts = LinkedList<SConcept>()
 }
