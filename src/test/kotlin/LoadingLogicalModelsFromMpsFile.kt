@@ -48,10 +48,10 @@ class LoadingLogicalModelsFromMpsFile {
     @Test
     fun loadBaseConceptHasRightLanguageID() {
         val languageRegistry = loadBasicLanguageRegistry()
-        val langCore = languageRegistry["jetbrains.mps.lang.core"]
-        assertNotNull(langCore)
         val expectedLangUUID = UUID.fromString("00000000-0000-4000-0000-011c89590288")
-        assertEquals(expectedLangUUID, langCore.id)
+        val langCore = languageRegistry[expectedLangUUID]
+        assertNotNull(langCore)
+        assertEquals("jetbrains.mps.lang.core", langCore.name)
     }
 
     @Test

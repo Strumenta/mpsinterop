@@ -15,7 +15,7 @@ class LanguageRegistry : ModelLocator {
         return modelsByID[modelUUID]
     }
 
-    private val languagesByName = HashMap<String, Language>()
+    //private val languagesByName = HashMap<String, Language>()
     private val languagesByID = HashMap<LanguageUUID, Language>()
     private val modelsByID = HashMap<LanguageUUID, PhysicalModel>()
     private val nodeLocator: NodeLocator = SimpleNodeLocator(this)
@@ -24,10 +24,10 @@ class LanguageRegistry : ModelLocator {
         val DEFAULT = LanguageRegistry()
     }
 
-    operator fun get(name: String) = languagesByName[name]
+    //operator fun get(name: String) = languagesByID[name]
 
     fun add(language: Language) {
-        languagesByName[language.name] = language
+        //languagesByName[language.name] = language
         languagesByID[language.id] = language
     }
 
@@ -48,16 +48,28 @@ class LanguageRegistry : ModelLocator {
         val model = it.model!!
         if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
             val languageName = model.name.removeSuffix(".structure")
-            val language = if (languageName in this.languagesByName) {
-                val l = this.languagesByName[languageName]!!
-                languagesByID[l.id] = l
+            val languageID = languageIDforConceptNode(it)
+            val language = if (languageID in this.languagesByID) {
+                val l = this.languagesByID[languageID]!!
                 l
             } else {
                 val l = Language(model.languageUuidFromName(languageName), languageName)
-                languagesByID[model.uuid] = l
                 this.add(l)
                 l
             }
+//            val language = if (languageName in this.languagesByName) {
+//                val l = this.languagesByName[languageName]!!
+//                if (l.id != languageIDforConceptNode(it)) {
+//                    throw RuntimeException("We have two languages with same name and different ID")
+//                }
+//                languagesByID[l.id] = l
+//                l
+//            } else {
+//                val l = Language(model.languageUuidFromName(languageName), languageName)
+//                languagesByID[model.uuid] = l
+//                this.add(l)
+//                l
+//            }
             val conceptIdValue : Long = conceptIDforConceptNode(it)
             val conceptId = SConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")
@@ -78,7 +90,15 @@ class LanguageRegistry : ModelLocator {
             return concept
         } else if (it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration") {
             val languageName = model.name.removeSuffix(".structure")
-            val language = this.languagesByName[languageName]!!
+            val languageID = languageIDforConceptNode(it)
+            val language = if (languageID in this.languagesByID) {
+                val l = this.languagesByID[languageID]!!
+                l
+            } else {
+                val l = Language(model.languageUuidFromName(languageName), languageName)
+                this.add(l)
+                l
+            }
             val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
             val conceptId = SConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")
