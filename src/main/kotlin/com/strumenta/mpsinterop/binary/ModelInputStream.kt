@@ -19,7 +19,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
     private val myConcepts = ArrayList<Concept>(128)
     private val myProperties = ArrayList<SProperty>(128)
 //    private val myAssociations = ArrayList<SReferenceLink>(128)
-//    private val myAggregations = ArrayList<SContainmentLink>(128)
+//    private val myAggregations = ArrayList<ContainmentLink>(128)
 
     @Throws(IOException::class)
     fun readStrings(): Collection<String>? {
@@ -252,7 +252,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
     }
 
     @Throws(IOException::class)
-    fun readContainmentLink(): SContainmentLink? {
+    fun readContainmentLink(): ContainmentLink? {
         val b = readByte()
         if (b == NULL) {
             return null
@@ -265,7 +265,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
             throw IOException(Integer.toHexString(b.toInt()))
         }
         val c = readConcept()
-//        val l = MetaAdapterFactory.getContainmentLink(SContainmentLinkId(MetaIdHelper.getConcept(c), readLong()), readString())
+//        val l = MetaAdapterFactory.getContainmentLink(AbsoluteContainmentLinkId(MetaIdHelper.getConcept(c), readLong()), readString())
 //        myAggregations.add(l)
 //        return l
         TODO()

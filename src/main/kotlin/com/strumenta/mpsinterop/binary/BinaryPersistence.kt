@@ -371,7 +371,7 @@ internal class BinaryPersistence {
             var conceptCount = mis.readShort().toInt()
             //println("conceptCount $conceptCount")
             while (conceptCount-- > 0) {
-                val conceptId = SConceptId(languageId, mis.readLong())
+                val conceptId = AbsoluteConceptId(languageId, mis.readLong())
                 //println("conceptId $conceptId")
                 val conceptName = mis.readString()
                 //println("  conceptName $conceptName")
@@ -382,12 +382,12 @@ internal class BinaryPersistence {
                 //println("  staticScopeValue $staticScopeValue")
                 //println("  conceptKindValue $conceptKindValue")
                 val stubToken = mis.readByte().toInt()
-                val stubId: SConceptId?
+                val stubId: AbsoluteConceptId?
                 if (stubToken == STUB_NONE.toInt()) {
                     stubId = null
                 } else {
                     assert(stubToken == STUB_ID.toInt()) { "StubToken expected to be NONE ($STUB_NONE) or ID ($STUB_ID) instead it is $stubToken" }
-                    stubId = SConceptId(languageId, mis.readLong())
+                    stubId = AbsoluteConceptId(languageId, mis.readLong())
                 }
 
                 val conceptKind = ConceptKind.values()[flags shr 4 and 0x0f]
@@ -421,7 +421,7 @@ internal class BinaryPersistence {
                 var aggregationCount = mis.readShort().toInt()
                 //println("  aggregationCount $aggregationCount")
                 while (aggregationCount-- > 0) {
-                    rh.aggregation(SContainmentLinkId(conceptId, mis.readLong()), mis.readString()!!, mis.readBoolean(), aggregationIndex++)
+                    rh.aggregation(AbsoluteContainmentLinkId(conceptId, mis.readLong()), mis.readString()!!, mis.readBoolean(), aggregationIndex++)
                 }
             }
         }
@@ -429,7 +429,7 @@ internal class BinaryPersistence {
         return rh
     }
 
-//    data class SConceptId(val languageId: LanguageUUID, val readLong: Long) {
+//    data class AbsoluteConceptId(val languageId: LanguageUUID, val readLong: Long) {
 //
 //    }
 //

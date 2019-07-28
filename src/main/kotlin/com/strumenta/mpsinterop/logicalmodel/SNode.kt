@@ -36,7 +36,7 @@ internal data class RegularSNodeId(val value: Long) : SNodeId() {
 }
 
 class InterfaceSNode(concept: Concept, nodeId: SNodeId?) : SNode(concept, nodeId) {
-    fun skipRole(link: SContainmentLink) {
+    fun skipRole(link: ContainmentLink) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
@@ -79,10 +79,10 @@ open class SNode(val concept: Concept, val nodeId: SNodeId?) {
                 acc
         }
 
-    private val childrenMap = HashMap<SContainmentLink, MutableList<SNode>>()
+    private val childrenMap = HashMap<ContainmentLink, MutableList<SNode>>()
     private val properties = HashMap<SProperty, String?>()
 
-    fun addChild(link: SContainmentLink, node: SNode) {
+    fun addChild(link: ContainmentLink, node: SNode) {
         node.parent = this
         childrenMap.computeIfAbsent(link) {
             LinkedList<SNode>()

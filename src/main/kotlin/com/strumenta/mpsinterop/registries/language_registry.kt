@@ -76,7 +76,7 @@ class LanguageRegistry : ModelLocator {
 //                l
 //            }
             val conceptIdValue : Long = conceptIDforConceptNode(it)!!
-            val conceptId = SConceptId(language.id, conceptIdValue)
+            val conceptId = AbsoluteConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")!!
             //println(conceptName)
             val concept = Concept(conceptIdValue, conceptName)
@@ -105,7 +105,7 @@ class LanguageRegistry : ModelLocator {
                 l
             }
             val conceptIdValue : Long = it.propertyValue("conceptId")!!.toLong()
-            val conceptId = SConceptId(language.id, conceptIdValue)
+            val conceptId = AbsoluteConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")!!
             val concept = Concept(conceptIdValue, conceptName, true)
             language.add(concept)

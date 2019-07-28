@@ -27,9 +27,9 @@ internal class ReadHelper() {
 
 
 //    /*package*/ // FIXME could I use myMetaInfo.registry.keySet() instead?
-//    val participatingConcepts: List<SConceptId>
+//    val participatingConcepts: List<AbsoluteConceptId>
 //        get() {
-//            val rv = ArrayList<SConceptId>(100)
+//            val rv = ArrayList<AbsoluteConceptId>(100)
 //            for (li in myMetaInfo.getLanguagesInUse()) {
 //                for (ci in li.getConceptsInUse()) {
 //                    rv.add(ci.getConceptId())
@@ -53,7 +53,7 @@ internal class ReadHelper() {
 //    }
 
 
-    fun withConcept(conceptIndex: Int, conceptId: SConceptId,
+    fun withConcept(conceptIndex: Int, conceptId: AbsoluteConceptId,
                     languageName: String,
                     conceptName: String, kind: ConceptKind)
             : PhysicalConcept {
@@ -66,7 +66,7 @@ internal class ReadHelper() {
 
 //
 //    // @param stub is optional
-//    fun withConcept(concept: SConceptId, name: String, scope: StaticScope, kind: ConceptKind, stub: SConceptId, index: Int) {
+//    fun withConcept(concept: AbsoluteConceptId, name: String, scope: StaticScope, kind: ConceptKind, stub: AbsoluteConceptId, index: Int) {
 //        myActualConcept = myMetaInfo.withConcept(concept, name)
 //        myActualConcept!!.setImplementationKind(scope, kind)
 //        myActualConcept!!.setIntIndex(index)
@@ -91,7 +91,7 @@ internal class ReadHelper() {
        //myMetaInfoProvider.setAssociationName(link, name)
     }
 //
-    fun aggregation(link: SContainmentLinkId, name: String, unordered: Boolean, index: Int) {
+    fun aggregation(link: AbsoluteContainmentLinkId, name: String, unordered: Boolean, index: Int) {
 //        myActualConcept!!.addLink(link, name, unordered).setIntIndex(index)
         myAggregations[index] = PhysicalRelation(currentConcept!!, link.idValue, name, index.toString(), RelationKind.CONTAINMENT)
 //        myMetaInfoProvider.setAggregationName(link, name)

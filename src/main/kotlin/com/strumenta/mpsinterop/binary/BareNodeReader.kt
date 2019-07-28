@@ -28,7 +28,7 @@ import com.strumenta.mpsinterop.physicalmodel.*
 //import jetbrains.mps.smodel.StaticReference
 //import jetbrains.mps.util.io.ModelInputStream
 //import org.jetbrains.mps.openapi.language.Concept
-//import org.jetbrains.mps.openapi.language.SContainmentLink
+//import org.jetbrains.mps.openapi.language.ContainmentLink
 //import org.jetbrains.mps.openapi.language.SProperty
 //import org.jetbrains.mps.openapi.language.SReferenceLink
 //import org.jetbrains.mps.openapi.model.SModelReference

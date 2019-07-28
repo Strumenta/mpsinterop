@@ -15,8 +15,8 @@ enum class ConceptKind {
 
 data class Concept(val id: Long, val name: String, val isInterface : Boolean = false) {
 
-    val absoluteID : SConceptId?
-        get() = if (language == null) null else SConceptId(language!!.id, id)
+    val absoluteID : AbsoluteConceptId?
+        get() = if (language == null) null else AbsoluteConceptId(language!!.id, id)
 
     var alias: String? = null
     var rootable: Boolean = false
@@ -56,7 +56,7 @@ data class Concept(val id: Long, val name: String, val isInterface : Boolean = f
 
     private fun languageName() : String {
         if (language == null) {
-            throw IllegalStateException("The concept is not attached to a languag")
+            throw IllegalStateException("The concept is not attached to a language")
         } else {
             return language!!.name
         }
@@ -79,9 +79,9 @@ data class Concept(val id: Long, val name: String, val isInterface : Boolean = f
     }
 }
 
-data class SConceptId(val languageId: LanguageUUID, val idValue: Long)
-data class SContainmentLink(val link: SContainmentLinkId, val name: String)
-data class SContainmentLinkId(val conceptId: SConceptId, val idValue: Long)
+data class AbsoluteConceptId(val languageId: LanguageUUID, val idValue: Long)
+data class ContainmentLink(val link: AbsoluteContainmentLinkId, val name: String)
+data class AbsoluteContainmentLinkId(val conceptId: AbsoluteConceptId, val idValue: Long)
 
 interface SPropertyType
 enum class PrimitiveSPropertyType : SPropertyType {
@@ -97,9 +97,9 @@ data class EnumerationSPropertyType(val name: String,
 data class ConstrainedDataTypeDeclaration(val qname: String) : SPropertyType
 
 data class SProperty(val sPropertyId: SPropertyId, val name: String, val type: SPropertyType)
-data class SPropertyId(val conceptId: SConceptId, val idValue: Long)
+data class SPropertyId(val conceptId: AbsoluteConceptId, val idValue: Long)
 data class SReferenceLink(val link: SReferenceLinkId, val name: String)
-data class SReferenceLinkId(val conceptId: SConceptId, val idValue: Long)
+data class SReferenceLinkId(val conceptId: AbsoluteConceptId, val idValue: Long)
 interface SReference
 data class StaticReference(val sref: PhysicalRelation, val node: PhysicalNode, val modelRef: SModelReference,
                            val targetNodeId: SNodeId?, val resolveInfo: String?) : SReference
