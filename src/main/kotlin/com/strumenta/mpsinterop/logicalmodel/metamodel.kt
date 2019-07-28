@@ -98,9 +98,9 @@ data class ConstrainedDataTypeDeclaration(val qname: String) : PropertyType
 
 data class Property(val sPropertyId: AbsolutePropertyId, val name: String, val type: PropertyType)
 data class AbsolutePropertyId(val conceptId: AbsoluteConceptId, val idValue: Long)
-data class SReferenceLink(val link: SReferenceLinkId, val name: String)
-data class SReferenceLinkId(val conceptId: AbsoluteConceptId, val idValue: Long)
-interface SReference
+data class ReferenceLink(val link: ReferenceLinkId, val name: String)
+data class ReferenceLinkId(val conceptId: AbsoluteConceptId, val idValue: Long)
+interface Reference
 data class StaticReference(val sref: PhysicalRelation, val node: PhysicalNode, val modelRef: SModelReference,
-                           val targetNodeId: SNodeId?, val resolveInfo: String?) : SReference
+                           val targetNodeId: SNodeId?, val resolveInfo: String?) : Reference
 

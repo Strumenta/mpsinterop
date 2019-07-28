@@ -18,7 +18,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
 //    private val myLanguages = ArrayList<SLanguage>(128)
     private val myConcepts = ArrayList<Concept>(128)
     private val myProperties = ArrayList<Property>(128)
-//    private val myAssociations = ArrayList<SReferenceLink>(128)
+//    private val myAssociations = ArrayList<ReferenceLink>(128)
 //    private val myAggregations = ArrayList<ContainmentLink>(128)
 
     @Throws(IOException::class)
@@ -232,7 +232,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
     }
 
     @Throws(IOException::class)
-    fun readReferenceLink(): SReferenceLink? {
+    fun readReferenceLink(): ReferenceLink? {
         val b = readByte()
         if (b == NULL) {
             return null
@@ -245,7 +245,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
             throw IOException(Integer.toHexString(b.toInt()))
         }
         val c = readConcept()
-//        val l = MetaAdapterFactory.getReferenceLink(SReferenceLinkId(MetaIdHelper.getConcept(c), readLong()), readString())
+//        val l = MetaAdapterFactory.getReferenceLink(ReferenceLinkId(MetaIdHelper.getConcept(c), readLong()), readString())
 //        myAssociations.add(l)
 //        return l
         TODO()

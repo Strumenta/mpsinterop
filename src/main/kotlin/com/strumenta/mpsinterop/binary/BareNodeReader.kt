@@ -30,15 +30,13 @@ import com.strumenta.mpsinterop.physicalmodel.*
 //import org.jetbrains.mps.openapi.language.Concept
 //import org.jetbrains.mps.openapi.language.ContainmentLink
 //import org.jetbrains.mps.openapi.language.Property
-//import org.jetbrains.mps.openapi.language.SReferenceLink
+//import org.jetbrains.mps.openapi.language.ReferenceLink
 //import org.jetbrains.mps.openapi.model.SModelReference
 //import org.jetbrains.mps.openapi.model.SNode
 //import org.jetbrains.mps.openapi.model.SNodeId
-//import org.jetbrains.mps.openapi.model.SReference
+//import org.jetbrains.mps.openapi.model.Reference
 
 import java.io.IOException
-import java.lang.Exception
-import java.lang.RuntimeException
 import java.lang.UnsupportedOperationException
 import java.util.ArrayList
 
@@ -93,7 +91,7 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
 
     protected abstract fun readReferences(node: PhysicalNode)
 
-    protected fun readReference(sref: PhysicalRelation, node: PhysicalNode): SReference {
+    protected fun readReference(sref: PhysicalRelation, node: PhysicalNode): Reference {
             val kind = modelInputStream.readByte().toInt()
             assert(kind in 1..3)
             val targetNodeId = if (kind == 1) modelInputStream.readNodeId() else null
