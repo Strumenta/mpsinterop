@@ -151,7 +151,7 @@ class LanguageRegistry : ModelLocator {
                 val alternatives = node.children("member").map {
                     loadEnumerationAlternative(it)
                 }.toList()
-                val enumerationType = EnumerationSPropertyType(
+                val enumerationType = EnumerationPropertyType(
                         node.name()!!,
                         loadPropertyTypeFromNode(baseTypeNode) as PrimitivePropertyType,
                         alternatives
@@ -222,7 +222,7 @@ class LanguageRegistry : ModelLocator {
                             ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
                     val propertyTypeNode = nodeLocator.resolve(dataType.target)!!
                     val propertyType = loadPropertyTypeFromNode(propertyTypeNode)
-                    concept.addProperty(SProperty(SPropertyId(concept.absoluteID!!, idValue), name, propertyType))
+                    concept.addProperty(Property(AbsolutePropertyId(concept.absoluteID!!, idValue), name, propertyType))
                 }
                 it.children("linkDeclaration").forEach {
                     //TODO()
@@ -242,7 +242,7 @@ class LanguageRegistry : ModelLocator {
                             ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
                     val propertyTypeNode = nodeLocator.resolve(dataType.target)!!
                     val propertyType = loadPropertyTypeFromNode(propertyTypeNode)
-                    concept.addProperty(SProperty(SPropertyId(concept.absoluteID!!, idValue), name, propertyType))
+                    concept.addProperty(Property(AbsolutePropertyId(concept.absoluteID!!, idValue), name, propertyType))
                 }
             }
         }

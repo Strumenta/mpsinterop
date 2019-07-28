@@ -24,7 +24,7 @@ data class Concept(val id: Long, val name: String, val isInterface : Boolean = f
     var abstract: Boolean = false
     var extended: Concept? = null
     val implemented: MutableList<Concept> = LinkedList()
-    val declaredProperties : MutableList<SProperty> = LinkedList()
+    val declaredProperties : MutableList<Property> = LinkedList()
     var language : Language? = null
         set(value) {
             if (field != null) {
@@ -36,9 +36,9 @@ data class Concept(val id: Long, val name: String, val isInterface : Boolean = f
             }
         }
 
-    val allProperties : List<SProperty>
+    val allProperties : List<Property>
         get() {
-            val props = LinkedList<SProperty>()
+            val props = LinkedList<Property>()
             if (extended != null) {
                 props.addAll(extended!!.allProperties)
             }
@@ -62,7 +62,7 @@ data class Concept(val id: Long, val name: String, val isInterface : Boolean = f
         }
     }
 
-    fun findProperty(propertyName: String): SProperty {
+    fun findProperty(propertyName: String): Property {
         val p = allProperties.find { it.name == propertyName }
         if (p != null) {
             return p
@@ -71,7 +71,7 @@ data class Concept(val id: Long, val name: String, val isInterface : Boolean = f
         }
     }
 
-    fun addProperty(property: SProperty) {
+    fun addProperty(property: Property) {
         if (property in declaredProperties) {
             return
         }
@@ -91,13 +91,13 @@ enum class PrimitivePropertyType : PropertyType {
 }
 
 data class EnumerationAlternative(val name: String, val value: String?)
-data class EnumerationSPropertyType(val name: String,
-                                    val baseType: PrimitivePropertyType,
-                                    val alternatives: List<EnumerationAlternative>) : PropertyType
+data class EnumerationPropertyType(val name: String,
+                                   val baseType: PrimitivePropertyType,
+                                   val alternatives: List<EnumerationAlternative>) : PropertyType
 data class ConstrainedDataTypeDeclaration(val qname: String) : PropertyType
 
-data class SProperty(val sPropertyId: SPropertyId, val name: String, val type: PropertyType)
-data class SPropertyId(val conceptId: AbsoluteConceptId, val idValue: Long)
+data class Property(val sPropertyId: AbsolutePropertyId, val name: String, val type: PropertyType)
+data class AbsolutePropertyId(val conceptId: AbsoluteConceptId, val idValue: Long)
 data class SReferenceLink(val link: SReferenceLinkId, val name: String)
 data class SReferenceLinkId(val conceptId: AbsoluteConceptId, val idValue: Long)
 interface SReference

@@ -76,7 +76,7 @@ internal class ReadHelper() {
 //        myMetaInfoProvider.setStubConcept(concept, stub)
 //    }
 //
-    fun property(property: SPropertyId, name: String, index: Int) {
+    fun property(property: AbsolutePropertyId, name: String, index: Int) {
         //myActualConcept!!.addProperty(property, name).setIntIndex(index)
         val property = PhysicalProperty(currentConcept!!, property.idValue, name, index.toString())
         currentConcept!!.addProperty(property)

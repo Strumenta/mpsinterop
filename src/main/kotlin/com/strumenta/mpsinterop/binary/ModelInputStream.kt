@@ -17,7 +17,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
     private val myModuleRefs = ArrayList<SModuleReference>(128)
 //    private val myLanguages = ArrayList<SLanguage>(128)
     private val myConcepts = ArrayList<Concept>(128)
-    private val myProperties = ArrayList<SProperty>(128)
+    private val myProperties = ArrayList<Property>(128)
 //    private val myAssociations = ArrayList<SReferenceLink>(128)
 //    private val myAggregations = ArrayList<ContainmentLink>(128)
 
@@ -209,7 +209,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
     }
 //
 //    @Throws(IOException::class)
-    fun readProperty(): SProperty? {
+    fun readProperty(): Property? {
         val b = readByte()
         println("readProperty $b")
         if (b == NULL) {
@@ -225,8 +225,8 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
         val propertyId = readLong()
         val propertyName = readString()
         val propertyType = TODO()
-        //val p = MetaAdapterFactory.getProperty(SPropertyId(MetaIdHelper.getConcept(c), readLong()), readString())
-        val p = SProperty(SPropertyId(c!!.absoluteID!!, propertyId), propertyName!!, propertyType)
+        //val p = MetaAdapterFactory.getProperty(AbsolutePropertyId(MetaIdHelper.getConcept(c), readLong()), readString())
+        val p = Property(AbsolutePropertyId(c!!.absoluteID!!, propertyId), propertyName!!, propertyType)
         myProperties.add(p)
         return p
     }

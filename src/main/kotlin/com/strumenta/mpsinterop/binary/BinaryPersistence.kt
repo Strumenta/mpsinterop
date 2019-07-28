@@ -405,7 +405,7 @@ internal class BinaryPersistence {
                     val propertyId = mis.readLong()
                     val propertyName = mis.readString()!!
                     //println("PROP $conceptId $propertyName")
-                    rh.property(SPropertyId(conceptId, propertyId), propertyName, propertyIndex)
+                    rh.property(AbsolutePropertyId(conceptId, propertyId), propertyName, propertyIndex)
                     propertyIndex++
                 }
 //                //

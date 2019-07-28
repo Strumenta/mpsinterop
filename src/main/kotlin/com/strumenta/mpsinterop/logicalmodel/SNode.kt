@@ -80,7 +80,7 @@ open class SNode(val concept: Concept, val nodeId: SNodeId?) {
         }
 
     private val childrenMap = HashMap<ContainmentLink, MutableList<SNode>>()
-    private val properties = HashMap<SProperty, String?>()
+    private val properties = HashMap<Property, String?>()
 
     fun addChild(link: ContainmentLink, node: SNode) {
         node.parent = this
@@ -89,7 +89,7 @@ open class SNode(val concept: Concept, val nodeId: SNodeId?) {
         }.add(node)
     }
 
-    fun setProperty(id: SProperty, value: String?) {
+    fun setProperty(id: Property, value: String?) {
         properties[id] = value
     }
 
@@ -97,7 +97,7 @@ open class SNode(val concept: Concept, val nodeId: SNodeId?) {
         return properties[property(name)] ?: "No value for property $name"
     }
 
-    fun property(name: String): SProperty {
+    fun property(name: String): Property {
         return properties.keys.find { it.name == name } ?: concept.findProperty(name)
     }
 
