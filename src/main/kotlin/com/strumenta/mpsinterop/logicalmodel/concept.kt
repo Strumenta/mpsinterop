@@ -1,9 +1,5 @@
 package com.strumenta.mpsinterop.logicalmodel
 
-import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
-import com.strumenta.mpsinterop.physicalmodel.PhysicalRelation
-import java.lang.IllegalArgumentException
-import java.lang.IllegalStateException
 import java.util.*
 
 abstract class AbstractConcept(open val id: Long, open val name: String) {
@@ -102,27 +98,4 @@ data class InterfaceConcept(override val id: Long, override val name: String)
 }
 
 data class AbsoluteConceptId(val languageId: LanguageUUID, val idValue: Long)
-data class ContainmentLink(val link: AbsoluteContainmentLinkId, val name: String)
-data class AbsoluteContainmentLinkId(val conceptId: AbsoluteConceptId, val idValue: Long)
-
-interface PropertyType
-enum class PrimitivePropertyType : PropertyType {
-    BOOLEAN,
-    INTEGER,
-    STRING
-}
-
-data class EnumerationAlternative(val name: String, val value: String?)
-data class EnumerationPropertyType(val name: String,
-                                   val baseType: PrimitivePropertyType,
-                                   val alternatives: List<EnumerationAlternative>) : PropertyType
-data class ConstrainedDataTypeDeclaration(val qname: String) : PropertyType
-
-data class Property(val sPropertyId: AbsolutePropertyId, val name: String, val type: PropertyType)
-data class AbsolutePropertyId(val conceptId: AbsoluteConceptId, val idValue: Long)
-data class ReferenceLink(val link: AbsoluteReferenceLinkId, val name: String)
-data class AbsoluteReferenceLinkId(val conceptId: AbsoluteConceptId, val idValue: Long)
-interface Reference
-data class StaticReference(val sref: PhysicalRelation, val node: PhysicalNode, val modelRef: SModelReference,
-                           val targetNodeId: NodeId?, val resolveInfo: String?) : Reference
 
