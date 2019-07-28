@@ -160,7 +160,7 @@ class LanguageRegistry : ModelLocator {
             }
             node.concept.qname == "jetbrains.mps.lang.structure.structure.ConstrainedDataTypeDeclaration" -> {
                 val qname = node.qname()
-                return ConstrainedDataTypeDeclaration(qname)
+                return ConstrainedPropertyType(qname)
             }
             else -> TODO(node.concept.qname)
         }

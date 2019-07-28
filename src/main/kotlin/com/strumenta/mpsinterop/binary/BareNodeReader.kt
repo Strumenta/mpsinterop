@@ -131,14 +131,14 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
                 if (kind == 2 || kind == 3) {
                     TODO()
 //                val reference = DynamicReference(
-//                        sref,
+//                        relation,
 //                        node,
 //                        modelRef,
 //                        resolveInfo)
 //                if (origin != null) {
 //                    reference.setOrigin(origin)
 //                }
-//                node.setReference(sref, reference)
+//                node.setReference(relation, reference)
                     //return reference
                 } else {
                     throw IOException("unknown reference type")
