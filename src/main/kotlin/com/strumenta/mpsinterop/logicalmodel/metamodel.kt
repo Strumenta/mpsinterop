@@ -2,7 +2,6 @@ package com.strumenta.mpsinterop.logicalmodel
 
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mpsinterop.physicalmodel.PhysicalRelation
-import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.util.*
 
 enum class ConceptKind {
@@ -22,8 +21,8 @@ data class SConcept(val id: Long, val name: String, val isInterface : Boolean = 
     var final: Boolean = false
     var abstract: Boolean = false
     var extended: SConcept? = null
-    val implemented: MutableList<SConcept> = LinkedList<SConcept>()
-    val declaredProperties : MutableList<SProperty> = LinkedList<SProperty>()
+    val implemented: MutableList<SConcept> = LinkedList()
+    val declaredProperties : MutableList<SProperty> = LinkedList()
     var language : Language? = null
         set(value) {
             if (field != null) {
@@ -48,17 +47,13 @@ data class SConcept(val id: Long, val name: String, val isInterface : Boolean = 
             return props
         }
 
-    fun qname(languageRegistry: LanguageRegistry) : String {
-        val languageName = languageName(languageRegistry)
+    fun qname() : String {
+        val languageName = languageName()
         return "$languageName.structure.$name"
     }
 
-    fun language(languageRegistry: LanguageRegistry) : Language {
-        return languageRegistry.get(language!!.id)!!
-    }
-
-    fun languageName(languageRegistry: LanguageRegistry) : String {
-        return languageRegistry.getName(language!!.id)!!
+    fun languageName() : String {
+        return language!!.name
     }
 
     fun findProperty(conceptName: String, propertyName: String): SProperty {

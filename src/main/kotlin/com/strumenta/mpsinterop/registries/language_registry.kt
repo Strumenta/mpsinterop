@@ -33,7 +33,7 @@ class LanguageRegistry : ModelLocator {
 
     fun getConcept(conceptName: String): SConcept? {
         for (l in languagesByID.values) {
-            val concept = l.concepts.find { it.qname(this) == conceptName }
+            val concept = l.concepts.find { it.qname() == conceptName }
             if (concept != null) {
                 return concept
             }
