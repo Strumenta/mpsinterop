@@ -16,7 +16,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
     private val myModelRefs = ArrayList<SModelReference>(1024)
     private val myModuleRefs = ArrayList<SModuleReference>(128)
 //    private val myLanguages = ArrayList<SLanguage>(128)
-    private val myConcepts = ArrayList<SConcept>(128)
+    private val myConcepts = ArrayList<Concept>(128)
     private val myProperties = ArrayList<SProperty>(128)
 //    private val myAssociations = ArrayList<SReferenceLink>(128)
 //    private val myAggregations = ArrayList<SContainmentLink>(128)
@@ -187,7 +187,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
 //    }
 //
 //    @Throws(IOException::class)
-    fun readConcept(): SConcept? {
+    fun readConcept(): Concept? {
         val b = readByte()
         if (b == NULL) {
             return null

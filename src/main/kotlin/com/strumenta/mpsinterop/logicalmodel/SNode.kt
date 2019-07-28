@@ -35,14 +35,14 @@ internal data class RegularSNodeId(val value: Long) : SNodeId() {
     override fun toLong() = value
 }
 
-class InterfaceSNode(concept: SConcept, nodeId: SNodeId?) : SNode(concept, nodeId) {
+class InterfaceSNode(concept: Concept, nodeId: SNodeId?) : SNode(concept, nodeId) {
     fun skipRole(link: SContainmentLink) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
 
-open class SNode(val concept: SConcept, val nodeId: SNodeId?) {
+open class SNode(val concept: Concept, val nodeId: SNodeId?) {
 
     private var _parent: SNode? = null
     var parent: SNode?

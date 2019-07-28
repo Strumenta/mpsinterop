@@ -10,7 +10,7 @@ import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
 class PhysicalToLogicalConverter(
         val languageRegistry: LanguageRegistry = LanguageRegistry.DEFAULT,
         val physicalModelsRegistry: PhysicalModelsRegistry = PhysicalModelsRegistry.DEFAULT) {
-    private val convertedConcepts = HashMap<PhysicalConcept, SConcept>()
+    private val convertedConcepts = HashMap<PhysicalConcept, Concept>()
     private val convertedNodes = HashMap<PhysicalNode, SNode>()
 
     fun toLogical(physicalModel: PhysicalModel) : Model {
@@ -36,7 +36,7 @@ class PhysicalToLogicalConverter(
         }
     }
 
-    fun toLogical(physicalConcept: PhysicalConcept) : SConcept {
+    fun toLogical(physicalConcept: PhysicalConcept) : Concept {
         return convertedConcepts.computeIfAbsent(physicalConcept) { physicalConcept ->
             val concept = languageRegistry.getConcept(physicalConcept.qname)
             if (concept != null) {
@@ -57,7 +57,7 @@ class PhysicalToLogicalConverter(
         }
     }
 
-    private fun loadConceptFromConceptDeclaration(conceptDeclaration: SNode) : SConcept {
+    private fun loadConceptFromConceptDeclaration(conceptDeclaration: SNode) : Concept {
         TODO()
     }
 

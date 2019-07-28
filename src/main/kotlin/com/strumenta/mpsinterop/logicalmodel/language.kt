@@ -8,12 +8,12 @@ data class LanguageId(val id: LanguageUUID, val name: String)
 
 data class Language(val id: LanguageUUID, val name: String) {
 
-    private val _concepts = LinkedList<SConcept>()
+    private val _concepts = LinkedList<Concept>()
 
-    val concepts : List<SConcept>
+    val concepts : List<Concept>
         get() = _concepts
 
-    fun add(concept: SConcept) {
+    fun add(concept: Concept) {
         if (concept in _concepts) {
             return
         }
@@ -23,7 +23,7 @@ data class Language(val id: LanguageUUID, val name: String) {
         }
     }
 
-    fun remove(concept: SConcept) {
+    fun remove(concept: Concept) {
         if (concept !in _concepts) {
             return
         }

@@ -1,9 +1,6 @@
 package com.strumenta.mpsinterop.loading
 
-import com.strumenta.mpsinterop.logicalmodel.SConcept
-import com.strumenta.mpsinterop.logicalmodel.SNode
 import com.strumenta.mpsinterop.physicalmodel.*
-import com.strumenta.mpsinterop.registries.findConceptDeclaration
 import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
 import java.lang.RuntimeException
 import java.util.*

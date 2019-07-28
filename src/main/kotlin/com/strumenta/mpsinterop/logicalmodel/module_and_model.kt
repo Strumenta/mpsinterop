@@ -58,7 +58,7 @@ class Model(val name: String) {
         roots.forEach { op(it) }
     }
 
-    fun onRoots(concept: SConcept, op: (SNode) -> Unit) {
+    fun onRoots(concept: Concept, op: (SNode) -> Unit) {
         roots.filter { it.concept == concept }.forEach { op(it) }
     }
 

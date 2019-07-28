@@ -137,7 +137,7 @@ class SModelHeader {
      *
      * This is per-model mechanism to alter meta-model (aka structure model) information used in persistence.
      * Generally, this mechanism shall not be in use, and `null` value is legitimate default, which means
-     * native MPS mechanism of SConcept (and ConceptDescriptors) would be in use.
+     * native MPS mechanism of Concept (and ConceptDescriptors) would be in use.
      * However, certain scenarios (command-line merge and ant task to convert models to binary) can't yet afford starting whole
      * MPS and thus shall rely on meta-information read from model files (which is generally sufficient to write the files back).
      *

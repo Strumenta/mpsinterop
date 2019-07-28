@@ -11,7 +11,7 @@ enum class ConceptKind {
     IMPLEMENTATION_WITH_STUB
 }
 
-data class SConcept(val id: Long, val name: String, val isInterface : Boolean = false) {
+data class Concept(val id: Long, val name: String, val isInterface : Boolean = false) {
 
     val absoluteID : SConceptId?
         get() = if (language == null) null else SConceptId(language!!.id, id)
@@ -20,8 +20,8 @@ data class SConcept(val id: Long, val name: String, val isInterface : Boolean = 
     var rootable: Boolean = false
     var final: Boolean = false
     var abstract: Boolean = false
-    var extended: SConcept? = null
-    val implemented: MutableList<SConcept> = LinkedList()
+    var extended: Concept? = null
+    val implemented: MutableList<Concept> = LinkedList()
     val declaredProperties : MutableList<SProperty> = LinkedList()
     var language : Language? = null
         set(value) {

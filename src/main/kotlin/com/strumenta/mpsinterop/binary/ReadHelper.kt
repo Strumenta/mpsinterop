@@ -117,7 +117,7 @@ internal class ReadHelper() {
         return myAggregations[index] ?: throw IllegalArgumentException("Aggregation with index $index not found. Known indexes: ${myAggregations.keys.joinToString(separator = ", ")}")
     }
 //
-//    fun isInterface(@NotNull concept: SConcept): Boolean {
+//    fun isInterface(@NotNull concept: Concept): Boolean {
 //        return ConceptKind.INTERFACE === myMetaInfo.find(concept).getKind()
 //    }
 }

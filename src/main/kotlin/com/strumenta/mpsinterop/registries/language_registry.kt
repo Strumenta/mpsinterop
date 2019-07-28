@@ -31,7 +31,7 @@ class LanguageRegistry : ModelLocator {
         languagesByID[language.id] = language
     }
 
-    fun getConcept(conceptName: String): SConcept? {
+    fun getConcept(conceptName: String): Concept? {
         for (l in languagesByID.values) {
             val concept = l.concepts.find { it.qname() == conceptName }
             if (concept != null) {
@@ -49,7 +49,7 @@ class LanguageRegistry : ModelLocator {
     }
     fun conceptIDforConceptNode(it: PhysicalNode) = it.propertyValue("conceptId")?.toLong()
 
-    fun preloadConcept(it: PhysicalNode) : SConcept? {
+    fun preloadConcept(it: PhysicalNode) : Concept? {
         val model = it.model!!
         if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
             val languageName = model.name.removeSuffix(".structure")
@@ -79,7 +79,7 @@ class LanguageRegistry : ModelLocator {
             val conceptId = SConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")!!
             //println(conceptName)
-            val concept = SConcept(conceptIdValue, conceptName)
+            val concept = Concept(conceptIdValue, conceptName)
             //concepts[it] = concept
             language.add(concept)
 
@@ -107,7 +107,7 @@ class LanguageRegistry : ModelLocator {
             val conceptIdValue : Long = it.propertyValue("conceptId")!!.toLong()
             val conceptId = SConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")!!
-            val concept = SConcept(conceptIdValue, conceptName, true)
+            val concept = Concept(conceptIdValue, conceptName, true)
             language.add(concept)
             //concepts[it] = concept
 
@@ -121,7 +121,7 @@ class LanguageRegistry : ModelLocator {
 
     fun loadLanguageFromModel(model: PhysicalModel) {
         // We solve stuff in two rounds, because there could be dependency between concepts
-        val concepts = HashMap<PhysicalNode, SConcept>()
+        val concepts = HashMap<PhysicalNode, Concept>()
         modelsByID[model.uuid] = model
         model.roots.forEach {
             val concept = preloadConcept(it)
@@ -171,7 +171,7 @@ class LanguageRegistry : ModelLocator {
                 node.propertyValue("internalValue", null))
     }
 
-    private fun loadConceptFromNode(it: PhysicalNode) : SConcept? {
+    private fun loadConceptFromNode(it: PhysicalNode) : Concept? {
         val conceptID = conceptIDforConceptNode(it)
         if (conceptID == null) {
             return null
@@ -249,7 +249,7 @@ class LanguageRegistry : ModelLocator {
         return concept
     }
 
-    private fun resolveAsConcept(target: ReferenceTarget): SConcept? {
+    private fun resolveAsConcept(target: ReferenceTarget): Concept? {
         return when (target) {
             is InModelReferenceTarget -> {
 //                val uuid = target.physicalModel.uuid
@@ -291,7 +291,7 @@ class LanguageRegistry : ModelLocator {
         }
     }
 
-    private fun findConceptWithID(nodeID: Long): SConcept? {
+    private fun findConceptWithID(nodeID: Long): Concept? {
         for (l in languagesByID.values) {
             for (c in l.concepts) {
                 if (c.id == nodeID) {

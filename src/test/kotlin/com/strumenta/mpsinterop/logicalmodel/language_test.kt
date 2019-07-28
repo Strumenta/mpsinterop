@@ -9,7 +9,7 @@ class LanguageTest {
     @Test
     fun addConcept() {
         val lang = Language(UUID.randomUUID(), "FooLang")
-        val conc = SConcept(123L, "FooConcept")
+        val conc = Concept(123L, "FooConcept")
 
         assertEquals(0, lang.concepts.size)
         assertEquals(null, conc.language)
@@ -24,7 +24,7 @@ class LanguageTest {
     @Test
     fun removeConcept() {
         val lang = Language(UUID.randomUUID(), "FooLang")
-        val conc = SConcept(123L, "FooConcept")
+        val conc = Concept(123L, "FooConcept")
 
         assertEquals(0, lang.concepts.size)
         assertEquals(null, conc.language)
@@ -42,7 +42,7 @@ class LanguageTest {
     @Test
     fun hasConceptWithID() {
         val lang = Language(UUID.randomUUID(), "FooLang")
-        val conc = SConcept(123L, "FooConcept")
+        val conc = Concept(123L, "FooConcept")
 
         assertEquals(false, lang.hasConceptWithID(123L))
 
@@ -56,7 +56,7 @@ class LanguageTest {
     @Test
     fun conceptByID() {
         val lang = Language(UUID.randomUUID(), "FooLang")
-        val conc = SConcept(123L, "FooConcept")
+        val conc = Concept(123L, "FooConcept")
 
         assertEquals(null, lang.conceptByID(123L))
 
