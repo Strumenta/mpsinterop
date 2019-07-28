@@ -6,14 +6,11 @@ import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 import java.util.*
 
-enum class ConceptKind {
-    NORMAL,
-    INTERFACE,
-    IMPLEMENTATION,
-    IMPLEMENTATION_WITH_STUB
-}
-
 abstract class AbstractConcept(open val id: Long, open val name: String) {
+    var rootable: Boolean = false
+    private val _declaredProperties : MutableList<Property> = LinkedList()
+    val declaredProperties : List<Property>
+        get() = _declaredProperties
     var language : Language? = null
         set(value) {
             if (field != null) {
@@ -41,19 +38,23 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
         }
     }
 
+    fun addProperty(property: Property) {
+        if (property in _declaredProperties) {
+            return
+        }
+        _declaredProperties.add(property)
+    }
+
 }
 
 data class Concept(override val id: Long, override val name: String)
     : AbstractConcept(id, name){
 
-
     var alias: String? = null
-    var rootable: Boolean = false
     var final: Boolean = false
     var abstract: Boolean = false
     var extended: Concept? = null
     val implemented: MutableList<InterfaceConcept> = LinkedList()
-    val declaredProperties : MutableList<Property> = LinkedList()
 
     val allProperties : List<Property>
         get() {
@@ -75,13 +76,6 @@ data class Concept(override val id: Long, override val name: String)
         } else {
             throw IllegalArgumentException("No property found with name $propertyName")
         }
-    }
-
-    fun addProperty(property: Property) {
-        if (property in declaredProperties) {
-            return
-        }
-        declaredProperties.add(property)
     }
 }
 
@@ -89,12 +83,10 @@ data class InterfaceConcept(override val id: Long, override val name: String)
     : AbstractConcept(id, name){
 
     var alias: String? = null
-    var rootable: Boolean = false
     var final: Boolean = false
     var abstract: Boolean = false
     var extended: InterfaceConcept? = null
     val implemented: MutableList<Concept> = LinkedList()
-    val declaredProperties : MutableList<Property> = LinkedList()
 
     val allProperties : List<Property>
         get() {
@@ -118,12 +110,6 @@ data class InterfaceConcept(override val id: Long, override val name: String)
         }
     }
 
-    fun addProperty(property: Property) {
-        if (property in declaredProperties) {
-            return
-        }
-        declaredProperties.add(property)
-    }
 }
 
 data class AbsoluteConceptId(val languageId: LanguageUUID, val idValue: Long)
