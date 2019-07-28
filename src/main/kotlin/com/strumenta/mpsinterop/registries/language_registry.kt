@@ -233,6 +233,17 @@ class LanguageRegistry : ModelLocator {
                 concept.final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
                 concept.rootable = it.booleanPropertyValue("rootable")
+
+                it.children("propertyDeclaration").forEach {
+                    val name = it.propertyValue("name")!!
+                    val conceptId = concept.id
+                    val idValue: Long = it.propertyValue("propertyId")!!.toLong()
+                    val dataType = it.reference("dataType")
+                            ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
+                    val propertyTypeNode = nodeLocator.resolve(dataType.target)!!
+                    val propertyType = loadPropertyTypeFromNode(propertyTypeNode)
+                    concept.addProperty(SProperty(SPropertyId(conceptId, idValue), name, propertyType))
+                }
             }
         }
         return concept

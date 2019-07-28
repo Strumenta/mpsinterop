@@ -23,6 +23,28 @@ class LanguageLoadingTest {
     }
 
     @Test
+    fun loadINamedConcept() {
+        val languageRegistry = LanguageRegistry()
+        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"))
+        injectIValidIdentifier(languageRegistry)
+        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.structure-src.jar"))
+        val concept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.INamedConcept")
+        assertNotNull(concept)
+//        assertEquals(true, concept.isInterface)
+//        assertEquals(false, concept.abstract)
+//        assertEquals(true, concept.final)
+//        assertNotNull(concept.extended)
+//        assertEquals(1, concept.implemented.size)
+//        assertEquals("Concept", concept.alias)
+        assertEquals(1, concept.declaredProperties.size)
+        assertEquals(1, concept.allProperties.size)
+        val nameProp = concept.allProperties.find { it.name == "name" }
+        assertNotNull(nameProp)
+    }
+
+    @Test
     fun loadConceptDeclaration() {
         val languageRegistry = LanguageRegistry()
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
@@ -38,7 +60,9 @@ class LanguageLoadingTest {
         assertEquals(1, concept.implemented.size)
         assertEquals("Concept", concept.alias)
         assertEquals(3, concept.declaredProperties.size)
-        assertEquals(13, concept.allProperties.size)
+        assertEquals(14, concept.allProperties.size)
+        val nameProp = concept.allProperties.find { it.name == "name" }
+        assertNotNull(nameProp)
     }
 
     /**
