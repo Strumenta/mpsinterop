@@ -79,7 +79,7 @@ class LanguageRegistry : ModelLocator {
             val conceptId = SConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")!!
             //println(conceptName)
-            val concept = SConcept(conceptId, conceptName)
+            val concept = SConcept(conceptIdValue, conceptName)
             //concepts[it] = concept
             language.add(concept)
 
@@ -107,7 +107,7 @@ class LanguageRegistry : ModelLocator {
             val conceptIdValue : Long = it.propertyValue("conceptId")!!.toLong()
             val conceptId = SConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")!!
-            val concept = SConcept(conceptId, conceptName, true)
+            val concept = SConcept(conceptIdValue, conceptName, true)
             language.add(concept)
             //concepts[it] = concept
 
@@ -222,7 +222,7 @@ class LanguageRegistry : ModelLocator {
                             ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
                     val propertyTypeNode = nodeLocator.resolve(dataType.target)!!
                     val propertyType = loadPropertyTypeFromNode(propertyTypeNode)
-                    concept.addProperty(SProperty(SPropertyId(conceptId, idValue), name, propertyType))
+                    concept.addProperty(SProperty(SPropertyId(concept.absoluteID!!, idValue), name, propertyType))
                 }
                 it.children("linkDeclaration").forEach {
                     //TODO()
@@ -242,7 +242,7 @@ class LanguageRegistry : ModelLocator {
                             ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
                     val propertyTypeNode = nodeLocator.resolve(dataType.target)!!
                     val propertyType = loadPropertyTypeFromNode(propertyTypeNode)
-                    concept.addProperty(SProperty(SPropertyId(conceptId, idValue), name, propertyType))
+                    concept.addProperty(SProperty(SPropertyId(concept.absoluteID!!, idValue), name, propertyType))
                 }
             }
         }
@@ -284,7 +284,7 @@ class LanguageRegistry : ModelLocator {
                     throw RuntimeException("Unknown language UUID $uuid (looking for node ${target.nodeId})")
                 }
                 val language = languagesByID[uuid]!!
-                val concept = language.concepts.find { it.id.idValue == target.nodeId }!!
+                val concept = language.concepts.find { it.id == target.nodeId }!!
                 return concept
             }
             else -> TODO()
@@ -294,7 +294,7 @@ class LanguageRegistry : ModelLocator {
     private fun findConceptWithID(nodeID: Long): SConcept? {
         for (l in languagesByID.values) {
             for (c in l.concepts) {
-                if (c.id.idValue == nodeID) {
+                if (c.id == nodeID) {
                     return c
                 }
             }

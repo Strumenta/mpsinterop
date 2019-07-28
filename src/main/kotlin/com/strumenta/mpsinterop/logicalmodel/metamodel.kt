@@ -12,7 +12,11 @@ enum class ConceptKind {
     IMPLEMENTATION_WITH_STUB
 }
 
-data class SConcept(val id: SConceptId, val name: String, val isInterface : Boolean = false) {
+data class SConcept(val id: Long, val name: String, val isInterface : Boolean = false) {
+
+    val absoluteID : SConceptId?
+        get() = if (language == null) null else SConceptId(language!!.id, id)
+
     var alias: String? = null
     var rootable: Boolean = false
     var final: Boolean = false
@@ -50,11 +54,11 @@ data class SConcept(val id: SConceptId, val name: String, val isInterface : Bool
     }
 
     fun language(languageRegistry: LanguageRegistry) : Language {
-        return languageRegistry.get(id.languageId)!!
+        return languageRegistry.get(language!!.id)!!
     }
 
     fun languageName(languageRegistry: LanguageRegistry) : String {
-        return languageRegistry.getName(id.languageId)!!
+        return languageRegistry.getName(language!!.id)!!
     }
 
     fun findProperty(conceptName: String, propertyName: String): SProperty {

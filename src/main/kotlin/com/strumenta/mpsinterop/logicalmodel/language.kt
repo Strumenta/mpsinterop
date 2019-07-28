@@ -35,6 +35,6 @@ data class Language(val id: LanguageUUID, val name: String) {
         return conceptByID(conceptID) != null
     }
 
-    fun conceptByID(conceptID: Long) = _concepts.find { it.id.idValue == conceptID }
+    fun conceptByID(conceptID: Long) = _concepts.find { it.id == conceptID }
 
 }
