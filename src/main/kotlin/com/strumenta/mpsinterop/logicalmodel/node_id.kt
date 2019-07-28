@@ -3,8 +3,8 @@ package com.strumenta.mpsinterop.logicalmodel
 import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
 
 abstract class NodeId {
-    abstract fun toBase64(): String
-    abstract fun toLong(): Long
+    abstract fun toStringRepresentation(): String
+    abstract fun isCompatibleWith(value: Long) : Boolean
 
     companion object {
         fun regular(idValue: Long): NodeId {
@@ -18,17 +18,18 @@ abstract class NodeId {
 }
 
 internal data class StringSNodeId(val value: String) : NodeId() {
-    override fun toBase64(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun toStringRepresentation(): String {
+        return value
     }
 
-    override fun toLong(): Long {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun isCompatibleWith(longValue: Long) : Boolean {
+        return value == JavaFriendlyBase64.toString(longValue)
     }
-
 }
 
 internal data class RegularSNodeId(val value: Long) : NodeId() {
-    override fun toBase64() = JavaFriendlyBase64.toString(value)
-    override fun toLong() = value
+    override fun toStringRepresentation() = JavaFriendlyBase64.toString(value)
+    override fun isCompatibleWith(longValue: Long): Boolean {
+        return longValue == value
+    }
 }

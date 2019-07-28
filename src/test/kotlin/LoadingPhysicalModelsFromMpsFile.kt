@@ -25,7 +25,7 @@ class LoadingPhysicalModelsFromMpsFile {
 
         // Basis
         assertEquals("Constraint", constraintNode.name())
-        assertEquals("6D8ZJLf0wUM", constraintNode.id.toBase64())
+        assertEquals("6D8ZJLf0wUM", constraintNode.id.toStringRepresentation())
         assertEquals(CONCEPT_DECLARATION_CONCEPT_NAME, constraintNode.concept.qname)
 
         // Properties

@@ -138,15 +138,12 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
         }
     }
 
-//    @Throws(IOException::class)
     fun readNodeId(): NodeId? {
         val c = readByte()
         return when (c) {
             NULL -> null
             NODEID_LONG -> NodeId.regular(readLong())
-            NODEID_STRING -> {
-                NodeId.fromString(readString()!!)
-            }//return PersistenceFacade.getInstance().createNodeId(readString())
+            NODEID_STRING -> NodeId.fromString(readString()!!)
 
             else -> throw IOException("no id")
         }

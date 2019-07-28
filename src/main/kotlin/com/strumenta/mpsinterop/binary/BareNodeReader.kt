@@ -117,9 +117,9 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
                 try {
                     val value = when (targetModelKind) {
                         REF_OTHER_MODEL.toInt() -> ExplicitReferenceTarget(
-                                modelRef.id.uuid(), targetNodeId!!.toLong())
+                                modelRef.id.uuid(), targetNodeId!!)
                         REF_THIS_MODEL.toInt() -> ExplicitReferenceTarget(
-                                modelRef.id.uuid(), targetNodeId!!.toLong())
+                                modelRef.id.uuid(), targetNodeId!!)
                         else -> throw UnsupportedOperationException()
                     }
                     node.addReference(sref, PhysicalReferenceValue(value, resolveInfo!!))

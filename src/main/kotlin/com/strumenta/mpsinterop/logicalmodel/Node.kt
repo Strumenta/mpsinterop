@@ -20,13 +20,21 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
         }
 
     private fun removeChild(child: Node) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        for (entry in childrenMap) {
+            if (entry.value.contains(child)) {
+                entry.value.remove(child)
+            }
+        }
     }
 
     private fun hasChild(child: Node): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        for (entry in childrenMap) {
+            if (entry.value.contains(child)) {
+                return true
+            }
+        }
+        return false
     }
-
 
     val root: Boolean
         get() = parent == null

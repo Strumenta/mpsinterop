@@ -283,7 +283,7 @@ class LanguageRegistry : ModelLocator {
                     throw RuntimeException("Unknown language UUID $uuid (looking for node ${target.nodeId})")
                 }
                 val language = languagesByID[uuid]!!
-                val concept = language.concepts.find { it.id == target.nodeId }!!
+                val concept = language.concepts.find { target.nodeId.isCompatibleWith(it.id) }!!
                 return concept
             }
             else -> TODO()

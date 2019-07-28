@@ -157,7 +157,9 @@ class PhysicalModel(val name: String, val uuid: UUID){
         languageUUIDsFromIndex[languageIndex] = languageUUID
     }
 
-    fun findNodeByID(nodeID: Long): PhysicalNode? {
+    fun findNodeByID(nodeID: Long): PhysicalNode? = findNodeByID(NodeId.regular(nodeID))
+
+    fun findNodeByID(nodeID: NodeId): PhysicalNode? {
         for (root in roots) {
             val res = root.findNodeByID(nodeID)
             if (res != null) {
@@ -188,7 +190,7 @@ data class OutsideModelReferenceTarget(val physicalModel: PhysicalModel,
             return JavaFriendlyBase64.parseLong(nodeIndex)
         }
 }
-class ExplicitReferenceTarget(val model: UUID, val nodeId: Long) : ReferenceTarget() {
+class ExplicitReferenceTarget(val model: UUID, val nodeId: NodeId) : ReferenceTarget() {
 
 }
 class FailedLoadingReferenceTarget(val e: Throwable) : ReferenceTarget()
@@ -324,8 +326,8 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         }
     }
 
-    fun findNodeByID(nodeID: Long): PhysicalNode? {
-        if (this.id.toLong() == nodeID) {
+    fun findNodeByID(nodeID: NodeId): PhysicalNode? {
+        if (this.id == nodeID) {
             return this
         }
         for (cl in children.values) {
