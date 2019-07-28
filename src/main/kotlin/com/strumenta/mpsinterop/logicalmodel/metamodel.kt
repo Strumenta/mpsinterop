@@ -2,6 +2,8 @@ package com.strumenta.mpsinterop.logicalmodel
 
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mpsinterop.physicalmodel.PhysicalRelation
+import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 import java.util.*
 
 enum class ConceptKind {
@@ -52,20 +54,20 @@ data class Concept(val id: Long, val name: String, val isInterface : Boolean = f
         return "$languageName.structure.$name"
     }
 
-    fun languageName() : String {
-        return language!!.name
-    }
-
-    fun findProperty(conceptName: String, propertyName: String): SProperty {
-        TODO()
+    private fun languageName() : String {
+        if (language == null) {
+            throw IllegalStateException("The concept is not attached to a languag")
+        } else {
+            return language!!.name
+        }
     }
 
     fun findProperty(propertyName: String): SProperty {
-        val p = declaredProperties.find { it.name == propertyName }
+        val p = allProperties.find { it.name == propertyName }
         if (p != null) {
             return p
         } else {
-            TODO("Property $propertyName in ${this.name}")
+            throw IllegalArgumentException("No property found with name $propertyName")
         }
     }
 
