@@ -10,7 +10,7 @@ fun injectIValidIdentifier(languageRegistry: LanguageRegistry) {
             "jetbrains.mps.baseLanguage")
     val iValidIndentifier = InterfaceConcept(1212170275853L,
             "IValidIdentifier")
-    iValidIndentifier.extended = iNamedConcept as InterfaceConcept
+    iValidIndentifier.extended.add(iNamedConcept as InterfaceConcept)
     baseLang.add(iValidIndentifier)
     languageRegistry.add(baseLang)
 }

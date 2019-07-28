@@ -11,6 +11,7 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
     private val _declaredProperties : MutableList<Property> = LinkedList()
     val declaredProperties : List<Property>
         get() = _declaredProperties
+    abstract val allProperties : List<Property>
     var language : Language? = null
         set(value) {
             if (field != null) {
@@ -45,6 +46,15 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
         _declaredProperties.add(property)
     }
 
+    fun findProperty(propertyName: String): Property {
+        val p = allProperties.find { it.name == propertyName }
+        if (p != null) {
+            return p
+        } else {
+            throw IllegalArgumentException("No property found with name $propertyName")
+        }
+    }
+
 }
 
 data class Concept(override val id: Long, override val name: String)
@@ -56,7 +66,7 @@ data class Concept(override val id: Long, override val name: String)
     var extended: Concept? = null
     val implemented: MutableList<InterfaceConcept> = LinkedList()
 
-    val allProperties : List<Property>
+    override val allProperties : List<Property>
         get() {
             val props = LinkedList<Property>()
             if (extended != null) {
@@ -69,14 +79,6 @@ data class Concept(override val id: Long, override val name: String)
             return props
         }
 
-    fun findProperty(propertyName: String): Property {
-        val p = allProperties.find { it.name == propertyName }
-        if (p != null) {
-            return p
-        } else {
-            throw IllegalArgumentException("No property found with name $propertyName")
-        }
-    }
 }
 
 data class InterfaceConcept(override val id: Long, override val name: String)
@@ -85,30 +87,17 @@ data class InterfaceConcept(override val id: Long, override val name: String)
     var alias: String? = null
     var final: Boolean = false
     var abstract: Boolean = false
-    var extended: InterfaceConcept? = null
-    val implemented: MutableList<Concept> = LinkedList()
+    var extended: MutableList<InterfaceConcept> = LinkedList<InterfaceConcept>()
 
-    val allProperties : List<Property>
+    override val allProperties : List<Property>
         get() {
             val props = LinkedList<Property>()
-            if (extended != null) {
-                props.addAll(extended!!.allProperties)
-            }
-            implemented.forEach {
+            extended.forEach {
                 props.addAll(it.allProperties)
             }
             props.addAll(declaredProperties)
             return props
         }
-
-    fun findProperty(propertyName: String): Property {
-        val p = allProperties.find { it.name == propertyName }
-        if (p != null) {
-            return p
-        } else {
-            throw IllegalArgumentException("No property found with name $propertyName")
-        }
-    }
 
 }
 
