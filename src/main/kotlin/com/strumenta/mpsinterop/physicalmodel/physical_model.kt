@@ -2,7 +2,7 @@ package com.strumenta.mpsinterop.physicalmodel
 
 import com.strumenta.mpsinterop.logicalmodel.LanguageId
 import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
-import com.strumenta.mpsinterop.logicalmodel.SNodeId
+import com.strumenta.mpsinterop.logicalmodel.NodeId
 import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
 import java.lang.RuntimeException
 import java.lang.UnsupportedOperationException
@@ -196,7 +196,7 @@ object NullReferenceTarget : ReferenceTarget()
 
 data class PhysicalReferenceValue(val target: ReferenceTarget, val resolve: String?)
 
-class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: SNodeId) {
+class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: NodeId) {
     val root: Boolean
         get() = parent == null
     internal var modelOfWhichIsRoot : PhysicalModel? = null

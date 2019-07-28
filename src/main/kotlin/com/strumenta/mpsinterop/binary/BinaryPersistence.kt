@@ -513,8 +513,8 @@ internal class BinaryPersistence {
 //            }
 //            readHelper.requestInterfaceOnly(false)
 //            val reader = NodesReader(modelHeader.getModelReference(), mis, readHelper)
-//            val externalNodes = HashSet<SNodeId>()
-//            val localNodes = HashSet<SNodeId>()
+//            val externalNodes = HashSet<NodeId>()
+//            val localNodes = HashSet<NodeId>()
 //            reader.collectExternalTargets(externalNodes)
 //            reader.collectLocalTargets(localNodes)
 //            reader.readChildren(null)

@@ -1,13 +1,11 @@
 package com.strumenta.mpsinterop.binary
 
-import com.strumenta.mpsinterop.logicalmodel.InterfaceSNode
 import com.strumenta.mpsinterop.logicalmodel.SModelReference
-import com.strumenta.mpsinterop.logicalmodel.SNode
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 
 internal class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, private val myReadHelper: ReadHelper) : BareNodeReader(modelReference, `is`) {
-//    private var myExternalRefs: MutableCollection<SNodeId>? = null
-//    private var myLocalRefs: MutableCollection<SNodeId>? = null
+//    private var myExternalRefs: MutableCollection<NodeId>? = null
+//    private var myLocalRefs: MutableCollection<NodeId>? = null
 
     override fun instantiate(parent: PhysicalNode?): PhysicalNode {
         val conceptIndex = modelInputStream.readShort().toInt()
@@ -39,13 +37,13 @@ internal class NodesReader(modelReference: SModelReference, `is`: ModelInputStre
         return node
     }
 //
-//    protected fun localNodeReferenceRead(nodeId: SNodeId?) {
+//    protected fun localNodeReferenceRead(nodeId: NodeId?) {
 //        if (nodeId != null && myLocalRefs != null) {
 //            myLocalRefs!!.add(nodeId)
 //        }
 //    }
 //
-//    protected fun externalNodeReferenceRead(targetModel: SModelReference, targetNodeId: SNodeId?) {
+//    protected fun externalNodeReferenceRead(targetModel: SModelReference, targetNodeId: NodeId?) {
 //        if (targetNodeId != null && myExternalRefs != null) {
 //            myExternalRefs!!.add(targetNodeId)
 //        }

@@ -11,7 +11,7 @@ class PhysicalToLogicalConverter(
         val languageRegistry: LanguageRegistry = LanguageRegistry.DEFAULT,
         val physicalModelsRegistry: PhysicalModelsRegistry = PhysicalModelsRegistry.DEFAULT) {
     private val convertedConcepts = HashMap<PhysicalConcept, AbstractConcept>()
-    private val convertedNodes = HashMap<PhysicalNode, SNode>()
+    private val convertedNodes = HashMap<PhysicalNode, Node>()
 
     fun toLogical(physicalModel: PhysicalModel) : Model {
         val logicalModel = Model(physicalModel.name)
@@ -19,11 +19,11 @@ class PhysicalToLogicalConverter(
         return logicalModel
     }
 
-    fun toLogical(physicalNode: PhysicalNode) : SNode {
+    fun toLogical(physicalNode: PhysicalNode) : Node {
         return convertedNodes.computeIfAbsent(physicalNode) { physicalNode ->
-            val id = physicalNode.id//SNodeId.regular(JavaFriendlyBase64.parseLong(physicalNode.id))
+            val id = physicalNode.id//NodeId.regular(JavaFriendlyBase64.parseLong(physicalNode.id))
             val concept = this.toLogical(physicalNode.concept) as Concept
-            val logicalNode = SNode(
+            val logicalNode = Node(
                     /*physicalNode.parent?.toLogical(this),*/
                     concept,
                     id)
@@ -57,7 +57,7 @@ class PhysicalToLogicalConverter(
         }
     }
 
-    private fun loadConceptFromConceptDeclaration(conceptDeclaration: SNode) : Concept {
+    private fun loadConceptFromConceptDeclaration(conceptDeclaration: Node) : Concept {
         TODO()
     }
 

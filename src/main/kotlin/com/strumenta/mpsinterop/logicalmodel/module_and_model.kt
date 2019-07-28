@@ -17,6 +17,7 @@ open class SModelId {
 internal class RegularSModelId(val uuid: UUID) : SModelId() {
     override fun uuid() = uuid
 }
+
 internal class ForeignSModelId(val id: String) : SModelId() {
     override fun uuid(): UUID {
         TODO("FOREIGN SModelID $id")
@@ -42,27 +43,27 @@ data class SModelReference(val moduleRef : SModuleReference?,
 data class SModuleReference(val name: String, val id: ModuleId)
 
 class Model(val name: String) {
-    private val roots = LinkedList<SNode>()
+    private val roots = LinkedList<Node>()
 
     val numberOfRoots: Int
         get() = this.roots.size
 
-    fun addRoot(root: SNode) {
+    fun addRoot(root: Node) {
         if (!root.root) {
             throw IllegalArgumentException("The given node is not a root")
         }
         roots.add(root)
     }
 
-    fun onRoots(op: (SNode) -> Unit) {
+    fun onRoots(op: (Node) -> Unit) {
         roots.forEach { op(it) }
     }
 
-    fun onRoots(concept: Concept, op: (SNode) -> Unit) {
+    fun onRoots(concept: Concept, op: (Node) -> Unit) {
         roots.filter { it.concept == concept }.forEach { op(it) }
     }
 
-    fun getRootByName(name: String): SNode {
+    fun getRootByName(name: String): Node {
         return roots.find { it.name == name } ?: throw RuntimeException(
                 "No root found with name $name. Roots have these names: ${roots.map { it.name
         }.joinToString(", ")}")

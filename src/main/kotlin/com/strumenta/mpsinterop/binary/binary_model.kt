@@ -1,7 +1,7 @@
 package com.strumenta.mpsinterop.binary
 
 import com.strumenta.mpsinterop.logicalmodel.SModelReference
-import com.strumenta.mpsinterop.logicalmodel.SNode
+import com.strumenta.mpsinterop.logicalmodel.Node
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.io.*
@@ -224,8 +224,8 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: Langu
 class SModel(modelReference: SModelReference?, val modelHeader: SModelHeader) {
     val numberOfRoots: Int
         get() = roots.size
-    val roots = LinkedList<SNode>()
-    fun addRootNode(root: SNode) {
+    val roots = LinkedList<Node>()
+    fun addRootNode(root: Node) {
         roots.add(root)
     }
 

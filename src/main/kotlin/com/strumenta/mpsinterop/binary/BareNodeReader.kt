@@ -32,8 +32,8 @@ import com.strumenta.mpsinterop.physicalmodel.*
 //import org.jetbrains.mps.openapi.language.Property
 //import org.jetbrains.mps.openapi.language.ReferenceLink
 //import org.jetbrains.mps.openapi.model.SModelReference
-//import org.jetbrains.mps.openapi.model.SNode
-//import org.jetbrains.mps.openapi.model.SNodeId
+//import org.jetbrains.mps.openapi.model.Node
+//import org.jetbrains.mps.openapi.model.NodeId
 //import org.jetbrains.mps.openapi.model.Reference
 
 import java.io.IOException
@@ -145,11 +145,11 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
                 }
     }
 //
-    protected fun localNodeReferenceRead(nodeId: SNodeId?) {
+    protected fun localNodeReferenceRead(nodeId: NodeId?) {
         // no-op, left for subclasses  to override
     }
 //
-//    protected fun externalNodeReferenceRead(targetModel: SModelReference?, nodeId: SNodeId?) {
+//    protected fun externalNodeReferenceRead(targetModel: SModelReference?, nodeId: NodeId?) {
 //        // no-op, left for subclasses  to override
 //    }
 //

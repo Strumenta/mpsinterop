@@ -1,7 +1,7 @@
 package com.strumenta.mpsinterop.loading
 
 import com.strumenta.mpsinterop.logicalmodel.LanguageId
-import com.strumenta.mpsinterop.logicalmodel.SNodeId
+import com.strumenta.mpsinterop.logicalmodel.NodeId
 import com.strumenta.mpsinterop.physicalmodel.*
 import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
 import com.strumenta.mpsinterop.utils.processAllNodes
@@ -18,7 +18,7 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, elem
     val conceptIndex = element.getAttribute("concept")
     val id = element.getAttribute("id")
     try {
-        val modelNode = PhysicalNode(parent, physicalModel.conceptByIndex(conceptIndex), SNodeId.regular(JavaFriendlyBase64.parseLong(id)))
+        val modelNode = PhysicalNode(parent, physicalModel.conceptByIndex(conceptIndex), NodeId.regular(JavaFriendlyBase64.parseLong(id)))
         element.processChildren("property") {
             val value = it.getAttribute("value")
             val property = physicalModel.propertyByIndex(it.getAttribute("role"))
