@@ -81,7 +81,7 @@ class LanguageRegistry : ModelLocator {
             //println(conceptName)
             val concept = SConcept(conceptId, conceptName)
             //concepts[it] = concept
-            language.concepts.add(concept)
+            language.add(concept)
 
 //                concept.final = it.booleanPropertyValue("final")
 //                concept.abstract = it.booleanPropertyValue("abstract")
@@ -108,7 +108,7 @@ class LanguageRegistry : ModelLocator {
             val conceptId = SConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")!!
             val concept = SConcept(conceptId, conceptName, true)
-            language.concepts.add(concept)
+            language.add(concept)
             //concepts[it] = concept
 
 //                concept.final = it.booleanPropertyValue("final")

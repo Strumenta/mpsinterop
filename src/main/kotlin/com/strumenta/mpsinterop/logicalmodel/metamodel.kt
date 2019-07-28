@@ -20,6 +20,16 @@ data class SConcept(val id: SConceptId, val name: String, val isInterface : Bool
     var extended: SConcept? = null
     val implemented: MutableList<SConcept> = LinkedList<SConcept>()
     val declaredProperties : MutableList<SProperty> = LinkedList<SProperty>()
+    var language : Language? = null
+        set(value) {
+            if (field != null) {
+                field?.remove(this)
+            }
+            field = value
+            if (field != null) {
+                field?.add(this)
+            }
+        }
 
     val allProperties : List<SProperty>
         get() {
