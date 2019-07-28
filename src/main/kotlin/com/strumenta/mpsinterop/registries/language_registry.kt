@@ -194,6 +194,7 @@ class LanguageRegistry : ModelLocator {
                 concept.final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
                 concept.rootable = it.booleanPropertyValue("rootable")
+                concept.alias = it.stringPropertyValue("conceptAlias")
 
                 // extends
                 val extendsValue = it.reference("extends")

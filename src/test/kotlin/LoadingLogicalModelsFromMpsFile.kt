@@ -12,6 +12,7 @@ import java.io.File
 import java.io.InputStream
 import java.util.*
 import java.util.jar.JarFile
+import kotlin.math.ln
 import kotlin.test.*
 
 class LoadingLogicalModelsFromMpsFile {
@@ -27,15 +28,7 @@ class LoadingLogicalModelsFromMpsFile {
         model.module = module
         languageRegistry.loadLanguageFromModel(model)
 
-        val iNamedConcept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.INamedConcept")!!
-        val baseLang = Language(UUID.fromString("00000000-0000-4000-0000-011c895902ca"),
-                "jetbrains.mps.baseLanguage")
-        val iValidIndentifier = SConcept(SConceptId(baseLang.id, 1212170275853L),
-                "IValidIdentifier",
-                isInterface = true)
-        iValidIndentifier.extended = iNamedConcept
-        baseLang.add(iValidIndentifier)
-        languageRegistry.add(baseLang)
+        injectIValidIdentifier(languageRegistry)
 
         return languageRegistry
     }

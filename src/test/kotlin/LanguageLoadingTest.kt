@@ -18,7 +18,7 @@ class LanguageLoadingTest {
         assertEquals(true, concept.abstract)
         assertEquals(null, concept.extended)
         assertEquals(0, concept.implemented.size)
-        assertEquals(null, concept.alias)
+        assertEquals("", concept.alias)
         assertEquals(2, concept.declaredProperties.size)
     }
 
@@ -27,6 +27,7 @@ class LanguageLoadingTest {
         val languageRegistry = LanguageRegistry()
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.core-src.jar"))
+        injectIValidIdentifier(languageRegistry)
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.structure-src.jar"))
         val concept = languageRegistry.getConcept("jetbrains.mps.lang.structure.structure.ConceptDeclaration")
@@ -37,8 +38,7 @@ class LanguageLoadingTest {
         assertEquals(1, concept.implemented.size)
         assertEquals("Concept", concept.alias)
         assertEquals(3, concept.declaredProperties.size)
-        // probably more than 10...
-        assertEquals(10, concept.allProperties.size)
+        assertEquals(13, concept.allProperties.size)
     }
 
     /**
@@ -61,7 +61,7 @@ class LanguageLoadingTest {
         assertEquals(true, concept.abstract)
         assertNotNull(concept.extended)
         assertEquals(0, concept.implemented.size)
-        assertEquals(null, concept.alias)
+        assertEquals("", concept.alias)
 
         assertEquals(0, concept.declaredProperties.size)
         assertEquals(2, concept.extended!!.declaredProperties.size)
