@@ -157,12 +157,16 @@ fun loadModel(document: Document) : PhysicalModel {
     return physicalModel
 }
 
-fun loadMpsModel(data: InputStream) : PhysicalModel {
+fun loadDocument(data: InputStream) : Document {
     val builderFactory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
     val builder = builderFactory.newDocumentBuilder()
 
     val document = builder.parse(data)
-    return loadModel(document)
+    return document
+}
+
+fun loadMpsModel(data: InputStream) : PhysicalModel {
+    return loadModel(loadDocument(data))
 }
 
 fun loadMpsModel(data: ByteArray) = loadMpsModel(ByteArrayInputStream(data))

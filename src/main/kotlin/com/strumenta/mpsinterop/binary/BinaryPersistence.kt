@@ -214,7 +214,7 @@ internal class BinaryPersistence {
                                      model: PhysicalModel): ReadHelper {
         val readHelper = loadRegistry(mis, languageLoaderHelper, model)
 //
-        loadUsedLanguages(mis)
+        loadUsedLanguages(mis, languageLoaderHelper)
 //
         for (ref in loadModuleRefList(mis)) {
             // FIXME add temporary code to read both module ref and SLanguage in 3.4 (write SLangugae, read both)
@@ -445,11 +445,12 @@ internal class BinaryPersistence {
 //    }
 //
 //    @Throws(IOException::class)
-    private fun loadUsedLanguages(`is`: ModelInputStream) {
+    private fun loadUsedLanguages(`is`: ModelInputStream, languageLoaderHelper: LanguageLoaderHelper) {
         val size = `is`.readShort().toInt()
         for (i in 0 until size) {
             val id = `is`.readUUID()
             val name = `is`.readString()
+            languageLoaderHelper.registerLanguage(id, name!!)
             //println("used language $id $name")
             //val l = MetaAdapterFactory.getLanguage(id, name)
             //loadingModel.addLanguage(l)

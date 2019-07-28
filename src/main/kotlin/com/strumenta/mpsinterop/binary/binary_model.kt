@@ -237,7 +237,7 @@ class SModel(modelReference: SModelReference?, val modelHeader: SModelHeader) {
 
 @Throws(IOException::class)
 private fun loadHeader(mis: ModelInputStream): SModelHeader {
-    if (mis.readInt() !== HEADER_START) {
+    if (mis.readInt() != HEADER_START) {
         throw IOException("bad stream, no header")
     }
 
@@ -254,7 +254,7 @@ private fun loadHeader(mis: ModelInputStream): SModelHeader {
     result.modelRef = modelRef
     mis.readInt() //left for compatibility: old version was here
     mis.mark(4)
-    if (mis.readByte() === HEADER_ATTRIBUTES) {
+    if (mis.readByte() == HEADER_ATTRIBUTES) {
         result.setDoNotGenerate(mis.readBoolean())
         var propsCount = mis.readShort()
         while (propsCount > 0) {

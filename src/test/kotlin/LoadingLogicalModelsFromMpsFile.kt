@@ -1,7 +1,11 @@
 
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import com.strumenta.mpsinterop.loading.*
+import com.strumenta.mpsinterop.logicalmodel.Language
+import com.strumenta.mpsinterop.logicalmodel.SConcept
+import com.strumenta.mpsinterop.logicalmodel.SConceptId
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
+import com.strumenta.mpsinterop.physicalmodel.PhysicalModule
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
 import java.io.File
@@ -18,7 +22,20 @@ class LoadingLogicalModelsFromMpsFile {
         val inputStream = LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.core-src-structure.mpb")
         val model = loadMpsModelFromBinaryFile(inputStream, languageRegistry)
+        val module = PhysicalModule("jetbrains.mps.lang.core",
+                UUID.fromString("ceab5195-25ea-4f22-9b92-103b95ca8c0c"))
+        model.module = module
         languageRegistry.loadLanguageFromModel(model)
+
+        val iNamedConcept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.INamedConcept")!!
+        val baseLang = Language(UUID.fromString("00000000-0000-4000-0000-011c895902ca"),
+                "jetbrains.mps.baseLanguage")
+        val iValidIndentifier = SConcept(SConceptId(baseLang.id, 1212170275853L),
+                "IValidIdentifier",
+                isInterface = true)
+        iValidIndentifier.extended = iNamedConcept
+        baseLang.add(iValidIndentifier)
+        languageRegistry.add(baseLang)
 
         return languageRegistry
     }
@@ -48,7 +65,9 @@ class LoadingLogicalModelsFromMpsFile {
     @Test
     fun loadBaseConceptHasRightLanguageID() {
         val languageRegistry = loadBasicLanguageRegistry()
-        val expectedLangUUID = UUID.fromString("00000000-0000-4000-0000-011c89590288")
+        // This is the UUID of the structure model
+        //val expectedLangUUID = UUID.fromString("00000000-0000-4000-0000-011c89590288")
+        val expectedLangUUID = UUID.fromString("ceab5195-25ea-4f22-9b92-103b95ca8c0c")
         val langCore = languageRegistry[expectedLangUUID]
         assertNotNull(langCore)
         assertEquals("jetbrains.mps.lang.core", langCore.name)

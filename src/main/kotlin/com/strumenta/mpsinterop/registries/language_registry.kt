@@ -41,8 +41,13 @@ class LanguageRegistry : ModelLocator {
         return null
     }
 
-    fun languageIDforConceptNode(it: PhysicalNode) = it.model!!.uuid
-    fun conceptIDforConceptNode(it: PhysicalNode) = it.propertyValue("conceptId").toLong()
+    // Wrong, this is the UUID of the structure model of the language,
+    // not the UUID of the language
+    fun languageIDforConceptNode(it: PhysicalNode) : UUID {
+        val module = it.model!!.module ?: throw RuntimeException("No module for model ${it.model!!.name}")
+        return module.uuid
+    }
+    fun conceptIDforConceptNode(it: PhysicalNode) = it.propertyValue("conceptId")?.toLong()
 
     fun preloadConcept(it: PhysicalNode) : SConcept? {
         val model = it.model!!
@@ -70,9 +75,9 @@ class LanguageRegistry : ModelLocator {
 //                this.add(l)
 //                l
 //            }
-            val conceptIdValue : Long = conceptIDforConceptNode(it)
+            val conceptIdValue : Long = conceptIDforConceptNode(it)!!
             val conceptId = SConceptId(language.id, conceptIdValue)
-            val conceptName = it.propertyValue("name")
+            val conceptName = it.propertyValue("name")!!
             //println(conceptName)
             val concept = SConcept(conceptId, conceptName)
             //concepts[it] = concept
@@ -99,9 +104,9 @@ class LanguageRegistry : ModelLocator {
                 this.add(l)
                 l
             }
-            val conceptIdValue : Long = it.propertyValue("conceptId").toLong()
+            val conceptIdValue : Long = it.propertyValue("conceptId")!!.toLong()
             val conceptId = SConceptId(language.id, conceptIdValue)
-            val conceptName = it.propertyValue("name")
+            val conceptName = it.propertyValue("name")!!
             val concept = SConcept(conceptId, conceptName, true)
             language.concepts.add(concept)
             //concepts[it] = concept
@@ -125,7 +130,6 @@ class LanguageRegistry : ModelLocator {
             }
             //println(it.concept.qname(this))
         }
-
 
         model.roots.forEach {
             loadConceptFromNode(it)
@@ -163,13 +167,17 @@ class LanguageRegistry : ModelLocator {
     }
 
     private fun loadEnumerationAlternative(node: PhysicalNode) : EnumerationAlternative {
-        return EnumerationAlternative(node.propertyValue("externalValue"),
+        return EnumerationAlternative(node.propertyValue("externalValue")!!,
                 node.propertyValue("internalValue", null))
     }
 
     private fun loadConceptFromNode(it: PhysicalNode) : SConcept? {
+        val conceptID = conceptIDforConceptNode(it)
+        if (conceptID == null) {
+            return null
+        }
         val langUUID = languageIDforConceptNode(it)
-        var concept = languagesByID[langUUID]?.conceptByID(conceptIDforConceptNode(it))
+        var concept = languagesByID[langUUID]?.conceptByID(conceptID)
         if (concept == null) {
             concept = preloadConcept(it)
             if (concept == null) {
@@ -206,9 +214,9 @@ class LanguageRegistry : ModelLocator {
                 })
 
                 it.children("propertyDeclaration").forEach {
-                    val name = it.propertyValue("name")
+                    val name = it.propertyValue("name")!!
                     val conceptId = concept.id
-                    val idValue: Long = it.propertyValue("propertyId").toLong()
+                    val idValue: Long = it.propertyValue("propertyId")!!.toLong()
                     val dataType = it.reference("dataType")
                             ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
                     val propertyTypeNode = nodeLocator.resolve(dataType.target)!!

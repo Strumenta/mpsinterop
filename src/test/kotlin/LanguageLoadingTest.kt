@@ -51,7 +51,7 @@ class LanguageLoadingTest {
                 "/jetbrains.mps.lang.core-src.jar"))
 
         // jetbrains.mps.lang.core should be registered
-        assertTrue(languageRegistry.knowsLanguageUUID(UUID.fromString("00000000-0000-4000-0000-011c89590288")))
+        assertTrue(languageRegistry.knowsLanguageUUID(UUID.fromString("ceab5195-25ea-4f22-9b92-103b95ca8c0c")))
 
         languageRegistry.loadLanguageFromMpsInputStream(inputStream)
         val concept = languageRegistry.getConcept("Formats.structure.Constraint")

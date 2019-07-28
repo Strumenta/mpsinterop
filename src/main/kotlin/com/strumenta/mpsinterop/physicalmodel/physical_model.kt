@@ -55,6 +55,10 @@ data class PhysicalRelation(val container: PhysicalConcept, val id: Long, val na
 
 data class PhysicalProperty(val container: PhysicalConcept, val id: Long, val name: String, val index: String)
 
+class PhysicalModule(val name: String, val uuid: UUID) {
+    val models = LinkedList<PhysicalModel>()
+}
+
 /**
  * A model, as defined in a file.
  *
@@ -64,6 +68,17 @@ data class PhysicalProperty(val container: PhysicalConcept, val id: Long, val na
 class PhysicalModel(val name: String, val uuid: UUID){
 
     val roots = LinkedList<PhysicalNode>()
+
+    var module : PhysicalModule? = null
+        set(value) {
+            if (field != null) {
+                field!!.models.remove(this)
+            }
+            if (value != null) {
+                value!!.models.add(this)
+            }
+            field = value
+        }
 
     val numberOfRoots: Int
         get() = this.roots.size
@@ -226,10 +241,11 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         }
     }
 
-    fun propertyValue(propertyName: String) : String {
+    fun propertyValue(propertyName: String) : String? {
         val properties = properties.keys.filter { it.name == propertyName }
         return when (properties.size) {
-            0 -> throw IllegalArgumentException("Unknown property name $propertyName. Known declaredProperties: $properties")
+            0 -> null
+            //0 -> throw IllegalArgumentException("Unknown property name $propertyName. Known declaredProperties: $properties")
             1 -> propertyValue(properties.first())
             else -> throw IllegalArgumentException("Ambiguous property name $propertyName")
         }
