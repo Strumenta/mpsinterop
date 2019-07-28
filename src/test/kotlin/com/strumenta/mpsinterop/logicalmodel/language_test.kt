@@ -39,5 +39,34 @@ class LanguageTest {
         assertEquals(null, conc.language)
     }
 
+    @Test
+    fun hasConceptWithID() {
+        val lang = Language(UUID.randomUUID(), "FooLang")
+        val conc = SConcept(123L, "FooConcept")
+
+        assertEquals(false, lang.hasConceptWithID(123L))
+
+        lang.add(conc)
+        assertEquals(true, lang.hasConceptWithID(123L))
+
+        lang.remove(conc)
+        assertEquals(false, lang.hasConceptWithID(123L))
+    }
+
+    @Test
+    fun conceptByID() {
+        val lang = Language(UUID.randomUUID(), "FooLang")
+        val conc = SConcept(123L, "FooConcept")
+
+        assertEquals(null, lang.conceptByID(123L))
+
+        lang.add(conc)
+        assertEquals(conc, lang.conceptByID(123L))
+        assertEquals(null, lang.conceptByID(124L))
+
+        lang.remove(conc)
+        assertEquals(null, lang.conceptByID(123L))
+    }
+
 }
 
