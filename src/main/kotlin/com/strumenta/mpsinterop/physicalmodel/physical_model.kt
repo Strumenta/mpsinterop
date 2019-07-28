@@ -145,7 +145,8 @@ class PhysicalModel(val name: String, val uuid: UUID){
     }
 
     fun languageUuidFromName(languageName: String): LanguageUUID {
-        return languageUUIDsFromName[languageName] ?: throw RuntimeException("Unable to find UUID for language $languageName")
+        return languageUUIDsFromName[languageName]
+                ?: throw RuntimeException("Unable to find UUID for language $languageName")
     }
 
     fun putLanguageInRegistry(languageUUID: LanguageUUID, languageName: String) {

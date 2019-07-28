@@ -126,7 +126,9 @@ private fun LanguageRegistry.loadJar(file: File) : List<PhysicalModel> {
     return models
 }
 
-fun LanguageRegistry.loadLanguageFromMpsInputStream(inputStream: InputStream) {
+fun LanguageRegistry.loadLanguageFromMpsInputStream(inputStream: InputStream,
+                                                    module: PhysicalModule) {
     val model = loadMpsModel(inputStream)
+    model.module = module
     this.loadLanguageFromModel(model)
 }

@@ -1,6 +1,7 @@
 
 import com.strumenta.mpsinterop.loading.loadLanguageFromJar
 import com.strumenta.mpsinterop.loading.loadLanguageFromMpsInputStream
+import com.strumenta.mpsinterop.physicalmodel.PhysicalModule
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.util.*
 import kotlin.test.*
@@ -53,7 +54,8 @@ class LanguageLoadingTest {
         // jetbrains.mps.lang.core should be registered
         assertTrue(languageRegistry.knowsLanguageUUID(UUID.fromString("ceab5195-25ea-4f22-9b92-103b95ca8c0c")))
 
-        languageRegistry.loadLanguageFromMpsInputStream(inputStream)
+        val module = PhysicalModule("Formats", UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"))
+        languageRegistry.loadLanguageFromMpsInputStream(inputStream, module)
         val concept = languageRegistry.getConcept("Formats.structure.Constraint")
         assertNotNull(concept)
         assertEquals(true, concept.abstract)
@@ -73,7 +75,8 @@ class LanguageLoadingTest {
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.core-src.jar"))
 
-        languageRegistry.loadLanguageFromMpsInputStream(inputStream)
+        val module = PhysicalModule("Formats", UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"))
+        languageRegistry.loadLanguageFromMpsInputStream(inputStream, module)
         val concept = languageRegistry.getConcept("Formats.structure.Constraint")
         assertNotNull(concept)
 
@@ -87,7 +90,8 @@ class LanguageLoadingTest {
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.core-src.jar"))
 
-        languageRegistry.loadLanguageFromMpsInputStream(inputStream)
+        val module = PhysicalModule("Formats", UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"))
+        languageRegistry.loadLanguageFromMpsInputStream(inputStream, module)
         val concept = languageRegistry.getConcept("Formats.structure.Constraint")
         assertNotNull(concept)
 

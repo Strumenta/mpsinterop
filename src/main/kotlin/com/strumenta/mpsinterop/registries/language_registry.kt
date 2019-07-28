@@ -58,7 +58,7 @@ class LanguageRegistry : ModelLocator {
                 val l = this.languagesByID[languageID]!!
                 l
             } else {
-                val l = Language(model.languageUuidFromName(languageName), languageName)
+                val l = Language(languageID, languageName)
                 this.add(l)
                 l
             }
@@ -240,24 +240,26 @@ class LanguageRegistry : ModelLocator {
     private fun resolveAsConcept(target: ReferenceTarget): SConcept? {
         return when (target) {
             is InModelReferenceTarget -> {
-                val uuid = target.physicalModel.uuid
-                if (uuid !in languagesByID) {
-                    throw RuntimeException("Unknown language UUID $uuid")
-                }
-                val language = languagesByID[uuid]!!
-                val concept = language.concepts.find {
-                    it.id.idValue == JavaFriendlyBase64.parseLong(target.nodeID)
-                } ?: throw RuntimeException("Concept not found (ID ${target.nodeID})")
-                return concept
+//                val uuid = target.physicalModel.uuid
+//                if (uuid !in languagesByID) {
+//                    throw RuntimeException("Unknown language UUID $uuid")
+//                }
+//                val language = languagesByID[uuid]!!
+//                val concept = language.concepts.find {
+//                    it.id.idValue == JavaFriendlyBase64.parseLong(target.nodeID)
+//                } ?: throw RuntimeException("Concept not found (ID ${target.nodeID})")
+//                return concept
+                return this.findConceptWithID(JavaFriendlyBase64.parseLong(target.nodeID))!!
             }
             is OutsideModelReferenceTarget -> {
+                // Note that this is the model ID, not the language ID
                 val uuid = target.modelUIID
-                if (uuid !in languagesByID) {
-                    throw RuntimeException("Unknown language UUID $uuid")
-                }
-                val language = languagesByID[uuid]!!
-                val concept = language.concepts.find { it.id.idValue == target.nodeID }!!
-                return concept
+//                if (uuid !in languagesByID) {
+//                    throw RuntimeException("Unknown language UUID $uuid")
+//                }
+//                val language = languagesByID[uuid]!!
+                //val concept = language.concepts.find { it.id.idValue == target.nodeID }!!
+                return this.findConceptWithID(target.nodeID)!!
             }
             is NullReferenceTarget -> null
             is ExplicitReferenceTarget -> {
@@ -275,6 +277,17 @@ class LanguageRegistry : ModelLocator {
             }
             else -> TODO()
         }
+    }
+
+    private fun findConceptWithID(nodeID: Long): SConcept? {
+        for (l in languagesByID.values) {
+            for (c in l.concepts) {
+                if (c.id.idValue == nodeID) {
+                    return c
+                }
+            }
+        }
+        return null
     }
 
     operator fun get(id: LanguageUUID): Language? {

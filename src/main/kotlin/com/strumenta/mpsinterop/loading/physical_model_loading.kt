@@ -105,7 +105,7 @@ fun loadModel(document: Document) : PhysicalModel {
     val uuid = rawNameToUuid(rawName)
 
     val physicalModel = PhysicalModel(nameInParens, uuid)
-    physicalModel.putLanguageInRegistry(uuid, nameInParens.removeSuffix(".structure"))
+    //physicalModel.putLanguageInRegistry(uuid, nameInParens.removeSuffix(".structure"))
     document.documentElement.processAllNodes("import") {
         val index = it.getAttribute("index")
         val rawName = it.getAttribute("ref")

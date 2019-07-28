@@ -61,6 +61,9 @@ data class SConcept(val id: SConceptId, val name: String, val isInterface : Bool
     }
 
     fun addProperty(property: SProperty) {
+        if (property in declaredProperties) {
+            return
+        }
         declaredProperties.add(property)
     }
 }
