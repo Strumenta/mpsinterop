@@ -1,6 +1,7 @@
 
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import com.strumenta.mpsinterop.loading.*
+import com.strumenta.mpsinterop.logicalmodel.Concept
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModule
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.util.*
@@ -39,7 +40,7 @@ class LoadingLogicalModelsFromMpsFile {
     @Test
     fun loadBaseConceptIntoLanguageRegistry() {
         val languageRegistry = loadBasicLanguageRegistry()
-        val baseConcept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.BaseConcept")!!
+        val baseConcept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.BaseConcept")!! as Concept
         assertEquals("BaseConcept", baseConcept.name)
         assertEquals(false, baseConcept.rootable)
         assertEquals(false, baseConcept.final)

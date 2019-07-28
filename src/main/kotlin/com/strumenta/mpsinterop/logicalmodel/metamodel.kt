@@ -13,18 +13,7 @@ enum class ConceptKind {
     IMPLEMENTATION_WITH_STUB
 }
 
-data class Concept(val id: Long, val name: String, val isInterface : Boolean = false) {
-
-    val absoluteID : AbsoluteConceptId?
-        get() = if (language == null) null else AbsoluteConceptId(language!!.id, id)
-
-    var alias: String? = null
-    var rootable: Boolean = false
-    var final: Boolean = false
-    var abstract: Boolean = false
-    var extended: Concept? = null
-    val implemented: MutableList<Concept> = LinkedList()
-    val declaredProperties : MutableList<Property> = LinkedList()
+abstract class AbstractConcept(open val id: Long, open val name: String) {
     var language : Language? = null
         set(value) {
             if (field != null) {
@@ -35,6 +24,36 @@ data class Concept(val id: Long, val name: String, val isInterface : Boolean = f
                 field?.add(this)
             }
         }
+
+    val absoluteID : AbsoluteConceptId?
+        get() = if (language == null) null else AbsoluteConceptId(language!!.id, id)
+
+    fun qname() : String {
+        val languageName = languageName()
+        return "$languageName.structure.$name"
+    }
+
+    private fun languageName() : String {
+        if (language == null) {
+            throw IllegalStateException("The concept is not attached to a language")
+        } else {
+            return language!!.name
+        }
+    }
+
+}
+
+data class Concept(override val id: Long, override val name: String)
+    : AbstractConcept(id, name){
+
+
+    var alias: String? = null
+    var rootable: Boolean = false
+    var final: Boolean = false
+    var abstract: Boolean = false
+    var extended: Concept? = null
+    val implemented: MutableList<InterfaceConcept> = LinkedList()
+    val declaredProperties : MutableList<Property> = LinkedList()
 
     val allProperties : List<Property>
         get() {
@@ -49,18 +68,46 @@ data class Concept(val id: Long, val name: String, val isInterface : Boolean = f
             return props
         }
 
-    fun qname() : String {
-        val languageName = languageName()
-        return "$languageName.structure.$name"
-    }
-
-    private fun languageName() : String {
-        if (language == null) {
-            throw IllegalStateException("The concept is not attached to a language")
+    fun findProperty(propertyName: String): Property {
+        val p = allProperties.find { it.name == propertyName }
+        if (p != null) {
+            return p
         } else {
-            return language!!.name
+            throw IllegalArgumentException("No property found with name $propertyName")
         }
     }
+
+    fun addProperty(property: Property) {
+        if (property in declaredProperties) {
+            return
+        }
+        declaredProperties.add(property)
+    }
+}
+
+data class InterfaceConcept(override val id: Long, override val name: String)
+    : AbstractConcept(id, name){
+
+    var alias: String? = null
+    var rootable: Boolean = false
+    var final: Boolean = false
+    var abstract: Boolean = false
+    var extended: InterfaceConcept? = null
+    val implemented: MutableList<Concept> = LinkedList()
+    val declaredProperties : MutableList<Property> = LinkedList()
+
+    val allProperties : List<Property>
+        get() {
+            val props = LinkedList<Property>()
+            if (extended != null) {
+                props.addAll(extended!!.allProperties)
+            }
+            implemented.forEach {
+                props.addAll(it.allProperties)
+            }
+            props.addAll(declaredProperties)
+            return props
+        }
 
     fun findProperty(propertyName: String): Property {
         val p = allProperties.find { it.name == propertyName }

@@ -31,7 +31,7 @@ class LanguageRegistry : ModelLocator {
         languagesByID[language.id] = language
     }
 
-    fun getConcept(conceptName: String): Concept? {
+    fun getConcept(conceptName: String): AbstractConcept? {
         for (l in languagesByID.values) {
             val concept = l.concepts.find { it.qname() == conceptName }
             if (concept != null) {
@@ -49,7 +49,7 @@ class LanguageRegistry : ModelLocator {
     }
     fun conceptIDforConceptNode(it: PhysicalNode) = it.propertyValue("conceptId")?.toLong()
 
-    fun preloadConcept(it: PhysicalNode) : Concept? {
+    fun preloadConcept(it: PhysicalNode) : AbstractConcept? {
         val model = it.model!!
         if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
             val languageName = model.name.removeSuffix(".structure")
@@ -107,7 +107,7 @@ class LanguageRegistry : ModelLocator {
             val conceptIdValue : Long = it.propertyValue("conceptId")!!.toLong()
             val conceptId = AbsoluteConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")!!
-            val concept = Concept(conceptIdValue, conceptName, true)
+            val concept = InterfaceConcept(conceptIdValue, conceptName)
             language.add(concept)
             //concepts[it] = concept
 
@@ -121,7 +121,7 @@ class LanguageRegistry : ModelLocator {
 
     fun loadLanguageFromModel(model: PhysicalModel) {
         // We solve stuff in two rounds, because there could be dependency between concepts
-        val concepts = HashMap<PhysicalNode, Concept>()
+        val concepts = HashMap<PhysicalNode, AbstractConcept>()
         modelsByID[model.uuid] = model
         model.roots.forEach {
             val concept = preloadConcept(it)
@@ -171,7 +171,7 @@ class LanguageRegistry : ModelLocator {
                 node.propertyValue("internalValue", null))
     }
 
-    private fun loadConceptFromNode(it: PhysicalNode) : Concept? {
+    private fun loadConceptFromNode(it: PhysicalNode) : AbstractConcept? {
         val conceptID = conceptIDforConceptNode(it)
         if (conceptID == null) {
             return null
@@ -191,7 +191,7 @@ class LanguageRegistry : ModelLocator {
         when {
             it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration" -> {
 
-                concept.final = it.booleanPropertyValue("final")
+                (concept as Concept).final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
                 concept.rootable = it.booleanPropertyValue("rootable")
                 concept.alias = it.stringPropertyValue("conceptAlias")
@@ -200,7 +200,7 @@ class LanguageRegistry : ModelLocator {
                 val extendsValue = it.reference("extends")
                 if (extendsValue != null) {
                     try {
-                        concept.extended = this.resolveAsConcept(extendsValue.target)
+                        concept.extended = this.resolveAsConcept(extendsValue.target) as Concept
                     } catch (e: Exception) {
 
                     }
@@ -210,7 +210,7 @@ class LanguageRegistry : ModelLocator {
                 val implementsValue = it.children("implements")
                 concept.implemented.clear()
                 concept.implemented.addAll(implementsValue.map {
-                    val interfaceDeclaration = this.resolveAsConcept(it.reference("intfc")!!.target)
+                    val interfaceDeclaration = this.resolveAsConcept(it.reference("intfc")!!.target) as InterfaceConcept
                     interfaceDeclaration!!
                 })
 
@@ -230,7 +230,7 @@ class LanguageRegistry : ModelLocator {
             }
             it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration" -> {
 
-                concept.final = it.booleanPropertyValue("final")
+                (concept as InterfaceConcept).final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
                 concept.rootable = it.booleanPropertyValue("rootable")
 
@@ -249,7 +249,7 @@ class LanguageRegistry : ModelLocator {
         return concept
     }
 
-    private fun resolveAsConcept(target: ReferenceTarget): Concept? {
+    private fun resolveAsConcept(target: ReferenceTarget): AbstractConcept? {
         return when (target) {
             is InModelReferenceTarget -> {
 //                val uuid = target.physicalModel.uuid
@@ -291,7 +291,7 @@ class LanguageRegistry : ModelLocator {
         }
     }
 
-    private fun findConceptWithID(nodeID: Long): Concept? {
+    private fun findConceptWithID(nodeID: Long): AbstractConcept? {
         for (l in languagesByID.values) {
             for (c in l.concepts) {
                 if (c.id == nodeID) {

@@ -1,6 +1,8 @@
 
 import com.strumenta.mpsinterop.loading.loadLanguageFromJar
 import com.strumenta.mpsinterop.loading.loadLanguageFromMpsInputStream
+import com.strumenta.mpsinterop.logicalmodel.Concept
+import com.strumenta.mpsinterop.logicalmodel.InterfaceConcept
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModule
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.util.*
@@ -15,6 +17,7 @@ class LanguageLoadingTest {
                 "/jetbrains.mps.lang.core-src.jar"))
         val concept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.BaseConcept")
         assertNotNull(concept)
+        assertTrue(concept is Concept)
         assertEquals(true, concept.abstract)
         assertEquals(null, concept.extended)
         assertEquals(0, concept.implemented.size)
@@ -30,7 +33,7 @@ class LanguageLoadingTest {
         injectIValidIdentifier(languageRegistry)
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.structure-src.jar"))
-        val concept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.INamedConcept")
+        val concept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.INamedConcept") as InterfaceConcept
         assertNotNull(concept)
 //        assertEquals(true, concept.isInterface)
 //        assertEquals(false, concept.abstract)
@@ -52,7 +55,7 @@ class LanguageLoadingTest {
         injectIValidIdentifier(languageRegistry)
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.structure-src.jar"))
-        val concept = languageRegistry.getConcept("jetbrains.mps.lang.structure.structure.ConceptDeclaration")
+        val concept = languageRegistry.getConcept("jetbrains.mps.lang.structure.structure.ConceptDeclaration") as Concept
         assertNotNull(concept)
         assertEquals(false, concept.abstract)
         assertEquals(true, concept.final)
@@ -80,7 +83,7 @@ class LanguageLoadingTest {
 
         val module = PhysicalModule("Formats", UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"))
         languageRegistry.loadLanguageFromMpsInputStream(inputStream, module)
-        val concept = languageRegistry.getConcept("Formats.structure.Constraint")
+        val concept = languageRegistry.getConcept("Formats.structure.Constraint") as Concept
         assertNotNull(concept)
         assertEquals(true, concept.abstract)
         assertNotNull(concept.extended)
@@ -101,7 +104,7 @@ class LanguageLoadingTest {
 
         val module = PhysicalModule("Formats", UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"))
         languageRegistry.loadLanguageFromMpsInputStream(inputStream, module)
-        val concept = languageRegistry.getConcept("Formats.structure.Constraint")
+        val concept = languageRegistry.getConcept("Formats.structure.Constraint") as Concept
         assertNotNull(concept)
 
         assertEquals(0, concept.declaredProperties.size)
@@ -116,7 +119,7 @@ class LanguageLoadingTest {
 
         val module = PhysicalModule("Formats", UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"))
         languageRegistry.loadLanguageFromMpsInputStream(inputStream, module)
-        val concept = languageRegistry.getConcept("Formats.structure.Constraint")
+        val concept = languageRegistry.getConcept("Formats.structure.Constraint") as Concept
         assertNotNull(concept)
 
         assertEquals(2, concept.allProperties.size)
