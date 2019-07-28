@@ -84,7 +84,7 @@ internal class ReadHelper() {
         //myMetaInfoProvider.setPropertyName(property, name)
     }
 //
-    fun association(link: ReferenceLinkId, name: String, index: Int) {
+    fun association(link: AbsoluteReferenceLinkId, name: String, index: Int) {
 
         //myActualConcept!!.addLink(link, name).setIntIndex(index)
        myAssociations[index] = PhysicalRelation(currentConcept!!, link.idValue, name, index.toString(), RelationKind.REFERENCE)

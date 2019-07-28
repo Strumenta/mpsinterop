@@ -245,7 +245,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
             throw IOException(Integer.toHexString(b.toInt()))
         }
         val c = readConcept()
-//        val l = MetaAdapterFactory.getReferenceLink(ReferenceLinkId(MetaIdHelper.getConcept(c), readLong()), readString())
+//        val l = MetaAdapterFactory.getReferenceLink(AbsoluteReferenceLinkId(MetaIdHelper.getConcept(c), readLong()), readString())
 //        myAssociations.add(l)
 //        return l
         TODO()

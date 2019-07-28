@@ -415,7 +415,7 @@ internal class BinaryPersistence {
                     val id = mis.readLong()
                     val name = mis.readString()
                     //println("     $id $name")
-                    rh.association(ReferenceLinkId(conceptId, id), name!!, associationIndex++)
+                    rh.association(AbsoluteReferenceLinkId(conceptId, id), name!!, associationIndex++)
                 }
 //                //
                 var aggregationCount = mis.readShort().toInt()
