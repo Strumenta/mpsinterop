@@ -83,8 +83,8 @@ data class AbsoluteConceptId(val languageId: LanguageUUID, val idValue: Long)
 data class ContainmentLink(val link: AbsoluteContainmentLinkId, val name: String)
 data class AbsoluteContainmentLinkId(val conceptId: AbsoluteConceptId, val idValue: Long)
 
-interface SPropertyType
-enum class PrimitiveSPropertyType : SPropertyType {
+interface PropertyType
+enum class PrimitivePropertyType : PropertyType {
     BOOLEAN,
     INTEGER,
     STRING
@@ -92,11 +92,11 @@ enum class PrimitiveSPropertyType : SPropertyType {
 
 data class EnumerationAlternative(val name: String, val value: String?)
 data class EnumerationSPropertyType(val name: String,
-                                    val baseType: PrimitiveSPropertyType,
-                                    val alternatives: List<EnumerationAlternative>) : SPropertyType
-data class ConstrainedDataTypeDeclaration(val qname: String) : SPropertyType
+                                    val baseType: PrimitivePropertyType,
+                                    val alternatives: List<EnumerationAlternative>) : PropertyType
+data class ConstrainedDataTypeDeclaration(val qname: String) : PropertyType
 
-data class SProperty(val sPropertyId: SPropertyId, val name: String, val type: SPropertyType)
+data class SProperty(val sPropertyId: SPropertyId, val name: String, val type: PropertyType)
 data class SPropertyId(val conceptId: AbsoluteConceptId, val idValue: Long)
 data class SReferenceLink(val link: SReferenceLinkId, val name: String)
 data class SReferenceLinkId(val conceptId: AbsoluteConceptId, val idValue: Long)

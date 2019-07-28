@@ -140,11 +140,11 @@ class LanguageRegistry : ModelLocator {
     }
 
 
-    private fun loadPropertyTypeFromNode(node: PhysicalNode) : SPropertyType {
+    private fun loadPropertyTypeFromNode(node: PhysicalNode) : PropertyType {
         when {
             node.concept.qname == "jetbrains.mps.lang.structure.structure.PrimitiveDataTypeDeclaration" -> {
                 val name = node.name()!!
-                return PrimitiveSPropertyType.valueOf(name.toUpperCase())
+                return PrimitivePropertyType.valueOf(name.toUpperCase())
             }
             node.concept.qname == "jetbrains.mps.lang.structure.structure.EnumerationDataTypeDeclaration" -> {
                 val baseTypeNode = nodeLocator.resolve(node.reference("memberDataType")!!.target)!!
@@ -153,7 +153,7 @@ class LanguageRegistry : ModelLocator {
                 }.toList()
                 val enumerationType = EnumerationSPropertyType(
                         node.name()!!,
-                        loadPropertyTypeFromNode(baseTypeNode) as PrimitiveSPropertyType,
+                        loadPropertyTypeFromNode(baseTypeNode) as PrimitivePropertyType,
                         alternatives
                 )
                 return enumerationType
