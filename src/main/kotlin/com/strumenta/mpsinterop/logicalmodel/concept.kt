@@ -3,10 +3,16 @@ package com.strumenta.mpsinterop.logicalmodel
 import java.util.*
 
 abstract class AbstractConcept(open val id: Long, open val name: String) {
-    var rootable: Boolean = false
+    var final: Boolean = false
+    var abstract: Boolean = false
+    var alias: String? = null
+
     private val _declaredProperties : MutableList<Property> = LinkedList()
+
+    // We want them to be exposed as an immutable list
     val declaredProperties : List<Property>
         get() = _declaredProperties
+
     abstract val allProperties : List<Property>
     var language : Language? = null
         set(value) {
@@ -39,7 +45,15 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
         if (property in _declaredProperties) {
             return
         }
+        if (hasPropertyNamed(property.name)) {
+            throw java.lang.IllegalStateException("Property with same name already present: ${property.name}")
+        }
+
         _declaredProperties.add(property)
+    }
+
+    fun hasPropertyNamed(propertyName: String): Boolean {
+        return allProperties.any { it.name == propertyName }
     }
 
     fun findProperty(propertyName: String): Property {
@@ -55,10 +69,7 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
 
 data class Concept(override val id: Long, override val name: String)
     : AbstractConcept(id, name){
-
-    var alias: String? = null
-    var final: Boolean = false
-    var abstract: Boolean = false
+    var rootable: Boolean = false
     var extended: Concept? = null
     val implemented: MutableList<InterfaceConcept> = LinkedList()
 
@@ -80,9 +91,6 @@ data class Concept(override val id: Long, override val name: String)
 data class InterfaceConcept(override val id: Long, override val name: String)
     : AbstractConcept(id, name){
 
-    var alias: String? = null
-    var final: Boolean = false
-    var abstract: Boolean = false
     var extended: MutableList<InterfaceConcept> = LinkedList<InterfaceConcept>()
 
     override val allProperties : List<Property>

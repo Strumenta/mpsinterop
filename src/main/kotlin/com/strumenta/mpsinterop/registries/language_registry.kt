@@ -232,7 +232,6 @@ class LanguageRegistry : ModelLocator {
 
                 (concept as InterfaceConcept).final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
-                concept.rootable = it.booleanPropertyValue("rootable")
 
                 it.children("propertyDeclaration").forEach {
                     val name = it.propertyValue("name")!!
