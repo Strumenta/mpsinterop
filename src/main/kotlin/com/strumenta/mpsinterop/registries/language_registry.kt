@@ -51,7 +51,7 @@ class LanguageRegistry : ModelLocator {
 
     fun preloadConcept(it: PhysicalNode) : AbstractConcept? {
         val model = it.model!!
-        if (it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration") {
+        if (it.concept.qname == CONCEPT_DECLARATION_CONCEPT_NAME) {
             val languageName = model.name.removeSuffix(".structure")
             val languageID = languageIDforConceptNode(it)
             val language = if (languageID in this.languagesByID) {
@@ -93,7 +93,7 @@ class LanguageRegistry : ModelLocator {
 //                    concept.extended = this.resolveAsConcept(extendsValue.target)
 //                }
             return concept
-        } else if (it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration") {
+        } else if (it.concept.qname == INTERFACE_CONCEPT_DECLARATION_CONCEPT_NAME) {
             val languageName = model.name.removeSuffix(".structure")
             val languageID = languageIDforConceptNode(it)
             val language = if (languageID in this.languagesByID) {
@@ -142,11 +142,11 @@ class LanguageRegistry : ModelLocator {
 
     private fun loadPropertyTypeFromNode(node: PhysicalNode) : PropertyType {
         when {
-            node.concept.qname == "jetbrains.mps.lang.structure.structure.PrimitiveDataTypeDeclaration" -> {
+            node.concept.qname == PRIMITIVE_DATA_TYPE_DECLARATION_CONCEPT_NAME -> {
                 val name = node.name()!!
                 return PrimitivePropertyType.valueOf(name.toUpperCase())
             }
-            node.concept.qname == "jetbrains.mps.lang.structure.structure.EnumerationDataTypeDeclaration" -> {
+            node.concept.qname == ENUMERATION_DATA_TYPE_DECLARATION_CONCEPT_NAME -> {
                 val baseTypeNode = nodeLocator.resolve(node.reference("memberDataType")!!.target)!!
                 val alternatives = node.children("member").map {
                     loadEnumerationAlternative(it)
@@ -158,7 +158,7 @@ class LanguageRegistry : ModelLocator {
                 )
                 return enumerationType
             }
-            node.concept.qname == "jetbrains.mps.lang.structure.structure.ConstrainedDataTypeDeclaration" -> {
+            node.concept.qname == CONSTRAINED_DATA_TYPE_DECLARATION_CONCEPT_NAME -> {
                 val qname = node.qname()
                 return ConstrainedPropertyType(qname)
             }
@@ -189,7 +189,7 @@ class LanguageRegistry : ModelLocator {
         }
 
         when {
-            it.concept.qname == "jetbrains.mps.lang.structure.structure.ConceptDeclaration" -> {
+            it.concept.qname == CONCEPT_DECLARATION -> {
 
                 (concept as Concept).final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
@@ -228,7 +228,7 @@ class LanguageRegistry : ModelLocator {
                     //TODO()
                 }
             }
-            it.concept.qname == "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration" -> {
+            it.concept.qname == INTERFACE_CONCEPT_DECLARATION_CONCEPT_NAME -> {
 
                 (concept as InterfaceConcept).final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")

@@ -91,7 +91,7 @@ data class Concept(override val id: Long, override val name: String)
 data class InterfaceConcept(override val id: Long, override val name: String)
     : AbstractConcept(id, name){
 
-    var extended: MutableList<InterfaceConcept> = LinkedList<InterfaceConcept>()
+    var extended: MutableList<InterfaceConcept> = LinkedList()
 
     override val allProperties : List<Property>
         get() {

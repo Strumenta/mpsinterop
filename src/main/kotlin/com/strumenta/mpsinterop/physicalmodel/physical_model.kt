@@ -169,13 +169,6 @@ class PhysicalModel(val name: String, val uuid: UUID){
         return null
     }
 
-
-//    override fun physicalConceptByName(name: String): PhysicalConcept? = conceptsByQName[name]
-//
-//    override fun conceptDeclarationByName(name: String): PhysicalNode? {
-//        TODO("not implemented $name") //To change body of created functions use File | Settings | File Templates.
-//    }
-
 }
 
 sealed class ReferenceTarget

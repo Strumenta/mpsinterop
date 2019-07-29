@@ -55,7 +55,7 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
     fun addChild(link: ContainmentLink, node: Node) {
         node.parent = this
         childrenMap.computeIfAbsent(link) {
-            LinkedList<Node>()
+            LinkedList()
         }.add(node)
     }
 
