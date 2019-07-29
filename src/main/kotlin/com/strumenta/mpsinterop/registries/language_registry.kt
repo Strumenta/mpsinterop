@@ -12,27 +12,23 @@ import kotlin.collections.HashMap
 
 class LanguageRegistry : ModelLocator {
     override fun locate(modelUUID: UUID): PhysicalModel? {
-        return modelsByID[modelUUID]
+        return modelsByUUID[modelUUID]
     }
 
-    //private val languagesByName = HashMap<String, Language>()
-    private val languagesByID = HashMap<LanguageUUID, Language>()
-    private val modelsByID = HashMap<LanguageUUID, PhysicalModel>()
+    private val languagesByUUID = HashMap<LanguageUUID, Language>()
+    private val modelsByUUID = HashMap<LanguageUUID, PhysicalModel>()
     private val nodeLocator: NodeLocator = SimpleNodeLocator(this)
 
     companion object {
         val DEFAULT = LanguageRegistry()
     }
 
-    //operator fun get(name: String) = languagesByID[name]
-
     fun add(language: Language) {
-        //languagesByName[language.name] = language
-        languagesByID[language.id] = language
+        languagesByUUID[language.id] = language
     }
 
     fun getConcept(conceptName: String): AbstractConcept? {
-        for (l in languagesByID.values) {
+        for (l in languagesByUUID.values) {
             val concept = l.concepts.find { it.qname() == conceptName }
             if (concept != null) {
                 return concept
@@ -54,8 +50,8 @@ class LanguageRegistry : ModelLocator {
         if (it.concept.qname == CONCEPT_DECLARATION_CONCEPT_NAME) {
             val languageName = model.name.removeSuffix(".structure")
             val languageID = languageIDforConceptNode(it)
-            val language = if (languageID in this.languagesByID) {
-                val l = this.languagesByID[languageID]!!
+            val language = if (languageID in this.languagesByUUID) {
+                val l = this.languagesByUUID[languageID]!!
                 l
             } else {
                 val l = Language(languageID, languageName)
@@ -67,11 +63,11 @@ class LanguageRegistry : ModelLocator {
 //                if (l.id != languageIDforConceptNode(it)) {
 //                    throw RuntimeException("We have two languages with same name and different ID")
 //                }
-//                languagesByID[l.id] = l
+//                languagesByUUID[l.id] = l
 //                l
 //            } else {
 //                val l = Language(model.languageUuidFromName(languageName), languageName)
-//                languagesByID[model.uuid] = l
+//                languagesByUUID[model.uuid] = l
 //                this.add(l)
 //                l
 //            }
@@ -96,8 +92,8 @@ class LanguageRegistry : ModelLocator {
         } else if (it.concept.qname == INTERFACE_CONCEPT_DECLARATION_CONCEPT_NAME) {
             val languageName = model.name.removeSuffix(".structure")
             val languageID = languageIDforConceptNode(it)
-            val language = if (languageID in this.languagesByID) {
-                val l = this.languagesByID[languageID]!!
+            val language = if (languageID in this.languagesByUUID) {
+                val l = this.languagesByUUID[languageID]!!
                 l
             } else {
                 val l = Language(model.languageUuidFromName(languageName), languageName)
@@ -122,7 +118,7 @@ class LanguageRegistry : ModelLocator {
     fun loadLanguageFromModel(model: PhysicalModel) {
         // We solve stuff in two rounds, because there could be dependency between concepts
         val concepts = HashMap<PhysicalNode, AbstractConcept>()
-        modelsByID[model.uuid] = model
+        modelsByUUID[model.uuid] = model
         model.roots.forEach {
             val concept = preloadConcept(it)
             if (concept != null) {
@@ -177,13 +173,13 @@ class LanguageRegistry : ModelLocator {
             return null
         }
         val langUUID = languageIDforConceptNode(it)
-        var concept = languagesByID[langUUID]?.conceptByID(conceptID)
+        var concept = languagesByUUID[langUUID]?.conceptByID(conceptID)
         if (concept == null) {
             concept = preloadConcept(it)
             if (concept == null) {
                 return null
             }
-            val l = languagesByID[langUUID]
+            val l = languagesByUUID[langUUID]
                     ?: throw RuntimeException("Language with ID $langUUID not found")
             l.add(concept)
         }
@@ -252,10 +248,10 @@ class LanguageRegistry : ModelLocator {
         return when (target) {
             is InModelReferenceTarget -> {
 //                val uuid = target.physicalModel.uuid
-//                if (uuid !in languagesByID) {
+//                if (uuid !in languagesByUUID) {
 //                    throw RuntimeException("Unknown language UUID $uuid")
 //                }
-//                val language = languagesByID[uuid]!!
+//                val language = languagesByUUID[uuid]!!
 //                val concept = language.concepts.find {
 //                    it.id.idValue == JavaFriendlyBase64.parseLong(target.nodeID)
 //                } ?: throw RuntimeException("Concept not found (ID ${target.nodeID})")
@@ -265,24 +261,24 @@ class LanguageRegistry : ModelLocator {
             is OutsideModelReferenceTarget -> {
                 // Note that this is the model ID, not the language ID
                 val uuid = target.modelUIID
-//                if (uuid !in languagesByID) {
+//                if (uuid !in languagesByUUID) {
 //                    throw RuntimeException("Unknown language UUID $uuid")
 //                }
-//                val language = languagesByID[uuid]!!
+//                val language = languagesByUUID[uuid]!!
                 //val concept = language.concepts.find { it.id.idValue == target.nodeID }!!
                 return this.findConceptWithID(target.nodeID)!!
             }
             is NullReferenceTarget -> null
             is ExplicitReferenceTarget -> {
                 val uuid = target.model
-                if (uuid !in languagesByID) {
-                    if (uuid in modelsByID) {
-                        val conceptNode = modelsByID[uuid]!!.findNodeByID(target.nodeId)
+                if (uuid !in languagesByUUID) {
+                    if (uuid in modelsByUUID) {
+                        val conceptNode = modelsByUUID[uuid]!!.findNodeByID(target.nodeId)
                         return loadConceptFromNode(conceptNode!!)
                     }
                     throw RuntimeException("Unknown language UUID $uuid (looking for node ${target.nodeId})")
                 }
-                val language = languagesByID[uuid]!!
+                val language = languagesByUUID[uuid]!!
                 val concept = language.concepts.find { target.nodeId.isCompatibleWith(it.id) }!!
                 return concept
             }
@@ -291,7 +287,7 @@ class LanguageRegistry : ModelLocator {
     }
 
     private fun findConceptWithID(nodeID: Long): AbstractConcept? {
-        for (l in languagesByID.values) {
+        for (l in languagesByUUID.values) {
             for (c in l.concepts) {
                 if (c.id == nodeID) {
                     return c
@@ -302,16 +298,13 @@ class LanguageRegistry : ModelLocator {
     }
 
     operator fun get(id: LanguageUUID): Language? {
-        return languagesByID[id]
+        return languagesByUUID[id]
     }
 
     fun getName(id: LanguageUUID): String? {
         return this[id]?.name
     }
 
-    fun knowsLanguageUUID(uuid: UUID) = uuid in languagesByID
+    fun knowsLanguageUUID(uuid: UUID) = uuid in languagesByUUID
 
-//    fun registerLanguage(languageId: UUID, langName: String) {
-//        languageNamesByID[languageId] = langName
-//    }
 }

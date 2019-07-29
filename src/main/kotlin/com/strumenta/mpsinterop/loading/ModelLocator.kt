@@ -11,7 +11,6 @@ interface ModelLocator {
 }
 
 interface NodeLocator {
-
     fun resolve(modelUUID: UUID, nodeID: NodeId): PhysicalNode?
     fun resolve(target: ReferenceTarget): PhysicalNode?
 }

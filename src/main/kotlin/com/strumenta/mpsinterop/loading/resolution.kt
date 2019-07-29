@@ -46,12 +46,6 @@ class PhysicalToLogicalConverter(
                         physicalModelsRegistry.findConceptDeclaration(physicalConcept.qname)
                                 ?: throw RuntimeException("Concept declaration for ${physicalConcept.qname} not found")
                 val thisConceptDeclarationLogical = toLogical(thisConceptDeclarationPhysical)
-                //            val thisConcept
-                //            val superConcept = constraintNode.reference("extends")
-                //            val implemented = LinkedList<Concept>()
-                //            val logicalConcept = Concept(physicalConcept.id, physicalConcept.name,
-                //                    superConcept, implemented)
-                //            logicalConcept
                 loadConceptFromConceptDeclaration(thisConceptDeclarationLogical)
             }
         }

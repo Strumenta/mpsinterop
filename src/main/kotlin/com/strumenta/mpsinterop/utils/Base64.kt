@@ -2,16 +2,13 @@ package com.strumenta.mpsinterop.utils
 
 import java.util.Arrays
 
-
 /**
  * Variation of Base64 encoding, with 10 digits, lower- and uppercase latin characters, '$' and '_' characters, basically, regular ASCII chars
  * with isJavaIdentifierPart == true, for the sake of use in generated code, e.g. method names.
  *
- *
  * This class is not thread-safe, uses internal buffers to save memory on (de-)serialize, do not share it between threads.
  *
- * @author Artem Tikhomirov
- * @since 3.5
+ * Author of the original class: Artem Tikhomirov
  */
 object JavaFriendlyBase64 {
     private val MIN_CHAR = '$'
