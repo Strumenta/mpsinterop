@@ -6,6 +6,7 @@ import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModule
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
+import com.strumenta.mpsinterop.utils.loadDocument
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream

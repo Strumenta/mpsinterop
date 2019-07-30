@@ -4,6 +4,7 @@ import com.strumenta.mpsinterop.logicalmodel.LanguageId
 import com.strumenta.mpsinterop.logicalmodel.NodeId
 import com.strumenta.mpsinterop.physicalmodel.*
 import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
+import com.strumenta.mpsinterop.utils.loadDocument
 import com.strumenta.mpsinterop.utils.processAllNodes
 import com.strumenta.mpsinterop.utils.processChildren
 import org.w3c.dom.Document
@@ -155,14 +156,6 @@ fun loadModel(document: Document) : PhysicalModel {
         physicalModel.addRoot(root)
     }
     return physicalModel
-}
-
-fun loadDocument(data: InputStream) : Document {
-    val builderFactory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
-    val builder = builderFactory.newDocumentBuilder()
-
-    val document = builder.parse(data)
-    return document
 }
 
 fun loadMpsModel(data: InputStream) : PhysicalModel {
