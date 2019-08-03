@@ -125,4 +125,3 @@ class PhysicalModel(val name: String, val uuid: UUID) {
         return conceptsByIndex.values.find { it.id == conceptID }
     }
 }
-

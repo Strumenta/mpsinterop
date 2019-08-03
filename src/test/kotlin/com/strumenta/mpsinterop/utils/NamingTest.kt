@@ -26,5 +26,4 @@ class NamingTest {
         assertEquals(true, "my.qualifiedName".isQualifiedName)
         assertEquals(true, "my.very.qualifiedName".isQualifiedName)
     }
-
 }

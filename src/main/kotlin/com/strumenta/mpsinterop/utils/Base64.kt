@@ -65,5 +65,4 @@ object Base64 {
         }
         return result
     }
-
 }
