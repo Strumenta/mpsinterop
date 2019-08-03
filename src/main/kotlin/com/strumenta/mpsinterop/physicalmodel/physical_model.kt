@@ -55,7 +55,7 @@ data class PhysicalRelation(val container: PhysicalConcept, val id: Long, val na
 
 data class PhysicalProperty(val container: PhysicalConcept, val id: Long, val name: String, val index: String)
 
-class PhysicalModule(val name: String, val uuid: UUID) {
+open class PhysicalModule(val name: String, val uuid: UUID) {
     val models = LinkedList<PhysicalModel>()
 }
 
