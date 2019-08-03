@@ -117,10 +117,6 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     // Properties
     // //////////////////////////////////////////
 
-    fun addProperty(property: PhysicalProperty, propertyValue: String) {
-        properties[property] = propertyValue
-    }
-
     fun propertyValue(property: PhysicalProperty): String? {
         return properties[property]
     }
@@ -146,6 +142,14 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
 
     operator fun set(property: PhysicalProperty, value: String) {
         properties[property] = value
+    }
+
+    operator fun set(property: PhysicalProperty, value: Boolean) {
+        this[property] = value.toString()
+    }
+
+    operator fun set(property: PhysicalProperty, value: Long) {
+        this[property] = value.toString()
     }
 
     fun booleanPropertyValue(propertyName: String): Boolean {

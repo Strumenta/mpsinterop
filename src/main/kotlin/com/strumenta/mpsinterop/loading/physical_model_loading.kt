@@ -23,7 +23,7 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, elem
         element.processChildren("property") {
             val value = it.getAttribute("value")
             val property = physicalModel.getPropertyByIndex(it.getAttribute("role"))
-            modelNode.addProperty(property, value)
+            modelNode[property] = value
         }
         element.processChildren("node") {
             val childModelNode = elementToModelNode(physicalModel, modelNode, it)
