@@ -1,6 +1,5 @@
 
 import com.strumenta.mpsinterop.registries.Indexer
-import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

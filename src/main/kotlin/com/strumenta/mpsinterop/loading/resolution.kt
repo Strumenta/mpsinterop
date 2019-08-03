@@ -1,16 +1,19 @@
 package com.strumenta.mpsinterop.loading
 
-import com.strumenta.mpsinterop.logicalmodel.*
+import com.strumenta.mpsinterop.logicalmodel.AbstractConcept
+import com.strumenta.mpsinterop.logicalmodel.Concept
+import com.strumenta.mpsinterop.logicalmodel.Model
+import com.strumenta.mpsinterop.logicalmodel.Node
 import com.strumenta.mpsinterop.physicalmodel.PhysicalConcept
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
+import com.strumenta.mpsinterop.registries.Indexer
 import com.strumenta.mpsinterop.registries.LanguageRegistry
-import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
 import com.strumenta.mpsinterop.registries.findConceptDeclaration
 
 class PhysicalToLogicalConverter(
         val languageRegistry: LanguageRegistry = LanguageRegistry.DEFAULT,
-        val physicalModelsRegistry: ModelLocator = PhysicalModelsRegistry.DEFAULT) {
+        val physicalModelsRegistry: ModelLocator = Indexer.DEFAULT) {
     private val convertedConcepts = HashMap<PhysicalConcept, AbstractConcept>()
     private val convertedNodes = HashMap<PhysicalNode, Node>()
 

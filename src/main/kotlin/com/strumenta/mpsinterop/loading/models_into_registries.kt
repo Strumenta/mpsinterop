@@ -1,19 +1,15 @@
 package com.strumenta.mpsinterop.loading
 
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
-import com.strumenta.mpsinterop.logicalmodel.Language
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModule
 import com.strumenta.mpsinterop.registries.LanguageRegistry
-import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
 import com.strumenta.mpsinterop.utils.dumpToTempFile
 import com.strumenta.mpsinterop.utils.loadDocument
 import java.io.File
-import java.io.FileInputStream
 import java.io.InputStream
-import java.util.jar.JarFile
-import java.io.FileOutputStream
 import java.util.*
+import java.util.jar.JarFile
 import java.util.zip.ZipException
 
 fun LanguageRegistry.loadLanguageFromJar(inputStream: InputStream)  {

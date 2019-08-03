@@ -49,6 +49,11 @@ typealias ModelLoadingInfo = LoadingInfo<PhysicalModel>
 typealias LanguageLoadingInfo = LoadingInfo<PhysicalLanguage>
 
 class Indexer : ModelLocator {
+
+    companion object {
+        val DEFAULT = Indexer()
+    }
+
     override fun locateModel(name: String): PhysicalModel? {
         return modelsByName[name]?.element
     }
