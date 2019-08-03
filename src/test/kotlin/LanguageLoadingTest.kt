@@ -124,6 +124,4 @@ class LanguageLoadingTest {
 
         assertEquals(2, concept.allProperties.size)
     }
-
 }
-

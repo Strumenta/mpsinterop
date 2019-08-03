@@ -9,7 +9,7 @@ import kotlin.test.*
 
 class LoadingLogicalModelsFromMpsFile {
 
-    fun loadBasicLanguageRegistry() : LanguageRegistry {
+    fun loadBasicLanguageRegistry(): LanguageRegistry {
         val languageRegistry = LanguageRegistry()
 
         val inputStream = LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
@@ -51,7 +51,7 @@ class LoadingLogicalModelsFromMpsFile {
     fun loadBaseConceptHasRightLanguageID() {
         val languageRegistry = loadBasicLanguageRegistry()
         // This is the UUID of the structure model
-        //val expectedLangUUID = UUID.fromString("00000000-0000-4000-0000-011c89590288")
+        // val expectedLangUUID = UUID.fromString("00000000-0000-4000-0000-011c89590288")
         val expectedLangUUID = UUID.fromString("ceab5195-25ea-4f22-9b92-103b95ca8c0c")
         val langCore = languageRegistry[expectedLangUUID]
         assertNotNull(langCore)
@@ -63,7 +63,7 @@ class LoadingLogicalModelsFromMpsFile {
         // The right language ID for jetbrains.mps.lang.core.structure is 00000000-0000-4000-0000-011c89590288
         // however it has been loaded with the wrong language ID. Why is this the case?
         val languageRegistry = loadBasicLanguageRegistry()
-        //val physicalModelRegistry = PhysicalModelsRegistry()
+        // val physicalModelRegistry = PhysicalModelsRegistry()
         val formatsStructurePhysicalModel = languageRegistry.loadMpsFile(
                 LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream("/formats-structure.mps"))
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
@@ -97,6 +97,4 @@ class LoadingLogicalModelsFromMpsFile {
 //        // TODO check no children
 //        TODO()
     }
-
 }
-

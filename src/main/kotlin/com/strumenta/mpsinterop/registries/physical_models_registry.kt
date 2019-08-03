@@ -1,12 +1,9 @@
 package com.strumenta.mpsinterop.registries
 
-import com.strumenta.mpsinterop.loading.ModelLocator
-import com.strumenta.mpsinterop.physicalmodel.PhysicalLanguage
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mpsinterop.physicalmodel.name
 import java.util.*
-
 
 val CONCEPT_DECLARATION = "jetbrains.mps.lang.structure.structure.ConceptDeclaration"
 

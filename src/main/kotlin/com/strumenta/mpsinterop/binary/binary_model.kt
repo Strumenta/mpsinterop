@@ -39,31 +39,31 @@ private val STUB_ID: Byte = 0x13
 
 // see https://github.com/JetBrains/MPS/blob/4e050f99500d7781d3b0cc5756ec07f129dc3a54/core/persistence/source/jetbrains/mps/persistence/binary/BinaryPersistence.java
 
-internal const val NULL : Byte = 0x70
-internal const val NODEID_STRING : Byte = 0x17
-internal const val NODEID_LONG : Byte = 0x18
-internal const val MODELID_STRING : Byte = 0x26
-internal const val MODELID_REGULAR : Byte = 0x28
-internal const val MODELID_FOREIGN : Byte = 0x27
-internal const val MODELID_INTEGER : Byte = 0x29
-internal const val NODEPTR : Byte = 0x44
-internal const val MODULEID_FOREIGN : Byte = 0x47
-internal const val MODULEID_REGULAR : Byte = 0x48
-internal const val MODELREF : Byte = 7
-internal const val MODELREF_INDEX : Byte = 9
-internal const val MODULEREF_MODULEID : Byte = 0x17
-internal const val MODULEREF_NAMEONLY : Byte = 0x18
-internal const val MODULEREF_INDEX : Byte = 0x19
-internal const val LANGUAGE : Byte = 0x30
-internal const val LANGUAGE_INDEX : Byte = 0x31
-internal const val CONCEPT : Byte = 0x32
-internal const val CONCEPT_INDEX : Byte = 0x33
-internal const val PROPERTY : Byte = 0x34
-internal const val PROPERTY_INDEX : Byte = 0x35
-internal const val ASSOCIATION : Byte = 0x36
-internal const val ASSOCIATION_INDEX : Byte = 0x37
-internal const val AGGREGATION : Byte = 0x38
-internal const val AGGREGATION_INDEX : Byte = 0x39
+internal const val NULL: Byte = 0x70
+internal const val NODEID_STRING: Byte = 0x17
+internal const val NODEID_LONG: Byte = 0x18
+internal const val MODELID_STRING: Byte = 0x26
+internal const val MODELID_REGULAR: Byte = 0x28
+internal const val MODELID_FOREIGN: Byte = 0x27
+internal const val MODELID_INTEGER: Byte = 0x29
+internal const val NODEPTR: Byte = 0x44
+internal const val MODULEID_FOREIGN: Byte = 0x47
+internal const val MODULEID_REGULAR: Byte = 0x48
+internal const val MODELREF: Byte = 7
+internal const val MODELREF_INDEX: Byte = 9
+internal const val MODULEREF_MODULEID: Byte = 0x17
+internal const val MODULEREF_NAMEONLY: Byte = 0x18
+internal const val MODULEREF_INDEX: Byte = 0x19
+internal const val LANGUAGE: Byte = 0x30
+internal const val LANGUAGE_INDEX: Byte = 0x31
+internal const val CONCEPT: Byte = 0x32
+internal const val CONCEPT_INDEX: Byte = 0x33
+internal const val PROPERTY: Byte = 0x34
+internal const val PROPERTY_INDEX: Byte = 0x35
+internal const val ASSOCIATION: Byte = 0x36
+internal const val ASSOCIATION_INDEX: Byte = 0x37
+internal const val AGGREGATION: Byte = 0x38
+internal const val AGGREGATION_INDEX: Byte = 0x39
 
 class SModelHeader {
     val DO_NOT_GENERATE = "doNotGenerate"
@@ -79,7 +79,7 @@ class SModelHeader {
     private var myPersistenceVersion = -1
     private var doNotGenerate = false
     private val myOptionalProperties = HashMap<String, String>()
-    //private val myMetaInfoProvider: MetaModelInfoProvider? = null
+    // private val myMetaInfoProvider: MetaModelInfoProvider? = null
 
     fun getPersistenceVersion(): Int {
         return myPersistenceVersion
@@ -199,10 +199,10 @@ class SModelHeader {
 //    }
 }
 
-fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: LanguageRegistry? = null) : PhysicalModel {
+fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: LanguageRegistry? = null): PhysicalModel {
     val mis = ModelInputStream(inputStream)
     val modelHeader = loadHeader(mis)
-    //val model = SModel(modelHeader.getModelReference(), modelHeader)
+    // val model = SModel(modelHeader.getModelReference(), modelHeader)
     val pModel = PhysicalModel(modelHeader.getModelReference()!!.name, modelHeader.getModelReference()!!.id.uuid())
     val bp = BinaryPersistence()
     val languageLoaderHelper = LanguageLoaderHelper()
@@ -212,7 +212,7 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: Langu
     val reader = NodesReader(modelHeader.getModelReference()!!, mis, rh)
     reader.readNodesInto(pModel)
 //    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
-            //TODO()
+            // TODO()
 
     if (languageRegistry != null) {
         languageLoaderHelper.loadedLanguages().forEach { languageRegistry.add(it) }
@@ -252,7 +252,7 @@ private fun loadHeader(mis: ModelInputStream): SModelHeader {
     val modelRef = mis.readModelReference()
     val result = SModelHeader()
     result.modelRef = modelRef
-    mis.readInt() //left for compatibility: old version was here
+    mis.readInt() // left for compatibility: old version was here
     mis.mark(4)
     if (mis.readByte() == HEADER_ATTRIBUTES) {
         result.setDoNotGenerate(mis.readBoolean())

@@ -11,8 +11,9 @@ enum class PrimitivePropertyType : PropertyType {
 }
 
 data class EnumerationAlternative(val name: String, val value: String?)
-data class EnumerationPropertyType(val name: String,
-                                   val baseType: PrimitivePropertyType,
-                                   val alternatives: List<EnumerationAlternative>) : PropertyType
+data class EnumerationPropertyType(
+    val name: String,
+    val baseType: PrimitivePropertyType,
+    val alternatives: List<EnumerationAlternative>
+) : PropertyType
 data class ConstrainedPropertyType(val qname: String) : PropertyType
-

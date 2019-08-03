@@ -3,7 +3,7 @@ package com.strumenta.mpsinterop.loading
 import com.strumenta.mpsinterop.logicalmodel.LanguageId
 import com.strumenta.mpsinterop.logicalmodel.NodeId
 import com.strumenta.mpsinterop.physicalmodel.*
-import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
+import com.strumenta.mpsinterop.utils.Base64
 import com.strumenta.mpsinterop.utils.loadDocument
 import com.strumenta.mpsinterop.utils.processAllNodes
 import com.strumenta.mpsinterop.utils.processChildren
@@ -15,11 +15,11 @@ import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
 import java.util.*
 
-fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, element: Element) : PhysicalNode {
+fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, element: Element): PhysicalNode {
     val conceptIndex = element.getAttribute("concept")
     val id = element.getAttribute("id")
     try {
-        val modelNode = PhysicalNode(parent, physicalModel.conceptByIndex(conceptIndex), NodeId.regular(JavaFriendlyBase64.parseLong(id)))
+        val modelNode = PhysicalNode(parent, physicalModel.conceptByIndex(conceptIndex), NodeId.regular(Base64.parseLong(id)))
         element.processChildren("property") {
             val value = it.getAttribute("value")
             val property = physicalModel.propertyByIndex(it.getAttribute("role"))
@@ -55,12 +55,12 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, elem
             modelNode.addReference(role, refValue)
         }
         return modelNode
-    } catch (e : Exception) {
+    } catch (e: Exception) {
         throw RuntimeException("Issue loading node with ID $id", e)
     }
 }
 
-private fun rawNameToUuid(rawName: String) : UUID {
+private fun rawNameToUuid(rawName: String): UUID {
     var nameInParens = rawName.substring(rawName.indexOf('(') + 1, rawName.indexOf(')'))
     if (nameInParens.lastIndexOf('/') != -1) {
         nameInParens = nameInParens.substring(nameInParens.lastIndexOf('/') + 1, nameInParens.length)
@@ -79,7 +79,7 @@ private fun rawNameToUuid(rawName: String) : UUID {
         uuidStr = uuidStr.substring(0, uuidStr.indexOf('/'))
     }
 
-    var uuid : UUID?
+    var uuid: UUID?
     try {
         uuid = UUID.fromString(uuidStr)
     } catch (e: RuntimeException) {
@@ -88,7 +88,7 @@ private fun rawNameToUuid(rawName: String) : UUID {
     return uuid
 }
 
-private fun rawNameToLanguageName(rawName: String) : String {
+private fun rawNameToLanguageName(rawName: String): String {
     var nameInParens = rawName.substring(rawName.indexOf('(') + 1, rawName.indexOf(')'))
     if (nameInParens.lastIndexOf('/') != -1) {
         nameInParens = nameInParens.substring(nameInParens.lastIndexOf('/') + 1, nameInParens.length)
@@ -99,14 +99,14 @@ private fun rawNameToLanguageName(rawName: String) : String {
     return nameInParens
 }
 
-fun loadModel(document: Document) : PhysicalModel {
+fun loadModel(document: Document): PhysicalModel {
     val rawName = document.documentElement.getAttribute("ref")
 
     val nameInParens = rawNameToLanguageName(rawName)
     val uuid = rawNameToUuid(rawName)
 
     val physicalModel = PhysicalModel(nameInParens, uuid)
-    //physicalModel.putLanguageInRegistry(uuid, nameInParens.removeSuffix(".structure"))
+    // physicalModel.putLanguageInRegistry(uuid, nameInParens.removeSuffix(".structure"))
     document.documentElement.processAllNodes("import") {
         val index = it.getAttribute("index")
         val rawName = it.getAttribute("ref")
@@ -117,7 +117,7 @@ fun loadModel(document: Document) : PhysicalModel {
     }
     document.documentElement.processAllNodes("concept") {
         val languageId = UUID.fromString((it.parentNode as Element).getAttribute("id"))
-        val languageName =  (it.parentNode as Element).getAttribute("name")
+        val languageName = (it.parentNode as Element).getAttribute("name")
         physicalModel.putLanguageInRegistry(languageId, languageName)
         val simpleConceptName = it.getAttribute("name").split(".").last()
         val concept = PhysicalConcept(
@@ -158,7 +158,7 @@ fun loadModel(document: Document) : PhysicalModel {
     return physicalModel
 }
 
-fun loadMpsModel(data: InputStream) : PhysicalModel {
+fun loadMpsModel(data: InputStream): PhysicalModel {
     return loadModel(loadDocument(data))
 }
 

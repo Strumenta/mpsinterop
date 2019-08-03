@@ -3,7 +3,6 @@ package com.strumenta.mpsinterop.logicalmodel
 import java.util.*
 import kotlin.collections.HashMap
 
-
 open class Node(val concept: Concept, val nodeId: NodeId?) {
 
     private var _parent: Node? = null
@@ -39,10 +38,10 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
     val root: Boolean
         get() = parent == null
     val numberOfChildren: Int
-        get() = childrenMap.values.fold(0) { acc, mutableList -> acc + mutableList.size  }
+        get() = childrenMap.values.fold(0) { acc, mutableList -> acc + mutableList.size }
     val numberOfProperties: Int
         get() = properties.size
-    val children : List<Node>
+    val children: List<Node>
         get() = childrenMap.entries.sortedBy { it.key.name }.foldRight(LinkedList()) {
             l, acc ->
                 acc.addAll(l.value)
@@ -71,7 +70,7 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
         return properties.keys.find { it.name == name } ?: concept.findProperty(name)
     }
 
-    val name : String?
+    val name: String?
         get() = this.properties.entries.firstOrNull { it.key.name == "name" }?.value
 
     override fun toString(): String {
@@ -87,4 +86,3 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
         }
     }
 }
-

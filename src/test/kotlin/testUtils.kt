@@ -1,5 +1,4 @@
 import com.strumenta.mpsinterop.logicalmodel.Language
-import com.strumenta.mpsinterop.logicalmodel.Concept
 import com.strumenta.mpsinterop.logicalmodel.InterfaceConcept
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import java.util.*

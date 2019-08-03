@@ -1,6 +1,6 @@
 package com.strumenta.mpsinterop.logicalmodel
 
-enum class ConceptKind {
+internal enum class ConceptKind {
     NORMAL,
     INTERFACE,
     IMPLEMENTATION,

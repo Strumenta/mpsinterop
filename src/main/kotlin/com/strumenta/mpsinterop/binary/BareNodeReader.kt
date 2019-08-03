@@ -2,7 +2,6 @@ package com.strumenta.mpsinterop.binary
 import com.strumenta.mpsinterop.logicalmodel.*
 import com.strumenta.mpsinterop.physicalmodel.*
 
-
 /*
  * Copyright 2003-2015 JetBrains s.r.o.
  *
@@ -20,21 +19,21 @@ import com.strumenta.mpsinterop.physicalmodel.*
  */
 
 //
-//import com.strumenta.mpsinterop.binary.ModelInputStream
-//import com.strumenta.mpsinterop.binary.SModelReference
-//import jetbrains.mps.extapi.model.SModelData
-//import jetbrains.mps.smodel.DynamicReference
-//import jetbrains.mps.smodel.DynamicReference.DynamicReferenceOrigin
-//import jetbrains.mps.smodel.StaticReference
-//import jetbrains.mps.util.io.ModelInputStream
-//import org.jetbrains.mps.openapi.language.Concept
-//import org.jetbrains.mps.openapi.language.ContainmentLink
-//import org.jetbrains.mps.openapi.language.Property
-//import org.jetbrains.mps.openapi.language.ReferenceLink
-//import org.jetbrains.mps.openapi.model.SModelReference
-//import org.jetbrains.mps.openapi.model.Node
-//import org.jetbrains.mps.openapi.model.NodeId
-//import org.jetbrains.mps.openapi.model.Reference
+// import com.strumenta.mpsinterop.binary.ModelInputStream
+// import com.strumenta.mpsinterop.binary.SModelReference
+// import jetbrains.mps.extapi.model.SModelData
+// import jetbrains.mps.smodel.DynamicReference
+// import jetbrains.mps.smodel.DynamicReference.DynamicReferenceOrigin
+// import jetbrains.mps.smodel.StaticReference
+// import jetbrains.mps.util.io.ModelInputStream
+// import org.jetbrains.mps.openapi.language.Concept
+// import org.jetbrains.mps.openapi.language.ContainmentLink
+// import org.jetbrains.mps.openapi.language.Property
+// import org.jetbrains.mps.openapi.language.ReferenceLink
+// import org.jetbrains.mps.openapi.model.SModelReference
+// import org.jetbrains.mps.openapi.model.Node
+// import org.jetbrains.mps.openapi.model.NodeId
+// import org.jetbrains.mps.openapi.model.Reference
 
 import java.io.IOException
 import java.lang.UnsupportedOperationException
@@ -46,8 +45,10 @@ import java.util.ArrayList
  *
  * @author Artem Tikhomirov
  */
-internal abstract class BareNodeReader(private val modelReference: SModelReference,
-                                   protected val modelInputStream: ModelInputStream) {
+internal abstract class BareNodeReader(
+    private val modelReference: SModelReference,
+    protected val modelInputStream: ModelInputStream
+) {
 
     companion object {
         private const val REF_THIS_MODEL: Byte = 17
@@ -95,7 +96,7 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
             val kind = modelInputStream.readByte().toInt()
             assert(kind in 1..3)
             val targetNodeId = if (kind == 1) modelInputStream.readNodeId() else null
-            //val origin = if (kind == 3) DynamicReferenceOrigin(modelInputStream.readNodePointer(), modelInputStream.readNodePointer()) else null
+            // val origin = if (kind == 3) DynamicReferenceOrigin(modelInputStream.readNodePointer(), modelInputStream.readNodePointer()) else null
             val origin = if (kind == 3) TODO() else null
             val targetModelKind = modelInputStream.readByte().toInt()
             assert(targetModelKind == REF_OTHER_MODEL.toInt() || targetModelKind == REF_THIS_MODEL.toInt())
@@ -127,8 +128,7 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
                     node.addReference(sref, PhysicalReferenceValue(FailedLoadingReferenceTarget(e), resolveInfo))
                 }
                 return reference
-            } else
-                if (kind == 2 || kind == 3) {
+            } else if (kind == 2 || kind == 3) {
                     TODO()
 //                val reference = DynamicReference(
 //                        relation,
@@ -139,7 +139,7 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
 //                    reference.setOrigin(origin)
 //                }
 //                node.setReference(relation, reference)
-                    //return reference
+                    // return reference
                 } else {
                     throw IOException("unknown reference type")
                 }
@@ -160,7 +160,7 @@ internal abstract class BareNodeReader(private val modelReference: SModelReferen
             val key = readUserObject()
             val value = readUserObject()
             if (key != null && value != null) {
-                //node.putUserObject(key, value)
+                // node.putUserObject(key, value)
             }
             i += 2
         }

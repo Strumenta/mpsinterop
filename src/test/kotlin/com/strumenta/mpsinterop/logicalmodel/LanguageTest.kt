@@ -67,6 +67,4 @@ class LanguageTest {
         lang.remove(conc)
         assertEquals(null, lang.conceptByID(123L))
     }
-
 }
-

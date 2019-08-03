@@ -10,9 +10,9 @@ internal class NodesReader(modelReference: SModelReference, `is`: ModelInputStre
     override fun instantiate(parent: PhysicalNode?): PhysicalNode {
         val conceptIndex = modelInputStream.readShort().toInt()
         val concept = myReadHelper.readConcept(conceptIndex)
-        //println("Concept $concept (index $conceptIndex)")
+        // println("Concept $concept (index $conceptIndex)")
         val nodeId = modelInputStream.readNodeId()
-        //println("NodeId $nodeId")
+        // println("NodeId $nodeId")
         val linkId = modelInputStream.readShort().toInt()
         val link = if (linkId == -1) null else myReadHelper.readAggregation(linkId)
 

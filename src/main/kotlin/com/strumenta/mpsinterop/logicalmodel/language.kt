@@ -10,7 +10,7 @@ data class Language(val id: LanguageUUID, val name: String) {
 
     private val _concepts = LinkedList<AbstractConcept>()
 
-    val concepts : List<AbstractConcept>
+    val concepts: List<AbstractConcept>
         get() = _concepts
 
     fun add(concept: AbstractConcept) {
@@ -36,5 +36,4 @@ data class Language(val id: LanguageUUID, val name: String) {
     }
 
     fun conceptByID(conceptID: Long) = _concepts.find { it.id == conceptID }
-
 }

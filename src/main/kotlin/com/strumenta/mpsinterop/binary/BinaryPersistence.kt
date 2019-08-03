@@ -2,11 +2,11 @@ package com.strumenta.mpsinterop.binary
 
 import com.strumenta.mpsinterop.logicalmodel.*
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
-import java.io.IOException;
+import java.io.IOException
 import java.util.*
 
 internal class LanguageLoaderHelper {
-    //private val languageNamesByID = HashMap<LanguageUUID, String>()
+    // private val languageNamesByID = HashMap<LanguageUUID, String>()
     private val languageByID = HashMap<LanguageUUID, Language>()
     fun registerLanguage(id: UUID, name: String) {
         if (id in languageByID) {
@@ -15,7 +15,7 @@ internal class LanguageLoaderHelper {
             languageByID[id] = Language(id, name)
         }
     }
-    fun loadedLanguages() : Set<Language> {
+    fun loadedLanguages(): Set<Language> {
         return languageByID.values.toSet()
     }
 }
@@ -25,7 +25,6 @@ internal class LanguageLoaderHelper {
  * @author Artem Tikhomirov
  */
 internal class BinaryPersistence {
-
 
 //    @Throws(ModelReadException::class)
 //    fun readHeader(@NotNull source: StreamDataSource): SModelHeader {
@@ -118,7 +117,6 @@ internal class BinaryPersistence {
 //        return result
 //    }
 
-
     private val HEADER_START = -0x6e545457
     private val STREAM_ID_V1 = 0x00000300
     private val STREAM_ID_V2 = 0x00000400
@@ -130,7 +128,6 @@ internal class BinaryPersistence {
     private val REGISTRY_END = -0x5a5a5a5b
     private val STUB_NONE: Byte = 0x12
     private val STUB_ID: Byte = 0x13
-
 
 //    @NotNull
 //    @Throws(IOException::class)
@@ -209,19 +206,21 @@ internal class BinaryPersistence {
 //        loadingModel = modelData
 //    }
 
-    internal fun loadModelProperties(mis: ModelInputStream,
-                                     languageLoaderHelper: LanguageLoaderHelper,
-                                     model: PhysicalModel): ReadHelper {
+    internal fun loadModelProperties(
+        mis: ModelInputStream,
+        languageLoaderHelper: LanguageLoaderHelper,
+        model: PhysicalModel
+    ): ReadHelper {
         val readHelper = loadRegistry(mis, languageLoaderHelper, model)
 //
         loadUsedLanguages(mis, languageLoaderHelper)
 //
         for (ref in loadModuleRefList(mis)) {
             // FIXME add temporary code to read both module ref and SLanguage in 3.4 (write SLangugae, read both)
-            //SModelLegacy(loadingModel).addEngagedOnGenerationLanguage(ref)
+            // SModelLegacy(loadingModel).addEngagedOnGenerationLanguage(ref)
         }
         for (ref in loadModuleRefList(mis)) {
-            //loadingModel.addDevKit(ref)
+            // loadingModel.addDevKit(ref)
         }
 
         loadImports(mis)
@@ -340,9 +339,11 @@ internal class BinaryPersistence {
 //    }
 //
 
-    private fun loadRegistry(mis: ModelInputStream,
-                             languageLoaderHelper: LanguageLoaderHelper,
-                             model: PhysicalModel): ReadHelper {
+    private fun loadRegistry(
+        mis: ModelInputStream,
+        languageLoaderHelper: LanguageLoaderHelper,
+        model: PhysicalModel
+    ): ReadHelper {
         assertSyncToken(mis, REGISTRY_START)
         // see #saveRegistry, we use position of an element in persistence as its index
         var langIndex: Int
@@ -358,29 +359,29 @@ internal class BinaryPersistence {
 
         val rh = ReadHelper()
         var langCount = mis.readShort().toInt()
-        //println("langCount $langCount")
+        // println("langCount $langCount")
         while (langCount-- > 0) {
             val languageId = mis.readUUID()
             val langName = mis.readString()
             languageLoaderHelper.registerLanguage(languageId, langName!!)
             model.putLanguageInRegistry(languageId, langName)
-            //println("langName $langName")
+            // println("langName $langName")
 
-            //rh.withLanguage(languageId, langName, langIndex++)
+            // rh.withLanguage(languageId, langName, langIndex++)
 //            //
             var conceptCount = mis.readShort().toInt()
-            //println("conceptCount $conceptCount")
+            // println("conceptCount $conceptCount")
             while (conceptCount-- > 0) {
                 val conceptId = AbsoluteConceptId(languageId, mis.readLong())
-                //println("conceptId $conceptId")
+                // println("conceptId $conceptId")
                 val conceptName = mis.readString()
-                //println("  conceptName $conceptName")
+                // println("  conceptName $conceptName")
                 val flags = mis.readByte().toInt()
-                //println("  flags $flags")
+                // println("  flags $flags")
                 val staticScopeValue = flags and 0x0f
                 val conceptKindValue = flags shr 4 and 0x0f
-                //println("  staticScopeValue $staticScopeValue")
-                //println("  conceptKindValue $conceptKindValue")
+                // println("  staticScopeValue $staticScopeValue")
+                // println("  conceptKindValue $conceptKindValue")
                 val stubToken = mis.readByte().toInt()
                 val stubId: AbsoluteConceptId?
                 if (stubToken == STUB_NONE.toInt()) {
@@ -400,26 +401,26 @@ internal class BinaryPersistence {
 //                //
                 conceptIndex++
                 var propertyCount = mis.readShort().toInt()
-                //println("  propertyCount $propertyCount")
+                // println("  propertyCount $propertyCount")
                 while (propertyCount-- > 0) {
                     val propertyId = mis.readLong()
                     val propertyName = mis.readString()!!
-                    //println("PROP $conceptId $propertyName")
+                    // println("PROP $conceptId $propertyName")
                     rh.property(AbsolutePropertyId(conceptId, propertyId), propertyName, propertyIndex)
                     propertyIndex++
                 }
 //                //
                 var associationCount = mis.readShort().toInt()
-                //println("  associationCount $associationCount")
+                // println("  associationCount $associationCount")
                 while (associationCount-- > 0) {
                     val id = mis.readLong()
                     val name = mis.readString()
-                    //println("     $id $name")
+                    // println("     $id $name")
                     rh.association(AbsoluteReferenceLinkId(conceptId, id), name!!, associationIndex++)
                 }
 //                //
                 var aggregationCount = mis.readShort().toInt()
-                //println("  aggregationCount $aggregationCount")
+                // println("  aggregationCount $aggregationCount")
                 while (aggregationCount-- > 0) {
                     rh.aggregation(AbsoluteContainmentLinkId(conceptId, mis.readLong()), mis.readString()!!, mis.readBoolean(), aggregationIndex++)
                 }
@@ -451,9 +452,9 @@ internal class BinaryPersistence {
             val id = `is`.readUUID()
             val name = `is`.readString()
             languageLoaderHelper.registerLanguage(id, name!!)
-            //println("used language $id $name")
-            //val l = MetaAdapterFactory.getLanguage(id, name)
-            //loadingModel.addLanguage(l)
+            // println("used language $id $name")
+            // val l = MetaAdapterFactory.getLanguage(id, name)
+            // loadingModel.addLanguage(l)
         }
     }
 //
@@ -487,13 +488,13 @@ internal class BinaryPersistence {
 //    @Throws(IOException::class)
     private fun loadImports(`is`: ModelInputStream)/*: List<ImportElement>*/ {
         val size = `is`.readInt()
-        //val result = ArrayList<ImportElement>()
+        // val result = ArrayList<ImportElement>()
         for (i in 0 until size) {
             val ref = `is`.readModelReference()
             val i = `is`.readInt()
-            //result.add(ImportElement(ref, -1, `is`.readInt()))
+            // result.add(ImportElement(ref, -1, `is`.readInt()))
         }
-        //return result
+        // return result
     }
 //
 //    @Throws(IOException::class)
@@ -541,4 +542,3 @@ internal class BinaryPersistence {
         }
     }
 }
-

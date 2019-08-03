@@ -1,57 +1,25 @@
 package com.strumenta.mpsinterop.physicalmodel
 
-import com.strumenta.mpsinterop.logicalmodel.LanguageId
 import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.NodeId
-import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
+import com.strumenta.mpsinterop.utils.Base64
 import java.lang.RuntimeException
 import java.lang.UnsupportedOperationException
 import java.util.*
 import kotlin.collections.HashMap
-
-/**
- * Simplified concept, as it appears in a model
- */
-data class PhysicalConcept(val languageId: LanguageId, val id: Long,
-                           val name: String, val index: String) {
-    init {
-        require(name.indexOf('.') == -1) { "A concept name should not be qualified ($name)" }
-    }
-    private val properties = LinkedList<PhysicalProperty>()
-    private val relations = LinkedList<PhysicalRelation>()
-
-    fun addProperty(property: PhysicalProperty) {
-        properties.add(property)
-    }
-
-    fun propertyByName(name: String): PhysicalProperty {
-        return properties.find { it.name == name }
-                ?: throw IllegalArgumentException("Property $name not found in concept $name")
-    }
-
-    fun addRelation(relation: PhysicalRelation) {
-        relations.add(relation)
-    }
-
-    fun relationByName(name: String): PhysicalRelation {
-        return relations.find { it.name == name }!!
-    }
-
-    val qname: String
-        get() {
-            val languageName = languageId.name
-            return "$languageName.structure.$name"
-        }
-
-}
 
 enum class RelationKind {
     CONTAINMENT,
     REFERENCE
 }
 
-data class PhysicalRelation(val container: PhysicalConcept, val id: Long, val name: String, val index: String,
-                            val kind: RelationKind)
+data class PhysicalRelation(
+    val container: PhysicalConcept,
+    val id: Long,
+    val name: String,
+    val index: String,
+    val kind: RelationKind
+)
 
 data class PhysicalProperty(val container: PhysicalConcept, val id: Long, val name: String, val index: String)
 
@@ -65,11 +33,11 @@ open class PhysicalModule(val name: String, val uuid: UUID) {
  * Each concept is identified by an ID globally and by an index within a single mps file,
  * same is true for relations and declaredProperties.
  */
-class PhysicalModel(val name: String, val uuid: UUID){
+class PhysicalModel(val name: String, val uuid: UUID) {
 
     val roots = LinkedList<PhysicalNode>()
 
-    var module : PhysicalModule? = null
+    var module: PhysicalModule? = null
         set(value) {
             if (field != null) {
                 field!!.models.remove(this)
@@ -91,11 +59,11 @@ class PhysicalModel(val name: String, val uuid: UUID){
         roots.add(root)
     }
 
-    fun onRoots(op: (PhysicalNode)->Unit) {
+    fun onRoots(op: (PhysicalNode) -> Unit) {
         roots.forEach { op(it) }
     }
 
-    fun onRoots(concept: PhysicalConcept, op: (PhysicalNode)->Unit) {
+    fun onRoots(concept: PhysicalConcept, op: (PhysicalNode) -> Unit) {
         roots.filter { it.concept == concept }.forEach { op(it) }
     }
 
@@ -123,17 +91,17 @@ class PhysicalModel(val name: String, val uuid: UUID){
         relationsByIndex[relation.index] = relation
     }
 
-    fun conceptByIndex(index: String) : PhysicalConcept = conceptsByIndex[index]!!
-    fun languageUUIDByIndex(index: String) : LanguageUUID = languageUUIDsFromIndex[index]
+    fun conceptByIndex(index: String): PhysicalConcept = conceptsByIndex[index]!!
+    fun languageUUIDByIndex(index: String): LanguageUUID = languageUUIDsFromIndex[index]
             ?: throw java.lang.IllegalArgumentException("Unknown language index $index. Known indexes: ${languageUUIDsFromIndex.keys.joinToString(", ")}")
 
-    fun relationByIndex(index: String) : PhysicalRelation = relationsByIndex[index]
+    fun relationByIndex(index: String): PhysicalRelation = relationsByIndex[index]
             ?: throw java.lang.IllegalArgumentException("Relation with index $index not found")
 
-    fun propertyByIndex(index: String) : PhysicalProperty = propertiesByIndex[index]!!
+    fun propertyByIndex(index: String): PhysicalProperty = propertiesByIndex[index]!!
     fun getProperty(conceptName: String, propertyName: String): PhysicalProperty {
-        return conceptsByQName[conceptName]?.propertyByName(propertyName) ?:
-                throw java.lang.IllegalArgumentException("Property $conceptName.$propertyName not found")
+        return conceptsByQName[conceptName]?.propertyByName(propertyName)
+                ?: throw java.lang.IllegalArgumentException("Property $conceptName.$propertyName not found")
     }
 
     fun conceptByName(conceptName: String): PhysicalConcept? {
@@ -168,24 +136,26 @@ class PhysicalModel(val name: String, val uuid: UUID){
         }
         return null
     }
-
 }
 
 sealed class ReferenceTarget
 
-data class InModelReferenceTarget(val physicalModel: PhysicalModel,
-                                  val nodeID: String) : ReferenceTarget()
-data class OutsideModelReferenceTarget(val physicalModel: PhysicalModel,
-                                       val importIndex: String, val nodeIndex:String) : ReferenceTarget() {
-    val modelUIID : UUID = physicalModel.languageUUIDByIndex(importIndex)
-    val nodeID : Long
+data class InModelReferenceTarget(
+    val physicalModel: PhysicalModel,
+    val nodeID: String
+) : ReferenceTarget()
+data class OutsideModelReferenceTarget(
+    val physicalModel: PhysicalModel,
+    val importIndex: String,
+    val nodeIndex: String
+) : ReferenceTarget() {
+    val modelUIID: UUID = physicalModel.languageUUIDByIndex(importIndex)
+    val nodeID: Long
         get() {
-            return JavaFriendlyBase64.parseLong(nodeIndex)
+            return Base64.parseLong(nodeIndex)
         }
 }
-class ExplicitReferenceTarget(val model: UUID, val nodeId: NodeId) : ReferenceTarget() {
-
-}
+class ExplicitReferenceTarget(val model: UUID, val nodeId: NodeId) : ReferenceTarget()
 class FailedLoadingReferenceTarget(val e: Throwable) : ReferenceTarget()
 object NullReferenceTarget : ReferenceTarget()
 
@@ -194,8 +164,8 @@ data class PhysicalReferenceValue(val target: ReferenceTarget, val resolve: Stri
 class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: NodeId) {
     val root: Boolean
         get() = parent == null
-    internal var modelOfWhichIsRoot : PhysicalModel? = null
-    val model : PhysicalModel?
+    internal var modelOfWhichIsRoot: PhysicalModel? = null
+    val model: PhysicalModel?
         get() = if (root) modelOfWhichIsRoot else parent!!.model
     private val properties = HashMap<PhysicalProperty, String>()
     private val children = HashMap<PhysicalRelation, MutableList<PhysicalNode>>()
@@ -224,11 +194,11 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         properties[property] = propertyValue
     }
 
-    fun propertyValue(property: PhysicalProperty) : String {
+    fun propertyValue(property: PhysicalProperty): String {
         return properties[property]!!
     }
 
-    fun propertyValue(propertyName: String, defaultValue: String?) : String? {
+    fun propertyValue(propertyName: String, defaultValue: String?): String? {
         val properties = properties.keys.filter { it.name == propertyName }
         return when (properties.size) {
             0 -> defaultValue
@@ -237,17 +207,17 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         }
     }
 
-    fun propertyValue(propertyName: String) : String? {
+    fun propertyValue(propertyName: String): String? {
         val properties = properties.keys.filter { it.name == propertyName }
         return when (properties.size) {
             0 -> null
-            //0 -> throw IllegalArgumentException("Unknown property name $propertyName. Known declaredProperties: $properties")
+            // 0 -> throw IllegalArgumentException("Unknown property name $propertyName. Known declaredProperties: $properties")
             1 -> propertyValue(properties.first())
             else -> throw IllegalArgumentException("Ambiguous property name $propertyName")
         }
     }
 
-    fun children(relationName: String) : List<PhysicalNode> {
+    fun children(relationName: String): List<PhysicalNode> {
         val relation = children.keys.find { it.name == relationName }
         return if (relation == null) {
             emptyList()
@@ -260,7 +230,7 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
 
     fun reference(relation: PhysicalRelation) = references[relation]
 
-    fun reference(relationName: String) : PhysicalReferenceValue? {
+    fun reference(relationName: String): PhysicalReferenceValue? {
         val rs = references.keys.filter { it.name == relationName }
         return when (rs.size) {
             0 -> null
@@ -269,7 +239,7 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         }
     }
 
-    fun ancestor(condition: (PhysicalNode) -> Boolean ): PhysicalNode? {
+    fun ancestor(condition: (PhysicalNode) -> Boolean): PhysicalNode? {
         if (parent == null) {
             return null
         }
@@ -333,5 +303,4 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         }
         return null
     }
-
 }

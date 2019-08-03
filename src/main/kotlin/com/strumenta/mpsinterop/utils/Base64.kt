@@ -10,7 +10,7 @@ import java.util.Arrays
  *
  * Author of the original class: Artem Tikhomirov
  */
-object JavaFriendlyBase64 {
+object Base64 {
     private val MIN_CHAR = '$'
     private val MAX_CHAR = 'z'
     // length shall be 2^^6 = 64 (10 digits + 2x26 letters + '$' and '_'. ASCII chars with isJavaIdentifierPart == true
@@ -87,5 +87,4 @@ object JavaFriendlyBase64 {
         }
         return String(myBufferInt, 1, 5)
     }
-
 }

@@ -1,7 +1,6 @@
 
 import com.strumenta.mpsinterop.registries.Indexer
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 // Perhaps not so useful
 class LoadingPhysicalModelsFromJar {
@@ -21,5 +20,4 @@ class LoadingPhysicalModelsFromJar {
         physicalModelsRegistry.indexJar(inputStream)
         val structure = physicalModelsRegistry.locateModel("jetbrains.mps.lang.structure.structure")!!
     }
-
 }

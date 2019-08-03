@@ -12,7 +12,7 @@ import java.util.*
 import java.util.jar.JarFile
 import java.util.zip.ZipException
 
-fun LanguageRegistry.loadLanguageFromJar(inputStream: InputStream)  {
+fun LanguageRegistry.loadLanguageFromJar(inputStream: InputStream) {
     loadJar(inputStream).forEach { this.loadLanguageFromModel(it) }
 }
 
@@ -21,7 +21,7 @@ fun LanguageRegistry.loadMpsFile(inputStream: InputStream): PhysicalModel {
     return model
 }
 
-private fun LanguageRegistry.loadJar(inputStream: InputStream) : List<PhysicalModel> {
+private fun LanguageRegistry.loadJar(inputStream: InputStream): List<PhysicalModel> {
     val file = dumpToTempFile(inputStream)
     try {
         return loadJar(file)
@@ -30,7 +30,7 @@ private fun LanguageRegistry.loadJar(inputStream: InputStream) : List<PhysicalMo
     }
 }
 // TODO return also the language for each model
-private fun LanguageRegistry.loadJar(file: File) : List<PhysicalModel> {
+private fun LanguageRegistry.loadJar(file: File): List<PhysicalModel> {
     val models = LinkedList<PhysicalModel>()
     val modules = LinkedList<Pair<String, PhysicalModule>>()
     try {
@@ -74,8 +74,10 @@ private fun LanguageRegistry.loadJar(file: File) : List<PhysicalModel> {
     return models
 }
 
-fun LanguageRegistry.loadLanguageFromMpsInputStream(inputStream: InputStream,
-                                                    module: PhysicalModule) {
+fun LanguageRegistry.loadLanguageFromMpsInputStream(
+    inputStream: InputStream,
+    module: PhysicalModule
+) {
     val model = loadMpsModel(inputStream)
     model.module = module
     this.loadLanguageFromModel(model)

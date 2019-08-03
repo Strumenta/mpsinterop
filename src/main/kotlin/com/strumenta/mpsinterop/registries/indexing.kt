@@ -34,12 +34,13 @@ enum class SourceType {
     MPL
 }
 
-abstract class LoadingInfo<E>(val source: Source,
-                              val sourceType: SourceType) {
-    open val element : E by lazy { load() }
+abstract class LoadingInfo<E>(
+    val source: Source,
+    val sourceType: SourceType
+) {
+    open val element: E by lazy { load() }
 
-
-    protected abstract fun load() : E
+    protected abstract fun load(): E
     override fun toString(): String {
         return "Element loaded from $source, type $sourceType"
     }
@@ -58,12 +59,13 @@ class Indexer : ModelLocator {
         return modelsByName[name]?.element
     }
 
-    private class HolderLoadingInfo<E>(override val element: E,
-                                       source: Source,
-                                       sourceType: SourceType) : LoadingInfo<E>(source, sourceType) {
+    private class HolderLoadingInfo<E>(
+        override val element: E,
+        source: Source,
+        sourceType: SourceType
+    ) : LoadingInfo<E>(source, sourceType) {
         override fun load() = throw UnsupportedOperationException()
     }
-
 
     private val modelsByUUID = HashMap<UUID, ModelLoadingInfo>()
     private val modelsByName = HashMap<String, ModelLoadingInfo>()
@@ -141,18 +143,18 @@ class Indexer : ModelLocator {
                 val source = JarSource(file, entry.name)
                 when {
                     entry.name.endsWith(".mps") -> {
-                        if (!entry.name.endsWith("descriptorclasses.mps")
-                                && !entry.name.contains("/aspectcps")) {
-                            //println("[MPS] ${entry.name}")
+                        if (!entry.name.endsWith("descriptorclasses.mps") &&
+                                !entry.name.contains("/aspectcps")) {
+                            // println("[MPS] ${entry.name}")
                             indexMps(jarFile.getInputStream(entry), source)
                         }
                     }
                     entry.name.endsWith(".mpl") -> {
-                        //println("[MPL] ${entry.name}")
+                        // println("[MPL] ${entry.name}")
                         indexMpl(jarFile.getInputStream(entry), source)
                     }
                     entry.name.endsWith(".mpb") -> {
-                        //println("[MPB] ${entry.name}")
+                        // println("[MPB] ${entry.name}")
                         indexMpb(jarFile.getInputStream(entry), source)
                     }
                 }
@@ -160,7 +162,6 @@ class Indexer : ModelLocator {
         } catch (e: ZipException) {
             throw RuntimeException("Problem loading JAR from file $file", e)
         }
-
     }
 }
 

@@ -12,20 +12,21 @@ import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.findConceptDeclaration
 
 class PhysicalToLogicalConverter(
-        val languageRegistry: LanguageRegistry = LanguageRegistry.DEFAULT,
-        val physicalModelsRegistry: ModelLocator = Indexer.DEFAULT) {
+    val languageRegistry: LanguageRegistry = LanguageRegistry.DEFAULT,
+    val physicalModelsRegistry: ModelLocator = Indexer.DEFAULT
+) {
     private val convertedConcepts = HashMap<PhysicalConcept, AbstractConcept>()
     private val convertedNodes = HashMap<PhysicalNode, Node>()
 
-    fun toLogical(physicalModel: PhysicalModel) : Model {
+    fun toLogical(physicalModel: PhysicalModel): Model {
         val logicalModel = Model(physicalModel.name)
         physicalModel.onRoots { logicalModel.addRoot(this.toLogical(it)) }
         return logicalModel
     }
 
-    fun toLogical(physicalNode: PhysicalNode) : Node {
+    fun toLogical(physicalNode: PhysicalNode): Node {
         return convertedNodes.computeIfAbsent(physicalNode) { physicalNode ->
-            val id = physicalNode.id//NodeId.regular(JavaFriendlyBase64.parseLong(physicalNode.id))
+            val id = physicalNode.id // NodeId.regular(Base64.parseLong(physicalNode.id))
             val concept = this.toLogical(physicalNode.concept) as Concept
             val logicalNode = Node(
                     /*physicalNode.parent?.toLogical(this),*/
@@ -40,7 +41,7 @@ class PhysicalToLogicalConverter(
         }
     }
 
-    fun toLogical(physicalConcept: PhysicalConcept) : AbstractConcept {
+    fun toLogical(physicalConcept: PhysicalConcept): AbstractConcept {
         return convertedConcepts.computeIfAbsent(physicalConcept) { physicalConcept ->
             val concept = languageRegistry.getConcept(physicalConcept.qname)
             if (concept != null) {
@@ -55,10 +56,9 @@ class PhysicalToLogicalConverter(
         }
     }
 
-    private fun loadConceptFromConceptDeclaration(conceptDeclaration: Node) : Concept {
+    private fun loadConceptFromConceptDeclaration(conceptDeclaration: Node): Concept {
         TODO()
     }
-
 }
 
 fun PhysicalNode.toLogical(physicalToLogicalConverter: PhysicalToLogicalConverter) =

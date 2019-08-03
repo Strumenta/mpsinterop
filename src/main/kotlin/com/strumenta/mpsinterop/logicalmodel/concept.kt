@@ -7,14 +7,14 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
     var abstract: Boolean = false
     var alias: String? = null
 
-    private val _declaredProperties : MutableList<Property> = LinkedList()
+    private val _declaredProperties: MutableList<Property> = LinkedList()
 
     // We want them to be exposed as an immutable list
-    val declaredProperties : List<Property>
+    val declaredProperties: List<Property>
         get() = _declaredProperties
 
-    abstract val allProperties : List<Property>
-    var language : Language? = null
+    abstract val allProperties: List<Property>
+    var language: Language? = null
         set(value) {
             if (field != null) {
                 field?.remove(this)
@@ -25,15 +25,15 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
             }
         }
 
-    val absoluteID : AbsoluteConceptId?
+    val absoluteID: AbsoluteConceptId?
         get() = if (language == null) null else AbsoluteConceptId(language!!.id, id)
 
-    fun qname() : String {
+    fun qname(): String {
         val languageName = languageName()
         return "$languageName.structure.$name"
     }
 
-    private fun languageName() : String {
+    private fun languageName(): String {
         if (language == null) {
             throw IllegalStateException("The concept is not attached to a language")
         } else {
@@ -64,16 +64,15 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
             throw IllegalArgumentException("No property found with name $propertyName")
         }
     }
-
 }
 
-data class Concept(override val id: Long, override val name: String)
-    : AbstractConcept(id, name){
+data class Concept(override val id: Long, override val name: String) :
+    AbstractConcept(id, name) {
     var rootable: Boolean = false
     var extended: Concept? = null
     val implemented: MutableList<InterfaceConcept> = LinkedList()
 
-    override val allProperties : List<Property>
+    override val allProperties: List<Property>
         get() {
             val props = LinkedList<Property>()
             if (extended != null) {
@@ -85,15 +84,14 @@ data class Concept(override val id: Long, override val name: String)
             props.addAll(declaredProperties)
             return props
         }
-
 }
 
-data class InterfaceConcept(override val id: Long, override val name: String)
-    : AbstractConcept(id, name){
+data class InterfaceConcept(override val id: Long, override val name: String) :
+    AbstractConcept(id, name) {
 
     var extended: MutableList<InterfaceConcept> = LinkedList()
 
-    override val allProperties : List<Property>
+    override val allProperties: List<Property>
         get() {
             val props = LinkedList<Property>()
             extended.forEach {
@@ -102,8 +100,6 @@ data class InterfaceConcept(override val id: Long, override val name: String)
             props.addAll(declaredProperties)
             return props
         }
-
 }
 
 data class AbsoluteConceptId(val languageId: LanguageUUID, val idValue: Long)
-

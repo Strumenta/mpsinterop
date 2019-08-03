@@ -96,7 +96,6 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
         }
     }
 
-
     fun readModelReference(): SModelReference? {
         val c = readByte()
         if (c == NULL) {
@@ -200,9 +199,9 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
         readLong()
         readString()
         TODO()
-        //val c = MetaAdapterFactory.getConcept(readLong(), readLong(), readLong(), readString())
-        //myConcepts.add(c)
-        //return c
+        // val c = MetaAdapterFactory.getConcept(readLong(), readLong(), readLong(), readString())
+        // myConcepts.add(c)
+        // return c
     }
 //
 //    @Throws(IOException::class)
@@ -222,7 +221,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
         val propertyId = readLong()
         val propertyName = readString()
         val propertyType = TODO()
-        //val p = MetaAdapterFactory.getProperty(AbsolutePropertyId(MetaIdHelper.getConcept(c), readLong()), readString())
+        // val p = MetaAdapterFactory.getProperty(AbsolutePropertyId(MetaIdHelper.getConcept(c), readLong()), readString())
         val p = Property(AbsolutePropertyId(c!!.absoluteID!!, propertyId), propertyName!!, propertyType)
         myProperties.add(p)
         return p
@@ -236,7 +235,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
         }
         if (b == ASSOCIATION_INDEX) {
             TODO()
-            //return myAssociations[readShort()]
+            // return myAssociations[readShort()]
         }
         if (b != ASSOCIATION) {
             throw IOException(Integer.toHexString(b.toInt()))
@@ -256,7 +255,7 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
         }
         if (b == AGGREGATION_INDEX) {
             TODO()
-            //return myAggregations[readShort()]
+            // return myAggregations[readShort()]
         }
         if (b != AGGREGATION) {
             throw IOException(Integer.toHexString(b.toInt()))
@@ -267,5 +266,4 @@ internal class ModelInputStream(val inputStream: InputStream) : DataInputStream(
 //        return l
         TODO()
     }
-
 }

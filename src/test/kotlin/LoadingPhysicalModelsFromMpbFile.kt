@@ -1,7 +1,4 @@
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
-import com.strumenta.mpsinterop.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
-import com.strumenta.mpsinterop.physicalmodel.OutsideModelReferenceTarget
-import com.strumenta.mpsinterop.physicalmodel.PhysicalReferenceValue
 import com.strumenta.mpsinterop.physicalmodel.name
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -47,5 +44,4 @@ class LoadingPhysicalModelsFromMpbFile {
         assertEquals(1, iNamedConceptNode.numberOfChildren("propertyDeclaration"))
         assertEquals(0, iNamedConceptNode.numberOfChildren("helpURL"))
     }
-
 }

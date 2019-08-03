@@ -5,18 +5,18 @@ import com.strumenta.mpsinterop.loading.NodeLocator
 import com.strumenta.mpsinterop.loading.SimpleNodeLocator
 import com.strumenta.mpsinterop.logicalmodel.*
 import com.strumenta.mpsinterop.physicalmodel.*
-import com.strumenta.mpsinterop.utils.JavaFriendlyBase64
+import com.strumenta.mpsinterop.utils.Base64
 import java.lang.RuntimeException
 import java.util.*
 import kotlin.collections.HashMap
 
 class LanguageRegistry : ModelLocator {
     override fun locateModel(name: String): PhysicalModel? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun locateLanguage(languageUUID: UUID): PhysicalLanguage? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun locateModel(modelUUID: UUID): PhysicalModel? {
@@ -47,13 +47,13 @@ class LanguageRegistry : ModelLocator {
 
     // Wrong, this is the UUID of the structure model of the language,
     // not the UUID of the language
-    fun languageIDforConceptNode(it: PhysicalNode) : UUID {
+    fun languageIDforConceptNode(it: PhysicalNode): UUID {
         val module = it.model!!.module ?: throw RuntimeException("No module for model ${it.model!!.name}")
         return module.uuid
     }
     fun conceptIDforConceptNode(it: PhysicalNode) = it.propertyValue("conceptId")?.toLong()
 
-    fun preloadConcept(it: PhysicalNode) : AbstractConcept? {
+    fun preloadConcept(it: PhysicalNode): AbstractConcept? {
         val model = it.model!!
         if (it.concept.qname == CONCEPT_DECLARATION_CONCEPT_NAME) {
             val languageName = model.name.removeSuffix(".structure")
@@ -79,12 +79,12 @@ class LanguageRegistry : ModelLocator {
 //                this.add(l)
 //                l
 //            }
-            val conceptIdValue : Long = conceptIDforConceptNode(it)!!
+            val conceptIdValue: Long = conceptIDforConceptNode(it)!!
             val conceptId = AbsoluteConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")!!
-            //println(conceptName)
+            // println(conceptName)
             val concept = Concept(conceptIdValue, conceptName)
-            //concepts[it] = concept
+            // concepts[it] = concept
             language.add(concept)
 
 //                concept.final = it.booleanPropertyValue("final")
@@ -108,12 +108,12 @@ class LanguageRegistry : ModelLocator {
                 this.add(l)
                 l
             }
-            val conceptIdValue : Long = it.propertyValue("conceptId")!!.toLong()
+            val conceptIdValue: Long = it.propertyValue("conceptId")!!.toLong()
             val conceptId = AbsoluteConceptId(language.id, conceptIdValue)
             val conceptName = it.propertyValue("name")!!
             val concept = InterfaceConcept(conceptIdValue, conceptName)
             language.add(concept)
-            //concepts[it] = concept
+            // concepts[it] = concept
 
 //                concept.final = it.booleanPropertyValue("final")
 //                concept.abstract = it.booleanPropertyValue("abstract")
@@ -132,19 +132,18 @@ class LanguageRegistry : ModelLocator {
             if (concept != null) {
                 concepts[it] = concept
             }
-            //println(it.concept.qname(this))
+            // println(it.concept.qname(this))
         }
 
         model.roots.forEach {
             loadConceptFromNode(it)
-            //println(it.concept.qname(this))
+            // println(it.concept.qname(this))
         }
-        //val language = model.
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // val language = model.
+        // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-
-    private fun loadPropertyTypeFromNode(node: PhysicalNode) : PropertyType {
+    private fun loadPropertyTypeFromNode(node: PhysicalNode): PropertyType {
         when {
             node.concept.qname == PRIMITIVE_DATA_TYPE_DECLARATION_CONCEPT_NAME -> {
                 val name = node.name()!!
@@ -170,12 +169,12 @@ class LanguageRegistry : ModelLocator {
         }
     }
 
-    private fun loadEnumerationAlternative(node: PhysicalNode) : EnumerationAlternative {
+    private fun loadEnumerationAlternative(node: PhysicalNode): EnumerationAlternative {
         return EnumerationAlternative(node.propertyValue("externalValue")!!,
                 node.propertyValue("internalValue", null))
     }
 
-    private fun loadConceptFromNode(it: PhysicalNode) : AbstractConcept? {
+    private fun loadConceptFromNode(it: PhysicalNode): AbstractConcept? {
         val conceptID = conceptIDforConceptNode(it)
         if (conceptID == null) {
             return null
@@ -206,7 +205,6 @@ class LanguageRegistry : ModelLocator {
                     try {
                         concept.extended = this.resolveAsConcept(extendsValue.target) as Concept
                     } catch (e: Exception) {
-
                     }
                 }
 
@@ -229,7 +227,7 @@ class LanguageRegistry : ModelLocator {
                     concept.addProperty(Property(AbsolutePropertyId(concept.absoluteID!!, idValue), name, propertyType))
                 }
                 it.children("linkDeclaration").forEach {
-                    //TODO()
+                    // TODO()
                 }
             }
             it.concept.qname == INTERFACE_CONCEPT_DECLARATION_CONCEPT_NAME -> {
@@ -261,10 +259,10 @@ class LanguageRegistry : ModelLocator {
 //                }
 //                val language = languagesByUUID[uuid]!!
 //                val concept = language.concepts.find {
-//                    it.id.idValue == JavaFriendlyBase64.parseLong(target.nodeID)
+//                    it.id.idValue == Base64.parseLong(target.nodeID)
 //                } ?: throw RuntimeException("Concept not found (ID ${target.nodeID})")
 //                return concept
-                return this.findConceptWithID(JavaFriendlyBase64.parseLong(target.nodeID))!!
+                return this.findConceptWithID(Base64.parseLong(target.nodeID))!!
             }
             is OutsideModelReferenceTarget -> {
                 // Note that this is the model ID, not the language ID
@@ -273,7 +271,7 @@ class LanguageRegistry : ModelLocator {
 //                    throw RuntimeException("Unknown language UUID $uuid")
 //                }
 //                val language = languagesByUUID[uuid]!!
-                //val concept = language.concepts.find { it.id.idValue == target.nodeID }!!
+                // val concept = language.concepts.find { it.id.idValue == target.nodeID }!!
                 return this.findConceptWithID(target.nodeID)!!
             }
             is NullReferenceTarget -> null
@@ -314,5 +312,4 @@ class LanguageRegistry : ModelLocator {
     }
 
     fun knowsLanguageUUID(uuid: UUID) = uuid in languagesByUUID
-
 }

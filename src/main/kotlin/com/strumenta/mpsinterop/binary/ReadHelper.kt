@@ -7,7 +7,6 @@ import com.strumenta.mpsinterop.physicalmodel.PhysicalRelation
 import com.strumenta.mpsinterop.physicalmodel.RelationKind
 import java.lang.IllegalArgumentException
 
-
 /**
  * [jetbrains.mps.smodel.persistence.def.v9.IdInfoReadHelper] counterpart for binary persistence.
  * FIXME consider refactoring to remove duplicating code (e.g. #isInterface or #isRequestedInterfaceOnly)
@@ -23,8 +22,7 @@ internal class ReadHelper() {
     private val myProperties = HashMap<Int, PhysicalProperty>()
     private val myAssociations = HashMap<Int, PhysicalRelation>()
     private val myAggregations = HashMap<Int, PhysicalRelation>()
-    private var currentConcept : PhysicalConcept? = null
-
+    private var currentConcept: PhysicalConcept? = null
 
 //    /*package*/ // FIXME could I use myMetaInfo.registry.keySet() instead?
 //    val participatingConcepts: List<AbsoluteConceptId>
@@ -52,11 +50,14 @@ internal class ReadHelper() {
 //        myMetaInfoProvider.setLanguageName(lang, name)
 //    }
 
-
-    fun withConcept(conceptIndex: Int, conceptId: AbsoluteConceptId,
-                    languageName: String,
-                    conceptName: String, kind: ConceptKind)
-            : PhysicalConcept {
+    fun withConcept(
+        conceptIndex: Int,
+        conceptId: AbsoluteConceptId,
+        languageName: String,
+        conceptName: String,
+        kind: ConceptKind
+    ):
+            PhysicalConcept {
         currentConcept = PhysicalConcept(
                 LanguageId(conceptId.languageId, languageName),
                 conceptId.idValue, conceptName, conceptIndex.toString())
@@ -77,18 +78,18 @@ internal class ReadHelper() {
 //    }
 //
     fun property(property: AbsolutePropertyId, name: String, index: Int) {
-        //myActualConcept!!.addProperty(property, name).setIntIndex(index)
+        // myActualConcept!!.addProperty(property, name).setIntIndex(index)
         val property = PhysicalProperty(currentConcept!!, property.idValue, name, index.toString())
         currentConcept!!.addProperty(property)
         myProperties[index] = property
-        //myMetaInfoProvider.setPropertyName(property, name)
+        // myMetaInfoProvider.setPropertyName(property, name)
     }
 //
     fun association(link: AbsoluteReferenceLinkId, name: String, index: Int) {
 
-        //myActualConcept!!.addLink(link, name).setIntIndex(index)
-       myAssociations[index] = PhysicalRelation(currentConcept!!, link.idValue, name, index.toString(), RelationKind.REFERENCE)
-       //myMetaInfoProvider.setAssociationName(link, name)
+        // myActualConcept!!.addLink(link, name).setIntIndex(index)
+        myAssociations[index] = PhysicalRelation(currentConcept!!, link.idValue, name, index.toString(), RelationKind.REFERENCE)
+        // myMetaInfoProvider.setAssociationName(link, name)
     }
 //
     fun aggregation(link: AbsoluteContainmentLinkId, name: String, unordered: Boolean, index: Int) {
@@ -104,7 +105,7 @@ internal class ReadHelper() {
 
     fun readProperty(index: Int): PhysicalProperty {
         require(index >= 0)
-        return myProperties[index]?: throw IllegalArgumentException("Property with index $index not found. Known indexes: ${myProperties.keys.joinToString(separator = ", ")}")
+        return myProperties[index] ?: throw IllegalArgumentException("Property with index $index not found. Known indexes: ${myProperties.keys.joinToString(separator = ", ")}")
     }
 
     fun readAssociation(index: Int): PhysicalRelation {
@@ -113,7 +114,7 @@ internal class ReadHelper() {
     }
 //
     fun readAggregation(index: Int): PhysicalRelation {
-        require(index >= 0) { "Index should be equal or greater to 0"}
+        require(index >= 0) { "Index should be equal or greater to 0" }
         return myAggregations[index] ?: throw IllegalArgumentException("Aggregation with index $index not found. Known indexes: ${myAggregations.keys.joinToString(separator = ", ")}")
     }
 //
