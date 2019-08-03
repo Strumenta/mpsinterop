@@ -18,15 +18,12 @@ class PhysicalModel(val uuid: UUID, val name: String) {
     private data class LanguageImport(val uuid: UUID, val name: String)
     private data class ModelImport(val uuid: UUID, val name: String, val index: String)
 
+    private val languages = LinkedList<LanguageImport>()
+    private val models = LinkedList<ModelImport>()
     private val conceptsByIndex = HashMap<String, PhysicalConcept>()
     private val conceptsByQName = HashMap<String, PhysicalConcept>()
     private val relationsByIndex = HashMap<String, PhysicalRelation>()
     private val propertiesByIndex = HashMap<String, PhysicalProperty>()
-    // TODO remove
-    private val languageUUIDsFromName = HashMap<String, LanguageUUID>()
-    private val languages = LinkedList<LanguageImport>()
-    private val models = LinkedList<ModelImport>()
-    // private val languageUUIDsFromIndex = HashMap<String, LanguageUUID>()
 
     // /////////////////////////////////////
     // Module
@@ -84,12 +81,12 @@ class PhysicalModel(val uuid: UUID, val name: String) {
     // /////////////////////////////////////
 
     fun languageUuidFromName(languageName: String): LanguageUUID {
-        return languageUUIDsFromName[languageName]
-                ?: throw RuntimeException("Unable to find UUID for language $languageName")
+        return languages.find { it.name == languageName }?.uuid
+                ?: throw IllegalArgumentException("Unable to find UUID for language $languageName")
     }
 
     fun putLanguageInRegistry(languageUUID: LanguageUUID, languageName: String) {
-        languageUUIDsFromName[languageName] = languageUUID
+        languages.add(LanguageImport(languageUUID, languageName))
     }
 
     // /////////////////////////////////////
@@ -100,7 +97,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
         models.add(ModelImport(uuid, name, index))
     }
 
-    fun modelUUIDByIndex(index: String): UUID = models.find { it.index == index }?.uuid
+    fun modelUUIDFromIndex(index: String): UUID = models.find { it.index == index }?.uuid
             ?: throw IllegalArgumentException("Unknown model index $index. Known indexes: ${models.joinToString(", ") { it.index }}")
 
     // /////////////////////////////////////

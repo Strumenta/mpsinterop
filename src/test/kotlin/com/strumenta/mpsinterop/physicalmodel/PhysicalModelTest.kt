@@ -228,4 +228,33 @@ class PhysicalModelTest {
         val roots = model.rootsOfConcept(anotherConcept)
         assertEquals(0, roots.size)
     }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun languageUuidFromNameNegativeCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        model.languageUuidFromName("my.imported.language")
+    }
+
+    @Test
+    fun languageUuidFromNamePositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val uuid = UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7")
+        model.putLanguageInRegistry(uuid, "my.imported.language")
+        assertEquals(uuid, model.languageUuidFromName("my.imported.language"))
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun modelUUIDFromIndexNegativeCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        model.modelUUIDFromIndex("my.imported.model")
+    }
+
+    @Test
+    fun modelUUIDFromIndexPositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val uuid = UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7")
+        model.putModelInRegistry(uuid, "my.imported.language", "45678")
+        assertEquals(uuid, model.modelUUIDFromIndex("45678"))
+    }
+
 }

@@ -16,7 +16,7 @@ data class OutsideModelReferenceTarget(
     val importIndex: String,
     val nodeIndex: String
 ) : ReferenceTarget() {
-    val modelUIID: UUID = physicalModel.modelUUIDByIndex(importIndex)
+    val modelUIID: UUID = physicalModel.modelUUIDFromIndex(importIndex)
     val nodeID: Long
         get() {
             return Base64.parseLong(nodeIndex)
