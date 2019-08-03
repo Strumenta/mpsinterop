@@ -195,4 +195,37 @@ class PhysicalModelTest {
         assertEquals(node1, model.getRootByName("MyNode1"))
         assertEquals(node2, model.getRootByName("MyNode2"))
     }
+
+    @Test
+    fun rootsOfConceptWithRightConcept() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        assertEquals(true, model.roots.isEmpty())
+
+        val concept = PhysicalConcept(LanguageId(UUID.randomUUID(), "MyLanguage"), 123L, "MyConcept", "123x")
+        val node1 = PhysicalNode(null, concept, NodeId.regular(1L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(2L))
+        model.addRoot(node1)
+        model.addRoot(node2)
+
+        val roots = model.rootsOfConcept(concept)
+        assertEquals(2, roots.size)
+        assertTrue(roots.contains(node1))
+        assertTrue(roots.contains(node2))
+    }
+
+    @Test
+    fun rootsOfConceptWithWrongConcept() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        assertEquals(true, model.roots.isEmpty())
+
+        val concept = PhysicalConcept(LanguageId(UUID.randomUUID(), "MyLanguage"), 123L, "MyConcept", "123x")
+        val anotherConcept = PhysicalConcept(LanguageId(UUID.randomUUID(), "MyLanguage"), 124L, "MyOtherConcept", "124x")
+        val node1 = PhysicalNode(null, concept, NodeId.regular(1L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(2L))
+        model.addRoot(node1)
+        model.addRoot(node2)
+
+        val roots = model.rootsOfConcept(anotherConcept)
+        assertEquals(0, roots.size)
+    }
 }

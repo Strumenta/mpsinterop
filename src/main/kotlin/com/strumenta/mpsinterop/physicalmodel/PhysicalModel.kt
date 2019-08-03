@@ -22,6 +22,10 @@ class PhysicalModel(val uuid: UUID, val name: String) {
     private val languageUUIDsFromName = HashMap<String, LanguageUUID>()
     private val languageUUIDsFromIndex = HashMap<String, LanguageUUID>()
 
+    // /////////////////////////////////////
+    // Module
+    // /////////////////////////////////////
+
     var module: PhysicalModule? = null
         set(value) {
             if (field != null) {
@@ -30,6 +34,10 @@ class PhysicalModel(val uuid: UUID, val name: String) {
             value?.models?.add(this)
             field = value
         }
+
+    // /////////////////////////////////////
+    // Roots
+    // /////////////////////////////////////
 
     private val _roots = LinkedList<PhysicalNode>()
 
@@ -41,7 +49,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
 
     fun addRoot(root: PhysicalNode) {
         if (!root.root) {
-            throw java.lang.IllegalArgumentException("The given node is not a root")
+            throw IllegalArgumentException("The given node is not a root")
         }
         root.modelOfWhichIsRoot = this
         _roots.add(root)
@@ -61,45 +69,16 @@ class PhysicalModel(val uuid: UUID, val name: String) {
 
     fun getRootByName(name: String) = findRootByName(name) ?: throw IllegalArgumentException("No root found with name $name")
 
-    fun registerConcept(concept: PhysicalConcept) {
-        conceptsByIndex[concept.index] = concept
-        conceptsByQName[concept.qualifiedName] = concept
-    }
-
-    fun registerProperty(property: PhysicalProperty) {
-        propertiesByIndex[property.index] = property
-    }
-
-    fun registerRelation(relation: PhysicalRelation) {
-        relationsByIndex[relation.index] = relation
-    }
-
-    fun conceptByIndex(index: String): PhysicalConcept = conceptsByIndex[index]!!
-
-    fun languageUUIDByIndex(index: String): LanguageUUID = languageUUIDsFromIndex[index]
-            ?: throw java.lang.IllegalArgumentException("Unknown language index $index. Known indexes: ${languageUUIDsFromIndex.keys.joinToString(", ")}")
-
-    fun relationByIndex(index: String): PhysicalRelation = relationsByIndex[index]
-            ?: throw java.lang.IllegalArgumentException("Relation with index $index not found")
-
-    fun propertyByIndex(index: String): PhysicalProperty = propertiesByIndex[index]!!
-
-    fun findProperty(conceptName: String, propertyName: String): PhysicalProperty? {
-        return conceptsByQName[conceptName]?.propertyByName(propertyName)
-    }
-
-    fun getProperty(conceptName: String, propertyName: String): PhysicalProperty {
-        return findProperty(conceptName, propertyName)
-                ?: throw java.lang.IllegalArgumentException("Property $conceptName.$propertyName not found")
-    }
-
-    fun conceptByName(conceptName: String): PhysicalConcept? {
-        return conceptsByQName[conceptName]
-    }
-
-    fun allRoots(concept: PhysicalConcept): List<PhysicalNode> {
+    fun rootsOfConcept(concept: PhysicalConcept): List<PhysicalNode> {
         return roots.filter { it.concept == concept }
     }
+
+    // /////////////////////////////////////
+    // Languages
+    // /////////////////////////////////////
+
+    fun languageUUIDByIndex(index: String): LanguageUUID = languageUUIDsFromIndex[index]
+            ?: throw IllegalArgumentException("Unknown language index $index. Known indexes: ${languageUUIDsFromIndex.keys.joinToString(", ")}")
 
     fun languageUuidFromName(languageName: String): LanguageUUID {
         return languageUUIDsFromName[languageName]
@@ -114,6 +93,59 @@ class PhysicalModel(val uuid: UUID, val name: String) {
         languageUUIDsFromIndex[languageIndex] = languageUUID
     }
 
+    // /////////////////////////////////////
+    // Concepts
+    // /////////////////////////////////////
+
+    fun registerConcept(concept: PhysicalConcept) {
+        conceptsByIndex[concept.index] = concept
+        conceptsByQName[concept.qualifiedName] = concept
+    }
+
+    fun conceptByIndex(index: String): PhysicalConcept = conceptsByIndex[index]!!
+
+    fun conceptByName(conceptName: String): PhysicalConcept? {
+        return conceptsByQName[conceptName]
+    }
+
+    fun findConceptByID(conceptID: Long): PhysicalConcept? {
+        return conceptsByIndex.values.find { it.id == conceptID }
+    }
+
+    // /////////////////////////////////////
+    // Relations
+    // /////////////////////////////////////
+
+    fun registerRelation(relation: PhysicalRelation) {
+        relationsByIndex[relation.index] = relation
+    }
+
+    fun relationByIndex(index: String): PhysicalRelation = relationsByIndex[index]
+            ?: throw IllegalArgumentException("Relation with index $index not found")
+
+    // /////////////////////////////////////
+    // Properties
+    // /////////////////////////////////////
+
+    fun registerProperty(property: PhysicalProperty) {
+        propertiesByIndex[property.index] = property
+    }
+
+    fun propertyByIndex(index: String): PhysicalProperty = propertiesByIndex[index]!!
+
+    fun findProperty(conceptName: String, propertyName: String): PhysicalProperty? {
+        return conceptsByQName[conceptName]?.propertyByName(propertyName)
+    }
+
+    fun getProperty(conceptName: String, propertyName: String): PhysicalProperty {
+        return findProperty(conceptName, propertyName)
+                ?: throw IllegalArgumentException("Property $conceptName.$propertyName not found")
+    }
+
+    // /////////////////////////////////////
+    // Nodes
+    // /////////////////////////////////////
+
     fun findNodeByID(nodeID: Long): PhysicalNode? = findNodeByID(NodeId.regular(nodeID))
 
     fun findNodeByID(nodeID: NodeId): PhysicalNode? {
@@ -126,7 +158,4 @@ class PhysicalModel(val uuid: UUID, val name: String) {
         return null
     }
 
-    fun findConceptByID(conceptID: Long): PhysicalConcept? {
-        return conceptsByIndex.values.find { it.id == conceptID }
-    }
 }
