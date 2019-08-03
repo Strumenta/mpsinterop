@@ -36,7 +36,8 @@ data class PhysicalConcept(
     }
 
     fun relationByName(name: String): PhysicalRelation {
-        return relations.find { it.name == name }!!
+        return relations.find { it.name == name }
+                ?: throw IllegalArgumentException("Relation $name not found in concept $name")
     }
 
     val qualifiedName: String
