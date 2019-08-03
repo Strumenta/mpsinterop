@@ -7,7 +7,8 @@ import java.lang.RuntimeException
 import java.util.*
 
 interface ModelLocator {
-    fun locate(modelUUID: UUID) : PhysicalModel?
+    fun locateModel(modelUUID: UUID) : PhysicalModel?
+    fun locateLanguage(languageUUID: UUID) : PhysicalLanguage?
 }
 
 interface NodeLocator {
@@ -18,7 +19,7 @@ interface NodeLocator {
 class SimpleNodeLocator(val modelLocator: ModelLocator) : NodeLocator {
 
     override fun resolve(modelUUID: UUID, nodeID: NodeId): PhysicalNode? {
-        val model = modelLocator.locate(modelUUID)
+        val model = modelLocator.locateModel(modelUUID)
                 ?: throw RuntimeException("Unknown model with UUID $modelUUID")
         return model.findNodeByID(nodeID)
     }

@@ -3,6 +3,7 @@ package com.strumenta.mpsinterop.registries
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import com.strumenta.mpsinterop.loading.ModelLocator
 import com.strumenta.mpsinterop.loading.loadMpsModel
+import com.strumenta.mpsinterop.physicalmodel.PhysicalLanguage
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModule
 import com.strumenta.mpsinterop.utils.loadDocument
@@ -28,34 +29,50 @@ enum class ModelSourceType {
     MPL
 }
 
+abstract class LoadingInfo<E>(val source: ModelSource,
+                                      val sourceType: ModelSourceType) {
+    open val element : E by lazy { load() }
+    protected abstract fun load() : E
+    override fun toString(): String {
+        return "Element loaded from $source, type $sourceType"
+    }
+}
+
+typealias ModelLoadingInfo = LoadingInfo<PhysicalModel>
+typealias LanguageLoadingInfo = LoadingInfo<PhysicalLanguage>
+
 // TODO treat languages differently
 class Indexer : ModelLocator {
 
-    private abstract class ModelLoadingInfo(val source: ModelSource,
-                                            val sourceType: ModelSourceType) {
-        open val model : PhysicalModel by lazy { load() }
-        protected abstract fun load() : PhysicalModel
-        override fun toString(): String {
-            return "Model loaded from $source, type $sourceType"
-        }
-    }
-
-    private class HolderModelLoadingInfo(override val model: PhysicalModel,
+    private class HolderLoadingInfo<E>(override val element: E,
                                          source: ModelSource,
-                                         sourceType: ModelSourceType) : ModelLoadingInfo(source, sourceType) {
+                                         sourceType: ModelSourceType) : LoadingInfo<E>(source, sourceType) {
         override fun load() = throw UnsupportedOperationException()
     }
 
-    private val byUUID = HashMap<UUID, ModelLoadingInfo>()
 
-    private fun register(uuid: UUID, modelLoadingInfo: ModelLoadingInfo) {
-        if (uuid in byUUID) {
-            throw IllegalStateException("ModelLoadingInfo already present for UUID $uuid: ${byUUID[uuid]}. Attempting to replace it with $modelLoadingInfo")
+    private val modelsByUUID = HashMap<UUID, ModelLoadingInfo>()
+    private val languagesByUUID = HashMap<UUID, LoadingInfo<PhysicalLanguage>>()
+
+    private fun registerModel(uuid: UUID, modelLoadingInfo: ModelLoadingInfo) {
+        if (uuid in modelsByUUID) {
+            throw IllegalStateException("ModelLoadingInfo already present for UUID $uuid: ${modelsByUUID[uuid]}. Attempting to replace it with $modelLoadingInfo")
         }
-        byUUID[uuid] = modelLoadingInfo
+        modelsByUUID[uuid] = modelLoadingInfo
     }
 
-    override fun locate(modelUUID: UUID): PhysicalModel? {
+    private fun registerLanguage(uuid: UUID, loadingInfo: LanguageLoadingInfo) {
+        if (uuid in languagesByUUID) {
+            throw IllegalStateException("LoadingInfo already present for UUID $uuid: ${languagesByUUID[uuid]}. Attempting to replace it with $loadingInfo")
+        }
+        languagesByUUID[uuid] = loadingInfo
+    }
+
+    override fun locateModel(modelUUID: UUID): PhysicalModel? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun locateLanguage(languageUUID: UUID): PhysicalLanguage? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -71,15 +88,18 @@ class Indexer : ModelLocator {
                 else -> println(file.extension)
             }
         }
-        println("SIZE ${byUUID.size}")
-        byUUID.entries.forEach {
-            println(it.value.model.name)
+        //println("SIZE ${byUUID.size}")
+        modelsByUUID.entries.forEach {
+            println("Model ${it.value.element.name} ${it.value.element.uuid}")
+        }
+        languagesByUUID.entries.forEach {
+            println("Language ${it.value.element.name} ${it.value.element.uuid}")
         }
     }
 
     private fun indexMps(inputStream: InputStream, modelSource: ModelSource) {
         val model = loadMpsModel(inputStream)
-        register(model.uuid, HolderModelLoadingInfo(model, modelSource, ModelSourceType.MPS))
+        registerModel(model.uuid, HolderLoadingInfo(model, modelSource, ModelSourceType.MPS))
     }
 
     private fun indexMpl(inputStream: InputStream, modelSource: ModelSource) {
@@ -87,16 +107,13 @@ class Indexer : ModelLocator {
         val uuid = UUID.fromString(mplXML.documentElement.getAttribute("uuid"))
         val name = mplXML.documentElement.getAttribute("namespace")
         val module = PhysicalModule(name, uuid)
-        register(uuid, object : ModelLoadingInfo(modelSource, ModelSourceType.MPL) {
-            override fun load(): PhysicalModel {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-        })
+        val language = PhysicalLanguage(uuid, name)
+        registerLanguage(uuid, HolderLoadingInfo(language, modelSource, ModelSourceType.MPL))
     }
 
     private fun indexMpb(inputStream: InputStream, modelSource: ModelSource) {
         val model = loadMpsModelFromBinaryFile(inputStream)
-        register(model.uuid, HolderModelLoadingInfo(model, modelSource, ModelSourceType.MPB))
+        registerModel(model.uuid, HolderLoadingInfo(model, modelSource, ModelSourceType.MPB))
     }
 
     private fun indexJar(file: File) {
