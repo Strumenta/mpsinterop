@@ -1,11 +1,25 @@
 package com.strumenta.mpsinterop.registries
 
+import com.strumenta.mpsinterop.loading.ModelLocator
+import com.strumenta.mpsinterop.physicalmodel.PhysicalLanguage
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mpsinterop.physicalmodel.name
 import java.util.*
 
-class PhysicalModelsRegistry {
+class PhysicalModelsRegistry : ModelLocator {
+    override fun locateModel(name: String): PhysicalModel? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun locateModel(modelUUID: UUID): PhysicalModel? {
+        return models.find { it.uuid == modelUUID }
+    }
+
+    override fun locateLanguage(languageUUID: UUID): PhysicalLanguage? {
+        return null
+    }
+
     private val models = LinkedList<PhysicalModel>()
 
     fun findConceptDeclaration(name: String): PhysicalNode? {

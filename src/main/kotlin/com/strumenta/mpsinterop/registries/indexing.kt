@@ -6,15 +6,18 @@ import com.strumenta.mpsinterop.loading.loadLanguage
 import com.strumenta.mpsinterop.loading.loadMpsModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalLanguage
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
-import com.strumenta.mpsinterop.physicalmodel.PhysicalModule
-import com.strumenta.mpsinterop.utils.loadDocument
+import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 import java.io.File
 import java.io.InputStream
-import java.lang.IllegalStateException
-import java.lang.UnsupportedOperationException
 import java.util.*
 import java.util.jar.JarFile
 import java.util.zip.ZipException
+
+private val String.parentName: String
+    get() {
+        val parts = this.split(".").dropLast(1)
+        return parts.joinToString(".")
+    }
 
 interface Source
 
@@ -45,6 +48,9 @@ typealias ModelLoadingInfo = LoadingInfo<PhysicalModel>
 typealias LanguageLoadingInfo = LoadingInfo<PhysicalLanguage>
 
 class Indexer : ModelLocator {
+    override fun locateModel(name: String): PhysicalModel? {
+        return modelsByName[name]?.element
+    }
 
     private class HolderLoadingInfo<E>(override val element: E,
                                        source: Source,
@@ -54,6 +60,7 @@ class Indexer : ModelLocator {
 
 
     private val modelsByUUID = HashMap<UUID, ModelLoadingInfo>()
+    private val modelsByName = HashMap<String, ModelLoadingInfo>()
     private val languagesByUUID = HashMap<UUID, LoadingInfo<PhysicalLanguage>>()
 
     private fun registerModel(uuid: UUID, loadingInfo: ModelLoadingInfo) {
@@ -61,6 +68,12 @@ class Indexer : ModelLocator {
             throw IllegalStateException(
                     "LoadingInfo already present for model with UUID $uuid: ${modelsByUUID[uuid]}. Attempting to replace it with $loadingInfo")
         }
+        val name = loadingInfo.element.name
+        if (name in modelsByName) {
+            throw IllegalStateException(
+                    "LoadingInfo already present for model with name $name: ${modelsByName[name]}. Attempting to replace it with $loadingInfo")
+        }
+        modelsByName[name] = loadingInfo
         modelsByUUID[uuid] = loadingInfo
     }
 
@@ -140,6 +153,12 @@ class Indexer : ModelLocator {
         }
 
     }
+}
+
+fun ModelLocator.findConceptDeclaration(qname: String): PhysicalNode? {
+    val modelName = qname.parentName
+    val model = this.locateModel(modelName)
+    return model?.findConceptDeclaration(qname)
 }
 
 fun main() {

@@ -6,10 +6,11 @@ import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
+import com.strumenta.mpsinterop.registries.findConceptDeclaration
 
 class PhysicalToLogicalConverter(
         val languageRegistry: LanguageRegistry = LanguageRegistry.DEFAULT,
-        val physicalModelsRegistry: PhysicalModelsRegistry = PhysicalModelsRegistry.DEFAULT) {
+        val physicalModelsRegistry: ModelLocator = PhysicalModelsRegistry.DEFAULT) {
     private val convertedConcepts = HashMap<PhysicalConcept, AbstractConcept>()
     private val convertedNodes = HashMap<PhysicalNode, Node>()
 

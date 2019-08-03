@@ -11,6 +11,10 @@ import java.util.*
 import kotlin.collections.HashMap
 
 class LanguageRegistry : ModelLocator {
+    override fun locateModel(name: String): PhysicalModel? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun locateLanguage(languageUUID: UUID): PhysicalLanguage? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
