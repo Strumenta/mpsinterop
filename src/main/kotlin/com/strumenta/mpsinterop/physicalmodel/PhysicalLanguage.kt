@@ -2,4 +2,4 @@ package com.strumenta.mpsinterop.physicalmodel
 
 import java.util.*
 
-class PhysicalLanguage(name: String, uuid: UUID) : PhysicalModule(name, uuid)
+class PhysicalLanguage(uuid: UUID, name: String) : PhysicalModule(uuid, name)

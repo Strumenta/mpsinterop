@@ -203,7 +203,7 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: Langu
     val mis = ModelInputStream(inputStream)
     val modelHeader = loadHeader(mis)
     // val model = SModel(modelHeader.getModelReference(), modelHeader)
-    val pModel = PhysicalModel(modelHeader.getModelReference()!!.name, modelHeader.getModelReference()!!.id.uuid())
+    val pModel = PhysicalModel(modelHeader.getModelReference()!!.id.uuid(), modelHeader.getModelReference()!!.name)
     val bp = BinaryPersistence()
     val languageLoaderHelper = LanguageLoaderHelper()
     val rh = bp.loadModelProperties(mis, languageLoaderHelper, pModel)

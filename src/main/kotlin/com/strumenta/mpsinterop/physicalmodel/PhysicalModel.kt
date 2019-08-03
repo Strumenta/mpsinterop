@@ -12,20 +12,28 @@ import kotlin.collections.HashMap
  * Each concept is identified by an ID globally and by an index within a single mps file,
  * same is true for relations and declaredProperties.
  */
-class PhysicalModel(val name: String, val uuid: UUID) {
+class PhysicalModel(val uuid: UUID, val name: String) {
 
-    val roots = LinkedList<PhysicalNode>()
+    private val conceptsByIndex = HashMap<String, PhysicalConcept>()
+    private val conceptsByQName = HashMap<String, PhysicalConcept>()
+    private val relationsByIndex = HashMap<String, PhysicalRelation>()
+    private val propertiesByIndex = HashMap<String, PhysicalProperty>()
+    private val languageUUIDsFromName = HashMap<String, LanguageUUID>()
+    private val languageUUIDsFromIndex = HashMap<String, LanguageUUID>()
 
     var module: PhysicalModule? = null
         set(value) {
             if (field != null) {
                 field!!.models.remove(this)
             }
-            if (value != null) {
-                value!!.models.add(this)
-            }
+            value?.models?.add(this)
             field = value
         }
+
+    private val _roots = LinkedList<PhysicalNode>()
+
+    val roots :List<PhysicalNode>
+        get() = _roots
 
     val numberOfRoots: Int
         get() = this.roots.size
@@ -35,7 +43,7 @@ class PhysicalModel(val name: String, val uuid: UUID) {
             throw java.lang.IllegalArgumentException("The given node is not a root")
         }
         root.modelOfWhichIsRoot = this
-        roots.add(root)
+        _roots.add(root)
     }
 
     fun onRoots(op: (PhysicalNode) -> Unit) {
@@ -49,13 +57,6 @@ class PhysicalModel(val name: String, val uuid: UUID) {
     fun getRootByName(name: String): PhysicalNode {
         return roots.find { it.name() == name }!!
     }
-
-    private val conceptsByIndex = HashMap<String, PhysicalConcept>()
-    private val conceptsByQName = HashMap<String, PhysicalConcept>()
-    private val relationsByIndex = HashMap<String, PhysicalRelation>()
-    private val propertiesByIndex = HashMap<String, PhysicalProperty>()
-    private val languageUUIDsFromName = HashMap<String, LanguageUUID>()
-    private val languageUUIDsFromIndex = HashMap<String, LanguageUUID>()
 
     fun registerConcept(concept: PhysicalConcept) {
         conceptsByIndex[concept.index] = concept

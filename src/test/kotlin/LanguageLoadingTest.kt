@@ -81,7 +81,7 @@ class LanguageLoadingTest {
         // jetbrains.mps.lang.core should be registered
         assertTrue(languageRegistry.knowsLanguageUUID(UUID.fromString("ceab5195-25ea-4f22-9b92-103b95ca8c0c")))
 
-        val module = PhysicalModule("Formats", UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"))
+        val module = PhysicalModule(UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"), "Formats")
         languageRegistry.loadLanguageFromMpsInputStream(inputStream, module)
         val concept = languageRegistry.getConcept("Formats.structure.Constraint") as Concept
         assertNotNull(concept)
@@ -102,7 +102,7 @@ class LanguageLoadingTest {
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.core-src.jar"))
 
-        val module = PhysicalModule("Formats", UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"))
+        val module = PhysicalModule(UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"), "Formats")
         languageRegistry.loadLanguageFromMpsInputStream(inputStream, module)
         val concept = languageRegistry.getConcept("Formats.structure.Constraint") as Concept
         assertNotNull(concept)
@@ -117,7 +117,7 @@ class LanguageLoadingTest {
         languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
                 "/jetbrains.mps.lang.core-src.jar"))
 
-        val module = PhysicalModule("Formats", UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"))
+        val module = PhysicalModule(UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"), "Formats")
         languageRegistry.loadLanguageFromMpsInputStream(inputStream, module)
         val concept = languageRegistry.getConcept("Formats.structure.Constraint") as Concept
         assertNotNull(concept)

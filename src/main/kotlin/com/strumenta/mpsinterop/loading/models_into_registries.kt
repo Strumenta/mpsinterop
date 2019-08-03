@@ -51,7 +51,7 @@ private fun LanguageRegistry.loadJar(file: File): List<PhysicalModel> {
                     val mplXML = loadDocument(jarFile.getInputStream(entry))
                     val uuid = UUID.fromString(mplXML.documentElement.getAttribute("uuid"))
                     val name = mplXML.documentElement.getAttribute("namespace")
-                    val module = PhysicalModule(name, uuid)
+                    val module = PhysicalModule(uuid, name)
                     var parts = entry.name.split("/")
                     parts = parts.dropLast(1)
                     // TODO read path from XML
