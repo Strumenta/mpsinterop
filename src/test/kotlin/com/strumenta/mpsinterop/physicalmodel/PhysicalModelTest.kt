@@ -144,11 +144,11 @@ class PhysicalModelTest {
         assertEquals(nameProp, model.findProperty(INAMED_CONCEPT, NAME_PROPERTY))
 
         val node1 = PhysicalNode(null, concept, NodeId.regular(1L))
-        node1.setProperty(nameProp, "MyNode1")
+        node1[nameProp] = "MyNode1"
         model.addRoot(node1)
         assertEquals("MyNode1", node1.name())
         val node2 = PhysicalNode(null, concept, NodeId.regular(2L))
-        node2.setProperty(nameProp, "MyNode2")
+        node2[nameProp] = "MyNode2"
         model.addRoot(node2)
         assertEquals("MyNode2", node2.name())
 
@@ -184,11 +184,11 @@ class PhysicalModelTest {
         assertEquals(nameProp, model.findProperty(INAMED_CONCEPT, NAME_PROPERTY))
 
         val node1 = PhysicalNode(null, concept, NodeId.regular(1L))
-        node1.setProperty(nameProp, "MyNode1")
+        node1[nameProp] = "MyNode1"
         model.addRoot(node1)
         assertEquals("MyNode1", node1.name())
         val node2 = PhysicalNode(null, concept, NodeId.regular(2L))
-        node2.setProperty(nameProp, "MyNode2")
+        node2[nameProp] = "MyNode2"
         model.addRoot(node2)
         assertEquals("MyNode2", node2.name())
 

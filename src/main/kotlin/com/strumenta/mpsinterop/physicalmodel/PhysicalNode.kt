@@ -23,6 +23,20 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         }
     }
 
+    fun ancestor(condition: (PhysicalNode) -> Boolean): PhysicalNode? {
+        if (parent == null) {
+            return null
+        }
+        if (condition(parent)) {
+            return parent
+        }
+        return parent.ancestor(condition)
+    }
+
+    // //////////////////////////////////////////
+    // Children
+    // //////////////////////////////////////////
+
     fun addChild(relation: PhysicalRelation, node: PhysicalNode) {
         if (relation !in children) {
             children[relation] = LinkedList()
@@ -30,9 +44,63 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         children[relation]!!.add(node)
     }
 
+    fun children(relation: PhysicalRelation) = children[relation] ?: emptyList<PhysicalNode>()
+
+    fun children(relationName: String): List<PhysicalNode> {
+        val relation = children.keys.find { it.name == relationName }
+        return if (relation == null) {
+            emptyList()
+        } else {
+            children[relation]!!
+        }
+    }
+
+    fun numberOfChildren(relationName: String): Int {
+        val rs = children.keys.filter { it.name == relationName }
+        return when (rs.size) {
+            0 -> 0
+            1 -> children[rs[0]]!!.size
+            else -> throw IllegalArgumentException("Ambiguous reference name $relationName")
+        }
+    }
+
+    fun findNodeByID(nodeID: NodeId): PhysicalNode? {
+        if (this.id == nodeID) {
+            return this
+        }
+        for (cl in children.values) {
+            for (c in cl) {
+                val res = c.findNodeByID(nodeID)
+                if (res != null) {
+                    return res
+                }
+            }
+        }
+        return null
+    }
+
+    // //////////////////////////////////////////
+    // References
+    // //////////////////////////////////////////
+
     fun addReference(relation: PhysicalRelation, node: PhysicalReferenceValue) {
         references[relation] = node
     }
+
+    fun reference(relation: PhysicalRelation) = references[relation]
+
+    fun reference(relationName: String): PhysicalReferenceValue? {
+        val rs = references.keys.filter { it.name == relationName }
+        return when (rs.size) {
+            0 -> null
+            1 -> reference(rs.first())
+            else -> throw IllegalArgumentException("Ambiguous reference name $relationName")
+        }
+    }
+
+    // //////////////////////////////////////////
+    // Properties
+    // //////////////////////////////////////////
 
     fun addProperty(property: PhysicalProperty, propertyValue: String) {
         properties[property] = propertyValue
@@ -61,39 +129,7 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         }
     }
 
-    fun children(relationName: String): List<PhysicalNode> {
-        val relation = children.keys.find { it.name == relationName }
-        return if (relation == null) {
-            emptyList()
-        } else {
-            children[relation]!!
-        }
-    }
-
-    fun children(relation: PhysicalRelation) = children[relation] ?: emptyList<PhysicalNode>()
-
-    fun reference(relation: PhysicalRelation) = references[relation]
-
-    fun reference(relationName: String): PhysicalReferenceValue? {
-        val rs = references.keys.filter { it.name == relationName }
-        return when (rs.size) {
-            0 -> null
-            1 -> reference(rs.first())
-            else -> throw IllegalArgumentException("Ambiguous reference name $relationName")
-        }
-    }
-
-    fun ancestor(condition: (PhysicalNode) -> Boolean): PhysicalNode? {
-        if (parent == null) {
-            return null
-        }
-        if (condition(parent)) {
-            return parent
-        }
-        return parent.ancestor(condition)
-    }
-
-    fun setProperty(property: PhysicalProperty, value: String) {
+    operator fun set(property: PhysicalProperty, value: String) {
         properties[property] = value
     }
 
@@ -122,29 +158,5 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         } else {
             properties[prop]!!
         }
-    }
-
-    fun numberOfChildren(relationName: String): Int {
-        val rs = children.keys.filter { it.name == relationName }
-        return when (rs.size) {
-            0 -> 0
-            1 -> children[rs[0]]!!.size
-            else -> throw IllegalArgumentException("Ambiguous reference name $relationName")
-        }
-    }
-
-    fun findNodeByID(nodeID: NodeId): PhysicalNode? {
-        if (this.id == nodeID) {
-            return this
-        }
-        for (cl in children.values) {
-            for (c in cl) {
-                val res = c.findNodeByID(nodeID)
-                if (res != null) {
-                    return res
-                }
-            }
-        }
-        return null
     }
 }
