@@ -3,7 +3,6 @@ package com.strumenta.mpsinterop.physicalmodel
 import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.NodeId
 import java.lang.IllegalArgumentException
-import java.lang.RuntimeException
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -127,7 +126,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
         relationsByIndex[relation.index] = relation
     }
 
-    fun relationByIndex(index: String): PhysicalRelation = relationsByIndex[index]
+    fun getRelationByIndex(index: String): PhysicalRelation = relationsByIndex[index]
             ?: throw IllegalArgumentException("Relation with index $index not found")
 
     // /////////////////////////////////////
@@ -135,17 +134,21 @@ class PhysicalModel(val uuid: UUID, val name: String) {
     // /////////////////////////////////////
 
     fun registerProperty(property: PhysicalProperty) {
+        if (!property.container.hasProperty(property)) {
+            property.container.addProperty(property)
+        }
         propertiesByIndex[property.index] = property
     }
 
-    fun propertyByIndex(index: String): PhysicalProperty = propertiesByIndex[index]!!
+    fun getPropertyByIndex(index: String): PhysicalProperty = propertiesByIndex[index]
+            ?: throw IllegalArgumentException("Property with index $index not found")
 
-    fun findProperty(conceptName: String, propertyName: String): PhysicalProperty? {
-        return conceptsByQName[conceptName]?.propertyByName(propertyName)
+    fun findPropertyByName(conceptName: String, propertyName: String): PhysicalProperty? {
+        return conceptsByQName[conceptName]?.findPropertyByName(propertyName)
     }
 
-    fun getProperty(conceptName: String, propertyName: String): PhysicalProperty {
-        return findProperty(conceptName, propertyName)
+    fun getPropertyByName(conceptName: String, propertyName: String): PhysicalProperty {
+        return findPropertyByName(conceptName, propertyName)
                 ?: throw IllegalArgumentException("Property $conceptName.$propertyName not found")
     }
 

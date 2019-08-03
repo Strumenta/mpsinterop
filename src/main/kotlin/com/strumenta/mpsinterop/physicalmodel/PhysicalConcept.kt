@@ -26,9 +26,13 @@ data class PhysicalConcept(
     /**
      * This method does not consider inherited properties
      */
-    fun propertyByName(name: String): PhysicalProperty {
-        return properties.find { it.name == name }
+    fun getPropertyByName(name: String): PhysicalProperty {
+        return findPropertyByName(name)
                 ?: throw IllegalArgumentException("Property $name not found in concept $name")
+    }
+
+    fun findPropertyByName(name: String): PhysicalProperty? {
+        return properties.find { it.name == name }
     }
 
     fun addRelation(relation: PhysicalRelation) {
@@ -38,6 +42,10 @@ data class PhysicalConcept(
     fun relationByName(name: String): PhysicalRelation {
         return relations.find { it.name == name }
                 ?: throw IllegalArgumentException("Relation $name not found in concept $name")
+    }
+
+    fun hasProperty(property: PhysicalProperty): Boolean {
+        return properties.contains(property)
     }
 
     val qualifiedName: String

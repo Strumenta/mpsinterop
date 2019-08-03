@@ -22,17 +22,17 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, elem
         val modelNode = PhysicalNode(parent, physicalModel.findConceptByIndex(conceptIndex)!!, NodeId.regular(Base64.parseLong(id)))
         element.processChildren("property") {
             val value = it.getAttribute("value")
-            val property = physicalModel.propertyByIndex(it.getAttribute("role"))
+            val property = physicalModel.getPropertyByIndex(it.getAttribute("role"))
             modelNode.addProperty(property, value)
         }
         element.processChildren("node") {
             val childModelNode = elementToModelNode(physicalModel, modelNode, it)
-            val role = physicalModel.relationByIndex(it.getAttribute("role"))
+            val role = physicalModel.getRelationByIndex(it.getAttribute("role"))
             modelNode.addChild(role, childModelNode)
         }
         element.processChildren("ref") {
             val roleIndex = it.getAttribute("role")
-            val role = physicalModel.relationByIndex(roleIndex)
+            val role = physicalModel.getRelationByIndex(roleIndex)
             val target = when {
                 it.hasAttribute("to") -> {
                     val to = it.getAttribute("to")

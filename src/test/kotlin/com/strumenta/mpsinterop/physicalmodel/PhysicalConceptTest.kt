@@ -41,7 +41,7 @@ class PhysicalConceptTest {
                 PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps"))
         val enumerationMemberDeclaration = model.findConceptByID(1083171877298L)
         assertNotNull(enumerationMemberDeclaration)
-        enumerationMemberDeclaration.propertyByName("MyUnexistingProperty")
+        enumerationMemberDeclaration.getPropertyByName("MyUnexistingProperty")
     }
 
     @Test
@@ -51,13 +51,13 @@ class PhysicalConceptTest {
         val enumerationMemberDeclaration = model.findConceptByID(1083171877298L)
         assertNotNull(enumerationMemberDeclaration)
 
-        val externalValue = enumerationMemberDeclaration.propertyByName("externalValue")
+        val externalValue = enumerationMemberDeclaration.getPropertyByName("externalValue")
         assertEquals("externalValue", externalValue.name)
         assertEquals("1uS6qo", externalValue.index)
         assertEquals(1083923523172L, externalValue.id)
         assertEquals(enumerationMemberDeclaration, externalValue.container)
 
-        val internalValue = enumerationMemberDeclaration.propertyByName("internalValue")
+        val internalValue = enumerationMemberDeclaration.getPropertyByName("internalValue")
         assertEquals("internalValue", internalValue.name)
         assertEquals("1uS6qv", internalValue.index)
         assertEquals(1083923523171L, internalValue.id)
