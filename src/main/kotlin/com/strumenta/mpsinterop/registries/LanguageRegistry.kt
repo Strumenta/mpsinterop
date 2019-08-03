@@ -175,10 +175,7 @@ class LanguageRegistry : ModelLocator {
     }
 
     private fun loadConceptFromNode(it: PhysicalNode): AbstractConcept? {
-        val conceptID = conceptIDforConceptNode(it)
-        if (conceptID == null) {
-            return null
-        }
+        val conceptID = conceptIDforConceptNode(it) ?: return null
         val langUUID = languageIDforConceptNode(it)
         var concept = languagesByUUID[langUUID]?.conceptByID(conceptID)
         if (concept == null) {
@@ -192,7 +189,7 @@ class LanguageRegistry : ModelLocator {
         }
 
         when {
-            it.concept.qualifiedName == CONCEPT_DECLARATION -> {
+            it.concept.qualifiedName == CONCEPT_DECLARATION_CONCEPT_NAME -> {
 
                 (concept as Concept).final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
