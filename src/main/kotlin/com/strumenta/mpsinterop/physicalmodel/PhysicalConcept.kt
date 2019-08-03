@@ -1,6 +1,7 @@
 package com.strumenta.mpsinterop.physicalmodel
 
 import com.strumenta.mpsinterop.logicalmodel.LanguageId
+import com.strumenta.mpsinterop.utils.isSimpleName
 import java.util.*
 
 /**
@@ -13,7 +14,7 @@ data class PhysicalConcept(
     val index: String
 ) {
     init {
-        require(name.indexOf('.') == -1) { "A concept name should not be qualified ($name)" }
+        require(name.isSimpleName) { "A concept name should not be qualified ($name)" }
     }
     private val properties = LinkedList<PhysicalProperty>()
     private val relations = LinkedList<PhysicalRelation>()
