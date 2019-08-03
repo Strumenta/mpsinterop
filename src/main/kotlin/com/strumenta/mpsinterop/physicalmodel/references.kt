@@ -10,12 +10,13 @@ data class InModelReferenceTarget(
     val physicalModel: PhysicalModel,
     val nodeID: String
 ) : ReferenceTarget()
+
 data class OutsideModelReferenceTarget(
     val physicalModel: PhysicalModel,
     val importIndex: String,
     val nodeIndex: String
 ) : ReferenceTarget() {
-    val modelUIID: UUID = physicalModel.languageUUIDByIndex(importIndex)
+    val modelUIID: UUID = physicalModel.modelUUIDFromIndex(importIndex)
     val nodeID: Long
         get() {
             return Base64.parseLong(nodeIndex)

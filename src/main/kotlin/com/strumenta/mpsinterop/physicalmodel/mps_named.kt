@@ -7,7 +7,7 @@ const val NAME_PROPERTY = "name"
 
 fun PhysicalNode.name(): String? {
     val model = this.model ?: throw IllegalStateException("Node not attached into a physical model")
-    return model.findProperty(INAMED_CONCEPT, NAME_PROPERTY)?.let {
+    return model.findPropertyByName(INAMED_CONCEPT, NAME_PROPERTY)?.let {
         propertyValue(it)
     }
 }

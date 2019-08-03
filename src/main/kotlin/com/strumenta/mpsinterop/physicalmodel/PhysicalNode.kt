@@ -1,36 +1,38 @@
 package com.strumenta.mpsinterop.physicalmodel
 
 import com.strumenta.mpsinterop.logicalmodel.NodeId
+import java.lang.IllegalStateException
 import java.lang.UnsupportedOperationException
 import java.util.*
 import kotlin.collections.HashMap
 
 class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: NodeId) {
-    val root: Boolean
-        get() = parent == null
-    internal var modelOfWhichIsRoot: PhysicalModel? = null
-    val model: PhysicalModel?
-        get() = if (root) modelOfWhichIsRoot else parent!!.model
     private val properties = HashMap<PhysicalProperty, String>()
     private val children = HashMap<PhysicalRelation, MutableList<PhysicalNode>>()
     private val references = HashMap<PhysicalRelation, PhysicalReferenceValue>()
 
-    fun qualifiedName(): String {
-        if (root) {
-            return model!!.name + "." + name()
-        } else {
-            throw UnsupportedOperationException()
-        }
-    }
+    // //////////////////////////////////////////
+    // Root and model
+    // //////////////////////////////////////////
 
-    fun ancestor(condition: (PhysicalNode) -> Boolean): PhysicalNode? {
-        if (parent == null) {
-            return null
+    val isRoot: Boolean
+        get() = parent == null
+    internal var modelOfWhichIsRoot: PhysicalModel? = null
+    val model: PhysicalModel?
+        get() = if (isRoot) modelOfWhichIsRoot else parent!!.model
+
+    // //////////////////////////////////////////
+    // Naming
+    // //////////////////////////////////////////
+
+    fun qualifiedName(): String {
+        if (isRoot) {
+            val model = model ?: throw IllegalStateException("The node must be attached into a model to get a qualified name")
+            val name = name() ?: throw IllegalStateException("The node has not simple name")
+            return model.name + "." + name
+        } else {
+            throw UnsupportedOperationException("Only root nodes can have a qualified name")
         }
-        if (condition(parent)) {
-            return parent
-        }
-        return parent.ancestor(condition)
     }
 
     // //////////////////////////////////////////
@@ -38,13 +40,21 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     // //////////////////////////////////////////
 
     fun addChild(relation: PhysicalRelation, node: PhysicalNode) {
+        if (relation.kind != RelationKind.CONTAINMENT) {
+            throw java.lang.IllegalArgumentException("Containment relation expected")
+        }
         if (relation !in children) {
             children[relation] = LinkedList()
         }
         children[relation]!!.add(node)
     }
 
-    fun children(relation: PhysicalRelation) = children[relation] ?: emptyList<PhysicalNode>()
+    fun children(relation: PhysicalRelation) : List<PhysicalNode> {
+        if (relation.kind != RelationKind.CONTAINMENT) {
+            throw java.lang.IllegalArgumentException("Containment relation expected")
+        }
+        return children[relation] ?: emptyList()
+    }
 
     fun children(relationName: String): List<PhysicalNode> {
         val relation = children.keys.find { it.name == relationName }
@@ -87,7 +97,12 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         references[relation] = node
     }
 
-    fun reference(relation: PhysicalRelation) = references[relation]
+    fun reference(relation: PhysicalRelation): PhysicalReferenceValue? {
+        if (relation.kind != RelationKind.REFERENCE) {
+            throw java.lang.IllegalArgumentException("Reference relation expected")
+        }
+        return references[relation]
+    }
 
     fun reference(relationName: String): PhysicalReferenceValue? {
         val rs = references.keys.filter { it.name == relationName }
@@ -101,10 +116,6 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     // //////////////////////////////////////////
     // Properties
     // //////////////////////////////////////////
-
-    fun addProperty(property: PhysicalProperty, propertyValue: String) {
-        properties[property] = propertyValue
-    }
 
     fun propertyValue(property: PhysicalProperty): String? {
         return properties[property]
@@ -131,6 +142,14 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
 
     operator fun set(property: PhysicalProperty, value: String) {
         properties[property] = value
+    }
+
+    operator fun set(property: PhysicalProperty, value: Boolean) {
+        this[property] = value.toString()
+    }
+
+    operator fun set(property: PhysicalProperty, value: Long) {
+        this[property] = value.toString()
     }
 
     fun booleanPropertyValue(propertyName: String): Boolean {

@@ -53,7 +53,7 @@ class Model(val name: String) {
 
     fun addRoot(root: Node) {
         if (!root.root) {
-            throw IllegalArgumentException("The given node is not a root")
+            throw IllegalArgumentException("The given node is not a isRoot")
         }
         roots.add(root)
     }
@@ -68,7 +68,7 @@ class Model(val name: String) {
 
     fun getRootByName(name: String): Node {
         return roots.find { it.name == name } ?: throw RuntimeException(
-                "No root found with name $name. Roots have these names: ${roots.map { it.name
+                "No isRoot found with name $name. Roots have these names: ${roots.map { it.name
         }.joinToString(", ")}")
     }
 }

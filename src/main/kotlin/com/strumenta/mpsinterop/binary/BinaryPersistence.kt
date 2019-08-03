@@ -93,7 +93,7 @@ internal class BinaryPersistence {
 //        assert(meta != null)
 //        // In fact, would be better to translate index attribute of any XXXInfo element into
 //        // a value not related to meta-element position in the registry. Otherwise, almost any change
-//        // in a model (e.g. addition of a new root or new property value) might affect all other root hashes
+//        // in a model (e.g. addition of a new isRoot or new property value) might affect all other isRoot hashes
 //        // as the index of meta-model elements might change. However, as long as our binary models are not exposed
 //        // for user editing, we don't care.
 //

@@ -19,20 +19,20 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, elem
     val conceptIndex = element.getAttribute("concept")
     val id = element.getAttribute("id")
     try {
-        val modelNode = PhysicalNode(parent, physicalModel.conceptByIndex(conceptIndex), NodeId.regular(Base64.parseLong(id)))
+        val modelNode = PhysicalNode(parent, physicalModel.findConceptByIndex(conceptIndex)!!, NodeId.regular(Base64.parseLong(id)))
         element.processChildren("property") {
             val value = it.getAttribute("value")
-            val property = physicalModel.propertyByIndex(it.getAttribute("role"))
-            modelNode.addProperty(property, value)
+            val property = physicalModel.getPropertyByIndex(it.getAttribute("role"))
+            modelNode[property] = value
         }
         element.processChildren("node") {
             val childModelNode = elementToModelNode(physicalModel, modelNode, it)
-            val role = physicalModel.relationByIndex(it.getAttribute("role"))
+            val role = physicalModel.getRelationByIndex(it.getAttribute("role"))
             modelNode.addChild(role, childModelNode)
         }
         element.processChildren("ref") {
             val roleIndex = it.getAttribute("role")
-            val role = physicalModel.relationByIndex(roleIndex)
+            val role = physicalModel.getRelationByIndex(roleIndex)
             val target = when {
                 it.hasAttribute("to") -> {
                     val to = it.getAttribute("to")
@@ -113,7 +113,7 @@ fun loadModel(document: Document): PhysicalModel {
         val nameInParens = rawNameToLanguageName(rawName)
         val uuid = rawNameToUuid(rawName)
         physicalModel.putLanguageInRegistry(uuid, nameInParens.removeSuffix(".structure"))
-        physicalModel.putLanguageIndexInRegistry(uuid, index)
+        physicalModel.putModelInRegistry(uuid, nameInParens, index)
     }
     document.documentElement.processAllNodes("concept") {
         val languageId = UUID.fromString((it.parentNode as Element).getAttribute("id"))
