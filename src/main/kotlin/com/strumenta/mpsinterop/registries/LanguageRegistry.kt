@@ -162,7 +162,7 @@ class LanguageRegistry : ModelLocator {
                 return enumerationType
             }
             node.concept.qualifiedName == CONSTRAINED_DATA_TYPE_DECLARATION_CONCEPT_NAME -> {
-                val qname = node.qname()
+                val qname = node.qualifiedName()
                 return ConstrainedPropertyType(qname)
             }
             else -> TODO(node.concept.qualifiedName)

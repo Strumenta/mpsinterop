@@ -15,7 +15,7 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     private val children = HashMap<PhysicalRelation, MutableList<PhysicalNode>>()
     private val references = HashMap<PhysicalRelation, PhysicalReferenceValue>()
 
-    fun qname(): String {
+    fun qualifiedName(): String {
         if (root) {
             return model!!.name + "." + name()
         } else {
