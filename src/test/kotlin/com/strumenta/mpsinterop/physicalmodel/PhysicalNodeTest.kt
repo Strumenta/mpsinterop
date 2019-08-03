@@ -177,7 +177,7 @@ class PhysicalNodeTest {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
         val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
                 "MyConcept", "123x")
-        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
         val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
@@ -193,7 +193,7 @@ class PhysicalNodeTest {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
         val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
                 "MyConcept", "123x")
-        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
         val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
@@ -209,7 +209,7 @@ class PhysicalNodeTest {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
         val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
                 "MyConcept", "123x")
-        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
         val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
@@ -225,7 +225,7 @@ class PhysicalNodeTest {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
         val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
                 "MyConcept", "123x")
-        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
         val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
@@ -241,7 +241,7 @@ class PhysicalNodeTest {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
         val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
                 "MyConcept", "123x")
-        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
         val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
@@ -257,7 +257,7 @@ class PhysicalNodeTest {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
         val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
                 "MyConcept", "123x")
-        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
         val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
@@ -273,7 +273,7 @@ class PhysicalNodeTest {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
         val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
                 "MyConcept", "123x")
-        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
         val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
@@ -282,5 +282,61 @@ class PhysicalNodeTest {
         node1.addChild(relation, node3)
 
         assertEquals(node3, node1.findNodeByID(NodeId.regular(126L)))
+    }
+
+    @Test
+    fun referenceKeyNegativeCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+
+        assertEquals(null, node1.reference(relation))
+    }
+
+    @Test
+    fun referenceKeyPositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
+        node1.addReference(relation, PhysicalReferenceValue(InModelReferenceTarget(model, "125"), null))
+
+        assertEquals(PhysicalReferenceValue(InModelReferenceTarget(model, "125"), null), node1.reference(relation))
+    }
+
+    @Test
+    fun referenceStringNegativeCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+
+        assertEquals(null, node1.reference("someRelation"))
+    }
+
+    @Test
+    fun referenceStringPositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
+        node1.addReference(relation, PhysicalReferenceValue(InModelReferenceTarget(model, "125"), null))
+
+        assertEquals(PhysicalReferenceValue(InModelReferenceTarget(model, "125"), null), node1.reference("MyRelation"))
     }
 }

@@ -40,6 +40,9 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     // //////////////////////////////////////////
 
     fun addChild(relation: PhysicalRelation, node: PhysicalNode) {
+        if (relation.kind != RelationKind.CONTAINMENT) {
+            throw java.lang.IllegalArgumentException("Containment relation expected")
+        }
         if (relation !in children) {
             children[relation] = LinkedList()
         }
