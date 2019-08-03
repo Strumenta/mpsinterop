@@ -2,6 +2,7 @@ package com.strumenta.mpsinterop.physicalmodel
 
 import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.logicalmodel.NodeId
+import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
 import java.util.*
 import kotlin.collections.HashMap
@@ -54,9 +55,11 @@ class PhysicalModel(val uuid: UUID, val name: String) {
         roots.filter { it.concept == concept }.forEach { op(it) }
     }
 
-    fun getRootByName(name: String): PhysicalNode {
-        return roots.find { it.name() == name }!!
+    fun findRootByName(name: String): PhysicalNode? {
+        return roots.find { it.name() == name }
     }
+
+    fun getRootByName(name: String) = findRootByName(name) ?: throw IllegalArgumentException("No root found with name $name")
 
     fun registerConcept(concept: PhysicalConcept) {
         conceptsByIndex[concept.index] = concept
@@ -72,6 +75,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
     }
 
     fun conceptByIndex(index: String): PhysicalConcept = conceptsByIndex[index]!!
+
     fun languageUUIDByIndex(index: String): LanguageUUID = languageUUIDsFromIndex[index]
             ?: throw java.lang.IllegalArgumentException("Unknown language index $index. Known indexes: ${languageUUIDsFromIndex.keys.joinToString(", ")}")
 
