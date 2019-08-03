@@ -6,6 +6,7 @@ import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModule
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.registries.PhysicalModelsRegistry
+import com.strumenta.mpsinterop.utils.dumpToTempFile
 import com.strumenta.mpsinterop.utils.loadDocument
 import java.io.File
 import java.io.FileInputStream
@@ -32,25 +33,7 @@ fun PhysicalModelsRegistry.loadJar(file: File) : List<PhysicalModel> {
 
 fun PhysicalModelsRegistry.loadJar(inputStream: InputStream) = loadJar(dumpToTempFile(inputStream))
 
-private fun dumpToTempFile(inputStream: InputStream): File {
-    val tempFile = File.createTempFile("jar_file_from_input_stream", ".jar")
-    tempFile.deleteOnExit()
 
-    val buffer = ByteArray(8 * 1024)
-
-    inputStream.use { inputStream ->
-        FileOutputStream(tempFile).use { output ->
-            var bytesRead: Int
-            do {
-                bytesRead = inputStream.read(buffer)
-                if (bytesRead != -1) {
-                    output.write(buffer, 0, bytesRead)
-                }
-            } while (bytesRead != -1)
-        }
-    }
-    return tempFile
-}
 
 fun LanguageRegistry.loadLanguageFromJar(inputStream: InputStream)  {
     loadJar(inputStream).forEach { this.loadLanguageFromModel(it) }
