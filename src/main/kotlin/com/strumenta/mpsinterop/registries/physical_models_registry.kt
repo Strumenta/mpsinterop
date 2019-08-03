@@ -22,15 +22,6 @@ class PhysicalModelsRegistry : ModelLocator {
 
     private val models = LinkedList<PhysicalModel>()
 
-    fun findConceptDeclaration(name: String): PhysicalNode? {
-        for (m: PhysicalModel in models) {
-            val res = m.findConceptDeclaration(name)
-            if (res != null) {
-                return res
-            }
-        }
-        return null
-    }
 
     companion object {
         val DEFAULT = PhysicalModelsRegistry()
@@ -40,13 +31,6 @@ class PhysicalModelsRegistry : ModelLocator {
         models.add(physicalModel)
     }
 
-//    operator fun get(name: String) {
-//        TODO()
-//    }
-//
-//    operator fun set(name: String, language: Language) {
-//        TODO()
-//    }
 }
 
 val CONCEPT_DECLARATION = "jetbrains.mps.lang.structure.structure.ConceptDeclaration"

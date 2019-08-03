@@ -16,25 +16,6 @@ import java.io.FileOutputStream
 import java.util.*
 import java.util.zip.ZipException
 
-fun PhysicalModelsRegistry.loadJar(file: File) : List<PhysicalModel> {
-    val models = LinkedList<PhysicalModel>()
-    val jarFile = JarFile(file)
-    val entries = jarFile.entries()
-    while (entries.hasMoreElements()) {
-        val entry = entries.nextElement()
-        if (entry.name.endsWith(".mps")) {
-            val model = loadMpsModel(jarFile.getInputStream(entry))
-            models.add(model)
-            this.add(model)
-        }
-    }
-    return models
-}
-
-fun PhysicalModelsRegistry.loadJar(inputStream: InputStream) = loadJar(dumpToTempFile(inputStream))
-
-
-
 fun LanguageRegistry.loadLanguageFromJar(inputStream: InputStream)  {
     loadJar(inputStream).forEach { this.loadLanguageFromModel(it) }
 }

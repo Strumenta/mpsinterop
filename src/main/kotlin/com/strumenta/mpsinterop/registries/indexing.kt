@@ -7,6 +7,7 @@ import com.strumenta.mpsinterop.loading.loadMpsModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalLanguage
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
+import com.strumenta.mpsinterop.utils.dumpToTempFile
 import java.io.File
 import java.io.InputStream
 import java.util.*
@@ -122,8 +123,11 @@ class Indexer : ModelLocator {
         registerModel(model.uuid, HolderLoadingInfo(model, modelSource, SourceType.MPB))
     }
 
-    private fun indexJar(file: File) {
-        //println("[JAR] ${file.absolutePath}")
+    fun indexJar(inputStream: InputStream) {
+        indexJar(dumpToTempFile(inputStream))
+    }
+
+    fun indexJar(file: File) {
         try {
             val jarFile = JarFile(file)
             val entries = jarFile.entries()
