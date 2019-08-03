@@ -66,25 +66,4 @@ object Base64 {
         return result
     }
 
-    // at least 5, at most 6 character string encoding. Leading zero is removed only if it's sixth symbol.
-    fun indexValue(v: Int): String {
-        var v = v
-        myBufferInt[5] = myIndexChars[v and 0x3F]
-        v = v shr 6
-        myBufferInt[4] = myIndexChars[v and 0x3F]
-        v = v shr 6
-        myBufferInt[3] = myIndexChars[v and 0x3F]
-        v = v shr 6
-        myBufferInt[2] = myIndexChars[v and 0x3F]
-        v = v shr 6
-        myBufferInt[1] = myIndexChars[v and 0x3F]
-        v = v shr 6
-        // 5 times x 6 bits = we've got only 2 bits left of integer's total 32
-        v = v and 0x3
-        if (v != 0) {
-            myBufferInt[0] = myIndexChars[v]
-            return String(myBufferInt)
-        }
-        return String(myBufferInt, 1, 5)
-    }
 }
