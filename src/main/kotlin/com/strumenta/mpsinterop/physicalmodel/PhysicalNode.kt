@@ -1,27 +1,43 @@
 package com.strumenta.mpsinterop.physicalmodel
 
 import com.strumenta.mpsinterop.logicalmodel.NodeId
+import java.lang.IllegalStateException
 import java.lang.UnsupportedOperationException
 import java.util.*
 import kotlin.collections.HashMap
 
 class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: NodeId) {
-    val root: Boolean
-        get() = parent == null
-    internal var modelOfWhichIsRoot: PhysicalModel? = null
-    val model: PhysicalModel?
-        get() = if (root) modelOfWhichIsRoot else parent!!.model
     private val properties = HashMap<PhysicalProperty, String>()
     private val children = HashMap<PhysicalRelation, MutableList<PhysicalNode>>()
     private val references = HashMap<PhysicalRelation, PhysicalReferenceValue>()
 
+    // //////////////////////////////////////////
+    // Root and model
+    // //////////////////////////////////////////
+
+    val isRoot: Boolean
+        get() = parent == null
+    internal var modelOfWhichIsRoot: PhysicalModel? = null
+    val model: PhysicalModel?
+        get() = if (isRoot) modelOfWhichIsRoot else parent!!.model
+
+    // //////////////////////////////////////////
+    // Naming
+    // //////////////////////////////////////////
+
     fun qualifiedName(): String {
-        if (root) {
-            return model!!.name + "." + name()
+        if (isRoot) {
+            val model = model ?: throw IllegalStateException("The node must be attached into a model to get a qualified name")
+            val name = name() ?: throw IllegalStateException("The node has not simple name")
+            return model.name + "." + name
         } else {
-            throw UnsupportedOperationException()
+            throw UnsupportedOperationException("Only root nodes can have a qualified name")
         }
     }
+
+    // //////////////////////////////////////////
+    // Hierarchy
+    // //////////////////////////////////////////
 
     fun ancestor(condition: (PhysicalNode) -> Boolean): PhysicalNode? {
         if (parent == null) {

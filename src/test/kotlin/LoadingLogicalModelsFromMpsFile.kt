@@ -88,7 +88,7 @@ class LoadingLogicalModelsFromMpsFile {
 //        assertNotNull(superConcept)
 //        assertEquals(PhysicalReferenceValue(OutsideModelReferenceTarget("tpck", "gw2VY9q"), "BaseConcept"), superConcept)
 //
-//        // TODO check it cannot be root
+//        // TODO check it cannot be isRoot
 //        // It is not present because it has the default value
 //        //assertEquals("false", constraintNode.propertyValue("rootable"))
 //

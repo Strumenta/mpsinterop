@@ -50,8 +50,8 @@ class PhysicalModel(val uuid: UUID, val name: String) {
         get() = this.roots.size
 
     fun addRoot(root: PhysicalNode) {
-        if (!root.root) {
-            throw IllegalArgumentException("The given node is not a root")
+        if (!root.isRoot) {
+            throw IllegalArgumentException("The given node is not a isRoot")
         }
         root.modelOfWhichIsRoot = this
         _roots.add(root)
@@ -69,7 +69,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
         return roots.find { it.name() == name }
     }
 
-    fun getRootByName(name: String) = findRootByName(name) ?: throw IllegalArgumentException("No root found with name $name")
+    fun getRootByName(name: String) = findRootByName(name) ?: throw IllegalArgumentException("No isRoot found with name $name")
 
     fun rootsOfConcept(concept: PhysicalConcept): List<PhysicalNode> {
         return roots.filter { it.concept == concept }

@@ -424,5 +424,4 @@ class PhysicalModelTest {
         model.addRoot(node)
         assertEquals(node, model.findNodeByID(NodeId.regular(124L)))
     }
-
 }
