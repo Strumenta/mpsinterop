@@ -120,5 +120,9 @@ class PhysicalModel(val name: String, val uuid: UUID) {
         }
         return null
     }
+
+    fun findConceptByID(conceptID: Long): PhysicalConcept? {
+        return conceptsByIndex.values.find { it.id == conceptID }
+    }
 }
 
