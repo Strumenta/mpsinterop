@@ -38,8 +38,8 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         properties[property] = propertyValue
     }
 
-    fun propertyValue(property: PhysicalProperty): String {
-        return properties[property]!!
+    fun propertyValue(property: PhysicalProperty): String? {
+        return properties[property]
     }
 
     fun propertyValue(propertyName: String, defaultValue: String?): String? {

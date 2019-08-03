@@ -55,7 +55,7 @@ class LanguageRegistry : ModelLocator {
 
     fun preloadConcept(it: PhysicalNode): AbstractConcept? {
         val model = it.model!!
-        if (it.concept.qname == CONCEPT_DECLARATION_CONCEPT_NAME) {
+        if (it.concept.qualifiedName == CONCEPT_DECLARATION_CONCEPT_NAME) {
             val languageName = model.name.removeSuffix(".structure")
             val languageID = languageIDforConceptNode(it)
             val language = if (languageID in this.languagesByUUID) {
@@ -97,7 +97,7 @@ class LanguageRegistry : ModelLocator {
 //                    concept.extended = this.resolveAsConcept(extendsValue.target)
 //                }
             return concept
-        } else if (it.concept.qname == INTERFACE_CONCEPT_DECLARATION_CONCEPT_NAME) {
+        } else if (it.concept.qualifiedName == INTERFACE_CONCEPT_DECLARATION_CONCEPT_NAME) {
             val languageName = model.name.removeSuffix(".structure")
             val languageID = languageIDforConceptNode(it)
             val language = if (languageID in this.languagesByUUID) {
@@ -132,12 +132,12 @@ class LanguageRegistry : ModelLocator {
             if (concept != null) {
                 concepts[it] = concept
             }
-            // println(it.concept.qname(this))
+            // println(it.concept.qualifiedName(this))
         }
 
         model.roots.forEach {
             loadConceptFromNode(it)
-            // println(it.concept.qname(this))
+            // println(it.concept.qualifiedName(this))
         }
         // val language = model.
         // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -145,11 +145,11 @@ class LanguageRegistry : ModelLocator {
 
     private fun loadPropertyTypeFromNode(node: PhysicalNode): PropertyType {
         when {
-            node.concept.qname == PRIMITIVE_DATA_TYPE_DECLARATION_CONCEPT_NAME -> {
+            node.concept.qualifiedName == PRIMITIVE_DATA_TYPE_DECLARATION_CONCEPT_NAME -> {
                 val name = node.name()!!
                 return PrimitivePropertyType.valueOf(name.toUpperCase())
             }
-            node.concept.qname == ENUMERATION_DATA_TYPE_DECLARATION_CONCEPT_NAME -> {
+            node.concept.qualifiedName == ENUMERATION_DATA_TYPE_DECLARATION_CONCEPT_NAME -> {
                 val baseTypeNode = nodeLocator.resolve(node.reference("memberDataType")!!.target)!!
                 val alternatives = node.children("member").map {
                     loadEnumerationAlternative(it)
@@ -161,11 +161,11 @@ class LanguageRegistry : ModelLocator {
                 )
                 return enumerationType
             }
-            node.concept.qname == CONSTRAINED_DATA_TYPE_DECLARATION_CONCEPT_NAME -> {
+            node.concept.qualifiedName == CONSTRAINED_DATA_TYPE_DECLARATION_CONCEPT_NAME -> {
                 val qname = node.qname()
                 return ConstrainedPropertyType(qname)
             }
-            else -> TODO(node.concept.qname)
+            else -> TODO(node.concept.qualifiedName)
         }
     }
 
@@ -192,7 +192,7 @@ class LanguageRegistry : ModelLocator {
         }
 
         when {
-            it.concept.qname == CONCEPT_DECLARATION -> {
+            it.concept.qualifiedName == CONCEPT_DECLARATION -> {
 
                 (concept as Concept).final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")
@@ -230,7 +230,7 @@ class LanguageRegistry : ModelLocator {
                     // TODO()
                 }
             }
-            it.concept.qname == INTERFACE_CONCEPT_DECLARATION_CONCEPT_NAME -> {
+            it.concept.qualifiedName == INTERFACE_CONCEPT_DECLARATION_CONCEPT_NAME -> {
 
                 (concept as InterfaceConcept).final = it.booleanPropertyValue("final")
                 concept.abstract = it.booleanPropertyValue("abstract")

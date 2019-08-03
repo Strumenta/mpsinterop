@@ -24,7 +24,7 @@ class LoadingPhysicalModelsFromMpbFile {
         // Basis
         assertEquals("INamedConcept", iNamedConceptNode.name())
         assertEquals(true, iNamedConceptNode.id.isCompatibleWith(1169194658468L))
-        assertEquals("jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration", iNamedConceptNode.concept.qname)
+        assertEquals("jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration", iNamedConceptNode.concept.qualifiedName)
 
         // Properties
         assertEquals(false, iNamedConceptNode.booleanPropertyValue("abstract"))

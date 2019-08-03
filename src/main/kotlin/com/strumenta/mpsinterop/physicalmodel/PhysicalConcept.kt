@@ -23,6 +23,9 @@ data class PhysicalConcept(
         properties.add(property)
     }
 
+    /**
+     * This method does not consider inherited properties
+     */
     fun propertyByName(name: String): PhysicalProperty {
         return properties.find { it.name == name }
                 ?: throw IllegalArgumentException("Property $name not found in concept $name")
@@ -36,7 +39,7 @@ data class PhysicalConcept(
         return relations.find { it.name == name }!!
     }
 
-    val qname: String
+    val qualifiedName: String
         get() {
             val languageName = languageId.name
             return "$languageName.structure.$name"

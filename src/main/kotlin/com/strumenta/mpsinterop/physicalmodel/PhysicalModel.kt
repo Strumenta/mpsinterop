@@ -59,7 +59,7 @@ class PhysicalModel(val name: String, val uuid: UUID) {
 
     fun registerConcept(concept: PhysicalConcept) {
         conceptsByIndex[concept.index] = concept
-        conceptsByQName[concept.qname] = concept
+        conceptsByQName[concept.qualifiedName] = concept
     }
 
     fun registerProperty(property: PhysicalProperty) {
@@ -78,8 +78,13 @@ class PhysicalModel(val name: String, val uuid: UUID) {
             ?: throw java.lang.IllegalArgumentException("Relation with index $index not found")
 
     fun propertyByIndex(index: String): PhysicalProperty = propertiesByIndex[index]!!
-    fun getProperty(conceptName: String, propertyName: String): PhysicalProperty {
+
+    fun findProperty(conceptName: String, propertyName: String): PhysicalProperty? {
         return conceptsByQName[conceptName]?.propertyByName(propertyName)
+    }
+
+    fun getProperty(conceptName: String, propertyName: String): PhysicalProperty {
+        return findProperty(conceptName, propertyName)
                 ?: throw java.lang.IllegalArgumentException("Property $conceptName.$propertyName not found")
     }
 
