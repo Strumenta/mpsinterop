@@ -15,19 +15,6 @@ import java.io.FileOutputStream
 import java.util.*
 import java.util.zip.ZipException
 
-fun PhysicalModelsRegistry.loadMpsFile(file: File) : PhysicalModel {
-    val model = loadMpsModel(FileInputStream(file))
-    this.add(model)
-    return model
-}
-
-
-fun PhysicalModelsRegistry.loadMpsFile(inputStream: InputStream) : PhysicalModel {
-    val model = loadMpsModel(inputStream)
-    this.add(model)
-    return model
-}
-
 fun PhysicalModelsRegistry.loadJar(file: File) : List<PhysicalModel> {
     val models = LinkedList<PhysicalModel>()
     val jarFile = JarFile(file)
