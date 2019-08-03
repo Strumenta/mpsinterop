@@ -33,7 +33,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
 
     private val _roots = LinkedList<PhysicalNode>()
 
-    val roots :List<PhysicalNode>
+    val roots: List<PhysicalNode>
         get() = _roots
 
     val numberOfRoots: Int

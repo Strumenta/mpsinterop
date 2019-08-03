@@ -7,7 +7,6 @@ import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.collections.HashSet
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class PhysicalModelTest {
@@ -196,5 +195,4 @@ class PhysicalModelTest {
         assertEquals(node1, model.getRootByName("MyNode1"))
         assertEquals(node2, model.getRootByName("MyNode2"))
     }
-
 }
