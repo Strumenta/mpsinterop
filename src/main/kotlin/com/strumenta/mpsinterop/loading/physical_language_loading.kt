@@ -1,7 +1,6 @@
 package com.strumenta.mpsinterop.loading
 
 import com.strumenta.mpsinterop.physicalmodel.PhysicalLanguage
-import com.strumenta.mpsinterop.physicalmodel.PhysicalModule
 import com.strumenta.mpsinterop.utils.loadDocument
 import org.w3c.dom.Document
 import java.io.ByteArrayInputStream
