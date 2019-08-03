@@ -257,4 +257,52 @@ class PhysicalModelTest {
         assertEquals(uuid, model.modelUUIDFromIndex("45678"))
     }
 
+    @Test
+    fun findConceptByIndexNegativeCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.randomUUID(), "MyLanguage"), 123L, "MyConcept", "123x")
+        model.registerConcept(concept)
+        assertEquals(null, model.findConceptByIndex("1234x"))
+    }
+
+    @Test
+    fun findConceptByIndexPositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.randomUUID(), "MyLanguage"), 123L, "MyConcept", "123x")
+        model.registerConcept(concept)
+        assertEquals(concept, model.findConceptByIndex("123x"))
+    }
+
+    @Test
+    fun findConceptByIDNegativeCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L, "MyConcept", "123x")
+        model.registerConcept(concept)
+        assertEquals(null, model.findConceptByID(12345L))
+    }
+
+    @Test
+    fun findConceptByIDPositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L, "MyConcept", "123x")
+        model.registerConcept(concept)
+        assertEquals(concept, model.findConceptByID(123L))
+    }
+
+    @Test
+    fun findConceptByNameNegativeCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L, "MyConcept", "123x")
+        model.registerConcept(concept)
+        assertEquals(null, model.findConceptByName("MyLanguage.structure.AnotherConcept"))
+    }
+
+    @Test
+    fun findConceptByNamePositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L, "MyConcept", "123x")
+        model.registerConcept(concept)
+        assertEquals(concept, model.findConceptByName("MyLanguage.structure.MyConcept"))
+    }
+
 }

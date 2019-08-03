@@ -109,9 +109,9 @@ class PhysicalModel(val uuid: UUID, val name: String) {
         conceptsByQName[concept.qualifiedName] = concept
     }
 
-    fun conceptByIndex(index: String): PhysicalConcept = conceptsByIndex[index]!!
+    fun findConceptByIndex(index: String) = conceptsByIndex[index]
 
-    fun conceptByName(conceptName: String): PhysicalConcept? {
+    fun findConceptByName(conceptName: String): PhysicalConcept? {
         return conceptsByQName[conceptName]
     }
 

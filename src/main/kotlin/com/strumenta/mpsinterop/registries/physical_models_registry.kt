@@ -6,7 +6,7 @@ import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mpsinterop.physicalmodel.name
 
 fun PhysicalModel.findConceptDeclaration(name: String): PhysicalNode? {
-    val conceptDeclaration = this.conceptByName(CONCEPT_DECLARATION_CONCEPT_NAME) ?: return null
+    val conceptDeclaration = this.findConceptByName(CONCEPT_DECLARATION_CONCEPT_NAME) ?: return null
     return this.rootsOfConcept(conceptDeclaration).find {
         it.name() == name
     }
