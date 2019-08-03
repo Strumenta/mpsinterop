@@ -67,7 +67,7 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
     }
 
     fun property(name: String): Property {
-        return properties.keys.find { it.name == name } ?: concept.findProperty(name)
+        return properties.keys.find { it.name == name } ?: concept.findProperty(name)!!
     }
 
     val name: String?

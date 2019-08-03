@@ -3,9 +3,18 @@ package com.strumenta.mpsinterop.logicalmodel
 import java.util.*
 
 abstract class AbstractConcept(open val id: Long, open val name: String) {
+
+    // /////////////////////////////////////
+    // Simple fields
+    // /////////////////////////////////////
+
     var final: Boolean = false
     var abstract: Boolean = false
     var alias: String? = null
+
+    // /////////////////////////////////////
+    // Properties
+    // /////////////////////////////////////
 
     private val _declaredProperties: MutableList<Property> = LinkedList()
 
@@ -14,6 +23,34 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
         get() = _declaredProperties
 
     abstract val allProperties: List<Property>
+
+    fun addProperty(property: Property) {
+        if (property in _declaredProperties) {
+            return
+        }
+        if (hasPropertyNamed(property.name)) {
+            throw IllegalArgumentException("Property with same name already present: ${property.name}")
+        }
+
+        _declaredProperties.add(property)
+    }
+
+    fun hasPropertyNamed(propertyName: String): Boolean {
+        return allProperties.any { it.name == propertyName }
+    }
+
+    fun findProperty(propertyName: String): Property? {
+        return allProperties.find { it.name == propertyName }
+    }
+
+    fun getProperty(propertyName: String): Property {
+        return findProperty(propertyName) ?: throw IllegalArgumentException("No property found with name $propertyName")
+    }
+
+    // /////////////////////////////////////
+    // Language
+    // /////////////////////////////////////
+
     var language: Language? = null
         set(value) {
             if (field != null) {
@@ -25,14 +62,6 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
             }
         }
 
-    val absoluteID: AbsoluteConceptId?
-        get() = if (language == null) null else AbsoluteConceptId(language!!.id, id)
-
-    fun qname(): String {
-        val languageName = languageName()
-        return "$languageName.structure.$name"
-    }
-
     private fun languageName(): String {
         if (language == null) {
             throw IllegalStateException("The concept is not attached to a language")
@@ -41,28 +70,20 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
         }
     }
 
-    fun addProperty(property: Property) {
-        if (property in _declaredProperties) {
-            return
-        }
-        if (hasPropertyNamed(property.name)) {
-            throw java.lang.IllegalStateException("Property with same name already present: ${property.name}")
-        }
+    // /////////////////////////////////////
+    // ID
+    // /////////////////////////////////////
 
-        _declaredProperties.add(property)
-    }
+    val absoluteID: AbsoluteConceptId?
+        get() = if (language == null) null else AbsoluteConceptId(language!!.id, id)
 
-    fun hasPropertyNamed(propertyName: String): Boolean {
-        return allProperties.any { it.name == propertyName }
-    }
+    // /////////////////////////////////////
+    // Name
+    // /////////////////////////////////////
 
-    fun findProperty(propertyName: String): Property {
-        val p = allProperties.find { it.name == propertyName }
-        if (p != null) {
-            return p
-        } else {
-            throw IllegalArgumentException("No property found with name $propertyName")
-        }
+    fun qualifiedName(): String {
+        val languageName = languageName()
+        return "$languageName.structure.$name"
     }
 }
 

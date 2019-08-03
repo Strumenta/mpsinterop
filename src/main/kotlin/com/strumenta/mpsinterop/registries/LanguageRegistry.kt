@@ -37,7 +37,7 @@ class LanguageRegistry : ModelLocator {
 
     fun getConcept(conceptName: String): AbstractConcept? {
         for (l in languagesByUUID.values) {
-            val concept = l.concepts.find { it.qname() == conceptName }
+            val concept = l.concepts.find { it.qualifiedName() == conceptName }
             if (concept != null) {
                 return concept
             }
