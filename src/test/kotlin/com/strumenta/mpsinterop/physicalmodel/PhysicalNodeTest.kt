@@ -110,7 +110,6 @@ class PhysicalNodeTest {
 
     @Test
     fun qualifiedNamePositiveCase() {
-
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
 
         val iNamedConcept = PhysicalConcept(LanguageId(UUID.randomUUID(), "jetbrains.mps.lang.core"), 123L, "INamedConcept", "123x")
@@ -132,5 +131,156 @@ class PhysicalNodeTest {
         assertEquals("MyNode2", node2.name())
 
         assertEquals("MyModel.MyNode1", node1.qualifiedName())
+    }
+
+    @Test
+    fun childrenRelationNegativeCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
+        model.registerRelation(relation)
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+
+        assertEquals(emptyList(), node1.children(relation))
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun childrenRelationPassingReference() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+        node1.children(relation)
+    }
+
+    @Test
+    fun childrenRelationPositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
+        model.registerRelation(relation)
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
+        val node3 = PhysicalNode(null, concept, NodeId.regular(126L))
+        node1.addChild(relation, node2)
+        node1.addChild(relation, node3)
+
+        assertEquals(listOf(node2, node3), node1.children(relation))
+    }
+
+    @Test
+    fun childrenStringNegativeCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
+        val node3 = PhysicalNode(null, concept, NodeId.regular(126L))
+        node1.addChild(relation, node2)
+        node1.addChild(relation, node3)
+
+        assertEquals(emptyList(), node1.children("anotherRelation"))
+    }
+
+    @Test
+    fun childrenStringPositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
+        val node3 = PhysicalNode(null, concept, NodeId.regular(126L))
+        node1.addChild(relation, node2)
+        node1.addChild(relation, node3)
+
+        assertEquals(listOf(node2, node3), node1.children("MyRelation"))
+    }
+
+    @Test
+    fun numberOfChildrenNegativeCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
+        val node3 = PhysicalNode(null, concept, NodeId.regular(126L))
+        node1.addChild(relation, node2)
+        node1.addChild(relation, node3)
+
+        assertEquals(0, node1.numberOfChildren("anotherRelation"))
+    }
+
+    @Test
+    fun numberOfChildrenPositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
+        val node3 = PhysicalNode(null, concept, NodeId.regular(126L))
+        node1.addChild(relation, node2)
+        node1.addChild(relation, node3)
+
+        assertEquals(2, node1.numberOfChildren("MyRelation"))
+    }
+
+    @Test
+    fun findNodeByIDNegativeCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
+        val node3 = PhysicalNode(null, concept, NodeId.regular(126L))
+        node1.addChild(relation, node2)
+        node1.addChild(relation, node3)
+
+        assertEquals(null, node1.findNodeByID(NodeId.regular(12900L)))
+    }
+
+    @Test
+    fun findNodeByIDRootPositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
+        val node3 = PhysicalNode(null, concept, NodeId.regular(126L))
+        node1.addChild(relation, node2)
+        node1.addChild(relation, node3)
+
+        assertEquals(node1, node1.findNodeByID(NodeId.regular(124L)))
+    }
+
+    @Test
+    fun findNodeByIDNonRootPositiveCase() {
+        val model = PhysicalModel(UUID.randomUUID(), "MyModel")
+        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
+                "MyConcept", "123x")
+        val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
+        model.registerRelation(relation)
+        val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
+        val node2 = PhysicalNode(null, concept, NodeId.regular(125L))
+        val node3 = PhysicalNode(null, concept, NodeId.regular(126L))
+        node1.addChild(relation, node2)
+        node1.addChild(relation, node3)
+
+        assertEquals(node3, node1.findNodeByID(NodeId.regular(126L)))
     }
 }

@@ -36,20 +36,6 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     }
 
     // //////////////////////////////////////////
-    // Hierarchy
-    // //////////////////////////////////////////
-
-    fun ancestor(condition: (PhysicalNode) -> Boolean): PhysicalNode? {
-        if (parent == null) {
-            return null
-        }
-        if (condition(parent)) {
-            return parent
-        }
-        return parent.ancestor(condition)
-    }
-
-    // //////////////////////////////////////////
     // Children
     // //////////////////////////////////////////
 
@@ -60,7 +46,12 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         children[relation]!!.add(node)
     }
 
-    fun children(relation: PhysicalRelation) = children[relation] ?: emptyList<PhysicalNode>()
+    fun children(relation: PhysicalRelation) : List<PhysicalNode> {
+        if (relation.kind != RelationKind.CONTAINMENT) {
+            throw java.lang.IllegalArgumentException("Containment relation expected")
+        }
+        return children[relation] ?: emptyList()
+    }
 
     fun children(relationName: String): List<PhysicalNode> {
         val relation = children.keys.find { it.name == relationName }
@@ -103,7 +94,12 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         references[relation] = node
     }
 
-    fun reference(relation: PhysicalRelation) = references[relation]
+    fun reference(relation: PhysicalRelation): PhysicalReferenceValue? {
+        if (relation.kind != RelationKind.REFERENCE) {
+            throw java.lang.IllegalArgumentException("Reference relation expected")
+        }
+        return references[relation]
+    }
 
     fun reference(relationName: String): PhysicalReferenceValue? {
         val rs = references.keys.filter { it.name == relationName }
