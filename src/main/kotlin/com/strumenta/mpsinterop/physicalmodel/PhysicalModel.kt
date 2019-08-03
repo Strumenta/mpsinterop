@@ -15,12 +15,18 @@ import kotlin.collections.HashMap
  */
 class PhysicalModel(val uuid: UUID, val name: String) {
 
+    private data class LanguageImport(val uuid: UUID, val name: String)
+    private data class ModelImport(val uuid: UUID, val name: String, val index: String)
+
     private val conceptsByIndex = HashMap<String, PhysicalConcept>()
     private val conceptsByQName = HashMap<String, PhysicalConcept>()
     private val relationsByIndex = HashMap<String, PhysicalRelation>()
     private val propertiesByIndex = HashMap<String, PhysicalProperty>()
+    // TODO remove
     private val languageUUIDsFromName = HashMap<String, LanguageUUID>()
-    private val languageUUIDsFromIndex = HashMap<String, LanguageUUID>()
+    private val languages = LinkedList<LanguageImport>()
+    private val models = LinkedList<ModelImport>()
+    // private val languageUUIDsFromIndex = HashMap<String, LanguageUUID>()
 
     // /////////////////////////////////////
     // Module
@@ -77,9 +83,6 @@ class PhysicalModel(val uuid: UUID, val name: String) {
     // Languages
     // /////////////////////////////////////
 
-    fun languageUUIDByIndex(index: String): LanguageUUID = languageUUIDsFromIndex[index]
-            ?: throw IllegalArgumentException("Unknown language index $index. Known indexes: ${languageUUIDsFromIndex.keys.joinToString(", ")}")
-
     fun languageUuidFromName(languageName: String): LanguageUUID {
         return languageUUIDsFromName[languageName]
                 ?: throw RuntimeException("Unable to find UUID for language $languageName")
@@ -89,9 +92,16 @@ class PhysicalModel(val uuid: UUID, val name: String) {
         languageUUIDsFromName[languageName] = languageUUID
     }
 
-    fun putLanguageIndexInRegistry(languageUUID: LanguageUUID, languageIndex: String) {
-        languageUUIDsFromIndex[languageIndex] = languageUUID
+    // /////////////////////////////////////
+    // Models
+    // /////////////////////////////////////
+
+    fun putModelInRegistry(uuid: UUID, name: String, index: String) {
+        models.add(ModelImport(uuid, name, index))
     }
+
+    fun modelUUIDByIndex(index: String): UUID = models.find { it.index == index }?.uuid
+            ?: throw IllegalArgumentException("Unknown model index $index. Known indexes: ${models.joinToString(", ") { it.index }}")
 
     // /////////////////////////////////////
     // Concepts

@@ -113,7 +113,7 @@ fun loadModel(document: Document): PhysicalModel {
         val nameInParens = rawNameToLanguageName(rawName)
         val uuid = rawNameToUuid(rawName)
         physicalModel.putLanguageInRegistry(uuid, nameInParens.removeSuffix(".structure"))
-        physicalModel.putLanguageIndexInRegistry(uuid, index)
+        physicalModel.putModelInRegistry(uuid, nameInParens, index)
     }
     document.documentElement.processAllNodes("concept") {
         val languageId = UUID.fromString((it.parentNode as Element).getAttribute("id"))
