@@ -35,8 +35,17 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
         return false
     }
 
-    val root: Boolean
+    val isRoot: Boolean
         get() = parent == null
+
+    // //////////////////////////////////////////
+    // Root and model
+    // //////////////////////////////////////////
+
+    internal var modelOfWhichIsRoot: Model? = null
+    val model: Model?
+        get() = if (isRoot) modelOfWhichIsRoot else parent!!.model
+
     val numberOfChildren: Int
         get() = childrenMap.values.fold(0) { acc, mutableList -> acc + mutableList.size }
     val numberOfProperties: Int
@@ -52,10 +61,10 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
     private val properties = HashMap<Property, String?>()
 
     fun addChild(link: ContainmentLink, node: Node) {
-        node.parent = this
         childrenMap.computeIfAbsent(link) {
             LinkedList()
         }.add(node)
+        node.parent = this
     }
 
     fun setProperty(id: Property, value: String?) {

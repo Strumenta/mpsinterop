@@ -31,7 +31,7 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
             val name = name() ?: throw IllegalStateException("The node has not simple name")
             return model.name + "." + name
         } else {
-            throw UnsupportedOperationException("Only root nodes can have a qualified name")
+            throw UnsupportedOperationException("Only isRoot nodes can have a qualified name")
         }
     }
 

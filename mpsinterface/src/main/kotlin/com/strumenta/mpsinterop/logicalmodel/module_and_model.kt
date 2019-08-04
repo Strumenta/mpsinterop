@@ -52,10 +52,19 @@ class Model(val name: String) {
         get() = this.roots.size
 
     fun addRoot(root: Node) {
-        if (!root.root) {
+        if (!root.isRoot) {
             throw IllegalArgumentException("The given node is not a isRoot")
         }
         roots.add(root)
+        root.modelOfWhichIsRoot = this
+    }
+
+    fun removeRoot(root: Node) {
+        if (root !in roots) {
+            throw IllegalArgumentException("The given node is not a root of this model")
+        }
+        roots.remove(root)
+        root.modelOfWhichIsRoot = null
     }
 
     fun onRoots(op: (Node) -> Unit) {
