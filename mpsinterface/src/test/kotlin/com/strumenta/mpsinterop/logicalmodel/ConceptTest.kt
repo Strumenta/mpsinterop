@@ -183,4 +183,30 @@ class ConceptTest {
 
         concept.getProperty("SomeWeirdName")
     }
+
+    @Test
+    fun settingLanguageTheConceptAppearsInTheLanguage() {
+        val language = Language(UUID.randomUUID(), "MyLanguage")
+        val concept = Concept(124L, "MyConcept")
+
+        assertEquals(null, concept.language)
+        assertEquals(false, language.concepts.contains(concept))
+        concept.language = language
+        assertEquals(language, concept.language)
+        assertEquals(true, language.concepts.contains(concept))
+    }
+
+    @Test
+    fun unsettingLanguageTheConceptDisappearsFromTheLanguage() {
+        val language = Language(UUID.randomUUID(), "MyLanguage")
+        val concept = Concept(124L, "MyConcept")
+
+        concept.language = language
+        assertEquals(language, concept.language)
+        assertEquals(true, language.concepts.contains(concept))
+        concept.language = null
+        assertEquals(null, concept.language)
+        assertEquals(false, language.concepts.contains(concept))
+
+    }
 }

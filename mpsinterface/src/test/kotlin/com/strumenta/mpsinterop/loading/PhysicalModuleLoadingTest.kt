@@ -13,5 +13,4 @@ class PhysicalModuleLoadingTest {
         assertEquals(UUID.fromString("252065ef-9fba-45ef-9478-0581a0595ac3"), module.uuid)
         assertEquals("com.strumenta.data.stdlib", module.name)
     }
-
 }
