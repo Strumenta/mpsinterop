@@ -19,7 +19,7 @@ import com.strumenta.mpsinterop.physicalmodel.*
  */
 
 //
-// import com.strumenta.mpsinterop.binary.ModelInputStream
+// import ModelInputStream
 // import com.strumenta.mpsinterop.binary.SModelReference
 // import jetbrains.mps.extapi.model.SModelData
 // import jetbrains.mps.smodel.DynamicReference
