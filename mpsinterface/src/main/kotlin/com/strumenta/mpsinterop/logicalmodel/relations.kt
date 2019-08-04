@@ -24,7 +24,15 @@ interface Link {
     val id: AbsoluteLinkId
     val name: String
 }
-data class ContainmentLink(override val id: AbsoluteContainmentLinkId, override val name: String) :
+
+enum class Multiplicity {
+    OPTIONAL,
+    ONE,
+    ZERO_OR_MORE,
+    ONE_OR_MORE
+}
+
+data class ContainmentLink(override val id: AbsoluteContainmentLinkId, override val name: String, val multiplicity: Multiplicity) :
     Link
 data class ReferenceLink(override val id: AbsoluteReferenceLinkId, override val name: String) :
     Link

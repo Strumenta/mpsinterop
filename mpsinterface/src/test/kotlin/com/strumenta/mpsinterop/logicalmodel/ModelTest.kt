@@ -28,7 +28,7 @@ class ModelTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
         val concept = Concept(1234234L, "MyConcept")
         language.add(concept)
-        val link = ContainmentLink(AbsoluteContainmentLinkId(concept.absoluteID!!, 1244L), "myLink")
+        val link = ContainmentLink(AbsoluteContainmentLinkId(concept.absoluteID!!, 1244L), "myLink", Multiplicity.ZERO_OR_MORE)
 
         val model = Model("myModel")
 
@@ -45,7 +45,7 @@ class ModelTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
         val concept = Concept(1234234L, "MyConcept")
         language.add(concept)
-        val link = ContainmentLink(AbsoluteContainmentLinkId(concept.absoluteID!!, 1244L), "myLink")
+        val link = ContainmentLink(AbsoluteContainmentLinkId(concept.absoluteID!!, 1244L), "myLink", Multiplicity.ZERO_OR_MORE)
         concept.addLink(link)
 
         val model = Model("myModel")
@@ -68,7 +68,7 @@ class ModelTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
         val concept = Concept(1234234L, "MyConcept")
         language.add(concept)
-        val link = ContainmentLink(AbsoluteContainmentLinkId(concept.absoluteID!!, 1244L), "myLink")
+        val link = ContainmentLink(AbsoluteContainmentLinkId(concept.absoluteID!!, 1244L), "myLink", Multiplicity.ZERO_OR_MORE)
         concept.addLink(link)
 
         val model = Model("myModel")
@@ -98,7 +98,7 @@ class ModelTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
         val concept = Concept(1234234L, "MyConcept")
         language.add(concept)
-        val link = ContainmentLink(AbsoluteContainmentLinkId(concept.absoluteID!!, 1244L), "myLink")
+        val link = ContainmentLink(AbsoluteContainmentLinkId(concept.absoluteID!!, 1244L), "myLink", Multiplicity.ZERO_OR_MORE)
 
         val model = Model("myModel")
 

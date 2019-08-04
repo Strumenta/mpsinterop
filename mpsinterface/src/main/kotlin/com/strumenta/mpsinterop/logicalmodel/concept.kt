@@ -72,8 +72,8 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
         _declaredLinks.add(link)
     }
 
-    fun addContainmentLink(linkID: Long, linkName: String) : ContainmentLink {
-        val link = ContainmentLink(AbsoluteContainmentLinkId(this.absoluteID!!, linkID), linkName)
+    fun addContainmentLink(linkID: Long, linkName: String, multiplicity: Multiplicity) : ContainmentLink {
+        val link = ContainmentLink(AbsoluteContainmentLinkId(this.absoluteID!!, linkID), linkName, multiplicity)
         this.addLink(link)
         return link
     }

@@ -13,7 +13,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -26,7 +26,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -39,7 +39,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -54,7 +54,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -73,7 +73,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -90,7 +90,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -108,7 +108,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -126,7 +126,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -140,7 +140,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -154,7 +154,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -171,7 +171,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -185,7 +185,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -200,7 +200,7 @@ class NodeTest {
         val language = Language(UUID.randomUUID(), "MyLanguage")
 
         val concept1 = language.addConcept(1234234L, "MyConcept")
-        val link = concept1.addContainmentLink(2323L, "MyLink")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
 
         val node1 = Node(concept1, NodeId.regular(124L))
         val node2 = Node(concept1, NodeId.regular(125L))
@@ -212,5 +212,23 @@ class NodeTest {
 
         assertEquals(null, node2.parent)
         assertFalse(node1.hasChild(node2))
+    }
+
+    @Test
+    fun children() {
+        val language = Language(UUID.randomUUID(), "MyLanguage")
+
+        val concept1 = language.addConcept(1234234L, "MyConcept")
+        val link = concept1.addContainmentLink(2323L, "MyLink", Multiplicity.ZERO_OR_MORE)
+
+        val node1 = Node(concept1, NodeId.regular(124L))
+        val node2 = Node(concept1, NodeId.regular(125L))
+        val node3 = Node(concept1, NodeId.regular(126L))
+
+        assertEquals(emptyList(), node1.children)
+        node1.addChild(link, node2)
+        assertEquals(listOf(node2), node1.children)
+        node1.addChild(link, node3)
+        assertEquals(listOf(node2, node3), node1.children)
     }
 }
