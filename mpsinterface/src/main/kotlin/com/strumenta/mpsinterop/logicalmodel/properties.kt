@@ -22,11 +22,10 @@ data class EnumerationPropertyType(
     val baseType: PrimitivePropertyType,
     val alternatives: List<EnumerationAlternative>
 ) : PropertyType {
-    override val defaultValue : Any
+    override val defaultValue: Any
         get() = TODO()
 }
 data class ConstrainedPropertyType(val qname: String) : PropertyType {
-    override val defaultValue : Any
+    override val defaultValue: Any
         get() = TODO()
 }
-

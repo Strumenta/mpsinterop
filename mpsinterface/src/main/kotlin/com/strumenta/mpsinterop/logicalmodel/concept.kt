@@ -24,7 +24,7 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
 
     abstract val allProperties: List<Property>
 
-    fun createProperty(propertyID: Long, propertyName: String, propertyType: PropertyType) : Property {
+    fun createProperty(propertyID: Long, propertyName: String, propertyType: PropertyType): Property {
         val property = Property(AbsolutePropertyId(this.absoluteID!!, propertyID), propertyName, propertyType)
         this.addProperty(property)
         return property
@@ -37,7 +37,7 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
         if (hasPropertyNamed(property.name)) {
             throw IllegalArgumentException("Property with same name already present: ${property.name}")
         }
-        if (_declaredProperties.any {it.propertyId == property.propertyId}) {
+        if (_declaredProperties.any { it.propertyId == property.propertyId }) {
             throw IllegalArgumentException("Property with same id already present: ${property.propertyId}")
         }
 
@@ -81,13 +81,13 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
         _declaredLinks.add(link)
     }
 
-    fun createContainmentLink(linkID: Long, linkName: String, multiplicity: Multiplicity) : ContainmentLink {
+    fun createContainmentLink(linkID: Long, linkName: String, multiplicity: Multiplicity): ContainmentLink {
         val link = ContainmentLink(AbsoluteContainmentLinkId(this.absoluteID!!, linkID), linkName, multiplicity)
         this.addLink(link)
         return link
     }
 
-    fun createReferenceLink(linkID: Long, linkName: String, multiplicity: Multiplicity) : ReferenceLink {
+    fun createReferenceLink(linkID: Long, linkName: String, multiplicity: Multiplicity): ReferenceLink {
         val link = ReferenceLink(AbsoluteReferenceLinkId(this.absoluteID!!, linkID), linkName, multiplicity)
         this.addLink(link)
         return link
