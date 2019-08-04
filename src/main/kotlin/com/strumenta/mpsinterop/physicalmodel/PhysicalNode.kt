@@ -49,7 +49,7 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         children[relation]!!.add(node)
     }
 
-    fun children(relation: PhysicalRelation) : List<PhysicalNode> {
+    fun children(relation: PhysicalRelation): List<PhysicalNode> {
         if (relation.kind != RelationKind.CONTAINMENT) {
             throw java.lang.IllegalArgumentException("Containment relation expected")
         }

@@ -10,6 +10,15 @@ The goal of this project is to permit interoperability with MPS model from outsi
 * Edit MPS models in external editors, for example web editors
 * Perform analysis on MPS models from outside MPS
 
+## Roadmap
+
+* Physical model, testing [DONE]
+* Logical model, testing [DOING]
+* Loading physical model
+* Loading logical model
+* Work with heterogeneous API, based on Manifold
+* Example with visualization of a model
+
 ## Planned features
 
 **Homogeneous API:** API to load MPS models using common classes like Node, Property, Relation, etc. to interact with those models
