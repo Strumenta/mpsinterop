@@ -36,4 +36,10 @@ data class Language(val id: LanguageUUID, val name: String) {
     }
 
     fun conceptByID(conceptID: Long) = _concepts.find { it.id == conceptID }
+
+    fun addConcept(conceptId: Long, conceptName: String): Concept {
+        val concept = Concept(conceptId, conceptName)
+        this.add(concept)
+        return concept
+    }
 }

@@ -72,6 +72,12 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
         _declaredLinks.add(link)
     }
 
+    fun addContainmentLink(linkID: Long, linkName: String) : ContainmentLink {
+        val link = ContainmentLink(AbsoluteContainmentLinkId(this.absoluteID!!, linkID), linkName)
+        this.addLink(link)
+        return link
+    }
+
     fun hasLinkNamed(name: String) = allLinks.any { it.name == name }
 
     fun hasLink(link: Link) = allLinks.contains(link)

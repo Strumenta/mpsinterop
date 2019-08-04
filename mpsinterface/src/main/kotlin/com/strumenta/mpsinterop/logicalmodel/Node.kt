@@ -60,6 +60,11 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
         node.parent = this
     }
 
+    fun getChildren(link: ContainmentLink) : List<Node> {
+        require(concept.hasLink(link)) { "Link unknown: $link" }
+        return childrenMap[link] ?: emptyList()
+    }
+
     private fun removeChild(child: Node) {
         for (entry in childrenMap) {
             if (entry.value.contains(child)) {
@@ -91,6 +96,7 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
     }
 
     fun getReference(link: ReferenceLink) : Node? {
+        require(concept.hasLink(link)) { "Link unknown: $link" }
         return referencesMap[link]
     }
 
