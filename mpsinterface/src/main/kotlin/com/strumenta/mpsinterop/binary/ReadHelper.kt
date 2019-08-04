@@ -78,7 +78,7 @@ internal class ReadHelper() {
 //    }
 //
     fun property(property: AbsolutePropertyId, name: String, index: Int) {
-        // myActualConcept!!.addProperty(property, name).setIntIndex(index)
+        // myActualConcept!!.createProperty(property, name).setIntIndex(index)
         val property = PhysicalProperty(currentConcept!!, property.idValue, name, index.toString())
         currentConcept!!.addProperty(property)
         myProperties[index] = property

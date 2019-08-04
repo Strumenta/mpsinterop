@@ -106,15 +106,27 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
     // //////////////////////////////////////////
 
     val numberOfProperties: Int
-        get() = properties.size
+        get() = this.concept.allProperties.size
 
-    fun setProperty(property: Property, value: String?) {
+    fun setProperty(property: Property, value: Boolean) {
+        setProperty(property, value.toString())
+    }
+
+    fun setProperty(property: Property, value: Long) {
+        setProperty(property, value.toString())
+    }
+
+    fun setProperty(property: Property, value: String) {
         require(concept.hasProperty(property)) { "Link unknown: $property" }
         properties[property] = value
     }
 
     fun propertyValue(name: String): String {
-        return properties[property(name)] ?: "No value for property $name"
+        return propertyValue(property(name))
+    }
+
+    fun propertyValue(prop: Property): String {
+        return properties[prop] ?: prop.type.defaultValueAsString
     }
 
     fun property(name: String): Property {
@@ -122,12 +134,15 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
     }
 
     fun booleanPropertyValue(name: String): Boolean {
-        val p = properties.keys.find { it.name == name }
-        return if (p == null) {
-            false
-        } else {
-            properties[p]!!.toBoolean()
-        }
+        return propertyValue(name).toBoolean()
+    }
+
+    fun longPropertyValue(name: String): Long {
+        return propertyValue(name).toLong()
+    }
+
+    fun stringPropertyValue(name: String): String {
+        return propertyValue(name)
     }
 
     // //////////////////////////////////////////
@@ -135,13 +150,21 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
     // //////////////////////////////////////////
 
     val name: String?
-        get() = this.properties.entries.firstOrNull { it.key.name == "name" }?.value
+        get() {
+            val prop = concept.findProperty("name")
+            if (prop == null) {
+                return null
+            } else {
+                return propertyValue(prop)
+            }
+        }
 
     // //////////////////////////////////////////
     // Misc
     // //////////////////////////////////////////
 
     override fun toString(): String {
-        return "Node $name [${concept.name}] ($nodeId)"
+        val nameStr = if (name == null) "null" else "($name)"
+        return "$nameStr [${concept.name}] ($nodeId)"
     }
 }

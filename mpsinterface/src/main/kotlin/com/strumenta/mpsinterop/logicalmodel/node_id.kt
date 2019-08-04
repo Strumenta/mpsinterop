@@ -28,6 +28,10 @@ internal data class StringSNodeId(val value: String) : NodeId() {
 }
 
 internal data class RegularSNodeId(val value: Long) : NodeId() {
+    override fun toString(): String {
+        return value.toString()
+    }
+
     override fun toStringRepresentation() = Base64.toString(value)
     override fun isCompatibleWith(longValue: Long): Boolean {
         return longValue == value
