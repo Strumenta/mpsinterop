@@ -4,9 +4,11 @@ import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import com.strumenta.mpsinterop.loading.ModelLocator
 import com.strumenta.mpsinterop.loading.loadLanguage
 import com.strumenta.mpsinterop.loading.loadMpsModel
+import com.strumenta.mpsinterop.loading.loadSolution
 import com.strumenta.mpsinterop.physicalmodel.PhysicalLanguageModule
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
+import com.strumenta.mpsinterop.physicalmodel.PhysicalSolutionModule
 import com.strumenta.mpsinterop.utils.dumpToTempFile
 import java.io.File
 import java.io.InputStream
@@ -48,6 +50,7 @@ abstract class LoadingInfo<E>(
 
 typealias ModelLoadingInfo = LoadingInfo<PhysicalModel>
 typealias LanguageLoadingInfo = LoadingInfo<PhysicalLanguageModule>
+typealias SolutionLoadingInfo = LoadingInfo<PhysicalSolutionModule>
 
 class Indexer : ModelLocator {
 
@@ -70,6 +73,7 @@ class Indexer : ModelLocator {
     private val modelsByUUID = HashMap<UUID, ModelLoadingInfo>()
     private val modelsByName = HashMap<String, ModelLoadingInfo>()
     private val languagesByUUID = HashMap<UUID, LoadingInfo<PhysicalLanguageModule>>()
+    private val solutionsByUUID = HashMap<UUID, LoadingInfo<PhysicalSolutionModule>>()
 
     private fun registerModel(uuid: UUID, loadingInfo: ModelLoadingInfo) {
         if (uuid in modelsByUUID) {
@@ -91,6 +95,14 @@ class Indexer : ModelLocator {
                     "LoadingInfo already present for language with UUID $uuid: ${languagesByUUID[uuid]}. Attempting to replace it with $loadingInfo")
         }
         languagesByUUID[uuid] = loadingInfo
+    }
+
+    private fun registerSolution(uuid: UUID, loadingInfo: SolutionLoadingInfo) {
+        if (uuid in solutionsByUUID) {
+            throw IllegalStateException(
+                    "LoadingInfo already present for solution with UUID $uuid: ${solutionsByUUID[uuid]}. Attempting to replace it with $loadingInfo")
+        }
+        solutionsByUUID[uuid] = loadingInfo
     }
 
     override fun locateModel(modelUUID: UUID): PhysicalModel? {
@@ -125,6 +137,11 @@ class Indexer : ModelLocator {
         registerLanguage(language.uuid, HolderLoadingInfo(language, modelSource, SourceType.MPL))
     }
 
+    private fun indexMsd(inputStream: InputStream, modelSource: Source) {
+        val solution = loadSolution(inputStream)
+        registerSolution(solution.uuid, HolderLoadingInfo(solution, modelSource, SourceType.MPL))
+    }
+
     private fun indexMpb(inputStream: InputStream, modelSource: Source) {
         val model = loadMpsModelFromBinaryFile(inputStream)
         registerModel(model.uuid, HolderLoadingInfo(model, modelSource, SourceType.MPB))
@@ -145,16 +162,16 @@ class Indexer : ModelLocator {
                     entry.name.endsWith(".mps") -> {
                         if (!entry.name.endsWith("descriptorclasses.mps") &&
                                 !entry.name.contains("/aspectcps")) {
-                            // println("[MPS] ${entry.name}")
                             indexMps(jarFile.getInputStream(entry), source)
                         }
                     }
                     entry.name.endsWith(".mpl") -> {
-                        // println("[MPL] ${entry.name}")
                         indexMpl(jarFile.getInputStream(entry), source)
                     }
+                    entry.name.endsWith(".msd") -> {
+                        indexMsd(jarFile.getInputStream(entry), source)
+                    }
                     entry.name.endsWith(".mpb") -> {
-                        // println("[MPB] ${entry.name}")
                         indexMpb(jarFile.getInputStream(entry), source)
                     }
                 }
