@@ -15,7 +15,7 @@ class LanguageRegistry : ModelLocator {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun locateLanguage(languageUUID: UUID): PhysicalLanguage? {
+    override fun locateLanguage(languageUUID: UUID): PhysicalLanguageModule? {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 

@@ -4,7 +4,7 @@ import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import com.strumenta.mpsinterop.loading.ModelLocator
 import com.strumenta.mpsinterop.loading.loadLanguage
 import com.strumenta.mpsinterop.loading.loadMpsModel
-import com.strumenta.mpsinterop.physicalmodel.PhysicalLanguage
+import com.strumenta.mpsinterop.physicalmodel.PhysicalLanguageModule
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mpsinterop.utils.dumpToTempFile
@@ -47,7 +47,7 @@ abstract class LoadingInfo<E>(
 }
 
 typealias ModelLoadingInfo = LoadingInfo<PhysicalModel>
-typealias LanguageLoadingInfo = LoadingInfo<PhysicalLanguage>
+typealias LanguageLoadingInfo = LoadingInfo<PhysicalLanguageModule>
 
 class Indexer : ModelLocator {
 
@@ -69,7 +69,7 @@ class Indexer : ModelLocator {
 
     private val modelsByUUID = HashMap<UUID, ModelLoadingInfo>()
     private val modelsByName = HashMap<String, ModelLoadingInfo>()
-    private val languagesByUUID = HashMap<UUID, LoadingInfo<PhysicalLanguage>>()
+    private val languagesByUUID = HashMap<UUID, LoadingInfo<PhysicalLanguageModule>>()
 
     private fun registerModel(uuid: UUID, loadingInfo: ModelLoadingInfo) {
         if (uuid in modelsByUUID) {
@@ -97,7 +97,7 @@ class Indexer : ModelLocator {
         return modelsByUUID[modelUUID]?.element
     }
 
-    override fun locateLanguage(languageUUID: UUID): PhysicalLanguage? {
+    override fun locateLanguage(languageUUID: UUID): PhysicalLanguageModule? {
         return languagesByUUID[languageUUID]?.element
     }
 

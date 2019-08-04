@@ -9,7 +9,7 @@ import java.util.*
 interface ModelLocator {
     fun locateModel(modelUUID: UUID): PhysicalModel?
     fun locateModel(name: String): PhysicalModel?
-    fun locateLanguage(languageUUID: UUID): PhysicalLanguage?
+    fun locateLanguage(languageUUID: UUID): PhysicalLanguageModule?
 }
 
 interface NodeLocator {
