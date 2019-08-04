@@ -81,7 +81,10 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
     // Name
     // /////////////////////////////////////
 
-    fun qualifiedName(): String {
+    fun qualifiedName(): String? {
+        if (language == null) {
+            return null
+        }
         val languageName = languageName()
         return "$languageName.structure.$name"
     }

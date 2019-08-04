@@ -207,6 +207,39 @@ class ConceptTest {
         concept.language = null
         assertEquals(null, concept.language)
         assertEquals(false, language.concepts.contains(concept))
+    }
 
+    @Test
+    fun absoluteIDforDangling() {
+        val concept = Concept(124L, "MyConcept")
+
+        assertEquals(null, concept.absoluteID)
+    }
+
+    @Test
+    fun absoluteIDforNotDangling() {
+        val languageUUID = UUID.fromString("3819ba36-98f4-49ac-b779-34f3a458c09b")
+        val language = Language(languageUUID, "MyLanguage")
+        val concept = Concept(124L, "MyConcept")
+
+        concept.language = language
+        assertEquals(AbsoluteConceptId(languageUUID, 124L), concept.absoluteID)
+    }
+
+    @Test
+    fun qualifiedNameForDangling() {
+        val concept = Concept(124L, "MyConcept")
+
+        assertEquals(null, concept.qualifiedName())
+    }
+
+    @Test
+    fun qualifiedNameForNotDangling() {
+        val languageUUID = UUID.fromString("3819ba36-98f4-49ac-b779-34f3a458c09b")
+        val language = Language(languageUUID, "MyLanguage")
+        val concept = Concept(124L, "MyConcept")
+
+        concept.language = language
+        assertEquals("MyLanguage.structure.MyConcept", concept.qualifiedName())
     }
 }
