@@ -25,6 +25,7 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
     // //////////////////////////////////////////
 
     private var _parent: Node? = null
+
     var parent: Node?
         get() = _parent
         set(value) {
@@ -73,7 +74,7 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
         }
     }
 
-    private fun hasChild(child: Node): Boolean {
+    fun hasChild(child: Node): Boolean {
         for (entry in childrenMap) {
             if (entry.value.contains(child)) {
                 return true

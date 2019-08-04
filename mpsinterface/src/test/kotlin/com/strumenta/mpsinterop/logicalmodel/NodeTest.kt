@@ -1,13 +1,10 @@
 package com.strumenta.mpsinterop.logicalmodel
 
-import com.strumenta.mpsinterop.physicalmodel.PhysicalConcept
-import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
-import com.strumenta.mpsinterop.physicalmodel.PhysicalNode
-import org.junit.Before
 import org.junit.Test
-import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class NodeTest {
 
@@ -120,7 +117,100 @@ class NodeTest {
         val model = Model("MyModel")
 
         model.addRoot(node1)
-        
+
         assertEquals(model, node2.model)
+    }
+
+    @Test
+    fun parentIsNull() {
+        val language = Language(UUID.randomUUID(), "MyLanguage")
+
+        val concept1 = language.addConcept(1234234L, "MyConcept")
+        val link = concept1.addContainmentLink(2323L, "MyLink")
+
+        val node1 = Node(concept1, NodeId.regular(124L))
+        val node2 = Node(concept1, NodeId.regular(125L))
+        node1.addChild(link, node2)
+
+        assertEquals(null, node1.parent)
+    }
+
+    @Test
+    fun parentIsNotNull() {
+        val language = Language(UUID.randomUUID(), "MyLanguage")
+
+        val concept1 = language.addConcept(1234234L, "MyConcept")
+        val link = concept1.addContainmentLink(2323L, "MyLink")
+
+        val node1 = Node(concept1, NodeId.regular(124L))
+        val node2 = Node(concept1, NodeId.regular(125L))
+        node1.addChild(link, node2)
+
+        assertEquals(node1, node2.parent)
+    }
+
+    @Test
+    fun settingParentNotNullWhenChild() {
+        val language = Language(UUID.randomUUID(), "MyLanguage")
+
+        val concept1 = language.addConcept(1234234L, "MyConcept")
+        val link = concept1.addContainmentLink(2323L, "MyLink")
+
+        val node1 = Node(concept1, NodeId.regular(124L))
+        val node2 = Node(concept1, NodeId.regular(125L))
+        node1.addChild(link, node2)
+
+        // this does nothing
+        node2.parent = node1
+
+        assertEquals(node1, node2.parent)
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun settingParentNotNullWhenNotChild() {
+        val language = Language(UUID.randomUUID(), "MyLanguage")
+
+        val concept1 = language.addConcept(1234234L, "MyConcept")
+        val link = concept1.addContainmentLink(2323L, "MyLink")
+
+        val node1 = Node(concept1, NodeId.regular(124L))
+        val node2 = Node(concept1, NodeId.regular(125L))
+
+        // this explodes
+        node2.parent = node1
+    }
+
+    @Test
+    fun settingParentNullWhenNull() {
+        val language = Language(UUID.randomUUID(), "MyLanguage")
+
+        val concept1 = language.addConcept(1234234L, "MyConcept")
+        val link = concept1.addContainmentLink(2323L, "MyLink")
+
+        val node1 = Node(concept1, NodeId.regular(124L))
+        val node2 = Node(concept1, NodeId.regular(125L))
+
+        // this does nothing
+        node2.parent = null
+        assertEquals(null, node2.parent)
+    }
+
+    @Test
+    fun settingParentNullWhenNotNull() {
+        val language = Language(UUID.randomUUID(), "MyLanguage")
+
+        val concept1 = language.addConcept(1234234L, "MyConcept")
+        val link = concept1.addContainmentLink(2323L, "MyLink")
+
+        val node1 = Node(concept1, NodeId.regular(124L))
+        val node2 = Node(concept1, NodeId.regular(125L))
+        node1.addChild(link, node2)
+
+        assertTrue(node1.hasChild(node2))
+
+        node2.parent = null
+
+        assertEquals(null, node2.parent)
+        assertFalse(node1.hasChild(node2))
     }
 }
