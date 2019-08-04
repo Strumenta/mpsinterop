@@ -46,6 +46,7 @@ class ModelTest {
         val concept = Concept(1234234L, "MyConcept")
         language.add(concept)
         val link = ContainmentLink(AbsoluteContainmentLinkId(concept.absoluteID!!, 1244L), "myLink")
+        concept.addLink(link)
 
         val model = Model("myModel")
 
@@ -68,6 +69,7 @@ class ModelTest {
         val concept = Concept(1234234L, "MyConcept")
         language.add(concept)
         val link = ContainmentLink(AbsoluteContainmentLinkId(concept.absoluteID!!, 1244L), "myLink")
+        concept.addLink(link)
 
         val model = Model("myModel")
 

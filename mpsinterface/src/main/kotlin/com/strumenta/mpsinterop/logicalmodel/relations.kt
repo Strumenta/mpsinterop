@@ -22,10 +22,11 @@ data class AbsoluteReferenceLinkId(
 
 interface Link {
     val id: AbsoluteLinkId
+    val name: String
 }
-data class ContainmentLink(override val id: AbsoluteContainmentLinkId, val name: String) :
+data class ContainmentLink(override val id: AbsoluteContainmentLinkId, override val name: String) :
     Link
-data class ReferenceLink(override val id: AbsoluteReferenceLinkId, val name: String) :
+data class ReferenceLink(override val id: AbsoluteReferenceLinkId, override val name: String) :
     Link
 
 interface Reference

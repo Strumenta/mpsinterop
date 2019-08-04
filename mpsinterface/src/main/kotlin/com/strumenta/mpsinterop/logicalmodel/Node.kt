@@ -5,11 +5,31 @@ import kotlin.collections.HashMap
 
 open class Node(val concept: Concept, val nodeId: NodeId?) {
 
+    private val childrenMap = HashMap<ContainmentLink, MutableList<Node>>()
+    private val referencesMap = HashMap<ReferenceLink, Node>()
+    private val properties = HashMap<Property, String?>()
+
+    // //////////////////////////////////////////
+    // Root and model
+    // //////////////////////////////////////////
+
+    val isRoot: Boolean
+        get() = parent == null
+
+    internal var modelOfWhichIsRoot: Model? = null
+    val model: Model?
+        get() = if (isRoot) modelOfWhichIsRoot else parent!!.model
+
+    // //////////////////////////////////////////
+    // Parent
+    // //////////////////////////////////////////
+
     private var _parent: Node? = null
     var parent: Node?
         get() = _parent
         set(value) {
             if (value != null) {
+                // We cannot set the parent directly because we need to know the containment link
                 require(value.hasChild(this))
             }
             if (_parent != null) {
@@ -17,6 +37,28 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
             }
             _parent = value
         }
+
+    // //////////////////////////////////////////
+    // Children
+    // //////////////////////////////////////////
+
+    val children: List<Node>
+        get() = childrenMap.entries.sortedBy { it.key.name }.foldRight(LinkedList()) {
+            l, acc ->
+            acc.addAll(l.value)
+            acc
+        }
+
+    val numberOfChildren: Int
+        get() = childrenMap.values.fold(0) { acc, mutableList -> acc + mutableList.size }
+
+    fun addChild(link: ContainmentLink, node: Node) {
+        require(concept.hasLink(link)) { "Link unknown: $link" }
+        childrenMap.computeIfAbsent(link) {
+            LinkedList()
+        }.add(node)
+        node.parent = this
+    }
 
     private fun removeChild(child: Node) {
         for (entry in childrenMap) {
@@ -35,40 +77,33 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
         return false
     }
 
-    val isRoot: Boolean
-        get() = parent == null
-
     // //////////////////////////////////////////
-    // Root and model
+    // References
     // //////////////////////////////////////////
 
-    internal var modelOfWhichIsRoot: Model? = null
-    val model: Model?
-        get() = if (isRoot) modelOfWhichIsRoot else parent!!.model
-
-    val numberOfChildren: Int
-        get() = childrenMap.values.fold(0) { acc, mutableList -> acc + mutableList.size }
-    val numberOfProperties: Int
-        get() = properties.size
-    val children: List<Node>
-        get() = childrenMap.entries.sortedBy { it.key.name }.foldRight(LinkedList()) {
-            l, acc ->
-                acc.addAll(l.value)
-                acc
+    fun setReference(link: ReferenceLink, node: Node?) {
+        require(concept.hasLink(link)) { "Link unknown: $link" }
+        if (node == null) {
+            referencesMap.remove(link)
+        } else {
+            referencesMap[link] = node
         }
-
-    private val childrenMap = HashMap<ContainmentLink, MutableList<Node>>()
-    private val properties = HashMap<Property, String?>()
-
-    fun addChild(link: ContainmentLink, node: Node) {
-        childrenMap.computeIfAbsent(link) {
-            LinkedList()
-        }.add(node)
-        node.parent = this
     }
 
-    fun setProperty(id: Property, value: String?) {
-        properties[id] = value
+    fun getReference(link: ReferenceLink) : Node? {
+        return referencesMap[link]
+    }
+
+    // //////////////////////////////////////////
+    // Properties
+    // //////////////////////////////////////////
+
+    val numberOfProperties: Int
+        get() = properties.size
+
+    fun setProperty(property: Property, value: String?) {
+        require(concept.hasProperty(property)) { "Link unknown: $property" }
+        properties[property] = value
     }
 
     fun propertyValue(name: String): String {
@@ -79,13 +114,6 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
         return properties.keys.find { it.name == name } ?: concept.findProperty(name)!!
     }
 
-    val name: String?
-        get() = this.properties.entries.firstOrNull { it.key.name == "name" }?.value
-
-    override fun toString(): String {
-        return "Node $name [${concept.name}] ($nodeId)"
-    }
-
     fun booleanPropertyValue(name: String): Boolean {
         val p = properties.keys.find { it.name == name }
         return if (p == null) {
@@ -93,5 +121,20 @@ open class Node(val concept: Concept, val nodeId: NodeId?) {
         } else {
             properties[p]!!.toBoolean()
         }
+    }
+
+    // //////////////////////////////////////////
+    // Naming
+    // //////////////////////////////////////////
+
+    val name: String?
+        get() = this.properties.entries.firstOrNull { it.key.name == "name" }?.value
+
+    // //////////////////////////////////////////
+    // Misc
+    // //////////////////////////////////////////
+
+    override fun toString(): String {
+        return "Node $name [${concept.name}] ($nodeId)"
     }
 }

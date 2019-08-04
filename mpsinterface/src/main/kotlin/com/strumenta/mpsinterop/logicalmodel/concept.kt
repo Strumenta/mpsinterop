@@ -47,6 +47,35 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
         return findProperty(propertyName) ?: throw IllegalArgumentException("No property found with name $propertyName")
     }
 
+    fun hasProperty(property: Property) = allProperties.contains(property)
+
+    // /////////////////////////////////////
+    // Links
+    // /////////////////////////////////////
+
+    private val _declaredLinks: MutableList<Link> = LinkedList()
+
+    // We want them to be exposed as an immutable list
+    val declaredLinks: List<Link>
+        get() = _declaredLinks
+
+    abstract val allLinks: List<Link>
+
+    fun addLink(link: Link) {
+        if (link in _declaredLinks) {
+            return
+        }
+        if (hasLinkNamed(link.name)) {
+            throw IllegalArgumentException("Link with same name already present: ${link.name}")
+        }
+
+        _declaredLinks.add(link)
+    }
+
+    fun hasLinkNamed(name: String) = allLinks.any { it.name == name }
+
+    fun hasLink(link: Link) = allLinks.contains(link)
+
     // /////////////////////////////////////
     // Language
     // /////////////////////////////////////
@@ -108,6 +137,19 @@ data class Concept(override val id: Long, override val name: String) :
             props.addAll(declaredProperties)
             return props
         }
+
+    override val allLinks: List<Link>
+        get() {
+            val links = LinkedList<Link>()
+            if (extended != null) {
+                links.addAll(extended!!.allLinks)
+            }
+            implemented.forEach {
+                links.addAll(it.allLinks)
+            }
+            links.addAll(declaredLinks)
+            return links
+        }
 }
 
 data class InterfaceConcept(override val id: Long, override val name: String) :
@@ -123,6 +165,16 @@ data class InterfaceConcept(override val id: Long, override val name: String) :
             }
             props.addAll(declaredProperties)
             return props
+        }
+
+    override val allLinks: List<Link>
+        get() {
+            val links = LinkedList<Link>()
+            extended.forEach {
+                links.addAll(it.allLinks)
+            }
+            links.addAll(declaredLinks)
+            return links
         }
 }
 
