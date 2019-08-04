@@ -291,4 +291,24 @@ class NodeTest {
         assertEquals(true, node1.hasChild(node2))
         assertEquals(true, node1.hasChild(node3))
     }
+
+    @Test
+    fun getReference() {
+        val language = Language(UUID.randomUUID(), "MyLanguage")
+
+        val concept1 = language.addConcept(1234234L, "MyConcept")
+        val link = concept1.addReferenceLink(2323L, "MyLink", Multiplicity.OPTIONAL)
+
+        val node1 = Node(concept1, NodeId.regular(124L))
+        val node2 = Node(concept1, NodeId.regular(125L))
+        val node3 = Node(concept1, NodeId.regular(126L))
+
+        assertEquals(null, node1.getReference(link))
+        node1.setReference(link, node2)
+        assertEquals(node2, node1.getReference(link))
+        node1.setReference(link, node3)
+        assertEquals(node3, node1.getReference(link))
+        node1.setReference(link, null)
+        assertEquals(null, node1.getReference(link))
+    }
 }

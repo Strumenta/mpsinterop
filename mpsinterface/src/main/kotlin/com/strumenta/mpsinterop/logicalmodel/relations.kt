@@ -34,8 +34,12 @@ enum class Multiplicity {
 
 data class ContainmentLink(override val id: AbsoluteContainmentLinkId, override val name: String, val multiplicity: Multiplicity) :
     Link
-data class ReferenceLink(override val id: AbsoluteReferenceLinkId, override val name: String) :
-    Link
+data class ReferenceLink(override val id: AbsoluteReferenceLinkId, override val name: String, val multiplicity: Multiplicity) :
+    Link {
+    init {
+        require(multiplicity == Multiplicity.OPTIONAL || multiplicity == Multiplicity.ONE) { "A reference can have optional or single multiplicity" }
+    }
+}
 
 interface Reference
 data class StaticReference(

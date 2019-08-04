@@ -78,6 +78,12 @@ abstract class AbstractConcept(open val id: Long, open val name: String) {
         return link
     }
 
+    fun addReferenceLink(linkID: Long, linkName: String, multiplicity: Multiplicity) : ReferenceLink {
+        val link = ReferenceLink(AbsoluteReferenceLinkId(this.absoluteID!!, linkID), linkName, multiplicity)
+        this.addLink(link)
+        return link
+    }
+
     fun hasLinkNamed(name: String) = allLinks.any { it.name == name }
 
     fun hasLink(link: Link) = allLinks.contains(link)
