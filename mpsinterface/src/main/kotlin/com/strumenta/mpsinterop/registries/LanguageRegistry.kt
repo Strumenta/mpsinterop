@@ -209,8 +209,12 @@ class LanguageRegistry : ModelLocator {
                 val implementsValue = it.children("implements")
                 concept.implemented.clear()
                 concept.implemented.addAll(implementsValue.map {
-                    val interfaceDeclaration = this.resolveAsConcept(it.reference("intfc")!!.target) as InterfaceConcept
-                    interfaceDeclaration!!
+                    try {
+                        val interfaceDeclaration = this.resolveAsConcept(it.reference("intfc")!!.target) as InterfaceConcept
+                        interfaceDeclaration!!
+                    } catch (e: RuntimeException) {
+                        throw RuntimeException(e, )
+                    }
                 })
 
                 it.children("propertyDeclaration").forEach {

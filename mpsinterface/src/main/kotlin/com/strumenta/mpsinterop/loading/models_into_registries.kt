@@ -12,6 +12,14 @@ import java.util.*
 import java.util.jar.JarFile
 import java.util.zip.ZipException
 
+fun LanguageRegistry.loadMplFile(inputStream: InputStream) : PhysicalModule {
+    val mplXML = loadDocument(inputStream)
+    val uuid = UUID.fromString(mplXML.documentElement.getAttribute("uuid"))
+    val name = mplXML.documentElement.getAttribute("namespace")
+    val module = PhysicalModule(uuid, name)
+    return module
+}
+
 fun LanguageRegistry.loadLanguageFromJar(inputStream: InputStream) {
     loadJar(inputStream).forEach { this.loadLanguageFromModel(it) }
 }
@@ -48,10 +56,7 @@ private fun LanguageRegistry.loadJar(file: File): List<PhysicalModel> {
                     }
                 }
                 entry.name.endsWith(".mpl") -> {
-                    val mplXML = loadDocument(jarFile.getInputStream(entry))
-                    val uuid = UUID.fromString(mplXML.documentElement.getAttribute("uuid"))
-                    val name = mplXML.documentElement.getAttribute("namespace")
-                    val module = PhysicalModule(uuid, name)
+                    val module = loadMplFile(jarFile.getInputStream(entry))
                     var parts = entry.name.split("/")
                     parts = parts.dropLast(1)
                     // TODO read path from XML
