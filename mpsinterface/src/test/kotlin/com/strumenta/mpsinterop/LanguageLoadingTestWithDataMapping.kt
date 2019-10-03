@@ -1,9 +1,6 @@
 package com.strumenta.mpsinterop
 
-import com.strumenta.mpsinterop.loading.PhysicalToLogicalConverter
-import com.strumenta.mpsinterop.loading.loadLanguageFromJar
-import com.strumenta.mpsinterop.loading.loadMplFile
-import com.strumenta.mpsinterop.loading.loadMpsFile
+import com.strumenta.mpsinterop.loading.*
 import com.strumenta.mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.mpsinterop.registries.Indexer
 import com.strumenta.mpsinterop.registries.LanguageRegistry
@@ -36,6 +33,11 @@ class LanguageLoadingTestWithDataMapping {
 //        lr.loadLanguageFromModule(module)
 //        lr.loadLanguageFromModel(structureModel)
         lr.loadLanguageFromModuleAndModel(module, structureModel)
+
+        loadGescomplusLanguage(lr,"gescomplus.dsl.core")
+
+        val physicalModel = loadMpsModel(FileInputStream(File("/Users/federico/repos/SigiDsl/solutions/gescomplus.dsl.sandbox/models/gescomplus.dsl.mapping.mps")))
+        val lm = converter.toLogical(physicalModel)
         println("FOO")
     }
 
@@ -67,11 +69,15 @@ class LanguageLoadingTestWithDataMapping {
         languageRegistry.loadLanguageFromJar(FileInputStream(f))
     }
 
+    private fun loadGescomplusLanguage(languageRegistry: LanguageRegistry, name: String) {
+        val d = File("/Users/federico/repos/SigiDsl/languages/$name")
+        languageRegistry.loadLanguageFromDirectory(d)
+    }
+
     private fun loadMbeddrLanguage(languageRegistry: LanguageRegistry, name: String) {
         if (!lookForLanguageIn(languageRegistry, name, File("/Users/federico/repos/SigiDsl/artifacts/com.mbeddr.platform"))) {
             throw RuntimeException("Language not found $name")
         }
-
     }
 
     private fun lookForLanguageIn(languageRegistry: LanguageRegistry, name: String, dir: File) : Boolean {

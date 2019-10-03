@@ -8,6 +8,7 @@ import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.utils.dumpToTempFile
 import com.strumenta.mpsinterop.utils.loadDocument
 import java.io.File
+import java.io.FileInputStream
 import java.io.InputStream
 import java.util.*
 import java.util.jar.JarFile
@@ -23,12 +24,21 @@ fun LanguageRegistry.loadMplFile(inputStream: InputStream) : PhysicalModule {
 
 fun LanguageRegistry.loadLanguageFromJar(inputStream: InputStream) {
     val jarData = loadJar(inputStream)
+    loadLanguageFromJarData(jarData)
+}
+
+private fun LanguageRegistry.loadLanguageFromJarData(jarData: JarData) {
     val modules = jarData.modules
     jarData.modules.forEach {
         this.add(Language(it.second.uuid, it.second.name))
     }
     jarData.models.forEach { this.loadLanguageFromModel(it, onlyShallow = true) }
     jarData.models.forEach { this.loadLanguageFromModel(it) }
+}
+
+fun LanguageRegistry.loadLanguageFromDirectory(directory: File) {
+    val jarData = loadJarFromDirectory(directory)
+    loadLanguageFromJarData(jarData)
 }
 
 fun LanguageRegistry.loadMpsFile(inputStream: InputStream): PhysicalModel {
@@ -44,8 +54,72 @@ private fun LanguageRegistry.loadJar(inputStream: InputStream): JarData {
         throw RuntimeException("Issue loading JAR from inputstream", e)
     }
 }
+
 // TODO return also the language for each model
 data class JarData(val models: List<PhysicalModel>, val modules : List<Pair<String, PhysicalModule>>)
+
+private fun LanguageRegistry.loadJarFromDirectory(directory: File): JarData {
+    val models = LinkedList<PhysicalModel>()
+    val modules = LinkedList<Pair<String, PhysicalModule>>()
+
+    val dirToExplores = LinkedList<File>()
+    val files = LinkedList<File>()
+    dirToExplores.add(directory)
+    var i = 0
+    while (i<dirToExplores.size) {
+        dirToExplores[i].listFiles().forEach {
+            if (it.isFile) {
+                files.add(it)
+            } else if (it.isDirectory) {
+                dirToExplores.add(it)
+            }
+        }
+        i++
+    }
+
+    files.filter { it.name.endsWith(".mpl") }.forEach {
+        val module = loadMplFile(FileInputStream(it))
+        var parts = it.name.split("/")
+        parts = parts.dropLast(1)
+        // TODO read path from XML
+        val pathCovered = parts.joinToString("/") + "/languageModels/"
+        modules.add(Pair(pathCovered, module))
+    }
+    files.filter { it.name.endsWith(".mps") }.forEach {file ->
+        val model = loadMpsModel(FileInputStream(file))
+        models.add(model)
+        val module = modules.find { file.name.startsWith(it.first) }
+        if (module != null) {
+            model.module = module.second
+        } else {
+            //throw java.lang.RuntimeException()
+            if (modules.size == 1) {
+                model.module = modules[0].second
+            }
+        }
+    }
+    files.filter { it.name.endsWith(".mpb") }.forEach {file ->
+        val model = loadMpsModelFromBinaryFile(FileInputStream(file))
+        models.add(model)
+        val module = modules.find {
+            var entryName = file.name
+            if (entryName.startsWith("module/models/")) {
+                entryName = entryName.removePrefix("module/models/")
+            }
+            entryName = entryName.replace("/", ".")
+            entryName.startsWith(it.first) }
+        if (module != null) {
+            model.module = module.second
+        } else {
+            //throw java.lang.RuntimeException()
+            //println("A")
+            if (modules.size == 1) {
+                model.module = modules[0].second
+            }
+        }
+    }
+    return JarData(models, modules)
+}
 
 private fun LanguageRegistry.loadJar(file: File): JarData {
     val models = LinkedList<PhysicalModel>()
