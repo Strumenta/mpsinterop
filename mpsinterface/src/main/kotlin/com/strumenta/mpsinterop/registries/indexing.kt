@@ -54,6 +54,8 @@ typealias SolutionLoadingInfo = LoadingInfo<PhysicalSolutionModule>
 
 class Indexer : ModelLocator {
 
+    var justPrinting : Boolean = false
+
     companion object {
         val DEFAULT = Indexer()
     }
@@ -75,34 +77,41 @@ class Indexer : ModelLocator {
     private val languagesByUUID = HashMap<UUID, LoadingInfo<PhysicalLanguageModule>>()
     private val solutionsByUUID = HashMap<UUID, LoadingInfo<PhysicalSolutionModule>>()
 
-    private fun registerModel(uuid: UUID, loadingInfo: ModelLoadingInfo) {
+    private fun registerModel(uuid: UUID, loadingInfo: ModelLoadingInfo) : Boolean {
         if (uuid in modelsByUUID) {
-            throw IllegalStateException(
-                    "LoadingInfo already present for model with UUID $uuid: ${modelsByUUID[uuid]}. Attempting to replace it with $loadingInfo")
+//            throw IllegalStateException(
+//                    "LoadingInfo already present for model with UUID $uuid: ${modelsByUUID[uuid]}. Attempting to replace it with $loadingInfo")
+            return false
         }
         val name = loadingInfo.element.name
         if (name in modelsByName) {
-            throw IllegalStateException(
-                    "LoadingInfo already present for model with name $name: ${modelsByName[name]}. Attempting to replace it with $loadingInfo")
+//            throw IllegalStateException(
+//                    "LoadingInfo already present for model with name $name: ${modelsByName[name]}. Attempting to replace it with $loadingInfo")
+            return false
         }
         modelsByName[name] = loadingInfo
         modelsByUUID[uuid] = loadingInfo
+        return true
     }
 
-    private fun registerLanguage(uuid: UUID, loadingInfo: LanguageLoadingInfo) {
+    private fun registerLanguage(uuid: UUID, loadingInfo: LanguageLoadingInfo) : Boolean {
         if (uuid in languagesByUUID) {
-            throw IllegalStateException(
-                    "LoadingInfo already present for language with UUID $uuid: ${languagesByUUID[uuid]}. Attempting to replace it with $loadingInfo")
+            return false
+//            throw IllegalStateException(
+//                    "LoadingInfo already present for language with UUID $uuid: ${languagesByUUID[uuid]}. Attempting to replace it with $loadingInfo")
         }
         languagesByUUID[uuid] = loadingInfo
+        return true
     }
 
-    private fun registerSolution(uuid: UUID, loadingInfo: SolutionLoadingInfo) {
+    private fun registerSolution(uuid: UUID, loadingInfo: SolutionLoadingInfo) : Boolean {
         if (uuid in solutionsByUUID) {
-            throw IllegalStateException(
-                    "LoadingInfo already present for solution with UUID $uuid: ${solutionsByUUID[uuid]}. Attempting to replace it with $loadingInfo")
+            return false
+//            throw IllegalStateException(
+//                    "LoadingInfo already present for solution with UUID $uuid: ${solutionsByUUID[uuid]}. Attempting to replace it with $loadingInfo")
         }
         solutionsByUUID[uuid] = loadingInfo
+        return true
     }
 
     override fun locateModel(modelUUID: UUID): PhysicalModel? {
@@ -129,21 +138,33 @@ class Indexer : ModelLocator {
 
     private fun indexMps(inputStream: InputStream, modelSource: Source) {
         val model = loadMpsModel(inputStream)
+        if (justPrinting) {
+            println("MODEL ${model.uuid} from $modelSource")
+        }
         registerModel(model.uuid, HolderLoadingInfo(model, modelSource, SourceType.MPS))
     }
 
     private fun indexMpl(inputStream: InputStream, modelSource: Source) {
         val language = loadLanguage(inputStream)
+        if (justPrinting) {
+            println("LANGUAGE ${language.uuid} from $modelSource")
+        }
         registerLanguage(language.uuid, HolderLoadingInfo(language, modelSource, SourceType.MPL))
     }
 
     private fun indexMsd(inputStream: InputStream, modelSource: Source) {
         val solution = loadSolution(inputStream)
+        if (justPrinting) {
+            println("SOLUTION ${solution.uuid} from $modelSource")
+        }
         registerSolution(solution.uuid, HolderLoadingInfo(solution, modelSource, SourceType.MPL))
     }
 
     private fun indexMpb(inputStream: InputStream, modelSource: Source) {
         val model = loadMpsModelFromBinaryFile(inputStream)
+        if (justPrinting) {
+            println("MODEL ${model.uuid} from $modelSource")
+        }
         registerModel(model.uuid, HolderLoadingInfo(model, modelSource, SourceType.MPB))
     }
 

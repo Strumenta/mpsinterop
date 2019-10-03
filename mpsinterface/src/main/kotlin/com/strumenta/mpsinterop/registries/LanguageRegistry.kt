@@ -123,16 +123,31 @@ class LanguageRegistry : ModelLocator {
         return null
     }
 
-    fun loadLanguageFromModel(model: PhysicalModel) {
+    fun loadLanguageFromModuleAndModel(module: PhysicalModule, structureModel: PhysicalModel) {
+        this.loadLanguageFromModule(module)
+        structureModel.module = module
+        this.loadLanguageFromModel(structureModel)
+    }
+
+    fun loadLanguageFromModule(module: PhysicalModule) {
+        add(Language(module.uuid, module.name))
+    }
+
+    fun loadLanguageFromModel(model: PhysicalModel, onlyShallow: Boolean = false) {
         // We solve stuff in two rounds, because there could be dependency between concepts
         val concepts = HashMap<PhysicalNode, AbstractConcept>()
         modelsByUUID[model.uuid] = model
+
         model.roots.forEach {
             val concept = preloadConcept(it)
             if (concept != null) {
                 concepts[it] = concept
             }
             // println(it.concept.qualifiedName(this))
+        }
+
+        if (onlyShallow) {
+            return
         }
 
         model.roots.forEach {
@@ -213,7 +228,7 @@ class LanguageRegistry : ModelLocator {
                         val interfaceDeclaration = this.resolveAsConcept(it.reference("intfc")!!.target) as InterfaceConcept
                         interfaceDeclaration!!
                     } catch (e: RuntimeException) {
-                        throw RuntimeException(e, )
+                        throw RuntimeException("Issue while loading for interface for concept ${concept.qualifiedName()}", e)
                     }
                 })
 
@@ -273,7 +288,7 @@ class LanguageRegistry : ModelLocator {
 //                }
 //                val language = languagesByUUID[uuid]!!
                 // val concept = language.concepts.find { it.id.idValue == target.nodeID }!!
-                return this.findConceptWithID(target.nodeID)!!
+                return this.findConceptWithID(target.nodeID) ?: throw RuntimeException("Concept with ID ${target.nodeID} was not found. Looking in model $uuid")
             }
             is NullReferenceTarget -> null
             is ExplicitReferenceTarget -> {
@@ -283,7 +298,7 @@ class LanguageRegistry : ModelLocator {
                         val conceptNode = modelsByUUID[uuid]!!.findNodeByID(target.nodeId)
                         return loadConceptFromNode(conceptNode!!)
                     }
-                    throw RuntimeException("Unknown language UUID $uuid (looking for node ${target.nodeId})")
+                    throw RuntimeException("Unknown language UUID $uuid (looking for node ${target.nodeId}). Note that it could be the structure model. Model $uuid")
                 }
                 val language = languagesByUUID[uuid]!!
                 val concept = language.concepts.find { target.nodeId.isCompatibleWith(it.id) }!!
