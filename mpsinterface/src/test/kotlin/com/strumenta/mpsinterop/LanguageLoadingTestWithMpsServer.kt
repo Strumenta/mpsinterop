@@ -17,7 +17,9 @@ class LanguageLoadingTestWithMpsServer {
         val indexer = com.strumenta.mpsinterop.Indexer()
         indexer.indexMpsDirectory(File("/Users/federico/repos/mpsserver/artifacts/mps"))
         indexer.indexMpsProject(File("/Users/federico/repos/mpsserver/mpscode"))
-        println("Foo")
+        val server = indexer.findSolutionByName("com.strumenta.mpsserver.server")
+        val deps = calculateDependenciesForSolution(server)
+        indexer.verifyCanSatisfyLanguages(deps, true)
     }
 
     @Test

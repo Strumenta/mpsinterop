@@ -2,8 +2,11 @@ package com.strumenta.mpsinterop
 
 import com.strumenta.mpsinterop.utils.loadDocument
 import com.strumenta.mpsinterop.utils.processAllNodes
+import com.strumenta.mpsinterop.utils.processChildren
+import org.w3c.dom.Document
 import java.io.File
 import java.io.FileInputStream
+import java.io.FilenameFilter
 import java.io.InputStream
 import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
@@ -25,7 +28,79 @@ class Indexer {
     private val elementsByUUID = mutableMapOf<UUID, IndexElement>()
     private val elementsByName = mutableMapOf<String, IndexElement>()
 
-    data class IndexElement(val uuid: UUID, val name: String, val type: ElementType, val moduleVersion: Int? = null, val languageVersion: Int? = null)
+    interface ElementLoader {
+        fun inputStream() : InputStream
+        fun listModelsUnder(location: String) : List<InputStream>
+    }
+
+    class JarEntryElementLoader(val jarFile: JarFile, val entry: JarEntry) : ElementLoader {
+        override fun inputStream(): InputStream {
+            return jarFile.getInputStream(entry)
+        }
+
+        override fun listModelsUnder(location: String): List<InputStream> {
+            TODO("Not yet implemented")
+        }
+    }
+
+    class FileElementLoader(val file: File) : ElementLoader {
+        override fun inputStream(): InputStream = FileInputStream(file)
+
+        override fun listModelsUnder(location: String): List<InputStream> {
+            val locationDir = File(file.parent, location)
+            require(locationDir.exists())
+            require(locationDir.isDirectory)
+            return locationDir.listFiles { dir, name -> name!!.endsWith(".mps") }.map { FileInputStream(it) }
+        }
+
+    }
+
+    data class IndexElement(val uuid: UUID, val name: String, val type: ElementType,
+                            val elementLoader: ElementLoader,
+                            val moduleVersion: Int? = null, val languageVersion: Int? = null) {
+        fun inputStream(): InputStream = elementLoader.inputStream()
+        fun findModel(modelName: String): Document {
+            val inputStream = this.inputStream()
+            val document = loadDocument(inputStream)
+            var res : Document? = null
+            document.documentElement.processChildren("models", { models ->
+                models.processChildren("modelRoot", { modelRoot ->
+                    modelRoot.processChildren("sourceRoot", { sourceRoot ->
+                        val location = sourceRoot.getAttribute("location")
+                        val models = listModelsUnder(location)
+                        for (model in models) {
+                            val doc = loadDocument(model)
+                            var ref = doc.documentElement.getAttribute("ref")
+                            require(ref.startsWith("r:"))
+                            ref = ref.removePrefix("r:")
+                            val uuid = UUID.fromString(ref.substring(0, 36))
+                            ref = ref.substring(36)
+                            require(ref.startsWith("("))
+                            require(ref.endsWith(")"))
+                            val name = ref.substring(1, ref.length - 1)
+                            if (modelName == name) {
+                                res = doc
+                            }
+                        }
+                    })
+                })
+            })
+            return res ?: throw RuntimeException("Model not found")
+        }
+
+        private fun listModelsUnder(location: String) : List<InputStream> {
+            return elementLoader.listModelsUnder(location)
+        }
+    }
+
+    fun findElement(elementName: String) : IndexElement? = elementsByName[elementName]
+    fun findElement(elementUUID: UUID) : IndexElement? = elementsByUUID[elementUUID]
+
+    fun findSolutionByName(solutionName: String) : IndexElement {
+        val indexElement = elementsByName[solutionName] ?: throw IllegalArgumentException("Solution $solutionName not found")
+        require(indexElement.type == ElementType.SOLUTION)
+        return indexElement
+    }
 
     private fun addIndexElement(indexElement: IndexElement) {
         //println(" * add $indexElement")
@@ -35,39 +110,37 @@ class Indexer {
         elementsByName[indexElement.name] = indexElement
     }
 
-    private fun loadDevKit(inputStreamProvider: () -> InputStream) {
-        val inputStream = inputStreamProvider()
+    private fun loadDevKit(elementLoader: ElementLoader) {
+        val inputStream = elementLoader.inputStream()
         val document = loadDocument(inputStream)
         val uuid = UUID.fromString(document.documentElement.getAttribute("uuid"))
         val name = document.documentElement.getAttribute("name")
         require(name.isNotBlank())
-        addIndexElement(IndexElement(uuid, name, ElementType.DEVKIT))
+        addIndexElement(IndexElement(uuid, name, ElementType.DEVKIT, elementLoader))
     }
 
-    fun jarEntryLoader(jarFile: JarFile, entry: JarEntry) : () -> InputStream {
-        return { -> jarFile.getInputStream(entry) }
-    }
+    fun jarEntryLoader(jarFile: JarFile, entry: JarEntry) : JarEntryElementLoader = JarEntryElementLoader(jarFile, entry)
 
-    private fun loadSolution(inputStreamProvider: () -> InputStream) {
-        val inputStream = inputStreamProvider()
+    private fun loadSolution(elementLoader: ElementLoader) {
+        val inputStream = elementLoader.inputStream()
         val document = loadDocument(inputStream)
         val uuid = UUID.fromString(document.documentElement.getAttribute("uuid"))
         val name = document.documentElement.getAttribute("name")
         val moduleVersionStr = document.documentElement.getAttribute("moduleVersion")
         val moduleVersion = if (moduleVersionStr.isBlank()) null else moduleVersionStr.toInt()
         require(name.isNotBlank()) { "name is blank" }
-        addIndexElement(IndexElement(uuid, name, ElementType.SOLUTION, moduleVersion))
+        addIndexElement(IndexElement(uuid, name, ElementType.SOLUTION, elementLoader, moduleVersion))
     }
 
-    private fun loadLanguage(inputStreamProvider: () -> InputStream) {
-        val inputStream = inputStreamProvider()
+    private fun loadLanguage(elementLoader: ElementLoader) {
+        val inputStream = elementLoader.inputStream()
         val document = loadDocument(inputStream)
         val uuid = UUID.fromString(document.documentElement.getAttribute("uuid"))
         val name = document.documentElement.getAttribute("namespace")
         val moduleVersion = document.documentElement.getAttribute("moduleVersion").toInt()
         val languageVersion = document.documentElement.getAttribute("languageVersion").toInt()
         require(name.isNotBlank())
-        addIndexElement(IndexElement(uuid, name, ElementType.LANGUAGE, moduleVersion, languageVersion))
+        addIndexElement(IndexElement(uuid, name, ElementType.LANGUAGE, elementLoader, moduleVersion, languageVersion))
     }
 
     private fun processJarFile(it: File) {
@@ -154,9 +227,39 @@ class Indexer {
             require(path.exists())
             require(path.isFile())
             when (path.extension) {
-                "mpl" -> loadLanguage { FileInputStream(path) }
-                "msd" -> loadSolution { FileInputStream(path) }
+                "mpl" -> loadLanguage(FileElementLoader(path))
+                "msd" -> loadSolution(FileElementLoader(path))
                 else -> TODO()
+            }
+        }
+    }
+
+    fun verifyCanSatisfyLanguages(deps: Dependencies, recursively: Boolean = false, alreadyVerified : MutableSet<LanguageDep> = mutableSetOf()) {
+        deps.languages.forEach {
+            verifyCanSatisfyLanguage(it, recursively, alreadyVerified)
+        }
+    }
+
+    private fun verifyCanSatisfyLanguage(languageDep: LanguageDep, recursively: Boolean = false, alreadyVerified : MutableSet<LanguageDep> = mutableSetOf()) {
+        if (alreadyVerified.contains(languageDep)) {
+            return
+        }
+        println("dep $languageDep")
+        val el = findElement(languageDep.uuid)
+        if (el == null) {
+            //throw RuntimeException("Cannot satisfy $languageDep")
+            println("UNSATISFIED $languageDep")
+        } else {
+            require(el.name == languageDep.name)
+            require(languageDep.version == -1 || el.languageVersion == languageDep.version) { "Version for dependency is $languageDep, while actual version is $el" }
+            alreadyVerified.add(languageDep)
+            if (recursively) {
+                val deps = calculateDependenciesForLanguage(el)
+                try {
+                    verifyCanSatisfyLanguages(deps, true, alreadyVerified)
+                } catch (t : Throwable) {
+                    throw RuntimeException("Deps of $el not satisfied", t)
+                }
             }
         }
     }
