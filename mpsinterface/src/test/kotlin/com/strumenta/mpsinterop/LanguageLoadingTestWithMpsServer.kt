@@ -13,6 +13,14 @@ import java.util.*
 class LanguageLoadingTestWithMpsServer {
 
     @Test
+    fun indexer() {
+        val indexer = com.strumenta.mpsinterop.Indexer()
+        indexer.indexMpsDirectory(File("/Users/federico/repos/mpsserver/artifacts/mps"))
+        indexer.indexMpsProject(File("/Users/federico/repos/mpsserver/mpscode"))
+        println("Foo")
+    }
+
+    @Test
     fun loadMpsServerMessages() {
         val mlf = ModelLoadingFacade(File("/Users/federico/repos/mpsserver/artifacts/mps"), File("/Users/federico/repos/mpsserver/mpscode"))
         val logicModel = mlf.loadModel("com.strumenta.mpsserver.server", "com.strumenta.mpsserver.logic")
