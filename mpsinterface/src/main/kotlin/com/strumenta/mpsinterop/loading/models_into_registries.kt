@@ -2,11 +2,15 @@ package com.strumenta.mpsinterop.loading
 
 import com.strumenta.mpsinterop.binary.loadMpsModelFromBinaryFile
 import com.strumenta.mpsinterop.logicalmodel.Language
+import com.strumenta.mpsinterop.physicalmodel.PhysicalLanguageModule
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.mpsinterop.physicalmodel.PhysicalModule
+import com.strumenta.mpsinterop.physicalmodel.PhysicalSolutionModule
 import com.strumenta.mpsinterop.registries.LanguageRegistry
 import com.strumenta.mpsinterop.utils.dumpToTempFile
 import com.strumenta.mpsinterop.utils.loadDocument
+import com.strumenta.mpsinterop.utils.processAllNodes
+import org.w3c.dom.Element
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
@@ -14,16 +18,60 @@ import java.util.*
 import java.util.jar.JarFile
 import java.util.zip.ZipException
 
-fun LanguageRegistry.loadMplFile(inputStream: InputStream) : PhysicalModule {
+fun LanguageRegistry.loadMplFile(inputStream: InputStream) : PhysicalLanguageModule {
     val mplXML = loadDocument(inputStream)
     val uuid = UUID.fromString(mplXML.documentElement.getAttribute("uuid"))
     val name = mplXML.documentElement.getAttribute("namespace")
-    val module = PhysicalModule(uuid, name)
+    val module = PhysicalLanguageModule(uuid, name)
+    mplXML.documentElement.processAllNodes { if (it.tagName == "dependency") {
+        module.dependencies.add(processDependency(it))
+        }
+    }
     return module
 }
 
-fun LanguageRegistry.loadLanguageFromJar(inputStream: InputStream) {
+private fun processDependency(element: Element) : PhysicalModule.Dependency {
+    val s = element.textContent
+    require(s[36] == '(')
+    require(s.last() == ')')
+    val uuid = UUID.fromString(s.substring(0, 36))
+    val name = s.substring(37, s.length - 1)
+    val reexport = element.getAttribute("reexport").toBoolean()
+    return PhysicalModule.Dependency(uuid, name, reexport)
+}
+
+private fun processUsedLanguage(element: Element) : PhysicalModule.UsedLanguage {
+    val s = element.textContent
+    require(s[36] == '(')
+    require(s.last() == ')')
+    val uuid = UUID.fromString(s.substring(0, 36))
+    val name = s.substring(37, s.length - 1)
+    return PhysicalModule.UsedLanguage(uuid, name)
+}
+
+fun LanguageRegistry.loadMsdFile(inputStream: InputStream) : PhysicalSolutionModule {
+    val mplXML = loadDocument(inputStream)
+    val uuid = UUID.fromString(mplXML.documentElement.getAttribute("uuid"))
+    val name = mplXML.documentElement.getAttribute("name")
+    val module = PhysicalSolutionModule(uuid, name)
+    mplXML.documentElement.processAllNodes { if (it.tagName == "dependency") {
+        module.dependencies.add(processDependency(it))
+        }
+    }
+    mplXML.documentElement.processAllNodes { if (it.tagName == "usedLanguage") {
+        module.usedLanguages.add(processUsedLanguage(it))
+    }
+    }
+    return module
+}
+
+interface DependenciesLoader {
+    fun loadDependencies(jarData: JarData)
+}
+
+fun LanguageRegistry.loadLanguageFromJar(inputStream: InputStream, dependenciesLoader: DependenciesLoader? = null) {
     val jarData = loadJar(inputStream)
+    dependenciesLoader?.loadDependencies(jarData)
     loadLanguageFromJarData(jarData)
 }
 
@@ -127,6 +175,8 @@ private fun LanguageRegistry.loadJar(file: File): JarData {
     try {
         val jarFile = JarFile(file)
 
+        // TODO consider devkits
+
         // first load modules
         var entries = jarFile.entries()
         while (entries.hasMoreElements()) {
@@ -138,6 +188,14 @@ private fun LanguageRegistry.loadJar(file: File): JarData {
                     parts = parts.dropLast(1)
                     // TODO read path from XML
                     val pathCovered = parts.joinToString("/") + "/languageModels/"
+                    modules.add(Pair(pathCovered, module))
+                }
+                entry.name.endsWith(".msd") -> {
+                    val module = loadMsdFile(jarFile.getInputStream(entry))
+                    var parts = entry.name.split("/")
+                    parts = parts.dropLast(1)
+                    // TODO read path from XML
+                    val pathCovered = parts.joinToString("/") + "/modules/"
                     modules.add(Pair(pathCovered, module))
                 }
             }
@@ -194,4 +252,9 @@ fun LanguageRegistry.loadLanguageFromMpsInputStream(
     val model = loadMpsModel(inputStream)
     model.module = module
     this.loadLanguageFromModel(model)
+}
+
+fun LanguageRegistry.loadElementFromJar(inputStream: InputStream, dependenciesLoader: DependenciesLoader? = null) {
+    val jarData = loadJar(inputStream)
+    dependenciesLoader?.loadDependencies(jarData)
 }

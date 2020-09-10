@@ -109,6 +109,12 @@ fun loadModel(document: Document): PhysicalModel {
 
     val physicalModel = PhysicalModel(uuid, nameInParens)
     // physicalModel.putLanguageInRegistry(uuid, nameInParens.removeSuffix(".structure"))
+    document.documentElement.processAllNodes("use") {
+        val id = UUID.fromString(it.getAttribute("id"))
+        val name = it.getAttribute("name")
+        val version = it.getAttribute("version").toInt()
+        physicalModel.addExplicitLanguageUse(id, name, version)
+    }
     document.documentElement.processAllNodes("import") {
         val index = it.getAttribute("index")
         val rawName = it.getAttribute("ref")

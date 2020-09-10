@@ -23,6 +23,10 @@ class PhysicalModel(val uuid: UUID, val name: String) {
     private val conceptsByQName = HashMap<String, PhysicalConcept>()
     private val relationsByIndex = HashMap<String, PhysicalRelation>()
     private val propertiesByIndex = HashMap<String, PhysicalProperty>()
+    private val explictLanguageUses_ = mutableListOf<ExplicitLanguageUse>()
+
+    val explicitLanguageUses : List<ExplicitLanguageUse>
+        get() = explictLanguageUses_.toList()
 
     // /////////////////////////////////////
     // Module
@@ -166,5 +170,11 @@ class PhysicalModel(val uuid: UUID, val name: String) {
             }
         }
         return null
+    }
+
+    data class ExplicitLanguageUse(val uuid: UUID, val name: String, val version: Int)
+
+    fun addExplicitLanguageUse(uuid: UUID, name: String, version: Int) {
+        explictLanguageUses_.add(ExplicitLanguageUse(uuid, name, version))
     }
 }

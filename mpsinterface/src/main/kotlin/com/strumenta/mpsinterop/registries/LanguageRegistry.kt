@@ -331,4 +331,6 @@ class LanguageRegistry : ModelLocator {
     }
 
     fun knowsLanguageUUID(uuid: UUID) = uuid in languagesByUUID
+
+    fun knowsLanguageName(name: String) = languagesByUUID.values.any { it.name == name }
 }
