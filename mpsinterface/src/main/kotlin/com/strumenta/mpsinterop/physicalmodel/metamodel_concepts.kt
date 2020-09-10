@@ -12,5 +12,6 @@ const val ENUMERATION_DATA_TYPE_DECLARATION_CONCEPT_NAME =
         "jetbrains.mps.lang.structure.structure.EnumerationDataTypeDeclaration"
 const val CONSTRAINED_DATA_TYPE_DECLARATION_CONCEPT_NAME =
         "jetbrains.mps.lang.structure.structure.ConstrainedDataTypeDeclaration"
+const val ENUMERATION_DECLARATION_CONCEPT_NAME = "jetbrains.mps.lang.structure.structure.EnumerationDeclaration"
 
 const val ABSTRACT_PROP_NAME = "abstract"

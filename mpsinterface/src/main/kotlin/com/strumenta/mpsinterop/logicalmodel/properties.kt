@@ -29,3 +29,8 @@ data class ConstrainedPropertyType(val qname: String) : PropertyType {
     override val defaultValue: Any
         get() = TODO()
 }
+// TODO write me
+class EnumerationDeclarationType() : PropertyType {
+    override val defaultValue: Any
+        get() = TODO()
+}

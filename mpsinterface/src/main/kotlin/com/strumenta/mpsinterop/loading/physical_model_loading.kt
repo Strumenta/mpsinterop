@@ -10,6 +10,8 @@ import com.strumenta.mpsinterop.utils.processChildren
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.FileInputStream
 import java.io.InputStream
 import java.lang.IllegalArgumentException
 import java.lang.RuntimeException
@@ -160,6 +162,10 @@ fun loadModel(document: Document): PhysicalModel {
 
 fun loadMpsModel(data: InputStream): PhysicalModel {
     return loadModel(loadDocument(data))
+}
+
+fun loadMpsModel(file: File): PhysicalModel {
+    return loadMpsModel(FileInputStream(file))
 }
 
 fun loadMpsModel(data: ByteArray) = loadMpsModel(ByteArrayInputStream(data))

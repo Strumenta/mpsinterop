@@ -4,6 +4,11 @@ import java.lang.RuntimeException
 import java.lang.UnsupportedOperationException
 import java.util.*
 
+enum class ModuleType {
+    LANGUAGE,
+    MODULE
+}
+
 open class SModelId {
     companion object {
         fun regular(uuid: UUID): SModelId = RegularSModelId(uuid)

@@ -180,6 +180,9 @@ class LanguageRegistry : ModelLocator {
                 val qname = node.qualifiedName()
                 return ConstrainedPropertyType(qname)
             }
+            node.concept.qualifiedName == ENUMERATION_DECLARATION_CONCEPT_NAME -> {
+                return EnumerationDeclarationType()
+            }
             else -> TODO(node.concept.qualifiedName)
         }
     }
