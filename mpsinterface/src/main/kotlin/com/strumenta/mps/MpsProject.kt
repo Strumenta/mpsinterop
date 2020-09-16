@@ -2,12 +2,15 @@ package com.strumenta.mps
 
 import com.strumenta.mps.utils.Base64
 import org.w3c.dom.Document
+import org.w3c.dom.Element
 import java.io.File
 import java.io.FileInputStream
 import java.io.FilenameFilter
 import java.lang.UnsupportedOperationException
+import java.rmi.registry.Registry
 import java.util.*
 import javax.print.Doc
+import kotlin.collections.HashMap
 
 enum class ElementType {
     DEVKIT,
@@ -47,6 +50,7 @@ abstract class Root {
     abstract val name: String?
     abstract val conceptName: String
     abstract val id: NodeID
+    abstract val properties : Map<String, String>
 }
 
 class MpsProject(val projectDir: File) {
@@ -227,6 +231,28 @@ class MpsProject(val projectDir: File) {
         }
     }
 
+    private class Registry {
+        private val indexToConceptName = HashMap<String, String>()
+        private val indexToPropertyName = HashMap<String, String>()
+
+        fun conceptNameFromIndex(index: String): String {
+            return indexToConceptName[index]!!
+        }
+
+        fun propertyNameFromIndex(index: String): String {
+            return indexToPropertyName[index]!!
+        }
+
+        fun registerConcept(index: String, name: String, id: String) {
+            indexToConceptName[index] = name
+        }
+
+        fun registerProperty(index: String, name: String, id: String) {
+            indexToPropertyName[index] = name
+        }
+
+    }
+
     private class ModelImpl(val source: Source, override val name: String, override val uuid: UUID) : Model() {
         private val roots : List<Root> by lazy { loadRoots() }
 
@@ -234,27 +260,6 @@ class MpsProject(val projectDir: File) {
             return roots
         }
 
-        private class Registry {
-            private val indexToConceptName = HashMap<String, String>()
-            private val indexToPropertyName = HashMap<String, String>()
-
-            fun conceptNameFromIndex(index: String): String {
-                return indexToConceptName[index]!!
-            }
-
-            fun propertyNameFromIndex(index: String): String {
-                return indexToPropertyName[index]!!
-            }
-
-            fun registerConcept(index: String, name: String, id: String) {
-                indexToConceptName[index] = name
-            }
-
-            fun registerProperty(index: String, name: String, id: String) {
-                indexToPropertyName[index] = name
-            }
-
-        }
 
         private fun loadRegistry(doc: Document) : Registry {
             val registry = Registry()
@@ -281,12 +286,26 @@ class MpsProject(val projectDir: File) {
                         name = property.getAttribute("value")
                     }
                 }
-                RootImpl(conceptName, id, name)
+                RootImpl(conceptName, id, name, node, registry)
             }
         }
     }
 
-    private class RootImpl(override val conceptName: String, override val id: NodeID, override val name: String?) : Root() {
+    private class RootImpl(override val conceptName: String, override val id: NodeID, override val name: String?,
+        val xmlNode: Element, val registry: Registry) : Root() {
 
+        override val properties : Map<String, String> by lazy { loadProperties() }
+
+        private fun loadProperties() : Map<String, String> {
+            val res = HashMap<String, String>()
+            xmlNode.processChildren("property") { property ->
+                val role = property.getAttribute("role")
+                val propertyName = registry.propertyNameFromIndex(role)
+                val value = property.getAttribute("value")
+                res[propertyName] = value
+            }
+            require(res["name"] == name)
+            return res
+        }
     }
 }

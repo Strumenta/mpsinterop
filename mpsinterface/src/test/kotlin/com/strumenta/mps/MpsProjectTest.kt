@@ -179,4 +179,17 @@ class MpsProjectTest {
         assertNull(roots.find { it.name == "Zuzzurellone" })
     }
 
+    @Test
+    fun modelProperties() {
+        val projectDir = File("src/test/resources/mpsserver_2")
+        val project = MpsProject(projectDir)
+        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+        val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
+        assertEquals(86, roots.size)
+        val conceptInfo = roots.find { it.name == "ConceptInfo" }
+        assertNotNull(conceptInfo)
+        assertEquals("data.metamodel", conceptInfo.properties["virtualPackage"])
+        assertEquals("ConceptInfo", conceptInfo.properties["name"])
+    }
+
 }
