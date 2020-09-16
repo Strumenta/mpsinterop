@@ -6,10 +6,9 @@ import org.w3c.dom.Element
 import java.io.File
 import java.io.FileInputStream
 import java.io.FilenameFilter
+import java.lang.IllegalArgumentException
 import java.lang.UnsupportedOperationException
-import java.rmi.registry.Registry
 import java.util.*
-import javax.print.Doc
 import kotlin.collections.HashMap
 
 enum class ElementType {
@@ -39,18 +38,34 @@ abstract class Model {
     abstract val name: String
     abstract val uuid: UUID
 
-    abstract fun roots() : List<Root>
-    fun roots(conceptName: String) : List<Root> = roots().filter { it.conceptName == conceptName }
+    abstract fun roots() : List<Node>
+    fun roots(conceptName: String) : List<Node> = roots().filter { it.conceptName == conceptName }
     fun numberOfRoots(): Int = roots().size
 }
 
 typealias NodeID = String
 
-abstract class Root {
+abstract class Reference {
+    abstract val linkName: String
+    abstract val value: Node?
+}
+
+abstract class Node {
+    fun child(relationName: String): Node? {
+        return children.find { it.containmentLinkName == relationName }
+    }
+
+    fun reference(relationName: String) : Node? {
+        return references.find { it.linkName == relationName }?.value
+    }
+
     abstract val name: String?
     abstract val conceptName: String
     abstract val id: NodeID
     abstract val properties : Map<String, String>
+    abstract val containmentLinkName: String?
+    abstract val children : List<Node>
+    abstract val references : List<Reference>
 }
 
 class MpsProject(val projectDir: File) {
@@ -234,6 +249,17 @@ class MpsProject(val projectDir: File) {
     private class Registry {
         private val indexToConceptName = HashMap<String, String>()
         private val indexToPropertyName = HashMap<String, String>()
+        private val indexToContainmentName = HashMap<String, String>()
+        private val indexToReferenceName = HashMap<String, String>()
+        private val indexToNode = HashMap<String, Node>()
+        private val indexToXmlNode = HashMap<String, Element>()
+
+        fun nodeFromIndex(index: String) : Node {
+            if (index !in indexToNode) {
+                NodeImpl.loadNode(indexToXmlNode[index] ?: throw IllegalArgumentException("Index unknown $index"), this)
+            }
+            return indexToNode[index]!!
+        }
 
         fun conceptNameFromIndex(index: String): String {
             return indexToConceptName[index]!!
@@ -241,6 +267,14 @@ class MpsProject(val projectDir: File) {
 
         fun propertyNameFromIndex(index: String): String {
             return indexToPropertyName[index]!!
+        }
+
+        fun containmentNameFromIndex(index: String): String {
+            return indexToContainmentName[index] ?: throw IllegalArgumentException("No containment with index $index found")
+        }
+
+        fun referenceNameFromIndex(index: String): String {
+            return indexToReferenceName[index] ?: throw IllegalArgumentException("No reference with index $index found")
         }
 
         fun registerConcept(index: String, name: String, id: String) {
@@ -251,33 +285,73 @@ class MpsProject(val projectDir: File) {
             indexToPropertyName[index] = name
         }
 
+        fun registerContainment(index: String, name: String, id: String) {
+            indexToContainmentName[index] = name
+        }
+
+        fun registerReference(index: String, name: String, id: String) {
+            indexToReferenceName[index] = name
+        }
+
+        fun registerXmlNode(index: String, xmlNode: Element) {
+            indexToXmlNode[index] = xmlNode
+        }
+
+        fun registerNode(index: String, node: Node) {
+            indexToNode[index] = node
+        }
+
     }
 
     private class ModelImpl(val source: Source, override val name: String, override val uuid: UUID) : Model() {
-        private val roots : List<Root> by lazy { loadRoots() }
+        private val roots : List<Node> by lazy { loadRoots() }
 
-        override fun roots(): List<Root> {
+        override fun roots(): List<Node> {
             return roots
         }
 
 
         private fun loadRegistry(doc: Document) : Registry {
             val registry = Registry()
+            doc.documentElement.processAllNodes("node") { node ->
+                registry.registerXmlNode(node.getAttribute("id"), node)
+            }
             doc.documentElement.child("registry").processAllNodes("concept") { concept ->
                 registry.registerConcept(concept.getAttribute("index"), concept.getAttribute("name"), concept.getAttribute("id"))
                 concept.processAllNodes("property") { property ->
                     registry.registerProperty(property.getAttribute("index"), property.getAttribute("name"), property.getAttribute("id"))
                 }
+                concept.processAllNodes("child") { child ->
+                    registry.registerContainment(child.getAttribute("index"), child.getAttribute("name"), child.getAttribute("id"))
+                }
+                concept.processAllNodes("reference") { reference ->
+                    registry.registerReference(reference.getAttribute("index"), reference.getAttribute("name"), reference.getAttribute("id"))
+                }
             }
             return registry
         }
 
-        private fun loadRoots(): List<Root> {
+        private fun loadRoots(): List<Node> {
             val doc = source.document
             val registry = loadRegistry(doc)
             return doc.documentElement.children("node").map { node ->
+                NodeImpl.loadNode(node, registry)
+            }
+        }
+    }
+
+    private class NodeImpl(override val conceptName: String, override val id: NodeID,
+                           override val containmentLinkName: String?,
+                           override val name: String?,
+        val xmlNode: Element, val registry: Registry) : Node() {
+
+        companion object {
+            fun loadNode(node: Element, registry: Registry) : Node {
+                val role = node.getAttribute("role")
+                val containmentLinkName : String? = if (role.isNullOrBlank()) null else registry.containmentNameFromIndex(role)
                 val conceptName = registry.conceptNameFromIndex(node.getAttribute("concept"))
-                val id = Base64.parseLong(node.getAttribute("id")).toString()
+                val index = node.getAttribute("id")
+                val id = Base64.parseLong(index).toString()
                 var name : String? = null
                 node.processChildren("property") { property ->
                     val role = property.getAttribute("role")
@@ -286,15 +360,15 @@ class MpsProject(val projectDir: File) {
                         name = property.getAttribute("value")
                     }
                 }
-                RootImpl(conceptName, id, name, node, registry)
+                val res = NodeImpl(conceptName, id, containmentLinkName, name, node, registry)
+                registry.registerNode(index, res)
+                return res
             }
         }
-    }
-
-    private class RootImpl(override val conceptName: String, override val id: NodeID, override val name: String?,
-        val xmlNode: Element, val registry: Registry) : Root() {
 
         override val properties : Map<String, String> by lazy { loadProperties() }
+        override val children : List<Node> by lazy { loadChildren() }
+        override val references : List<Reference> by lazy { loadReferences() }
 
         private fun loadProperties() : Map<String, String> {
             val res = HashMap<String, String>()
@@ -307,5 +381,34 @@ class MpsProject(val projectDir: File) {
             require(res["name"] == name)
             return res
         }
+
+        private fun loadChildren() : List<Node> {
+            val res = LinkedList<Node>()
+            xmlNode.processChildren("node") { node ->
+                res.add(loadNode(node, registry))
+            }
+            return res
+        }
+
+        private fun loadReferences() : List<Reference> {
+            val res = LinkedList<Reference>()
+            xmlNode.processChildren("ref") { ref ->
+                val role = ref.getAttribute("role")
+                val index = ref.getAttribute("node")
+                val relationName = registry.referenceNameFromIndex(role)
+                val ref = ReferenceImpl(relationName, registry, index)
+                res.add(ref)
+            }
+            return res
+        }
+    }
+
+    private class ReferenceImpl(override val linkName: String, val registry: Registry, val index: String) : Reference() {
+        override val value: Node? by lazy { loadValue() }
+
+        private fun loadValue() : Node? {
+            return registry.nodeFromIndex(index)
+        }
+
     }
 }

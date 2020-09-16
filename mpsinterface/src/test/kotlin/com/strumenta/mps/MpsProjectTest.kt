@@ -192,4 +192,53 @@ class MpsProjectTest {
         assertEquals("ConceptInfo", conceptInfo.properties["name"])
     }
 
+    @Test
+    fun rootContainmentLinkName() {
+        val projectDir = File("src/test/resources/mpsserver_2")
+        val project = MpsProject(projectDir)
+        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+        val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
+        assertEquals(86, roots.size)
+        val conceptInfo = roots.find { it.name == "ConceptInfo" }!!
+        assertEquals(null, conceptInfo.containmentLinkName)
+    }
+
+    @Test
+    fun nodeChildren() {
+        val projectDir = File("src/test/resources/mpsserver_2")
+        val project = MpsProject(projectDir)
+        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+        val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
+        assertEquals(86, roots.size)
+        val addChild = roots.find { it.name == "AddChild" }!!
+        val children = addChild.children
+        assertEquals(7, children.size)
+    }
+
+    @Test
+    fun nodeReferences() {
+        val projectDir = File("src/test/resources/mpsserver_2")
+        val project = MpsProject(projectDir)
+        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+        val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
+        assertEquals(86, roots.size)
+        val addChild = roots.find { it.name == "AddChild" }!!
+        val superclassChild = addChild.child("superclass")!!
+        val references = superclassChild.references
+        assertEquals(1, references.size)
+    }
+
+    @Test
+    fun nodeReferenceByName() {
+        val projectDir = File("src/test/resources/mpsserver_2")
+        val project = MpsProject(projectDir)
+        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+        val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
+        assertEquals(86, roots.size)
+        val addChild = roots.find { it.name == "AddChild" }!!
+        val superclassClassifier = addChild.child("superclass")!!.reference("classifier")
+        assertNotNull(superclassClassifier)
+        assertEquals("RequestMessage", superclassClassifier.name)
+    }
+
 }
