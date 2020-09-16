@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<debug-info version="2">
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1082485599095:jetbrains.mps.baseLanguage.structure.BlockStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123140:jetbrains.mps.baseLanguage.structure.ConstructorDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123155:jetbrains.mps.baseLanguage.structure.ExpressionStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068390468200:jetbrains.mps.baseLanguage.structure.FieldDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123159:jetbrains.mps.baseLanguage.structure.IfStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123165:jetbrains.mps.baseLanguage.structure.InstanceMethodDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068581242864:jetbrains.mps.baseLanguage.structure.LocalVariableDeclarationStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068581242878:jetbrains.mps.baseLanguage.structure.ReturnStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/6329021646629104954:jetbrains.mps.baseLanguage.structure.SingleLineComment" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1070462154015:jetbrains.mps.baseLanguage.structure.StaticFieldDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1070475587102:jetbrains.mps.baseLanguage.structure.SuperConstructorInvocation" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1076505808687:jetbrains.mps.baseLanguage.structure.WhileStatement" />
+  <root nodeRef="r:83426abb-2070-490d-b7ef-d9a956a95c67(com.strumenta.mpsserver.ide.plugin)/4416770564874244440">
+    <file name="Ide_ProjectPlugin.java">
+      <node id="4416770564874244440" at="21,62,22,59" concept="2" />
+    </file>
+    <file name="MPSServerIDEProject_ProjectPluginPart.java">
+      <node id="6791139870339581107" at="12,40,13,31" concept="2" />
+      <node id="4416770564874244440" at="9,0,11,0" concept="1" trace="MPSServerIDEProject_ProjectPluginPart#()V" />
+      <node id="4416770564874244440" at="11,0,15,0" concept="5" trace="init#(Ljetbrains/mps/project/MPSProject;)V" />
+      <scope id="4416770564874244440" at="9,50,9,50" />
+      <scope id="4416770564874244843" at="12,40,13,31" />
+      <scope id="4416770564874244440" at="9,0,11,0" />
+      <scope id="4416770564874244440" at="11,0,15,0">
+        <var name="project" id="4416770564874244440" />
+      </scope>
+      <unit id="4416770564874244440" at="8,0,16,0" name="com.strumenta.mpsserver.ide.plugin.MPSServerIDEProject_ProjectPluginPart" />
+    </file>
+  </root>
+  <root nodeRef="r:83426abb-2070-490d-b7ef-d9a956a95c67(com.strumenta.mpsserver.ide.plugin)/7970562785828250431">
+    <file name="Ide_ApplicationPlugin.java">
+      <node id="7970562785828250431" at="22,30,23,51" concept="2" />
+    </file>
+    <file name="ShowServerLauncherTool_Action.java">
+      <node id="7970562785828250431" at="16,0,17,0" concept="9" trace="ICON" />
+      <node id="7970562785828250431" at="18,42,19,48" concept="10" />
+      <node id="7970562785828250431" at="19,48,20,34" concept="2" />
+      <node id="7970562785828250431" at="20,34,21,52" concept="2" />
+      <node id="7970562785828250431" at="24,32,25,16" concept="7" />
+      <node id="7970562785828250431" at="29,53,30,19" concept="7" />
+      <node id="8970236339104100145" at="32,5,33,56" concept="6" />
+      <node id="8898893144448210138" at="34,22,35,21" concept="7" />
+      <node id="7970562785828250431" at="37,5,38,16" concept="7" />
+      <node id="8970236339104100119" at="41,96,42,153" concept="6" />
+      <node id="8970236339104100139" at="42,153,43,29" concept="2" />
+      <node id="7970562785828250431" at="28,95,31,5" concept="4" />
+      <node id="8898893144448210138" at="33,56,36,7" concept="4" />
+      <node id="7970562785828250431" at="23,0,27,0" concept="5" trace="isDumbAware#()Z" />
+      <node id="7970562785828250431" at="18,0,23,0" concept="1" trace="ShowServerLauncherTool_Action#()V" />
+      <node id="7970562785828250431" at="40,0,45,0" concept="5" trace="doExecute#(Lcom/intellij/openapi/actionSystem/AnActionEvent;Ljava/util/Map;)V" />
+      <node id="8970236339104100145" at="31,5,37,5" concept="0" />
+      <node id="7970562785828250431" at="27,0,40,0" concept="5" trace="collectActionData#(Lcom/intellij/openapi/actionSystem/AnActionEvent;Ljava/util/Map;)Z" />
+      <scope id="7970562785828250431" at="24,32,25,16" />
+      <scope id="7970562785828250431" at="29,53,30,19" />
+      <scope id="8898893144448210138" at="34,22,35,21" />
+      <scope id="7970562785828250431" at="41,96,43,29">
+        <var name="tool" id="8970236339104100120" />
+      </scope>
+      <scope id="7970562785828250431" at="18,42,21,52" />
+      <scope id="7970562785828250431" at="23,0,27,0" />
+      <scope id="8970236339104100145" at="32,5,36,7">
+        <var name="p" id="8970236339104100145" />
+      </scope>
+      <scope id="7970562785828250431" at="18,0,23,0" />
+      <scope id="7970562785828250431" at="40,0,45,0">
+        <var name="_params" id="7970562785828250431" />
+        <var name="event" id="7970562785828250431" />
+      </scope>
+      <scope id="7970562785828250431" at="28,95,38,16" />
+      <scope id="7970562785828250431" at="27,0,40,0">
+        <var name="_params" id="7970562785828250431" />
+        <var name="event" id="7970562785828250431" />
+      </scope>
+      <unit id="7970562785828250431" at="15,0,46,0" name="com.strumenta.mpsserver.ide.plugin.ShowServerLauncherTool_Action" />
+    </file>
+  </root>
+  <root nodeRef="r:83426abb-2070-490d-b7ef-d9a956a95c67(com.strumenta.mpsserver.ide.plugin)/7970562785828286123">
+    <file name="Ide_ApplicationPlugin.java">
+      <node id="7970562785828286123" at="24,14,25,46" concept="2" />
+      <node id="8970236339104100150" at="27,37,28,115" concept="2" />
+    </file>
+    <file name="MPSServer_ActionGroup.java">
+      <node id="7970562785828286123" at="10,0,11,0" concept="9" trace="ID" />
+      <node id="7970562785828286123" at="12,68,13,35" concept="10" />
+      <node id="7970562785828286123" at="13,35,14,25" concept="2" />
+      <node id="7970562785828286123" at="14,25,15,20" concept="2" />
+      <node id="25517877165641067" at="15,20,16,46" concept="2" />
+      <node id="6791139870339573766" at="16,46,17,109" concept="2" />
+      <node id="25517877165641075" at="17,109,18,46" concept="2" />
+      <node id="7970562785828286123" at="12,0,20,0" concept="1" trace="MPSServer_ActionGroup#(Ljetbrains/mps/workbench/action/ApplicationPlugin;)V" />
+      <scope id="7970562785828286123" at="12,68,18,46" />
+      <scope id="7970562785828286123" at="12,0,20,0">
+        <var name="plugin" id="7970562785828286123" />
+      </scope>
+      <unit id="7970562785828286123" at="9,0,21,0" name="com.strumenta.mpsserver.ide.plugin.MPSServer_ActionGroup" />
+    </file>
+  </root>
+  <root nodeRef="r:83426abb-2070-490d-b7ef-d9a956a95c67(com.strumenta.mpsserver.ide.plugin)/7970562785828900073">
+    <file name="Ide_ProjectPlugin.java">
+      <node id="7970562785828900073" at="17,76,18,82" concept="2" />
+    </file>
+    <file name="ServerLauncherTool_Tool.java">
+      <node id="7970562785828900073" at="20,0,21,0" concept="9" trace="ICON" />
+      <node id="7970562785828901416" at="21,0,22,0" concept="3" trace="currentProject" />
+      <node id="7970562785832394476" at="22,0,23,0" concept="3" trace="displayPane" />
+      <node id="7970562785828900073" at="23,80,24,85" concept="10" />
+      <node id="7970562785828900073" at="26,66,27,24" concept="2" />
+      <node id="7970562785828901883" at="27,24,28,89" concept="2" />
+      <node id="2118091894897272238" at="30,29,31,89" concept="6" />
+      <node id="2118091894897272855" at="31,89,32,54" concept="2" />
+      <node id="2118091894897273281" at="32,54,33,31" concept="6" />
+      <node id="4870610273556472090" at="33,31,34,26" concept="6" />
+      <node id="4870610273556473650" at="35,22,36,46" concept="6" />
+      <node id="4870610273556505893" at="37,28,38,21" concept="2" />
+      <node id="4870610273556512879" at="39,50,40,20" concept="7" />
+      <node id="4870610273556513533" at="41,14,42,42" concept="2" />
+      <node id="2118091894897273843" at="44,5,45,19" concept="7" />
+      <node id="6376703545016666014" at="47,38,48,55" concept="7" />
+      <node id="5377429388897396836" at="50,35,51,86" concept="7" />
+      <node id="6791139870339455723" at="53,36,54,32" concept="6" />
+      <node id="6791139870339478708" at="54,32,55,38" concept="6" />
+      <node id="7790139088486002062" at="58,50,59,200" concept="6" />
+      <node id="6791139870339630764" at="59,200,60,55" concept="6" />
+      <node id="6791139870339651558" at="60,55,61,41" concept="2" />
+      <node id="6791139870339464778" at="63,7,64,17" concept="2" />
+      <node id="7970562785828911451" at="64,17,65,17" concept="7" />
+      <node id="4870610273556512397" at="41,12,43,7" concept="0" />
+      <node id="7970562785828900073" at="23,0,26,0" concept="1" trace="ServerLauncherTool_Tool#(Lcom/intellij/openapi/project/Project;)V" />
+      <node id="6376703545016661171" at="47,0,50,0" concept="5" trace="getCurrentProject#()Ljetbrains/mps/project/Project;" />
+      <node id="5377429388897391490" at="50,0,53,0" concept="5" trace="mpsProject#()Ljetbrains/mps/project/MPSProject;" />
+      <node id="7970562785828900073" at="26,0,30,0" concept="5" trace="init#(Lcom/intellij/openapi/project/Project;)V" />
+      <node id="6791139870339621771" at="57,0,63,0" concept="5" trace="actionPerformed#(Ljava/awt/event/ActionEvent;)V" />
+      <node id="4870610273556504299" at="36,46,43,7" concept="4" />
+      <node id="6791139870339605381" at="55,38,63,7" concept="2" />
+      <node id="4870610273556473236" at="34,26,44,5" concept="11" />
+      <node id="7970562785828900073" at="53,0,67,0" concept="5" trace="getComponent#()Ljavax/swing/JComponent;" />
+      <node id="2118091894897266188" at="30,0,47,0" concept="5" trace="getGitRoot#()Ljava/io/File;" />
+      <scope id="7970562785828900073" at="23,80,24,85" />
+      <scope id="4870610273556504301" at="37,28,38,21" />
+      <scope id="4870610273556507084" at="39,50,40,20" />
+      <scope id="4870610273556512398" at="41,14,42,42" />
+      <scope id="6376703545016661173" at="47,38,48,55" />
+      <scope id="5377429388897391492" at="50,35,51,86" />
+      <scope id="7970562785828900073" at="26,66,28,89" />
+      <scope id="7970562785828900073" at="23,0,26,0">
+        <var name="project" id="7970562785828900073" />
+      </scope>
+      <scope id="6376703545016661171" at="47,0,50,0" />
+      <scope id="5377429388897391490" at="50,0,53,0" />
+      <scope id="6791139870339621777" at="58,50,61,41">
+        <var name="sc" id="6791139870339630765" />
+        <var name="serverConfiguration" id="7790139088486002063" />
+      </scope>
+      <scope id="7970562785828900073" at="26,0,30,0">
+        <var name="project" id="7970562785828900073" />
+      </scope>
+      <scope id="6791139870339621771" at="57,0,63,0">
+        <var name="e" id="6791139870339621775" />
+      </scope>
+      <scope id="4870610273556473238" at="35,22,43,7">
+        <var name="gitDir" id="4870610273556473651" />
+      </scope>
+      <scope id="7970562785828900075" at="53,36,65,17">
+        <var name="b" id="6791139870339478709" />
+        <var name="panel" id="6791139870339455724" />
+      </scope>
+      <scope id="7970562785828900073" at="53,0,67,0" />
+      <scope id="2118091894897270835" at="30,29,45,19">
+        <var name="found" id="4870610273556472093" />
+        <var name="gitRoot" id="2118091894897273282" />
+        <var name="projectFile" id="2118091894897272239" />
+      </scope>
+      <scope id="2118091894897266188" at="30,0,47,0" />
+      <unit id="6791139870339621765" at="56,28,63,5" name="com.strumenta.mpsserver.ide.plugin.ServerLauncherTool_Tool$1" />
+      <unit id="7970562785828900073" at="19,0,68,0" name="com.strumenta.mpsserver.ide.plugin.ServerLauncherTool_Tool" />
+    </file>
+  </root>
+  <root nodeRef="r:83426abb-2070-490d-b7ef-d9a956a95c67(com.strumenta.mpsserver.ide.plugin)/8077410651478308548">
+    <file name="Ide_ApplicationPlugin.java">
+      <node id="8077410651478308548" at="11,0,12,0" concept="3" trace="myId" />
+      <node id="8077410651478308548" at="17,27,18,16" concept="7" />
+      <node id="8077410651478308548" at="21,30,22,30" concept="8" />
+      <node id="8077410651478308548" at="23,51,24,14" concept="8" />
+      <node id="8077410651478308548" at="13,0,15,0" concept="1" trace="Ide_ApplicationPlugin#()V" />
+      <node id="8077410651478308548" at="27,0,30,0" concept="5" trace="adjustRegularGroups#()V" />
+      <node id="8077410651478308548" at="16,0,20,0" concept="5" trace="getId#()Lcom/intellij/openapi/extensions/PluginId;" />
+      <node id="8077410651478308548" at="21,0,27,0" concept="5" trace="createGroups#()V" />
+      <scope id="8077410651478308548" at="13,34,13,34" />
+      <scope id="8077410651478308548" at="17,27,18,16" />
+      <scope id="8077410651478308548" at="27,37,28,115" />
+      <scope id="8077410651478308548" at="13,0,15,0" />
+      <scope id="8077410651478308548" at="27,0,30,0" />
+      <scope id="8077410651478308548" at="16,0,20,0" />
+      <scope id="8077410651478308548" at="21,30,25,46" />
+      <scope id="8077410651478308548" at="21,0,27,0" />
+      <unit id="8077410651478308548" at="10,0,31,0" name="com.strumenta.mpsserver.ide.plugin.Ide_ApplicationPlugin" />
+    </file>
+    <file name="Ide_ProjectPlugin.java">
+      <node id="8077410651478308548" at="16,56,17,76" concept="6" />
+      <node id="8077410651478308548" at="18,82,19,17" concept="7" />
+      <node id="8077410651478308548" at="14,0,16,0" concept="1" trace="Ide_ProjectPlugin#()V" />
+      <node id="8077410651478308548" at="21,0,24,0" concept="5" trace="fillCustomParts#(Ljava/util/List;)V" />
+      <node id="8077410651478308548" at="16,0,21,0" concept="5" trace="initAllTools1#(Lcom/intellij/openapi/project/Project;)Ljava/util/List;" />
+      <scope id="8077410651478308548" at="14,30,14,30" />
+      <scope id="8077410651478308548" at="21,62,22,59" />
+      <scope id="8077410651478308548" at="14,0,16,0" />
+      <scope id="8077410651478308548" at="16,56,19,17">
+        <var name="tools" id="8077410651478308548" />
+      </scope>
+      <scope id="8077410651478308548" at="21,0,24,0">
+        <var name="parts" id="8077410651478308548" />
+      </scope>
+      <scope id="8077410651478308548" at="16,0,21,0">
+        <var name="project" id="8077410651478308548" />
+      </scope>
+      <unit id="8077410651478308548" at="13,0,25,0" name="com.strumenta.mpsserver.ide.plugin.Ide_ProjectPlugin" />
+    </file>
+  </root>
+</debug-info>
+

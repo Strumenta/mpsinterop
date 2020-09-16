@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<debug-info version="2">
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1082485599095:jetbrains.mps.baseLanguage.structure.BlockStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123140:jetbrains.mps.baseLanguage.structure.ConstructorDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123155:jetbrains.mps.baseLanguage.structure.ExpressionStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1144226303539:jetbrains.mps.baseLanguage.structure.ForeachStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123159:jetbrains.mps.baseLanguage.structure.IfStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123165:jetbrains.mps.baseLanguage.structure.InstanceMethodDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068581242864:jetbrains.mps.baseLanguage.structure.LocalVariableDeclarationStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068581242878:jetbrains.mps.baseLanguage.structure.ReturnStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1070462154015:jetbrains.mps.baseLanguage.structure.StaticFieldDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1081236700938:jetbrains.mps.baseLanguage.structure.StaticMethodDeclaration" />
+  <root>
+    <file name="TypesystemDescriptor.java">
+      <unit at="8,0,20,0" name="com.strumenta.businessorg.typesystem.TypesystemDescriptor" />
+    </file>
+  </root>
+  <root nodeRef="r:3588f820-f38c-4943-a5b1-ddc6c762e9a9(com.strumenta.businessorg.typesystem)/2649606736827368100">
+    <file name="TypesystemDescriptor.java">
+      <node id="2649606736827368100" at="14,5,15,93" concept="6" />
+      <node id="2649606736827368100" at="15,93,16,55" concept="2" />
+      <node id="2649606736827368100" at="13,5,17,5" concept="0" />
+      <scope id="2649606736827368100" at="14,5,16,55">
+        <var name="nonTypesystemRule" id="2649606736827368100" />
+      </scope>
+    </file>
+    <file name="check_RolePlayed_NonTypesystemRule.java">
+      <node id="2649606736827383072" at="28,9,29,88" concept="6" />
+      <node id="2649606736827383072" at="29,88,30,236" concept="6" />
+      <node id="2649606736827368100" at="35,50,36,34" concept="7" />
+      <node id="2649606736827368100" at="38,68,39,102" concept="7" />
+      <node id="2649606736827368100" at="41,30,42,17" concept="7" />
+      <node id="2649606736827368100" at="46,0,47,0" concept="8" trace="RolePlayed$g1" />
+      <node id="2649606736827368100" at="50,0,51,0" concept="8" trace="role$LfTF" />
+      <node id="2649606736827368100" at="23,0,25,0" concept="1" trace="check_RolePlayed_NonTypesystemRule#()V" />
+      <node id="2649606736827368100" at="35,0,38,0" concept="5" trace="getApplicableConcept#()Lorg/jetbrains/mps/openapi/language/SAbstractConcept;" />
+      <node id="2649606736827368100" at="38,0,41,0" concept="5" trace="isApplicableAndPattern#(Lorg/jetbrains/mps/openapi/model/SNode;)Ljetbrains/mps/lang/typesystem/runtime/IsApplicableStatus;" />
+      <node id="2649606736827368100" at="41,0,44,0" concept="5" trace="overrides#()Z" />
+      <node id="2649606736827383072" at="27,338,31,9" concept="0" />
+      <node id="2649606736827372294" at="26,94,32,7" concept="4" />
+      <node id="2649606736827371219" at="25,123,33,5" concept="3" />
+      <node id="2649606736827368100" at="25,0,35,0" concept="5" trace="applyRule#(Lorg/jetbrains/mps/openapi/model/SNode;Ljetbrains/mps/typesystem/inference/TypeCheckingContext;Ljetbrains/mps/lang/typesystem/runtime/IsApplicableStatus;)V" />
+      <scope id="2649606736827368100" at="23,47,23,47" />
+      <scope id="2649606736827368100" at="35,50,36,34" />
+      <scope id="2649606736827368100" at="38,68,39,102" />
+      <scope id="2649606736827368100" at="41,30,42,17" />
+      <scope id="2649606736827368100" at="23,0,25,0" />
+      <scope id="2649606736827383072" at="28,9,30,236">
+        <var name="_reporter_2309309498" id="2649606736827383072" />
+        <var name="errorTarget" id="2649606736827383072" />
+      </scope>
+      <scope id="2649606736827368100" at="35,0,38,0" />
+      <scope id="2649606736827368100" at="38,0,41,0">
+        <var name="argument" id="2649606736827368100" />
+      </scope>
+      <scope id="2649606736827368100" at="41,0,44,0" />
+      <scope id="2649606736827372296" at="27,338,31,9" />
+      <scope id="2649606736827371222" at="26,94,32,7" />
+      <scope id="2649606736827368101" at="25,123,33,5" />
+      <scope id="2649606736827371219" at="25,123,33,5">
+        <var name="s" id="2649606736827371220" />
+      </scope>
+      <scope id="2649606736827368100" at="25,0,35,0">
+        <var name="rolePlayed" id="2649606736827368100" />
+        <var name="status" id="2649606736827368100" />
+        <var name="typeCheckingContext" id="2649606736827368100" />
+      </scope>
+      <unit id="2649606736827368100" at="45,0,48,0" name="com.strumenta.businessorg.typesystem.check_RolePlayed_NonTypesystemRule$CONCEPTS" />
+      <unit id="2649606736827368100" at="49,0,52,0" name="com.strumenta.businessorg.typesystem.check_RolePlayed_NonTypesystemRule$LINKS" />
+      <unit id="2649606736827368100" at="22,0,53,0" name="com.strumenta.businessorg.typesystem.check_RolePlayed_NonTypesystemRule" />
+    </file>
+  </root>
+  <root nodeRef="r:3588f820-f38c-4943-a5b1-ddc6c762e9a9(com.strumenta.businessorg.typesystem)/3185435802458718249">
+    <file name="TypesystemDescriptor.java">
+      <node id="3185435802458718249" at="10,5,11,87" concept="6" />
+      <node id="3185435802458718249" at="11,87,12,55" concept="2" />
+      <node id="3185435802458718249" at="9,33,13,5" concept="0" />
+      <scope id="3185435802458718249" at="10,5,12,55">
+        <var name="nonTypesystemRule" id="3185435802458718249" />
+      </scope>
+    </file>
+    <file name="check_Role_NonTypesystemRule.java">
+      <node id="3185435802458742560" at="29,11,30,89" concept="6" />
+      <node id="3185435802458742560" at="30,89,31,232" concept="6" />
+      <node id="3185435802458718249" at="37,50,38,28" concept="7" />
+      <node id="3185435802458718249" at="40,68,41,102" concept="7" />
+      <node id="3185435802458718249" at="43,30,44,17" concept="7" />
+      <node id="3185435802458736899" at="46,55,47,43" concept="7" />
+      <node id="3185435802458718249" at="51,0,52,0" concept="8" trace="Role$j3" />
+      <node id="3185435802458718249" at="55,0,56,0" concept="8" trace="name$tAp1" />
+      <node id="3185435802458718249" at="23,0,25,0" concept="1" trace="check_Role_NonTypesystemRule#()V" />
+      <node id="3185435802458718249" at="37,0,40,0" concept="5" trace="getApplicableConcept#()Lorg/jetbrains/mps/openapi/language/SAbstractConcept;" />
+      <node id="3185435802458718249" at="40,0,43,0" concept="5" trace="isApplicableAndPattern#(Lorg/jetbrains/mps/openapi/model/SNode;)Ljetbrains/mps/lang/typesystem/runtime/IsApplicableStatus;" />
+      <node id="3185435802458718249" at="43,0,46,0" concept="5" trace="overrides#()Z" />
+      <node id="3185435802458736899" at="46,0,49,0" concept="9" trace="isNotEmptyString#(Ljava/lang/String;)Z" />
+      <node id="3185435802458742560" at="28,328,32,11" concept="0" />
+      <node id="3185435802458723032" at="27,90,33,9" concept="4" />
+      <node id="3185435802458721678" at="26,145,34,7" concept="3" />
+      <node id="3185435802458731029" at="25,117,35,5" concept="4" />
+      <node id="3185435802458718249" at="25,0,37,0" concept="5" trace="applyRule#(Lorg/jetbrains/mps/openapi/model/SNode;Ljetbrains/mps/typesystem/inference/TypeCheckingContext;Ljetbrains/mps/lang/typesystem/runtime/IsApplicableStatus;)V" />
+      <scope id="3185435802458718249" at="23,41,23,41" />
+      <scope id="3185435802458718249" at="37,50,38,28" />
+      <scope id="3185435802458718249" at="40,68,41,102" />
+      <scope id="3185435802458718249" at="43,30,44,17" />
+      <scope id="3185435802458736899" at="46,55,47,43" />
+      <scope id="3185435802458718249" at="23,0,25,0" />
+      <scope id="3185435802458742560" at="29,11,31,232">
+        <var name="_reporter_2309309498" id="3185435802458742560" />
+        <var name="errorTarget" id="3185435802458742560" />
+      </scope>
+      <scope id="3185435802458718249" at="37,0,40,0" />
+      <scope id="3185435802458718249" at="40,0,43,0">
+        <var name="argument" id="3185435802458718249" />
+      </scope>
+      <scope id="3185435802458718249" at="43,0,46,0" />
+      <scope id="3185435802458736899" at="46,0,49,0">
+        <var name="str" id="3185435802458736899" />
+      </scope>
+      <scope id="3185435802458723034" at="28,328,32,11" />
+      <scope id="3185435802458721681" at="27,90,33,9" />
+      <scope id="3185435802458721678" at="26,145,34,7">
+        <var name="s" id="3185435802458721679" />
+      </scope>
+      <scope id="3185435802458731031" at="26,145,34,7" />
+      <scope id="3185435802458718250" at="25,117,35,5" />
+      <scope id="3185435802458718249" at="25,0,37,0">
+        <var name="role" id="3185435802458718249" />
+        <var name="status" id="3185435802458718249" />
+        <var name="typeCheckingContext" id="3185435802458718249" />
+      </scope>
+      <unit id="3185435802458718249" at="50,0,53,0" name="com.strumenta.businessorg.typesystem.check_Role_NonTypesystemRule$CONCEPTS" />
+      <unit id="3185435802458718249" at="54,0,57,0" name="com.strumenta.businessorg.typesystem.check_Role_NonTypesystemRule$PROPS" />
+      <unit id="3185435802458718249" at="22,0,58,0" name="com.strumenta.businessorg.typesystem.check_Role_NonTypesystemRule" />
+    </file>
+  </root>
+</debug-info>
+

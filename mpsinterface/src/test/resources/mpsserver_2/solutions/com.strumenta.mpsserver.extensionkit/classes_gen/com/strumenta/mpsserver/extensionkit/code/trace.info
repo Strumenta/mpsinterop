@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<debug-info version="2">
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123165:jetbrains.mps.baseLanguage.structure.InstanceMethodDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068581242878:jetbrains.mps.baseLanguage.structure.ReturnStatement" />
+  <root nodeRef="r:0b41bd2a-d72e-4e3a-8bde-c68965ce30dd(com.strumenta.mpsserver.extensionkit.code)/324292001765690087">
+    <file name="Action.java">
+      <node id="324292001765701104" at="8,0,9,0" concept="0" trace="execute#(Lorg/jetbrains/mps/openapi/model/SNode;)Ljava/lang/Object;" />
+      <scope id="324292001765701104" at="8,0,9,0">
+        <var name="node" id="324292001765703161" />
+      </scope>
+      <unit id="324292001765690087" at="7,0,10,0" name="com.strumenta.mpsserver.extensionkit.code.Action" />
+    </file>
+  </root>
+  <root nodeRef="r:0b41bd2a-d72e-4e3a-8bde-c68965ce30dd(com.strumenta.mpsserver.extensionkit.code)/3248405667824468818">
+    <file name="MPSServerExtension.java">
+      <node id="5421713440038312778" at="7,25,8,46" concept="1" />
+      <node id="3248405667824469169" at="15,0,16,0" concept="0" trace="activate#(Lcom/strumenta/mpsserver/extensionkit/code/ExtendableServer;)V" />
+      <node id="5421713440038312717" at="7,0,10,0" concept="0" trace="name#()Ljava/lang/String;" />
+      <scope id="5421713440038312720" at="7,25,8,46" />
+      <scope id="3248405667824469169" at="15,0,16,0">
+        <var name="server" id="3248405667824469625" />
+      </scope>
+      <scope id="5421713440038312717" at="7,0,10,0" />
+      <unit id="3248405667824468818" at="6,0,17,0" name="com.strumenta.mpsserver.extensionkit.code.MPSServerExtension" />
+    </file>
+  </root>
+  <root nodeRef="r:0b41bd2a-d72e-4e3a-8bde-c68965ce30dd(com.strumenta.mpsserver.extensionkit.code)/5465070037663269168">
+    <file name="ExtendableServer.java">
+      <node id="324292001765724176" at="7,0,8,0" concept="0" trace="registerConceptSpecificAction#(Ljava/lang/String;Ljava/lang/String;Lcom/strumenta/mpsserver/extensionkit/code/Action;)V" />
+      <scope id="324292001765724176" at="7,0,8,0">
+        <var name="action" id="324292001765762494" />
+        <var name="actionName" id="324292001765737879" />
+        <var name="conceptName" id="324292001765732722" />
+      </scope>
+      <unit id="5465070037663269168" at="6,0,9,0" name="com.strumenta.mpsserver.extensionkit.code.ExtendableServer" />
+    </file>
+  </root>
+</debug-info>
+

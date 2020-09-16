@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<debug-info version="2">
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1082485599095:jetbrains.mps.baseLanguage.structure.BlockStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123155:jetbrains.mps.baseLanguage.structure.ExpressionStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1144226303539:jetbrains.mps.baseLanguage.structure.ForeachStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123159:jetbrains.mps.baseLanguage.structure.IfStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068581242864:jetbrains.mps.baseLanguage.structure.LocalVariableDeclarationStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068581242878:jetbrains.mps.baseLanguage.structure.ReturnStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123157:jetbrains.mps.baseLanguage.structure.Statement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1081236700938:jetbrains.mps.baseLanguage.structure.StaticMethodDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1164879751025:jetbrains.mps.baseLanguage.structure.TryCatchStatement" />
+  <root nodeRef="r:c2d9b334-861b-401e-b805-94c1896b2f59(com.strumenta.mpsserver.launcher)/5754613855127260407">
+    <file name="MainClass.java">
+      <node id="7768752093378893445" at="17,46,18,72" concept="4" />
+      <node id="7768752093378893452" at="19,102,20,62" concept="4" />
+      <node id="7768752093378893457" at="20,62,21,51" concept="1" />
+      <node id="7768752093378893462" at="21,51,22,55" concept="1" />
+      <node id="7768752093378893467" at="22,55,23,62" concept="1" />
+      <node id="7768752093378896000" at="27,32,28,20" concept="4" />
+      <node id="7768752093378896004" at="28,20,29,62" concept="4" />
+      <node id="7768752093378896011" at="30,68,31,48" concept="1" />
+      <node id="7768752093378896016" at="31,48,32,59" concept="1" />
+      <node id="7768752093378896029" at="33,12,34,67" concept="1" />
+      <node id="7768752093378896514" at="35,5,36,16" concept="5" />
+      <node id="7768752093378901691" at="39,40,40,27" concept="1" />
+      <node id="7768752093378901693" at="40,27,41,74" concept="4" />
+      <node id="3248405667828844364" at="42,34,43,82" concept="1" />
+      <node id="7768752093378901700" at="43,82,44,27" concept="1" />
+      <node id="3248405667828845382" at="45,12,46,66" concept="1" />
+      <node id="7768752093378901707" at="47,5,48,0" concept="6" />
+      <node id="7768752093378901708" at="48,0,49,67" concept="4" />
+      <node id="7768752093378901716" at="49,67,50,54" concept="1" />
+      <node id="7768752093378901719" at="50,54,51,0" concept="6" />
+      <node id="7768752093378901720" at="51,0,52,23" concept="5" />
+      <node id="7768752093378913184" at="55,52,56,61" concept="4" />
+      <node id="7768752093378913191" at="57,30,58,50" concept="1" />
+      <node id="8341243812848556725" at="59,5,60,0" concept="6" />
+      <node id="8341243812848558631" at="60,0,61,69" concept="4" />
+      <node id="7768752093378913201" at="62,29,63,57" concept="1" />
+      <node id="8341243812848565262" at="63,57,64,35" concept="5" />
+      <node id="8341243812848568198" at="65,5,66,38" concept="1" />
+      <node id="7768752093378913562" at="66,38,67,16" concept="5" />
+      <node id="7768752093382327099" at="69,40,70,58" concept="4" />
+      <node id="7768752093382327106" at="71,27,72,24" concept="1" />
+      <node id="7768752093382327115" at="73,5,74,0" concept="6" />
+      <node id="7768752093382327116" at="74,0,75,47" concept="1" />
+      <node id="7768752093382327119" at="75,47,76,42" concept="5" />
+      <node id="7790139088486450578" at="79,94,80,71" concept="4" />
+      <node id="7790139088486469518" at="81,92,82,50" concept="1" />
+      <node id="7790139088486460533" at="82,50,83,49" concept="4" />
+      <node id="7790139088486470146" at="83,49,84,56" concept="1" />
+      <node id="7790139088486470674" at="84,56,85,56" concept="1" />
+      <node id="7790139088486459936" at="85,56,86,61" concept="1" />
+      <node id="7790139088486471956" at="87,12,88,47" concept="1" />
+      <node id="1678269866642884401" at="93,93,94,58" concept="4" />
+      <node id="1678269866642884408" at="95,21,96,86" concept="1" />
+      <node id="1678269866642896739" at="98,42,99,73" concept="1" />
+      <node id="1678269866642894627" at="99,73,100,52" concept="1" />
+      <node id="7768752093378894124" at="105,59,106,27" concept="1" />
+      <node id="5046632397147703756" at="106,27,107,40" concept="4" />
+      <node id="5046632397147701744" at="107,40,108,63" concept="4" />
+      <node id="5046632397147705758" at="108,63,109,45" concept="1" />
+      <node id="7768752093382321013" at="109,45,110,188" concept="4" />
+      <node id="7790139088486466778" at="110,188,111,48" concept="1" />
+      <node id="1678269866642882692" at="111,48,112,47" concept="1" />
+      <node id="7768752093382603196" at="112,47,113,32" concept="1" />
+      <node id="7768752093382604150" at="113,32,114,0" concept="6" />
+      <node id="2756881722859150791" at="114,0,115,47" concept="1" />
+      <node id="8975101069542614427" at="116,9,117,74" concept="4" />
+      <node id="2756881722859179461" at="117,74,118,42" concept="1" />
+      <node id="2756881722859174913" at="118,42,119,23" concept="1" />
+      <node id="2756881722859180138" at="119,23,120,54" concept="1" />
+      <node id="2756881722859151891" at="121,27,122,26" concept="1" />
+      <node id="2756881722859151431" at="123,5,124,45" concept="1" />
+      <node id="7768752093378896027" at="33,10,35,5" concept="0" />
+      <node id="3248405667828845118" at="45,10,47,5" concept="0" />
+      <node id="7790139088486471450" at="87,10,89,5" concept="0" />
+      <node id="7768752093378913189" at="56,61,59,5" concept="3" />
+      <node id="7768752093382327104" at="70,58,73,5" concept="3" />
+      <node id="8341243812848563664" at="61,69,65,5" concept="3" />
+      <node id="1678269866642885609" at="97,12,101,7" concept="2" />
+      <node id="1678269866642884417" at="97,10,102,5" concept="0" />
+      <node id="7768752093378893450" at="18,72,24,5" concept="3" />
+      <node id="7768752093378896009" at="29,62,35,5" concept="3" />
+      <node id="7768752093378901698" at="41,74,47,5" concept="3" />
+      <node id="1678269866642884406" at="94,58,102,5" concept="3" />
+      <node id="2756881722859151703" at="115,47,123,5" concept="8" />
+      <node id="7768752093378893442" at="17,0,26,0" concept="7" trace="considerExtraLogging#()V" />
+      <node id="7768752093382327097" at="69,0,78,0" concept="7" trace="getAutoSave#()Z" />
+      <node id="7790139088486450583" at="80,71,89,5" concept="3" />
+      <node id="7768752093378895647" at="27,0,38,0" concept="7" trace="getPort#()I" />
+      <node id="1678269866642878105" at="93,0,104,0" concept="7" trace="considerExtensionPath#(Lcom/strumenta/mpsserver/logic/Server/ServerConfiguration;)V" />
+      <node id="7790139088486450576" at="79,0,91,0" concept="7" trace="considerGitCredentials#(Lcom/strumenta/mpsserver/logic/Server/ServerConfiguration;)V" />
+      <node id="7768752093378904827" at="55,0,69,0" concept="7" trace="getGitRoot#(Ljava/io/File;)Ljava/io/File;" />
+      <node id="7768752093378901688" at="39,0,54,0" concept="7" trace="getProjectFile#()Ljava/io/File;" />
+      <node id="5754613855127260463" at="105,0,126,0" concept="7" trace="mpsMain#(Ljetbrains/mps/tool/environment/Environment;)V" />
+      <scope id="7768752093378896028" at="33,12,34,67" />
+      <scope id="3248405667828845119" at="45,12,46,66" />
+      <scope id="7768752093378913190" at="57,30,58,50" />
+      <scope id="7768752093382327105" at="71,27,72,24" />
+      <scope id="7790139088486471451" at="87,12,88,47" />
+      <scope id="1678269866642884407" at="95,21,96,86" />
+      <scope id="2756881722859151706" at="121,0,122,26">
+        <var name="t" id="2756881722859151708" />
+      </scope>
+      <scope id="2756881722859151712" at="121,27,122,26" />
+      <scope id="7768752093378896010" at="30,68,32,59" />
+      <scope id="7768752093378901699" at="42,34,44,27" />
+      <scope id="8341243812848563666" at="62,29,64,35" />
+      <scope id="1678269866642885621" at="98,42,100,52" />
+      <scope id="7768752093378893451" at="19,102,23,62">
+        <var name="consoleAppender" id="7768752093378893453" />
+      </scope>
+      <scope id="1678269866642884418" at="97,12,101,7" />
+      <scope id="1678269866642885609" at="97,12,101,7">
+        <var name="entry" id="1678269866642885613" />
+      </scope>
+      <scope id="2756881722859151705" at="116,9,120,54">
+        <var name="sc" id="8975101069542614428" />
+      </scope>
+      <scope id="7790139088486450584" at="81,92,86,61">
+        <var name="parts" id="7790139088486460536" />
+      </scope>
+      <scope id="7768752093378893444" at="17,46,24,5">
+        <var name="enableExtraLogging" id="7768752093378893446" />
+      </scope>
+      <scope id="7768752093382327098" at="69,40,76,42">
+        <var name="autosave" id="7768752093382327100" />
+      </scope>
+      <scope id="7768752093378893442" at="17,0,26,0" />
+      <scope id="7768752093378895650" at="27,32,36,16">
+        <var name="mpsServerPortStr" id="7768752093378896005" />
+        <var name="port" id="7768752093378896001" />
+      </scope>
+      <scope id="7768752093382327097" at="69,0,78,0" />
+      <scope id="1678269866642878108" at="93,93,102,5">
+        <var name="ep" id="1678269866642884402" />
+      </scope>
+      <scope id="7790139088486450577" at="79,94,89,5">
+        <var name="gitCredentials" id="7790139088486450579" />
+      </scope>
+      <scope id="7768752093378895647" at="27,0,38,0" />
+      <scope id="1678269866642878105" at="93,0,104,0">
+        <var name="serverConfiguration" id="1678269866642880889" />
+      </scope>
+      <scope id="7768752093378904830" at="55,52,67,16">
+        <var name="dotGitDir" id="8341243812848558632" />
+        <var name="gitRootPath" id="7768752093378913185" />
+      </scope>
+      <scope id="7790139088486450576" at="79,0,91,0">
+        <var name="serverConfiguration" id="7790139088486450604" />
+      </scope>
+      <scope id="7768752093378901690" at="39,40,52,23">
+        <var name="projectFile" id="7768752093378901709" />
+        <var name="projectFilePath" id="7768752093378901694" />
+      </scope>
+      <scope id="7768752093378904827" at="55,0,69,0">
+        <var name="projectFile" id="7768752093378912460" />
+      </scope>
+      <scope id="7768752093378901688" at="39,0,54,0" />
+      <scope id="5754613855127260466" at="105,59,124,45">
+        <var name="project" id="5046632397147701745" />
+        <var name="projectFile" id="5046632397147703757" />
+        <var name="serverConfiguration" id="7768752093382321014" />
+      </scope>
+      <scope id="5754613855127260463" at="105,0,126,0">
+        <var name="ideaEnvironment" id="5754613855128377838" />
+      </scope>
+      <unit id="5754613855127260407" at="15,0,127,0" name="com.strumenta.mpsserver.launcher.MainClass" />
+    </file>
+  </root>
+</debug-info>
+

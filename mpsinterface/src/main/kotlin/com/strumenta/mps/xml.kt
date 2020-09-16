@@ -11,20 +11,20 @@ fun loadDocument(data: InputStream): Document {
     return builder.parse(data)
 }
 
-fun Element.processAllNodes(op: (Element) -> Unit) {
-    op(this)
-    (0..(this.childNodes.length))
+fun Element.childrenSequence() : Sequence<Element> {
+    return (0..(this.childNodes.length))
             .asSequence()
             .map { this.childNodes.item(it) }
             .filterIsInstance<Element>()
-            .forEach { it.processAllNodes(op) }
+}
+
+fun Element.processAllNodes(op: (Element) -> Unit) {
+    op(this)
+    childrenSequence().forEach { it.processAllNodes(op) }
 }
 
 fun Element.processChildren(op: (Element) -> Unit) {
-    (0..(this.childNodes.length))
-            .asSequence()
-            .map { this.childNodes.item(it) }
-            .filterIsInstance<Element>()
+    childrenSequence()
             .forEach { op(it) }
 }
 
@@ -35,3 +35,11 @@ fun Element.processAllNodes(tagName: String, op: (Element) -> Unit) {
 fun Element.processChildren(tagName: String, op: (Element) -> Unit) {
     this.processChildren { if (it.tagName == tagName) op(it) }
 }
+
+fun Element.child(tagName: String) : Element {
+    val matching = childrenSequence().filter { it.tagName == tagName }.toList()
+    require(matching.size == 1)
+    return matching.first()
+}
+
+fun Element.children(tagName: String) : List<Element> = childrenSequence().filter { it.tagName == tagName }.toList()

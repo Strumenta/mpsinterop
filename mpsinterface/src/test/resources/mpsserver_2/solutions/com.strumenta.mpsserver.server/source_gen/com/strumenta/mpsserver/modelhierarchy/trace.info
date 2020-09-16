@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<debug-info version="2">
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123140:jetbrains.mps.baseLanguage.structure.ConstructorDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123155:jetbrains.mps.baseLanguage.structure.ExpressionStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068390468200:jetbrains.mps.baseLanguage.structure.FieldDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1144226303539:jetbrains.mps.baseLanguage.structure.ForeachStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123159:jetbrains.mps.baseLanguage.structure.IfStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123165:jetbrains.mps.baseLanguage.structure.InstanceMethodDeclaration" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068581242864:jetbrains.mps.baseLanguage.structure.LocalVariableDeclarationStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068581242878:jetbrains.mps.baseLanguage.structure.ReturnStatement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/6329021646629104954:jetbrains.mps.baseLanguage.structure.SingleLineComment" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1068580123157:jetbrains.mps.baseLanguage.structure.Statement" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1070475587102:jetbrains.mps.baseLanguage.structure.SuperConstructorInvocation" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1178893518978:jetbrains.mps.baseLanguage.structure.ThisConstructorInvocation" />
+  <concept fqn="c:f3061a53-9226-4cc5-a443-f952ceaf5816/1164991038168:jetbrains.mps.baseLanguage.structure.ThrowStatement" />
+  <root nodeRef="r:7e5b2038-fef4-4e4d-bb66-6d01879f6f52(com.strumenta.mpsserver.modelhierarchy)/215519239075484658">
+    <file name="MyModelRoot.java">
+      <node id="215519239075641178" at="20,0,21,0" concept="2" trace="models" />
+      <node id="215519239076744747" at="23,35,24,52" concept="1" />
+      <node id="215519239075650832" at="25,5,26,52" concept="1" />
+      <node id="5909214862811468159" at="27,76,28,70" concept="1" />
+      <node id="215519239075643271" at="34,40,35,18" concept="7" />
+      <node id="215519239075502516" at="38,27,39,46" concept="12" />
+      <node id="215519239075502447" at="42,35,43,46" concept="12" />
+      <node id="215519239075663923" at="49,47,50,17" concept="7" />
+      <node id="215519239075656102" at="52,5,53,16" concept="7" />
+      <node id="215519239075502333" at="57,57,58,46" concept="12" />
+      <node id="215519239075502291" at="62,53,63,46" concept="12" />
+      <node id="215519239075502258" at="66,46,67,46" concept="12" />
+      <node id="215519239075496104" at="70,46,71,46" concept="12" />
+      <node id="215519239076744202" at="22,38,25,5" concept="4" />
+      <node id="5909214862811465157" at="26,52,29,5" concept="4" />
+      <node id="215519239075661184" at="48,52,51,7" concept="4" />
+      <node id="215519239075494523" at="37,0,41,0" concept="5" trace="getType#()Ljava/lang/String;" />
+      <node id="215519239075494533" at="41,0,45,0" concept="5" trace="getPresentation#()Ljava/lang/String;" />
+      <node id="215519239075494588" at="65,0,69,0" concept="5" trace="save#(Lorg/jetbrains/mps/openapi/persistence/Memento;)V" />
+      <node id="215519239075494599" at="69,0,73,0" concept="5" trace="load#(Lorg/jetbrains/mps/openapi/persistence/Memento;)V" />
+      <node id="215519239075494513" at="32,0,37,0" concept="5" trace="loadModels#()Ljava/lang/Iterable;" />
+      <node id="215519239075658795" at="47,48,52,5" concept="3" />
+      <node id="215519239075494557" at="55,0,60,0" concept="5" trace="canCreateModel#(Ljava/lang/String;)Z" />
+      <node id="215519239075494574" at="60,0,65,0" concept="5" trace="createModel#(Ljava/lang/String;)Lorg/jetbrains/mps/openapi/model/SModel;" />
+      <node id="215519239075648172" at="22,0,31,0" concept="5" trace="addModel#(Lorg/jetbrains/mps/openapi/model/SModel;)V" />
+      <node id="215519239075494543" at="45,0,55,0" concept="5" trace="getModel#(Lorg/jetbrains/mps/openapi/model/SModelId;)Lorg/jetbrains/mps/openapi/model/SModel;" />
+      <scope id="215519239076744204" at="23,35,24,52" />
+      <scope id="5909214862811465159" at="27,76,28,70" />
+      <scope id="215519239075494519" at="34,40,35,18" />
+      <scope id="215519239075494529" at="38,27,39,46" />
+      <scope id="215519239075494539" at="42,35,43,46" />
+      <scope id="215519239075661186" at="49,47,50,17" />
+      <scope id="215519239075494570" at="57,57,58,46" />
+      <scope id="215519239075494584" at="62,53,63,46" />
+      <scope id="215519239075494597" at="66,46,67,46" />
+      <scope id="215519239075494608" at="70,46,71,46" />
+      <scope id="215519239075658801" at="48,52,51,7" />
+      <scope id="215519239075494523" at="37,0,41,0" />
+      <scope id="215519239075494533" at="41,0,45,0" />
+      <scope id="215519239075494588" at="65,0,69,0">
+        <var name="memento" id="215519239075494592" />
+      </scope>
+      <scope id="215519239075494599" at="69,0,73,0">
+        <var name="memento" id="215519239075494603" />
+      </scope>
+      <scope id="215519239075494513" at="32,0,37,0" />
+      <scope id="215519239075658795" at="47,48,52,5">
+        <var name="m" id="215519239075658797" />
+      </scope>
+      <scope id="215519239075494557" at="55,0,60,0">
+        <var name="string" id="215519239075494565" />
+      </scope>
+      <scope id="215519239075494574" at="60,0,65,0">
+        <var name="string" id="215519239075494579" />
+      </scope>
+      <scope id="215519239075494553" at="47,48,53,16" />
+      <scope id="215519239075648175" at="22,38,29,5" />
+      <scope id="215519239075648172" at="22,0,31,0">
+        <var name="model" id="215519239075649528" />
+      </scope>
+      <scope id="215519239075494543" at="45,0,55,0">
+        <var name="id" id="215519239075494548" />
+      </scope>
+      <unit id="215519239075484658" at="18,0,74,0" name="com.strumenta.mpsserver.modelhierarchy.MyModelRoot" />
+    </file>
+  </root>
+  <root nodeRef="r:7e5b2038-fef4-4e4d-bb66-6d01879f6f52(com.strumenta.mpsserver.modelhierarchy)/215519239076300880">
+    <file name="MyModelReference.java">
+      <node id="215519239076300882" at="16,0,17,0" concept="2" trace="id" />
+      <node id="215519239076300885" at="17,0,18,0" concept="2" trace="name" />
+      <node id="215519239076401135" at="18,0,19,0" concept="2" trace="sModelName" />
+      <node id="215519239076305299" at="20,53,21,17" concept="1" />
+      <node id="215519239076306859" at="21,17,22,21" concept="1" />
+      <node id="215519239076402348" at="22,21,23,43" concept="1" />
+      <node id="215519239076308396" at="28,32,29,14" concept="7" />
+      <node id="215519239076308832" at="33,32,34,16" concept="7" />
+      <node id="215519239076401735" at="38,31,39,22" concept="7" />
+      <node id="215519239076311254" at="43,48,44,46" concept="12" />
+      <node id="5909214862811311629" at="47,49,48,56" concept="6" />
+      <node id="5909214862811303692" at="48,56,49,15" concept="7" />
+      <node id="2649606736824370247" at="52,28,53,76" concept="7" />
+      <node id="2649606736824369179" at="51,0,55,0" concept="5" trace="toString#()Ljava/lang/String;" />
+      <node id="215519239076304570" at="20,0,25,0" concept="0" trace="MyModelReference#(Lorg/jetbrains/mps/openapi/model/SModelId;Ljava/lang/String;)V" />
+      <node id="215519239076303255" at="26,0,31,0" concept="5" trace="getModelId#()Lorg/jetbrains/mps/openapi/model/SModelId;" />
+      <node id="215519239076303264" at="31,0,36,0" concept="5" trace="getModelName#()Ljava/lang/String;" />
+      <node id="215519239076303273" at="36,0,41,0" concept="5" trace="getName#()Lorg/jetbrains/mps/openapi/model/SModelName;" />
+      <node id="215519239076303282" at="41,0,46,0" concept="5" trace="getModuleReference#()Lorg/jetbrains/mps/openapi/module/SModuleReference;" />
+      <node id="215519239076303291" at="46,0,51,0" concept="5" trace="resolve#(Lorg/jetbrains/mps/openapi/module/SRepository;)Lorg/jetbrains/mps/openapi/model/SModel;" />
+      <scope id="215519239076303260" at="28,32,29,14" />
+      <scope id="215519239076303269" at="33,32,34,16" />
+      <scope id="215519239076303278" at="38,31,39,22" />
+      <scope id="215519239076303287" at="43,48,44,46" />
+      <scope id="2649606736824369183" at="52,28,53,76" />
+      <scope id="215519239076303297" at="47,49,49,15">
+        <var name="res" id="5909214862811311630" />
+      </scope>
+      <scope id="215519239076304574" at="20,53,23,43" />
+      <scope id="2649606736824369179" at="51,0,55,0" />
+      <scope id="215519239076304570" at="20,0,25,0">
+        <var name="id" id="215519239076304943" />
+        <var name="name" id="215519239076304946" />
+      </scope>
+      <scope id="215519239076303255" at="26,0,31,0" />
+      <scope id="215519239076303264" at="31,0,36,0" />
+      <scope id="215519239076303273" at="36,0,41,0" />
+      <scope id="215519239076303282" at="41,0,46,0" />
+      <scope id="215519239076303291" at="46,0,51,0">
+        <var name="repository" id="215519239076303295" />
+      </scope>
+      <unit id="215519239076300880" at="14,0,56,0" name="com.strumenta.mpsserver.modelhierarchy.MyModelReference" />
+    </file>
+  </root>
+  <root nodeRef="r:7e5b2038-fef4-4e4d-bb66-6d01879f6f52(com.strumenta.mpsserver.modelhierarchy)/215519239076339987">
+    <file name="MyModel.java">
+      <node id="215519239076385750" at="19,0,20,0" concept="2" trace="roots" />
+      <node id="215519239076485826" at="20,0,21,0" concept="2" trace="module" />
+      <node id="5909214862811097756" at="21,0,22,0" concept="2" trace="internalSModel" />
+      <node id="215519239076347865" at="24,87,25,34" concept="10" />
+      <node id="5909214862811087716" at="25,34,26,41" concept="1" />
+      <node id="5909214862811106796" at="26,41,27,53" concept="1" />
+      <node id="2649606736824435586" at="27,53,28,55" concept="1" />
+      <node id="215519239076340683" at="32,46,33,46" concept="12" />
+      <node id="5909214862811064468" at="37,37,38,26" concept="7" />
+      <node id="215519239076387870" at="41,48,42,55" concept="1" />
+      <node id="5909214862811101128" at="42,55,43,37" concept="1" />
+      <node id="2649606736823512803" at="43,37,44,0" concept="9" />
+      <node id="3185435802459385047" at="44,0,45,48" concept="8" />
+      <node id="3185435802459385046" at="45,48,46,0" concept="9" />
+      <node id="215519239076495331" at="50,25,51,18" concept="7" />
+      <node id="215519239076491091" at="52,5,53,34" concept="7" />
+      <node id="215519239076487657" at="56,41,57,25" concept="1" />
+      <node id="5909214862811290317" at="61,30,62,23" concept="7" />
+      <node id="5909214862811085605" at="22,0,24,0" concept="2" trace="modelReference" />
+      <node id="215519239076493494" at="49,38,52,5" concept="4" />
+      <node id="215519239076483049" at="55,0,59,0" concept="5" trace="setModule#(Lorg/jetbrains/mps/openapi/module/SModule;)V" />
+      <node id="215519239076340098" at="30,0,35,0" concept="5" trace="getCurrentModelInternal#()Ljetbrains/mps/smodel/SModel;" />
+      <node id="215519239076340107" at="35,0,40,0" concept="5" trace="getSModelInternal#()Ljetbrains/mps/smodel/SModel;" />
+      <node id="5909214862811288226" at="59,0,64,0" concept="5" trace="getModule#()Lorg/jetbrains/mps/openapi/module/SModule;" />
+      <node id="215519239076347247" at="24,0,30,0" concept="0" trace="MyModel#(Lorg/jetbrains/mps/openapi/model/SModelReference;Lorg/jetbrains/mps/openapi/persistence/DataSource;)V" />
+      <node id="215519239076481530" at="48,0,55,0" concept="5" trace="getRepository#()Lorg/jetbrains/mps/openapi/module/SRepository;" />
+      <node id="215519239076384275" at="40,0,48,0" concept="5" trace="addRootNode#(Lorg/jetbrains/mps/openapi/model/SNode;)V" />
+      <scope id="215519239076340103" at="32,46,33,46" />
+      <scope id="215519239076340117" at="37,37,38,26" />
+      <scope id="215519239076493496" at="50,25,51,18" />
+      <scope id="215519239076483055" at="56,41,57,25" />
+      <scope id="5909214862811288231" at="61,30,62,23" />
+      <scope id="215519239076347598" at="24,87,28,55" />
+      <scope id="215519239076481534" at="49,38,53,34" />
+      <scope id="215519239076483049" at="55,0,59,0">
+        <var name="module" id="215519239076483053" />
+      </scope>
+      <scope id="215519239076340098" at="30,0,35,0" />
+      <scope id="215519239076340107" at="35,0,40,0" />
+      <scope id="215519239076384282" at="41,48,46,0" />
+      <scope id="5909214862811288226" at="59,0,64,0" />
+      <scope id="215519239076347247" at="24,0,30,0">
+        <var name="modelReference" id="215519239076347251" />
+        <var name="source" id="215519239076347254" />
+      </scope>
+      <scope id="215519239076481530" at="48,0,55,0" />
+      <scope id="215519239076384275" at="40,0,48,0">
+        <var name="node" id="215519239076384279" />
+      </scope>
+      <unit id="215519239076339987" at="18,0,65,0" name="com.strumenta.mpsserver.modelhierarchy.MyModel" />
+    </file>
+  </root>
+  <root nodeRef="r:7e5b2038-fef4-4e4d-bb66-6d01879f6f52(com.strumenta.mpsserver.modelhierarchy)/215519239076348444">
+    <file name="MyDataSource.java">
+      <node id="215519239076349093" at="12,31,13,46" concept="12" />
+      <node id="215519239076350737" at="16,65,17,46" concept="12" />
+      <node id="215519239076350770" at="20,68,21,46" concept="12" />
+      <node id="215519239076350812" at="24,30,25,46" concept="12" />
+      <node id="215519239076350863" at="28,31,29,46" concept="12" />
+      <node id="215519239076348545" at="15,0,19,0" concept="5" trace="addListener#(Lorg/jetbrains/mps/openapi/persistence/DataSourceListener;)V" />
+      <node id="215519239076348554" at="19,0,23,0" concept="5" trace="removeListener#(Lorg/jetbrains/mps/openapi/persistence/DataSourceListener;)V" />
+      <node id="215519239076348563" at="23,0,27,0" concept="5" trace="getTimestamp#()J" />
+      <node id="215519239076348569" at="27,0,31,0" concept="5" trace="isReadOnly#()Z" />
+      <node id="215519239076348536" at="10,0,15,0" concept="5" trace="getLocation#()Ljava/lang/String;" />
+      <scope id="215519239076348541" at="12,31,13,46" />
+      <scope id="215519239076348552" at="16,65,17,46" />
+      <scope id="215519239076348561" at="20,68,21,46" />
+      <scope id="215519239076348567" at="24,30,25,46" />
+      <scope id="215519239076348573" at="28,31,29,46" />
+      <scope id="215519239076348545" at="15,0,19,0">
+        <var name="listener" id="215519239076348549" />
+      </scope>
+      <scope id="215519239076348554" at="19,0,23,0">
+        <var name="listener" id="215519239076348558" />
+      </scope>
+      <scope id="215519239076348563" at="23,0,27,0" />
+      <scope id="215519239076348569" at="27,0,31,0" />
+      <scope id="215519239076348536" at="10,0,15,0" />
+      <unit id="215519239076348444" at="9,0,32,0" name="com.strumenta.mpsserver.modelhierarchy.MyDataSource" />
+    </file>
+  </root>
+  <root nodeRef="r:7e5b2038-fef4-4e4d-bb66-6d01879f6f52(com.strumenta.mpsserver.modelhierarchy)/779546429941041759">
+    <file name="MyRepo.java">
+      <node id="779546429941046627" at="21,0,22,0" concept="2" trace="modules" />
+      <node id="779546429941064039" at="23,41,24,67" concept="1" />
+      <node id="215519239076543238" at="25,40,26,42" concept="1" />
+      <node id="779546429941047725" at="32,51,33,48" concept="7" />
+      <node id="779546429941052662" at="38,41,39,49" concept="7" />
+      <node id="5909214862811334423" at="43,53,44,44" concept="6" />
+      <node id="5909214862811345762" at="44,44,45,63" concept="1" />
+      <node id="5909214862811335640" at="45,63,46,18" concept="7" />
+      <node id="215519239076582652" at="54,46,55,50" concept="12" />
+      <node id="215519239076582574" at="59,45,60,50" concept="12" />
+      <node id="215519239076582506" at="64,47,65,50" concept="12" />
+      <node id="215519239076582446" at="69,46,70,50" concept="12" />
+      <node id="215519239076582396" at="74,47,75,50" concept="12" />
+      <node id="215519239076578159" at="85,37,86,50" concept="12" />
+      <node id="5909214862811045557" at="89,37,90,14" concept="8" />
+      <node id="5909214862811045556" at="90,14,91,0" concept="9" />
+      <node id="215519239076600581" at="94,38,95,14" concept="8" />
+      <node id="215519239076600580" at="95,14,96,0" concept="9" />
+      <node id="779546429941059502" at="102,25,103,46" concept="12" />
+      <node id="215519239076542411" at="24,67,27,5" concept="4" />
+      <node id="215519239076570413" at="53,0,57,0" concept="5" trace="runReadAction#(Ljava/lang/Runnable;)V" />
+      <node id="215519239076570423" at="58,0,62,0" concept="5" trace="runReadInEDT#(Ljava/lang/Runnable;)V" />
+      <node id="215519239076570433" at="63,0,67,0" concept="5" trace="runWriteAction#(Ljava/lang/Runnable;)V" />
+      <node id="215519239076570443" at="68,0,72,0" concept="5" trace="runWriteInEDT#(Ljava/lang/Runnable;)V" />
+      <node id="215519239076570453" at="73,0,77,0" concept="5" trace="executeCommand#(Ljava/lang/Runnable;)V" />
+      <node id="779546429941041861" at="101,0,105,0" concept="5" trace="saveAll#()V" />
+      <node id="779546429941041824" at="30,0,35,0" concept="5" trace="getModule#(Lorg/jetbrains/mps/openapi/module/SModuleId;)Lorg/jetbrains/mps/openapi/module/SModule;" />
+      <node id="779546429941041838" at="36,0,41,0" concept="5" trace="getModules#()Ljava/lang/Iterable;" />
+      <node id="5909214862811042074" at="88,0,93,0" concept="5" trace="checkReadAccess#()V" />
+      <node id="215519239076594886" at="93,0,98,0" concept="5" trace="checkWriteAccess#()V" />
+      <node id="779546429941062602" at="23,0,29,0" concept="5" trace="addModule#(Lorg/jetbrains/mps/openapi/module/SModule;)V" />
+      <node id="215519239076570463" at="82,0,88,0" concept="5" trace="flushEventQueue#()V" />
+      <node id="5909214862811322739" at="41,0,48,0" concept="5" trace="getModel#(Lorg/jetbrains/mps/openapi/model/SModelId;)Lorg/jetbrains/mps/openapi/model/SModel;" />
+      <node id="215519239076568022" at="51,39,98,6" concept="7" />
+      <node id="779546429941041850" at="49,0,100,0" concept="5" trace="getModelAccess#()Lorg/jetbrains/mps/openapi/module/ModelAccess;" />
+      <scope id="215519239076542413" at="25,40,26,42" />
+      <scope id="779546429941041834" at="32,51,33,48" />
+      <scope id="779546429941041846" at="38,41,39,49" />
+      <scope id="215519239076570419" at="54,46,55,50" />
+      <scope id="215519239076570429" at="59,45,60,50" />
+      <scope id="215519239076570439" at="64,47,65,50" />
+      <scope id="215519239076570449" at="69,46,70,50" />
+      <scope id="215519239076570459" at="74,47,75,50" />
+      <scope id="215519239076570474" at="85,37,86,50" />
+      <scope id="779546429941041867" at="102,25,103,46" />
+      <scope id="5909214862811042082" at="89,37,91,0" />
+      <scope id="215519239076594894" at="94,38,96,0" />
+      <scope id="5909214862811322747" at="43,53,46,18">
+        <var name="result" id="5909214862811334424" />
+      </scope>
+      <scope id="779546429941062605" at="23,41,27,5" />
+      <scope id="215519239076570413" at="53,0,57,0">
+        <var name="p0" id="215519239076570417" />
+      </scope>
+      <scope id="215519239076570423" at="58,0,62,0">
+        <var name="p0" id="215519239076570427" />
+      </scope>
+      <scope id="215519239076570433" at="63,0,67,0">
+        <var name="p0" id="215519239076570437" />
+      </scope>
+      <scope id="215519239076570443" at="68,0,72,0">
+        <var name="p0" id="215519239076570447" />
+      </scope>
+      <scope id="215519239076570453" at="73,0,77,0">
+        <var name="p0" id="215519239076570457" />
+      </scope>
+      <scope id="779546429941041861" at="101,0,105,0" />
+      <scope id="779546429941041824" at="30,0,35,0">
+        <var name="id" id="779546429941041829" />
+      </scope>
+      <scope id="779546429941041838" at="36,0,41,0" />
+      <scope id="5909214862811042074" at="88,0,93,0" />
+      <scope id="215519239076594886" at="93,0,98,0" />
+      <scope id="779546429941062602" at="23,0,29,0">
+        <var name="module" id="779546429941063335" />
+      </scope>
+      <scope id="215519239076570463" at="82,0,88,0" />
+      <scope id="5909214862811322739" at="41,0,48,0">
+        <var name="modelId" id="5909214862811322744" />
+      </scope>
+      <scope id="779546429941041857" at="51,39,98,6" />
+      <scope id="779546429941041850" at="49,0,100,0" />
+      <unit id="215519239076570405" at="52,15,98,5" name="com.strumenta.mpsserver.modelhierarchy.MyRepo$1" />
+      <unit id="779546429941041759" at="19,0,106,0" name="com.strumenta.mpsserver.modelhierarchy.MyRepo" />
+    </file>
+  </root>
+  <root nodeRef="r:7e5b2038-fef4-4e4d-bb66-6d01879f6f52(com.strumenta.mpsserver.modelhierarchy)/779546429941134612">
+    <file name="MyModule.java">
+      <node id="779546429941171832" at="28,0,29,0" concept="2" trace="moduleReference" />
+      <node id="215519239075453969" at="29,0,30,0" concept="2" trace="modelRoots" />
+      <node id="215519239076517156" at="31,0,32,0" concept="2" trace="repository" />
+      <node id="215519239076521709" at="35,49,36,23" concept="1" />
+      <node id="215519239076524133" at="36,23,37,33" concept="1" />
+      <node id="779546429941216206" at="40,43,41,39" concept="11" />
+      <node id="779546429941203739" at="44,46,45,42" concept="11" />
+      <node id="779546429941152299" at="48,53,49,43" concept="1" />
+      <node id="215519239075467770" at="52,49,53,65" concept="1" />
+      <node id="215519239076821166" at="54,45,55,50" concept="1" />
+      <node id="779546429941156058" at="61,34,62,41" concept="7" />
+      <node id="779546429941167609" at="66,33,67,43" concept="7" />
+      <node id="779546429941182990" at="71,48,72,27" concept="7" />
+      <node id="779546429941134720" at="75,31,76,17" concept="7" />
+      <node id="779546429941134730" at="79,31,80,17" concept="7" />
+      <node id="779546429941138262" at="83,58,84,46" concept="12" />
+      <node id="779546429941138319" at="87,44,88,46" concept="12" />
+      <node id="779546429941138385" at="91,66,92,46" concept="12" />
+      <node id="779546429941138460" at="96,45,97,46" concept="12" />
+      <node id="6123135023144413929" at="101,72,102,16" concept="7" />
+      <node id="215519239075456861" at="105,46,106,22" concept="7" />
+      <node id="779546429941216202" at="40,0,43,0" concept="0" trace="MyModule#(Ljava/util/UUID;Ljava/lang/String;)V" />
+      <node id="779546429941194846" at="44,0,47,0" concept="0" trace="MyModule#(Lorg/jetbrains/mps/openapi/module/SModuleId;Ljava/lang/String;)V" />
+      <node id="779546429941149522" at="48,0,51,0" concept="0" trace="MyModule#(Lorg/jetbrains/mps/openapi/module/SModuleReference;)V" />
+      <node id="215519239076812970" at="53,65,56,5" concept="4" />
+      <node id="779546429941134711" at="74,0,78,0" concept="5" trace="isReadOnly#()Z" />
+      <node id="779546429941134721" at="78,0,82,0" concept="5" trace="isPackaged#()Z" />
+      <node id="779546429941134731" at="82,0,86,0" concept="5" trace="getDeclaredDependencies#()Ljava/lang/Iterable;" />
+      <node id="779546429941134742" at="86,0,90,0" concept="5" trace="getUsedLanguages#()Ljava/util/Set;" />
+      <node id="779546429941134753" at="90,0,94,0" concept="5" trace="getUsedLanguageVersion#(Lorg/jetbrains/mps/openapi/language/SLanguage;)I" />
+      <node id="779546429941134791" at="104,0,108,0" concept="5" trace="getModelRoots#()Ljava/lang/Iterable;" />
+      <node id="215519239076521698" at="34,0,39,0" concept="5" trace="attach#(Lorg/jetbrains/mps/openapi/module/SRepository;)V" />
+      <node id="779546429941134678" at="59,0,64,0" concept="5" trace="getModuleId#()Lorg/jetbrains/mps/openapi/module/SModuleId;" />
+      <node id="779546429941134689" at="64,0,69,0" concept="5" trace="getModuleName#()Ljava/lang/String;" />
+      <node id="779546429941134700" at="69,0,74,0" concept="5" trace="getModuleReference#()Lorg/jetbrains/mps/openapi/module/SModuleReference;" />
+      <node id="779546429941134764" at="94,0,99,0" concept="5" trace="getFacets#()Ljava/lang/Iterable;" />
+      <node id="6123135023144412151" at="99,0,104,0" concept="5" trace="getFacet#(Ljava/lang/Class;)null" />
+      <node id="215519239075464077" at="52,0,58,0" concept="5" trace="addModelRoot#(Lorg/jetbrains/mps/openapi/persistence/ModelRoot;)V" />
+      <scope id="779546429941216205" at="40,43,41,39" />
+      <scope id="779546429941194849" at="44,46,45,42" />
+      <scope id="779546429941149526" at="48,53,49,43" />
+      <scope id="215519239076812972" at="54,45,55,50" />
+      <scope id="779546429941134685" at="61,34,62,41" />
+      <scope id="779546429941134696" at="66,33,67,43" />
+      <scope id="779546429941134707" at="71,48,72,27" />
+      <scope id="779546429941134717" at="75,31,76,17" />
+      <scope id="779546429941134727" at="79,31,80,17" />
+      <scope id="779546429941134738" at="83,58,84,46" />
+      <scope id="779546429941134749" at="87,44,88,46" />
+      <scope id="779546429941134762" at="91,66,92,46" />
+      <scope id="779546429941134772" at="96,45,97,46" />
+      <scope id="6123135023144412164" at="101,72,102,16" />
+      <scope id="779546429941134798" at="105,46,106,22" />
+      <scope id="215519239076521705" at="35,49,37,33" />
+      <scope id="779546429941216202" at="40,0,43,0">
+        <var name="name" id="779546429941216213" />
+        <var name="uuid" id="779546429941216211" />
+      </scope>
+      <scope id="779546429941194846" at="44,0,47,0">
+        <var name="id" id="779546429941199902" />
+        <var name="name" id="779546429941199904" />
+      </scope>
+      <scope id="779546429941149522" at="48,0,51,0">
+        <var name="moduleReference" id="779546429941151004" />
+      </scope>
+      <scope id="215519239075464080" at="52,49,56,5" />
+      <scope id="779546429941134711" at="74,0,78,0" />
+      <scope id="779546429941134721" at="78,0,82,0" />
+      <scope id="779546429941134731" at="82,0,86,0" />
+      <scope id="779546429941134742" at="86,0,90,0" />
+      <scope id="779546429941134753" at="90,0,94,0">
+        <var name="language" id="779546429941134757" />
+      </scope>
+      <scope id="779546429941134791" at="104,0,108,0" />
+      <scope id="215519239076521698" at="34,0,39,0">
+        <var name="repo" id="215519239076521702" />
+      </scope>
+      <scope id="779546429941134678" at="59,0,64,0" />
+      <scope id="779546429941134689" at="64,0,69,0" />
+      <scope id="779546429941134700" at="69,0,74,0" />
+      <scope id="779546429941134764" at="94,0,99,0" />
+      <scope id="6123135023144412151" at="99,0,104,0">
+        <var name="aClass" id="6123135023144412158" />
+      </scope>
+      <scope id="215519239075464077" at="52,0,58,0">
+        <var name="modelRoot" id="215519239075465990" />
+      </scope>
+      <unit id="779546429941134612" at="26,0,109,0" name="com.strumenta.mpsserver.modelhierarchy.MyModule" />
+    </file>
+  </root>
+  <root nodeRef="r:7e5b2038-fef4-4e4d-bb66-6d01879f6f52(com.strumenta.mpsserver.modelhierarchy)/779546429941185631">
+    <file name="MyModuleReference.java">
+      <node id="779546429941188324" at="14,0,15,0" concept="2" trace="id" />
+      <node id="779546429941189239" at="15,0,16,0" concept="2" trace="name" />
+      <node id="779546429941190637" at="17,55,18,17" concept="1" />
+      <node id="779546429941190649" at="18,17,19,21" concept="1" />
+      <node id="779546429941189495" at="23,34,24,14" concept="7" />
+      <node id="779546429941189827" at="28,33,29,16" concept="7" />
+      <node id="779546429941186125" at="33,59,34,46" concept="12" />
+      <node id="779546429941190629" at="17,0,21,0" concept="0" trace="MyModuleReference#(Lorg/jetbrains/mps/openapi/module/SModuleId;Ljava/lang/String;)V" />
+      <node id="779546429941185756" at="21,0,26,0" concept="5" trace="getModuleId#()Lorg/jetbrains/mps/openapi/module/SModuleId;" />
+      <node id="779546429941185765" at="26,0,31,0" concept="5" trace="getModuleName#()Ljava/lang/String;" />
+      <node id="779546429941185774" at="31,0,36,0" concept="5" trace="resolve#(Lorg/jetbrains/mps/openapi/module/SRepository;)Lorg/jetbrains/mps/openapi/module/SModule;" />
+      <scope id="779546429941185761" at="23,34,24,14" />
+      <scope id="779546429941185770" at="28,33,29,16" />
+      <scope id="779546429941185782" at="33,59,34,46" />
+      <scope id="779546429941190633" at="17,55,19,21" />
+      <scope id="779546429941190629" at="17,0,21,0">
+        <var name="id" id="779546429941190636" />
+        <var name="name" id="779546429941190648" />
+      </scope>
+      <scope id="779546429941185756" at="21,0,26,0" />
+      <scope id="779546429941185765" at="26,0,31,0" />
+      <scope id="779546429941185774" at="31,0,36,0">
+        <var name="repository" id="779546429941185779" />
+      </scope>
+      <unit id="779546429941185631" at="12,0,37,0" name="com.strumenta.mpsserver.modelhierarchy.MyModuleReference" />
+    </file>
+  </root>
+</debug-info>
+
