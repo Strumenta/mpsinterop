@@ -145,7 +145,7 @@ class Indexer : ModelLocator {
     }
 
     private fun indexMpl(inputStream: InputStream, modelSource: Source) {
-        val language = loadLanguage(inputStream)
+        val language = loadLanguage(TODO(), inputStream)
         if (justPrinting) {
             println("LANGUAGE ${language.uuid} from $modelSource")
         }

@@ -64,6 +64,7 @@ fun calculateDependenciesForLanguage(inputStream: InputStream) : Dependencies {
     val thisUUID = UUID.fromString(doc.documentElement.getAttribute("uuid"))
     val thisName = doc.documentElement.getAttribute("namespace")
     val thisLanguageVersion = doc.documentElement.getAttribute("languageVersion").toInt()
+    val languageVersions = mutableListOf<LanguageDep>()
     doc.documentElement.processChildren("languageVersions") {
         it.processAllNodes("language") {
             var slang = it.getAttribute("slang")
@@ -79,7 +80,30 @@ fun calculateDependenciesForLanguage(inputStream: InputStream) : Dependencies {
                 require(thisLanguageVersion == version)
                 // we do not consider dependencies on the language itself
             } else {
-                deps.languages.add(LanguageDep(name, uuid, version))
+                languageVersions.add(LanguageDep(name, uuid, version))
+            }
+        }
+    }
+    doc.documentElement.processChildren("dependencyVersions") {
+        it.processAllNodes("module") {
+            var reference = it.getAttribute("reference")
+
+            val uuid = UUID.fromString(reference.substring(0, 36))
+            reference = reference.substring(36)
+            require(reference.startsWith("("))
+            require(reference.endsWith(")"))
+            val name = reference.substring(1, reference.length - 1)
+            val version = it.getAttribute("version").toInt()
+            require(version >= -1)
+            val isLanguage = languageVersions.any { it.uuid == uuid }
+            if (isLanguage) {
+                if (thisUUID == uuid) {
+                    require(thisName == name)
+                    require(thisLanguageVersion == version)
+                    // we do not consider dependencies on the language itself
+                } else {
+                    deps.languages.add(LanguageDep(name, uuid, version))
+                }
             }
         }
     }

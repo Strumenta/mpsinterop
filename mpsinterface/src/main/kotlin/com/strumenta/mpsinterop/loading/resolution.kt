@@ -45,16 +45,19 @@ class PhysicalToLogicalConverter(
 
     fun toLogical(physicalConcept: PhysicalConcept): AbstractConcept {
         return convertedConcepts.computeIfAbsent(physicalConcept) { physicalConcept ->
-            val concept = languageRegistry.getConcept(physicalConcept.qualifiedName)
-            if (concept != null) {
-                concept
-            } else {
-                val thisConceptDeclarationPhysical =
-                        physicalModelsRegistry.findConceptDeclaration(physicalConcept.qualifiedName)
-                                ?: throw RuntimeException("Concept declaration for ${physicalConcept.qualifiedName} not found")
-                val thisConceptDeclarationLogical = toLogical(thisConceptDeclarationPhysical)
-                loadConceptFromConceptDeclaration(thisConceptDeclarationLogical)
-            }
+            val language = languageRegistry.languageByUUID(physicalConcept.languageId.id)
+            require(language != null) { "Language not found ${physicalConcept.languageId} for concept $physicalConcept" }
+            val concept = language!!.conceptByID(physicalConcept.id)
+            TODO(concept?.toString() ?: "NULL")
+//            if (concept != null) {
+//                concept
+//            } else {
+//                val thisConceptDeclarationPhysical =
+//                        physicalModelsRegistry.findConceptDeclaration(physicalConcept.qualifiedName)
+//                                ?: throw RuntimeException("Concept declaration for ${physicalConcept.qualifiedName} not found")
+//                val thisConceptDeclarationLogical = toLogical(thisConceptDeclarationPhysical)
+//                loadConceptFromConceptDeclaration(thisConceptDeclarationLogical)
+//            }
         }
     }
 

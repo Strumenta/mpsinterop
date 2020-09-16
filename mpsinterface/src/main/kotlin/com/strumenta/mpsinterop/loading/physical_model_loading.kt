@@ -91,18 +91,27 @@ private fun rawNameToUuid(rawName: String): UUID {
 }
 
 private fun rawNameToLanguageName(rawName: String): String {
-    var nameInParens = rawName.substring(rawName.indexOf('(') + 1, rawName.indexOf(')'))
-    if (nameInParens.lastIndexOf('/') != -1) {
-        nameInParens = nameInParens.substring(nameInParens.lastIndexOf('/') + 1, nameInParens.length)
+    require(rawName.isNotBlank()) { "A blank name is not acceptable" }
+    try {
+        var nameInParens = rawName.substring(rawName.indexOf('(') + 1, rawName.indexOf(')'))
+        if (nameInParens.lastIndexOf('/') != -1) {
+            nameInParens = nameInParens.substring(nameInParens.lastIndexOf('/') + 1, nameInParens.length)
+        }
+        if (nameInParens.lastIndexOf('@') != -1) {
+            nameInParens = nameInParens.substring(0, nameInParens.lastIndexOf('@'))
+        }
+        return nameInParens
+    } catch (t: Throwable) {
+        throw RuntimeException("Issue processing name '$rawName'", t)
     }
-    if (nameInParens.lastIndexOf('@') != -1) {
-        nameInParens = nameInParens.substring(0, nameInParens.lastIndexOf('@'))
-    }
-    return nameInParens
 }
 
 fun loadModel(document: Document): PhysicalModel {
     val rawName = document.documentElement.getAttribute("ref")
+
+    if (rawName.isBlank()) {
+        throw RuntimeException("The document has an invalid ref value")
+    }
 
     val nameInParens = rawNameToLanguageName(rawName)
     val uuid = rawNameToUuid(rawName)

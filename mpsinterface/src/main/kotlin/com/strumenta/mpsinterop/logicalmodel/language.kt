@@ -1,12 +1,13 @@
 package com.strumenta.mpsinterop.logicalmodel
 
+import com.strumenta.mpsinterop.physicalmodel.PhysicalLanguageModule
 import java.util.*
 
 typealias LanguageUUID = UUID
 
 data class LanguageId(val id: LanguageUUID, val name: String)
 
-data class Language(val id: LanguageUUID, val name: String) {
+data class Language(val id: LanguageUUID, val name: String, val physicalLanguageModule: PhysicalLanguageModule? = null) {
 
     private val _concepts = LinkedList<AbstractConcept>()
 

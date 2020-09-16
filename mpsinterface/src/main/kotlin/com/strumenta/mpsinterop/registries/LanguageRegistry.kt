@@ -123,14 +123,14 @@ class LanguageRegistry : ModelLocator {
         return null
     }
 
-    fun loadLanguageFromModuleAndModel(module: PhysicalModule, structureModel: PhysicalModel) {
+    fun loadLanguageFromModuleAndModel(module: PhysicalLanguageModule, structureModel: PhysicalModel) {
         this.loadLanguageFromModule(module)
         structureModel.module = module
         this.loadLanguageFromModel(structureModel)
     }
 
-    fun loadLanguageFromModule(module: PhysicalModule) {
-        add(Language(module.uuid, module.name))
+    fun loadLanguageFromModule(module: PhysicalLanguageModule) {
+        add(Language(module.uuid, module.name, module))
     }
 
     fun loadLanguageFromModel(model: PhysicalModel, onlyShallow: Boolean = false) {
@@ -331,6 +331,8 @@ class LanguageRegistry : ModelLocator {
     }
 
     fun knowsLanguageUUID(uuid: UUID) = uuid in languagesByUUID
+
+    fun languageByUUID(uuid: UUID) = languagesByUUID[uuid]
 
     fun knowsLanguageName(name: String) = languagesByUUID.values.any { it.name == name }
 }

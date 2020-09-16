@@ -20,6 +20,7 @@ class ModelLoadingFacade(mpsInstallation: File, projectPath: File) {
 
     private val languageRegistry = LanguageRegistry()
     protected val converter = PhysicalToLogicalConverter(languageRegistry)
+    private val physicalToLogicalConverter = PhysicalToLogicalConverter(languageRegistry)
 
     private val indexer : Indexer = Indexer()
 
@@ -31,17 +32,42 @@ class ModelLoadingFacade(mpsInstallation: File, projectPath: File) {
     fun loadModel(moduleName: String, modelName: String) : Model {
         val solutionIndexElement = indexer.findSolutionByName("com.strumenta.mpsserver.server")
         // first of all we need to find where the model is
-        val model = solutionIndexElement.findModel(modelName)
-        // then we need to load all languages
-        val deps = calculateDependenciesForModel(model)
-        ensureLanguagesAreLoaded(deps)
-        TODO()
+        try {
+            val modelDocument = solutionIndexElement.findModel(modelName)
+            // then we need to load all languages
+            val deps = calculateDependenciesForModel(modelDocument)
+            ensureLanguagesAreLoaded(deps)
+            val physicalModel = com.strumenta.mpsinterop.loading.loadModel(modelDocument)
+            return physicalToLogicalConverter.toLogical(physicalModel)
+        } catch (e: Throwable) {
+            throw RuntimeException("Issue loading model $moduleName.$modelName", e)
+        }
     }
 
-    private fun ensureLanguagesAreLoaded(deps: Dependencies) {
+    private fun ensureLanguagesAreLoaded(deps: Dependencies, loading: Set<UUID> = emptySet()) {
         deps.languages.forEach {
-            if (!languageRegistry.knowsLanguageUUID(it.uuid)) {
-                TODO("loading $it")
+            if (!loading.contains(it.uuid)) {
+                if (it.name == "jetbrains.mps.lang.core" || it.name == "jetbrains.mps.lang.structure") {
+                    // these languages have to be bootstrapped
+                } else {
+                    if (!languageRegistry.knowsLanguageUUID(it.uuid)) {
+                        println("ensureLanguagesAreLoaded $it")
+                        val el = indexer.findElement(it.uuid)
+                        if (el == null) {
+                            throw RuntimeException("We do now know how to locate this language: $it")
+                        } else {
+                            val deps = calculateDependenciesForLanguage(el)
+                            ensureLanguagesAreLoaded(deps, loading + setOf(it.uuid))
+                            try {
+                                val physicalLanguageModule = loadLanguage(el.loader(), el.inputStream())
+                                languageRegistry.loadLanguageFromModule(physicalLanguageModule)
+                                require(languageRegistry.knowsLanguageUUID(it.uuid))
+                            } catch (t: Throwable) {
+                                throw RuntimeException("Issue loading element for $it from $el", t)
+                            }
+                        }
+                    }
+                }
             }
         }
     }

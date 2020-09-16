@@ -24,7 +24,7 @@ class LanguageLoadingTestWithMpsServer {
 
     @Test
     fun loadMpsServerMessages() {
-        val mlf = ModelLoadingFacade(File("/Users/federico/repos/mpsserver/artifacts/mps"), File("/Users/federico/repos/mpsserver/mpscode"))
+        val mlf = ModelLoadingFacade(File("/Users/federico/repos/MPSServer/artifacts/mps"), File("/Users/federico/repos/MPSServer/mpscode"))
         val logicModel = mlf.loadModel("com.strumenta.mpsserver.server", "com.strumenta.mpsserver.logic")
     }
 

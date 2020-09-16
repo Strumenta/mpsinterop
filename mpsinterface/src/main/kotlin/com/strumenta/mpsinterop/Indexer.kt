@@ -9,8 +9,10 @@ import java.io.FileInputStream
 import java.io.FilenameFilter
 import java.io.InputStream
 import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 import java.lang.RuntimeException
 import java.util.*
+import java.util.function.Consumer
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 
@@ -18,6 +20,36 @@ enum class ElementType {
     DEVKIT,
     LANGUAGE,
     SOLUTION
+}
+
+fun processModelsInModule(elementLoader: Indexer.ElementLoader, document: Document, consumer: Consumer<Document>) {
+    document.documentElement.processChildren("models", { models ->
+        models.processChildren("modelRoot", { modelRoot ->
+            val contentPath = modelRoot.getAttribute("contentPath")
+            val type = modelRoot.getAttribute("type")
+            if (type == "default") {
+                modelRoot.processChildren("sourceRoot", { sourceRoot ->
+                    val location = sourceRoot.getAttribute("location")
+                    try {
+                        var combinedLocation = "$contentPath/$location"
+                        require(combinedLocation.startsWith("\${module}/"))
+                        combinedLocation = combinedLocation.removePrefix("\${module}/")
+                        val models = elementLoader.listModelsUnder(combinedLocation)
+                        for (model in models) {
+                            val doc = loadDocument(model)
+                            consumer.accept(doc)
+                        }
+                    } catch (e: Throwable) {
+                        throw RuntimeException("Issue processing location '$location'", e)
+                    }
+                })
+            } else if (type == "java_classes") {
+                // ignore
+            } else {
+                TODO(type)
+            }
+        })
+    })
 }
 
 /**
@@ -39,7 +71,12 @@ class Indexer {
         }
 
         override fun listModelsUnder(location: String): List<InputStream> {
-            TODO("Not yet implemented")
+            val entries = entry.parent().child(location).children(jarFile)
+            return entries.map { jarFile.getInputStream(it) }
+        }
+
+        override fun toString(): String {
+            return "JarEntry(file=$jarFile,entry=${entry.name})"
         }
     }
 
@@ -48,7 +85,7 @@ class Indexer {
 
         override fun listModelsUnder(location: String): List<InputStream> {
             val locationDir = File(file.parent, location)
-            require(locationDir.exists())
+            require(locationDir.exists()) { "${locationDir.absolutePath} does not exit" }
             require(locationDir.isDirectory)
             return locationDir.listFiles { dir, name -> name!!.endsWith(".mps") }.map { FileInputStream(it) }
         }
@@ -63,33 +100,24 @@ class Indexer {
             val inputStream = this.inputStream()
             val document = loadDocument(inputStream)
             var res : Document? = null
-            document.documentElement.processChildren("models", { models ->
-                models.processChildren("modelRoot", { modelRoot ->
-                    modelRoot.processChildren("sourceRoot", { sourceRoot ->
-                        val location = sourceRoot.getAttribute("location")
-                        val models = listModelsUnder(location)
-                        for (model in models) {
-                            val doc = loadDocument(model)
-                            var ref = doc.documentElement.getAttribute("ref")
-                            require(ref.startsWith("r:"))
-                            ref = ref.removePrefix("r:")
-                            val uuid = UUID.fromString(ref.substring(0, 36))
-                            ref = ref.substring(36)
-                            require(ref.startsWith("("))
-                            require(ref.endsWith(")"))
-                            val name = ref.substring(1, ref.length - 1)
-                            if (modelName == name) {
-                                res = doc
-                            }
-                        }
-                    })
-                })
+            processModelsInModule(elementLoader, document, Consumer<Document> { doc ->
+                var ref = doc.documentElement.getAttribute("ref")
+                require(ref.startsWith("r:"))
+                ref = ref.removePrefix("r:")
+                val uuid = UUID.fromString(ref.substring(0, 36))
+                ref = ref.substring(36)
+                require(ref.startsWith("("))
+                require(ref.endsWith(")"))
+                val name = ref.substring(1, ref.length - 1)
+                if (modelName == name) {
+                    res = doc
+                }
             })
             return res ?: throw RuntimeException("Model not found")
         }
 
-        private fun listModelsUnder(location: String) : List<InputStream> {
-            return elementLoader.listModelsUnder(location)
+        fun loader(): Indexer.ElementLoader {
+            return elementLoader
         }
     }
 
@@ -189,10 +217,14 @@ class Indexer {
 
     fun indexMpsDirectory(mpsInstallation: File) {
         val languagesDir = File(mpsInstallation, "languages")
+        require(languagesDir.exists())
+        require(languagesDir.isDirectory)
         languagesDir.walkTopDown().forEach {
             processFileInMpsInstallation(it)
         }
         val pluginsDir = File(mpsInstallation, "plugins")
+        require(pluginsDir.exists())
+        require(pluginsDir.isDirectory)
         pluginsDir.walkTopDown().forEach {
             processFileInMpsInstallation(it)
         }
@@ -262,5 +294,34 @@ class Indexer {
                 }
             }
         }
+    }
+}
+
+private fun JarEntry.child(location: String): JarEntry {
+    return JarEntry("${this.name}/$location")
+}
+
+private fun JarEntry.children(jarFile: JarFile): List<JarEntry> {
+    return jarFile.entries().toList().filter {
+        it.isChildOf(this)
+    }.toList()
+}
+
+private fun JarEntry.isChildOf(parent: JarEntry): Boolean {
+    return if (this.name.startsWith("${parent.name}/")) {
+        val remaining = this.name.substring("${parent.name}/".length)
+        remaining.indexOf('/') == -1
+    } else {
+        false
+    }
+}
+
+private fun JarEntry.parent(): JarEntry {
+    val index = this.name.lastIndexOf('/')
+    if (index == -1) {
+        throw IllegalStateException()
+    } else {
+        val parentName = this.name.substring(0, index)
+        return JarEntry(parentName)
     }
 }
