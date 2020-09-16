@@ -1,5 +1,6 @@
 package com.strumenta.mpsinterop
 
+import com.strumenta.mpsinterop.loading.Source
 import com.strumenta.mpsinterop.utils.loadDocument
 import com.strumenta.mpsinterop.utils.processAllNodes
 import com.strumenta.mpsinterop.utils.processChildren
@@ -34,9 +35,9 @@ fun processModelsInModule(elementLoader: Indexer.ElementLoader, document: Docume
                         var combinedLocation = "$contentPath/$location"
                         require(combinedLocation.startsWith("\${module}/"))
                         combinedLocation = combinedLocation.removePrefix("\${module}/")
-                        val models = elementLoader.listModelsUnder(combinedLocation)
+                        val models = elementLoader.listChildrenUnder(combinedLocation)
                         for (model in models) {
-                            val doc = loadDocument(model)
+                            val doc = model.document()
                             consumer.accept(doc)
                         }
                     } catch (e: Throwable) {
@@ -60,7 +61,7 @@ class Indexer {
     private val elementsByUUID = mutableMapOf<UUID, IndexElement>()
     private val elementsByName = mutableMapOf<String, IndexElement>()
 
-    interface ElementLoader {
+    interface ElementLoader : Source {
         fun inputStream() : InputStream
         fun listModelsUnder(location: String) : List<InputStream>
     }
@@ -73,6 +74,14 @@ class Indexer {
         override fun listModelsUnder(location: String): List<InputStream> {
             val entries = entry.parent().child(location).children(jarFile)
             return entries.map { jarFile.getInputStream(it) }
+        }
+
+        override fun document(): Document {
+            return loadDocument(inputStream())
+        }
+
+        override fun listChildrenUnder(combinedLocation: String): List<Source> {
+            TODO("Not yet implemented")
         }
 
         override fun toString(): String {
@@ -90,6 +99,13 @@ class Indexer {
             return locationDir.listFiles { dir, name -> name!!.endsWith(".mps") }.map { FileInputStream(it) }
         }
 
+        override fun document(): Document {
+            return loadDocument(inputStream())
+        }
+
+        override fun listChildrenUnder(combinedLocation: String): List<Source> {
+            TODO("Not yet implemented")
+        }
     }
 
     data class IndexElement(val uuid: UUID, val name: String, val type: ElementType,
@@ -118,6 +134,10 @@ class Indexer {
 
         fun loader(): Indexer.ElementLoader {
             return elementLoader
+        }
+
+        fun source(): Source {
+            TODO("Not yet implemented")
         }
     }
 

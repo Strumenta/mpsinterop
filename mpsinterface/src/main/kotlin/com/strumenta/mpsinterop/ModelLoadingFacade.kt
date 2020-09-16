@@ -59,7 +59,7 @@ class ModelLoadingFacade(mpsInstallation: File, projectPath: File) {
                             val deps = calculateDependenciesForLanguage(el)
                             ensureLanguagesAreLoaded(deps, loading + setOf(it.uuid))
                             try {
-                                val physicalLanguageModule = loadLanguage(el.loader(), el.inputStream())
+                                val physicalLanguageModule = loadLanguage(el.source())
                                 languageRegistry.loadLanguageFromModule(physicalLanguageModule)
                                 require(languageRegistry.knowsLanguageUUID(it.uuid))
                             } catch (t: Throwable) {
