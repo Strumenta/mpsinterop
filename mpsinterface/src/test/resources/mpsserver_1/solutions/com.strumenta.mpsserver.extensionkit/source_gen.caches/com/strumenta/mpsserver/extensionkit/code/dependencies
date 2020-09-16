@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dependenciesRoot>
+  <dependency className="com.strumenta.mpsserver.extensionkit.code.Action">
+    <classNode dependClassName="java.lang.Object" />
+    <classNode dependClassName="org.jetbrains.mps.openapi.model.SNode" />
+  </dependency>
+  <dependency className="com.strumenta.mpsserver.extensionkit.code.ExtendableServer">
+    <classNode dependClassName="com.strumenta.mpsserver.extensionkit.code.Action" />
+    <classNode dependClassName="java.lang.String" />
+  </dependency>
+  <dependency className="com.strumenta.mpsserver.extensionkit.code.MPSServerExtension">
+    <classNode dependClassName="com.strumenta.mpsserver.extensionkit.code.ExtendableServer" />
+    <classNode dependClassName="java.lang.String" />
+  </dependency>
+</dependenciesRoot>
+
