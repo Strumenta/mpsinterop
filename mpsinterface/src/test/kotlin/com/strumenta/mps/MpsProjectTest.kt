@@ -241,4 +241,50 @@ class MpsProjectTest {
         assertEquals("RequestMessage", superclassClassifier.name)
     }
 
+    @Test
+    fun findingMessages() {
+        val projectDir = File("src/test/resources/mpsserver_2")
+        val project = MpsProject(projectDir)
+        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+        val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
+
+        val isMessageClass = { node: Node ->
+            val superclass = node.child("superclass")
+            if (superclass != null && superclass.isReferenceLocal("classifier") == true) {
+                val superclassClassifier = superclass.reference("classifier")
+                superclassClassifier?.name == "RequestMessage"
+                        || superclassClassifier?.name == "RequestAnswerMessage"
+                        || superclassClassifier?.name == "Message"
+                        || superclassClassifier?.name == "Notification"
+            } else {
+                false
+            }
+        }
+
+        val isAbstract = { node: Node ->
+            node.property("abstractClass") == "true"
+        }
+
+        val messagesClasses = roots.filter {
+            isMessageClass(it) && !isAbstract(it)
+        }
+        val AddChild = messagesClasses.find { it.name == "AddChild" }!!
+        val AddChildAnswer = messagesClasses.find { it.name == "AddChildAnswer" }!!
+        val AnswerAlternatives = messagesClasses.find { it.name == "AnswerAlternatives" }!!
+        val AnswerDefaultInsertion = messagesClasses.find { it.name == "AnswerDefaultInsertion" }!!
+        val AskAlternatives = messagesClasses.find { it.name == "AskAlternatives" }!!
+        val DefaultInsertion = messagesClasses.find { it.name == "DefaultInsertion" }!!
+        val DeleteNode = messagesClasses.find { it.name == "DeleteNode" }!!
+        val InsertNextSibling = messagesClasses.find { it.name == "InsertNextSibling" }!!
+        val NodeAdded = messagesClasses.find { it.name == "NodeAdded" }!!
+        val NodeRemoved = messagesClasses.find { it.name == "NodeRemoved" }!!
+        val SetChild = messagesClasses.find { it.name == "SetChild" }!!
+
+        val AskErrorsForNode = messagesClasses.find { it.name == "AskErrorsForNode" }!!
+        val ErrorsForModelReport = messagesClasses.find { it.name == "ErrorsForModelReport" }!!
+        val ErrorsForNodeReport = messagesClasses.find { it.name == "ErrorsForNodeReport" }!!
+
+        assertEquals(34, messagesClasses.size)
+    }
+
 }

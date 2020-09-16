@@ -48,6 +48,7 @@ typealias NodeID = String
 abstract class Reference {
     abstract val linkName: String
     abstract val value: Node?
+    abstract val isLocalToModel: Boolean
 }
 
 abstract class Node {
@@ -58,6 +59,12 @@ abstract class Node {
     fun reference(relationName: String) : Node? {
         return references.find { it.linkName == relationName }?.value
     }
+
+    fun isReferenceLocal(relationName: String) : Boolean? {
+        return references.find { it.linkName == relationName }?.isLocalToModel
+    }
+
+    fun property(propertyName: String): String? = properties[propertyName]
 
     abstract val name: String?
     abstract val conceptName: String
@@ -255,8 +262,9 @@ class MpsProject(val projectDir: File) {
         private val indexToXmlNode = HashMap<String, Element>()
 
         fun nodeFromIndex(index: String) : Node {
+            require(index.isNotBlank()) { "a blank index should not be used" }
             if (index !in indexToNode) {
-                NodeImpl.loadNode(indexToXmlNode[index] ?: throw IllegalArgumentException("Index unknown $index"), this)
+                NodeImpl.loadNode(indexToXmlNode[index] ?: throw IllegalArgumentException("Index unknown '$index'"), this)
             }
             return indexToNode[index]!!
         }
@@ -394,20 +402,52 @@ class MpsProject(val projectDir: File) {
             val res = LinkedList<Reference>()
             xmlNode.processChildren("ref") { ref ->
                 val role = ref.getAttribute("role")
-                val index = ref.getAttribute("node")
                 val relationName = registry.referenceNameFromIndex(role)
-                val ref = ReferenceImpl(relationName, registry, index)
-                res.add(ref)
+                val index = ref.getAttribute("node")
+                if (index.isNullOrBlank()) {
+                    val to = ref.getAttribute("to")
+                    val parts = to.split(":")
+                    require(parts.size == 2)
+                    val ref = ExternalReferenceImpl(relationName, registry, parts[0], parts[1])
+                    res.add(ref)
+                } else {
+                    val ref = LocalReferenceImpl(relationName, registry, index)
+                    res.add(ref)
+                }
             }
             return res
         }
     }
 
-    private class ReferenceImpl(override val linkName: String, val registry: Registry, val index: String) : Reference() {
+    private class LocalReferenceImpl(override val linkName: String, val registry: Registry, val index: String) : Reference() {
         override val value: Node? by lazy { loadValue() }
+        override val isLocalToModel: Boolean
+            get() = true
+
+
+        init {
+            require(index.isNotBlank()) { "A valid reference index should not be blank" }
+        }
 
         private fun loadValue() : Node? {
             return registry.nodeFromIndex(index)
+        }
+
+    }
+
+    private class ExternalReferenceImpl(override val linkName: String, val registry: Registry, val modelIndex: String,
+        val localIndex: String) : Reference() {
+        override val value: Node? by lazy { loadValue() }
+        override val isLocalToModel: Boolean
+            get() = false
+
+        init {
+            require(modelIndex.isNotBlank())
+            require(localIndex.isNotBlank())
+        }
+
+        private fun loadValue() : Node? {
+            TODO()
         }
 
     }
