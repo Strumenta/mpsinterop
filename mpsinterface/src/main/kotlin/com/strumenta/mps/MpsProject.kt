@@ -1,5 +1,6 @@
 package com.strumenta.mps
 
+import com.google.gson.annotations.Expose
 import com.strumenta.mps.utils.Base64
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -34,7 +35,7 @@ abstract class Language : Module() {
 
 abstract class Solution : Module()
 
-abstract class Model {
+abstract class Model : Serializable {
     abstract val name: String
     abstract val uuid: UUID
 
@@ -46,12 +47,16 @@ abstract class Model {
 typealias NodeID = String
 
 abstract class Reference {
+    abstract fun refString(): String
+
     abstract val linkName: String
     abstract val value: Node?
     abstract val isLocalToModel: Boolean
 }
 
-abstract class Node {
+interface Serializable
+
+abstract class Node : Serializable {
     fun child(relationName: String): Node? {
         return children.find { it.containmentLinkName == relationName }
     }
@@ -315,7 +320,9 @@ class MpsProject(val projectDir: File) {
 
     }
 
-    private class ModelImpl(val source: Source, override val name: String, override val uuid: UUID) : Model() {
+    private class ModelImpl(
+            @Expose(serialize = false)
+            val source: Source, override val name: String, override val uuid: UUID) : Model() {
         private val roots : List<Node> by lazy { loadRoots() }
 
         override fun roots(): List<Node> {
@@ -355,7 +362,10 @@ class MpsProject(val projectDir: File) {
     private class NodeImpl(override val conceptName: String, override val id: NodeID,
                            override val containmentLinkName: String?,
                            override val name: String?,
-        val xmlNode: Element, val registry: Registry) : Node() {
+                           @Expose(serialize = false)
+                           val xmlNode: Element,
+                           @Expose(serialize = false)
+                           val registry: Registry) : Node() {
 
         companion object {
             fun loadNode(node: Element, registry: Registry) : Node {
@@ -423,7 +433,11 @@ class MpsProject(val projectDir: File) {
         }
     }
 
-    private class LocalReferenceImpl(override val linkName: String, val registry: Registry, val index: String) : Reference() {
+    private class LocalReferenceImpl(override val linkName: String,
+                                     @Expose(serialize = false)
+                                     val registry: Registry, val index: String) : Reference() {
+        override fun refString(): String = "int:$index"
+
         override val value: Node? by lazy { loadValue() }
         override val isLocalToModel: Boolean
             get() = true
@@ -439,8 +453,12 @@ class MpsProject(val projectDir: File) {
 
     }
 
-    private class ExternalReferenceImpl(override val linkName: String, val registry: Registry, val modelIndex: String,
+    private class ExternalReferenceImpl(override val linkName: String,
+                                        @Expose(serialize = false)
+                                        val registry: Registry, val modelIndex: String,
         val localIndex: String) : Reference() {
+        override fun refString(): String = "ext:$modelIndex:$localIndex"
+
         override val value: Node? by lazy { loadValue() }
         override val isLocalToModel: Boolean
             get() = false

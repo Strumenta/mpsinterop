@@ -312,4 +312,45 @@ class MpsProjectTest {
         assertEquals(listOf("container", "containmentName", "conceptToInstantiate", "index", "smartRefNodeId"), children.map { it.name })
     }
 
+    @Test
+    fun addChildContainerType() {
+        val projectDir = File("src/test/resources/mpsserver_2")
+        val project = MpsProject(projectDir)
+        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+        val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
+        val addChild = roots.find { it.name == "AddChild" }!!
+        val children = addChild.children("member")
+        val container = children.find { it.name == "container" }!!
+        val containerType = container.child("type")!!
+        assertEquals("jetbrains.mps.baseLanguage.structure.ClassifierType", containerType.conceptName)
+        val containerTypeClassifier = containerType.reference("classifier")!!
+        assertEquals("NodeIDInModel", containerTypeClassifier.name)
+    }
+
+    @Test
+    fun addChildContainmentNameType() {
+        val projectDir = File("src/test/resources/mpsserver_2")
+        val project = MpsProject(projectDir)
+        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+        val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
+        val addChild = roots.find { it.name == "AddChild" }!!
+        val children = addChild.children("member")
+        val containmentName = children.find { it.name == "containmentName" }!!
+        val containmentNameType = containmentName.child("type")!!
+        assertEquals("jetbrains.mps.baseLanguage.structure.StringType", containmentNameType.conceptName)
+    }
+
+    @Test
+    fun addChildIndexType() {
+        val projectDir = File("src/test/resources/mpsserver_2")
+        val project = MpsProject(projectDir)
+        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+        val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
+        val addChild = roots.find { it.name == "AddChild" }!!
+        val children = addChild.children("member")
+        val index = children.find { it.name == "index" }!!
+        val indexType = index.child("type")!!
+        assertEquals("jetbrains.mps.baseLanguage.structure.IntegerType", indexType.conceptName)
+    }
+
 }
