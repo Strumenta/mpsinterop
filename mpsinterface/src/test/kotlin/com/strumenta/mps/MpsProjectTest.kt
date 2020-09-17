@@ -287,4 +287,29 @@ class MpsProjectTest {
         assertEquals(34, messagesClasses.size)
     }
 
+    @Test
+    fun nodeChildrenForLinkNameUnexisting() {
+        val projectDir = File("src/test/resources/mpsserver_2")
+        val project = MpsProject(projectDir)
+        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+        val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
+        assertEquals(86, roots.size)
+        val addChild = roots.find { it.name == "AddChild" }!!
+        val children = addChild.children("foo")
+        assertEquals(0, children.size)
+    }
+
+    @Test
+    fun nodeChildrenForLinkNameExisting() {
+        val projectDir = File("src/test/resources/mpsserver_2")
+        val project = MpsProject(projectDir)
+        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+        val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
+        assertEquals(86, roots.size)
+        val addChild = roots.find { it.name == "AddChild" }!!
+        val children = addChild.children("member")
+        assertEquals(5, children.size)
+        assertEquals(listOf("container", "containmentName", "conceptToInstantiate", "index", "smartRefNodeId"), children.map { it.name })
+    }
+
 }

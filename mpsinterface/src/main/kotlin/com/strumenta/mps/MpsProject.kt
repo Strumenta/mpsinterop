@@ -56,6 +56,10 @@ abstract class Node {
         return children.find { it.containmentLinkName == relationName }
     }
 
+    fun children(relationName: String): List<Node> {
+        return children.filter { it.containmentLinkName == relationName }
+    }
+
     fun reference(relationName: String) : Node? {
         return references.find { it.linkName == relationName }?.value
     }
