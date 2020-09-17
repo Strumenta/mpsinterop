@@ -1,6 +1,6 @@
 package com.strumenta.deprecated_mpsinterop.logicalmodel
 
-import java.util.*
+import java.util.LinkedList
 
 abstract class AbstractConcept(open val id: Long, open val name: String) {
 

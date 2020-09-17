@@ -1,7 +1,11 @@
 package com.strumenta.deprecated_mpsinterop
 
 import com.strumenta.deprecated_mpsinterop.loading.loadMpsModel
-import com.strumenta.deprecated_mpsinterop.physicalmodel.*
+import com.strumenta.deprecated_mpsinterop.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
+import com.strumenta.deprecated_mpsinterop.physicalmodel.InModelReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.OutsideModelReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalReferenceValue
+import com.strumenta.deprecated_mpsinterop.physicalmodel.name
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -10,7 +14,8 @@ class LoadingPhysicalModelsFromMpsFile {
     @Test
     fun loadPhysicalModelOfFormatsStructureBasicSanityCheck() {
         val inputStream = LoadingPhysicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/formats-structure.mps")
+            "/formats-structure.mps"
+        )
         val model = loadMpsModel(inputStream)
 
         assertEquals("Formats.structure", model.name)
@@ -20,7 +25,8 @@ class LoadingPhysicalModelsFromMpsFile {
     @Test
     fun loadPhysicalModelOfConstraint() {
         val inputStream = LoadingPhysicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/formats-structure.mps")
+            "/formats-structure.mps"
+        )
         val model = loadMpsModel(inputStream)
 
         val constraintNode = model.getRootByName("Constraint")
@@ -44,10 +50,13 @@ class LoadingPhysicalModelsFromMpsFile {
 
         // Structure
         val superConcept = constraintNode.reference("extends")
-        assertEquals(PhysicalReferenceValue(
+        assertEquals(
+            PhysicalReferenceValue(
                 OutsideModelReferenceTarget(model, "tpck", "gw2VY9q"),
-                "BaseConcept"),
-                superConcept)
+                "BaseConcept"
+            ),
+            superConcept
+        )
         val sourceNode = constraintNode.reference("sourceNode")
         assertEquals(null, sourceNode)
         assertEquals(0, constraintNode.numberOfChildren("implements"))
@@ -61,7 +70,8 @@ class LoadingPhysicalModelsFromMpsFile {
     @Test
     fun loadPhysicalModelOfEqualTo() {
         val inputStream = LoadingPhysicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/formats-structure.mps")
+            "/formats-structure.mps"
+        )
         val model = loadMpsModel(inputStream)
 
         val equalTo = model.getRootByName("EqualTo")
@@ -75,12 +85,16 @@ class LoadingPhysicalModelsFromMpsFile {
 
         // Structure
         val superConcept = equalTo.reference("extends")
-        assertEquals(PhysicalReferenceValue(
+        assertEquals(
+            PhysicalReferenceValue(
                 InModelReferenceTarget(
-                        model,
-                        "6D8ZJLf0wUM"),
-                "Constraint"),
-                superConcept)
+                    model,
+                    "6D8ZJLf0wUM"
+                ),
+                "Constraint"
+            ),
+            superConcept
+        )
 
         // Relations
         assertEquals(1, equalTo.numberOfChildren("linkDeclaration"))

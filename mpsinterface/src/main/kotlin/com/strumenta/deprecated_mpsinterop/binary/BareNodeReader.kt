@@ -1,40 +1,6 @@
 package com.strumenta.deprecated_mpsinterop.binary
-import com.strumenta.deprecated_mpsinterop.logicalmodel.*
-import com.strumenta.deprecated_mpsinterop.physicalmodel.*
-
-/*
- * Copyright 2003-2015 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-//
-// import ModelInputStream
-// import com.strumenta.mpsinterop.binary.SModelReference
-// import jetbrains.mps.extapi.model.SModelData
-// import jetbrains.mps.smodel.DynamicReference
-// import jetbrains.mps.smodel.DynamicReference.DynamicReferenceOrigin
-// import jetbrains.mps.smodel.StaticReference
-// import jetbrains.mps.util.io.ModelInputStream
-// import org.jetbrains.mps.openapi.language.Concept
-// import org.jetbrains.mps.openapi.language.ContainmentLink
-// import org.jetbrains.mps.openapi.language.Property
-// import org.jetbrains.mps.openapi.language.ReferenceLink
-// import org.jetbrains.mps.openapi.model.SModelReference
-// import org.jetbrains.mps.openapi.model.Node
-// import org.jetbrains.mps.openapi.model.NodeId
-// import org.jetbrains.mps.openapi.model.Reference
-
+import com.strumenta.deprecated_mpsinterop.logicalmodel.* // ktlint-disable
+import com.strumenta.deprecated_mpsinterop.physicalmodel.* // ktlint-disable
 import java.io.IOException
 import java.lang.UnsupportedOperationException
 import java.util.ArrayList
@@ -93,43 +59,48 @@ internal abstract class BareNodeReader(
     protected abstract fun readReferences(node: PhysicalNode)
 
     protected fun readReference(sref: PhysicalRelation, node: PhysicalNode): Reference {
-            val kind = modelInputStream.readByte().toInt()
-            assert(kind in 1..3)
-            val targetNodeId = if (kind == 1) modelInputStream.readNodeId() else null
-            // val origin = if (kind == 3) DynamicReferenceOrigin(modelInputStream.readNodePointer(), modelInputStream.readNodePointer()) else null
-            val origin = if (kind == 3) TODO() else null
-            val targetModelKind = modelInputStream.readByte().toInt()
-            assert(targetModelKind == REF_OTHER_MODEL.toInt() || targetModelKind == REF_THIS_MODEL.toInt())
-            val modelRef: SModelReference?
-            if (targetModelKind == REF_OTHER_MODEL.toInt()) {
-                modelRef = modelInputStream.readModelReference()
-            } else {
-                modelRef = modelReference
-                localNodeReferenceRead(targetNodeId)
-            }
-            val resolveInfo = modelInputStream.readString()
-            if (kind == 1) {
-                val reference = StaticReference(
-                        sref,
-                        node,
-                        modelRef!!,
-                        targetNodeId,
-                        resolveInfo)
-                try {
-                    val value = when (targetModelKind) {
-                        REF_OTHER_MODEL.toInt() -> ExplicitReferenceTarget(
-                                modelRef.id.uuid(), targetNodeId!!)
-                        REF_THIS_MODEL.toInt() -> ExplicitReferenceTarget(
-                                modelRef.id.uuid(), targetNodeId!!)
-                        else -> throw UnsupportedOperationException()
-                    }
-                    node.addReference(sref, PhysicalReferenceValue(value, resolveInfo!!))
-                } catch (e: Throwable) {
-                    node.addReference(sref, PhysicalReferenceValue(FailedLoadingReferenceTarget(e), resolveInfo))
+        val kind = modelInputStream.readByte().toInt()
+        assert(kind in 1..3)
+        val targetNodeId = if (kind == 1) modelInputStream.readNodeId() else null
+        // val origin = if (kind == 3) DynamicReferenceOrigin(modelInputStream.readNodePointer(), modelInputStream.readNodePointer()) else null
+        val origin = if (kind == 3) TODO() else null
+        val targetModelKind = modelInputStream.readByte().toInt()
+        assert(targetModelKind == REF_OTHER_MODEL.toInt() || targetModelKind == REF_THIS_MODEL.toInt())
+        val modelRef: SModelReference?
+        if (targetModelKind == REF_OTHER_MODEL.toInt()) {
+            modelRef = modelInputStream.readModelReference()
+        } else {
+            modelRef = modelReference
+            localNodeReferenceRead(targetNodeId)
+        }
+        val resolveInfo = modelInputStream.readString()
+        if (kind == 1) {
+            val reference = StaticReference(
+                sref,
+                node,
+                modelRef!!,
+                targetNodeId,
+                resolveInfo
+            )
+            try {
+                val value = when (targetModelKind) {
+                    REF_OTHER_MODEL.toInt() -> ExplicitReferenceTarget(
+                        modelRef.id.uuid(),
+                        targetNodeId!!
+                    )
+                    REF_THIS_MODEL.toInt() -> ExplicitReferenceTarget(
+                        modelRef.id.uuid(),
+                        targetNodeId!!
+                    )
+                    else -> throw UnsupportedOperationException()
                 }
-                return reference
-            } else if (kind == 2 || kind == 3) {
-                    TODO()
+                node.addReference(sref, PhysicalReferenceValue(value, resolveInfo!!))
+            } catch (e: Throwable) {
+                node.addReference(sref, PhysicalReferenceValue(FailedLoadingReferenceTarget(e), resolveInfo))
+            }
+            return reference
+        } else if (kind == 2 || kind == 3) {
+            TODO()
 //                val reference = DynamicReference(
 //                        relation,
 //                        node,
@@ -139,10 +110,10 @@ internal abstract class BareNodeReader(
 //                    reference.setOrigin(origin)
 //                }
 //                node.setReference(relation, reference)
-                    // return reference
-                } else {
-                    throw IOException("unknown reference type")
-                }
+            // return reference
+        } else {
+            throw IOException("unknown reference type")
+        }
     }
 //
     protected fun localNodeReferenceRead(nodeId: NodeId?) {

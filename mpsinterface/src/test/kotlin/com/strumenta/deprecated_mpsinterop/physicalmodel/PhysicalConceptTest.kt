@@ -11,7 +11,8 @@ class PhysicalConceptTest {
     @Test
     fun conceptSimpleName() {
         val model = loadMpsModel(
-                PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps"))
+            PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps")
+        )
         val enumerationMemberDeclaration = model.findConceptByID(1083171877298L)
         assertNotNull(enumerationMemberDeclaration)
         assertEquals("EnumerationMemberDeclaration", enumerationMemberDeclaration.name)
@@ -20,7 +21,8 @@ class PhysicalConceptTest {
     @Test
     fun conceptQualifiedName() {
         val model = loadMpsModel(
-                PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps"))
+            PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps")
+        )
         val enumerationMemberDeclaration = model.findConceptByID(1083171877298L)
         assertNotNull(enumerationMemberDeclaration)
         assertEquals("jetbrains.mps.lang.structure.structure.EnumerationMemberDeclaration", enumerationMemberDeclaration.qualifiedName)
@@ -29,7 +31,8 @@ class PhysicalConceptTest {
     @Test
     fun conceptIndex() {
         val model = loadMpsModel(
-                PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps"))
+            PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps")
+        )
         val enumerationMemberDeclaration = model.findConceptByID(1083171877298L)
         assertNotNull(enumerationMemberDeclaration)
         assertEquals("M4N5e", enumerationMemberDeclaration.index)
@@ -38,7 +41,8 @@ class PhysicalConceptTest {
     @Test(expected = IllegalArgumentException::class)
     fun getUnexistingProperty() {
         val model = loadMpsModel(
-                PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps"))
+            PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps")
+        )
         val enumerationMemberDeclaration = model.findConceptByID(1083171877298L)
         assertNotNull(enumerationMemberDeclaration)
         enumerationMemberDeclaration.getPropertyByName("MyUnexistingProperty")
@@ -47,7 +51,8 @@ class PhysicalConceptTest {
     @Test
     fun getExistingProperty() {
         val model = loadMpsModel(
-                PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps"))
+            PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps")
+        )
         val enumerationMemberDeclaration = model.findConceptByID(1083171877298L)
         assertNotNull(enumerationMemberDeclaration)
 
@@ -67,7 +72,8 @@ class PhysicalConceptTest {
     @Test(expected = IllegalArgumentException::class)
     fun getUnexistingRelation() {
         val model = loadMpsModel(
-                PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps"))
+            PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps")
+        )
         val enumerationMemberDeclaration = model.findConceptByID(1083171877298L)
         assertNotNull(enumerationMemberDeclaration)
         enumerationMemberDeclaration.relationByName("MyUnexistingRelation")
@@ -76,7 +82,8 @@ class PhysicalConceptTest {
     @Test
     fun getExistingContainment() {
         val model = loadMpsModel(
-                PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps"))
+            PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps")
+        )
         val abstractConceptDeclaration = model.findConceptByID(1169125787135L)
         assertNotNull(abstractConceptDeclaration)
 
@@ -98,7 +105,8 @@ class PhysicalConceptTest {
     @Test
     fun getExistingReference() {
         val model = loadMpsModel(
-                PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps"))
+            PhysicalConceptTest::class.java.getResourceAsStream("/formats-structure.mps")
+        )
         val linkDeclaration = model.findConceptByID(1071489288298L)
         assertNotNull(linkDeclaration)
 

@@ -12,7 +12,7 @@ import java.lang.RuntimeException
 abstract class Source {
     abstract fun inputStream(): InputStream
     abstract fun listChildrenUnder(location: String): List<Source>
-    val document : Document by lazy { loadDocument(inputStream()) }
+    val document: Document by lazy { loadDocument(inputStream()) }
 }
 
 class FileSource(val file: File) : Source() {
@@ -29,5 +29,3 @@ class FileSource(val file: File) : Source() {
         return childrenFiles.map { FileSource(it) }
     }
 }
-
-

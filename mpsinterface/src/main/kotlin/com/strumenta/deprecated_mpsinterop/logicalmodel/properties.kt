@@ -4,7 +4,7 @@ interface PropertyType {
     val defaultValue: Any
 
     val defaultValueAsString: String
-            get() = defaultValue.toString()
+        get() = defaultValue.toString()
 }
 
 data class AbsolutePropertyId(val conceptId: AbsoluteConceptId, val idValue: Long)

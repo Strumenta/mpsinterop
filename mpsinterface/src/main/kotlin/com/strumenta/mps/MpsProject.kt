@@ -7,10 +7,8 @@ import org.w3c.dom.Element
 import java.io.File
 import java.io.FileInputStream
 import java.io.FilenameFilter
-import java.lang.IllegalArgumentException
-import java.lang.UnsupportedOperationException
-import java.util.*
-import kotlin.collections.HashMap
+import java.util.LinkedList
+import java.util.UUID
 
 enum class ElementType {
     DEVKIT,
@@ -24,9 +22,9 @@ abstract class Module {
     abstract val moduleVersion: Int
 
     fun modelNames(): Set<String> = models().map { it.name }.toSet()
-    abstract fun models() : Set<Model>
-    fun findModel(uuid: UUID) : Model? = models().find { it.uuid == uuid }
-    fun findModel(name: String) : Model? = models().find { it.name == name }
+    abstract fun models(): Set<Model>
+    fun findModel(uuid: UUID): Model? = models().find { it.uuid == uuid }
+    fun findModel(name: String): Model? = models().find { it.name == name }
 }
 
 abstract class Language : Module() {
@@ -39,8 +37,8 @@ abstract class Model : Serializable {
     abstract val name: String
     abstract val uuid: UUID
 
-    abstract fun roots() : List<Node>
-    fun roots(conceptName: String) : List<Node> = roots().filter { it.conceptName == conceptName }
+    abstract fun roots(): List<Node>
+    fun roots(conceptName: String): List<Node> = roots().filter { it.conceptName == conceptName }
     fun numberOfRoots(): Int = roots().size
 }
 
@@ -65,11 +63,11 @@ abstract class Node : Serializable {
         return children.filter { it.containmentLinkName == relationName }
     }
 
-    fun reference(relationName: String) : Node? {
+    fun reference(relationName: String): Node? {
         return references.find { it.linkName == relationName }?.value
     }
 
-    fun isReferenceLocal(relationName: String) : Boolean? {
+    fun isReferenceLocal(relationName: String): Boolean? {
         return references.find { it.linkName == relationName }?.isLocalToModel
     }
 
@@ -78,10 +76,10 @@ abstract class Node : Serializable {
     abstract val name: String?
     abstract val conceptName: String
     abstract val id: NodeID
-    abstract val properties : Map<String, String>
+    abstract val properties: Map<String, String>
     abstract val containmentLinkName: String?
-    abstract val children : List<Node>
-    abstract val references : List<Reference>
+    abstract val children: List<Node>
+    abstract val references: List<Reference>
 }
 
 class MpsProject(val projectDir: File) {
@@ -89,7 +87,7 @@ class MpsProject(val projectDir: File) {
     private val solutions = mutableListOf<Solution>()
     private val languages = mutableListOf<Language>()
 
-    val modules : List<Module>
+    val modules: List<Module>
         get() = solutions + languages
 
     init {
@@ -154,11 +152,11 @@ class MpsProject(val projectDir: File) {
         return solutions.any { it.name == solutionName }
     }
 
-    fun language(languageName: String) : Language? {
+    fun language(languageName: String): Language? {
         return languages.find { it.name == languageName }
     }
 
-    fun solution(solutionName: String) : Solution? {
+    fun solution(solutionName: String): Solution? {
         return solutions.find { it.name == solutionName }
     }
 
@@ -172,15 +170,20 @@ class MpsProject(val projectDir: File) {
         return null
     }
 
-    private data class IndexElement(val uuid: UUID, val name: String, val type: ElementType,
-                            val source: Source,
-                            val moduleVersion: Int? = null, val languageVersion: Int? = null) {
+    private data class IndexElement(
+        val uuid: UUID,
+        val name: String,
+        val type: ElementType,
+        val source: Source,
+        val moduleVersion: Int? = null,
+        val languageVersion: Int? = null
+    ) {
         val document: Document
             get() = source.document
     }
 
     private class ModuleImpl(val indexElement: IndexElement) {
-        private val models : Set<Model> by lazy { loadModels() }
+        private val models: Set<Model> by lazy { loadModels() }
 
         fun models(): Set<Model> {
             return models
@@ -189,31 +192,37 @@ class MpsProject(val projectDir: File) {
         private fun loadModels(): Set<Model> {
             val document = indexElement.document
             val modelSources = mutableListOf<Source>()
-            document.documentElement.child("models").processChildren("modelRoot", { modelRoot ->
-                val contentPath = modelRoot.getAttribute("contentPath")
-                val type = modelRoot.getAttribute("type")
-                when (type) {
-                    "default" -> {
-                        modelRoot.processChildren("sourceRoot", { sourceRoot ->
-                            val location = sourceRoot.getAttribute("location")
-                            try {
-                                var combinedLocation = "$contentPath/$location"
-                                require(combinedLocation.startsWith("\${module}/"))
-                                combinedLocation = combinedLocation.removePrefix("\${module}/")
-                                modelSources.addAll(indexElement.source.listChildrenUnder(combinedLocation))
-                            } catch (e: Throwable) {
-                                throw RuntimeException("Issue processing location '$location'", e)
-                            }
-                        })
-                    }
-                    "java_classes" -> {
-                        // ignore
-                    }
-                    else -> {
-                        throw UnsupportedOperationException("modelRoot of type $type is not supported")
+            document.documentElement.child("models").processChildren(
+                "modelRoot",
+                { modelRoot ->
+                    val contentPath = modelRoot.getAttribute("contentPath")
+                    val type = modelRoot.getAttribute("type")
+                    when (type) {
+                        "default" -> {
+                            modelRoot.processChildren(
+                                "sourceRoot",
+                                { sourceRoot ->
+                                    val location = sourceRoot.getAttribute("location")
+                                    try {
+                                        var combinedLocation = "$contentPath/$location"
+                                        require(combinedLocation.startsWith("\${module}/"))
+                                        combinedLocation = combinedLocation.removePrefix("\${module}/")
+                                        modelSources.addAll(indexElement.source.listChildrenUnder(combinedLocation))
+                                    } catch (e: Throwable) {
+                                        throw RuntimeException("Issue processing location '$location'", e)
+                                    }
+                                }
+                            )
+                        }
+                        "java_classes" -> {
+                            // ignore
+                        }
+                        else -> {
+                            throw UnsupportedOperationException("modelRoot of type $type is not supported")
+                        }
                     }
                 }
-            })
+            )
             return modelSources.map { loadModel(it) }.toSet()
         }
 
@@ -270,7 +279,7 @@ class MpsProject(val projectDir: File) {
         private val indexToNode = HashMap<String, Node>()
         private val indexToXmlNode = HashMap<String, Element>()
 
-        fun nodeFromIndex(index: String) : Node {
+        fun nodeFromIndex(index: String): Node {
             require(index.isNotBlank()) { "a blank index should not be used" }
             if (index !in indexToNode) {
                 NodeImpl.loadNode(indexToXmlNode[index] ?: throw IllegalArgumentException("Index unknown '$index'"), this)
@@ -317,20 +326,21 @@ class MpsProject(val projectDir: File) {
         fun registerNode(index: String, node: Node) {
             indexToNode[index] = node
         }
-
     }
 
     private class ModelImpl(
-            @Expose(serialize = false)
-            val source: Source, override val name: String, override val uuid: UUID) : Model() {
-        private val roots : List<Node> by lazy { loadRoots() }
+        @Expose(serialize = false)
+        val source: Source,
+        override val name: String,
+        override val uuid: UUID
+    ) : Model() {
+        private val roots: List<Node> by lazy { loadRoots() }
 
         override fun roots(): List<Node> {
             return roots
         }
 
-
-        private fun loadRegistry(doc: Document) : Registry {
+        private fun loadRegistry(doc: Document): Registry {
             val registry = Registry()
             doc.documentElement.processAllNodes("node") { node ->
                 registry.registerXmlNode(node.getAttribute("id"), node)
@@ -359,22 +369,25 @@ class MpsProject(val projectDir: File) {
         }
     }
 
-    private class NodeImpl(override val conceptName: String, override val id: NodeID,
-                           override val containmentLinkName: String?,
-                           override val name: String?,
-                           @Expose(serialize = false)
-                           val xmlNode: Element,
-                           @Expose(serialize = false)
-                           val registry: Registry) : Node() {
+    private class NodeImpl(
+        override val conceptName: String,
+        override val id: NodeID,
+        override val containmentLinkName: String?,
+        override val name: String?,
+        @Expose(serialize = false)
+        val xmlNode: Element,
+        @Expose(serialize = false)
+        val registry: Registry
+    ) : Node() {
 
         companion object {
-            fun loadNode(node: Element, registry: Registry) : Node {
+            fun loadNode(node: Element, registry: Registry): Node {
                 val role = node.getAttribute("role")
-                val containmentLinkName : String? = if (role.isNullOrBlank()) null else registry.containmentNameFromIndex(role)
+                val containmentLinkName: String? = if (role.isNullOrBlank()) null else registry.containmentNameFromIndex(role)
                 val conceptName = registry.conceptNameFromIndex(node.getAttribute("concept"))
                 val index = node.getAttribute("id")
                 val id = Base64.parseLong(index).toString()
-                var name : String? = null
+                var name: String? = null
                 node.processChildren("property") { property ->
                     val role = property.getAttribute("role")
                     val propertyName = registry.propertyNameFromIndex(role)
@@ -388,11 +401,11 @@ class MpsProject(val projectDir: File) {
             }
         }
 
-        override val properties : Map<String, String> by lazy { loadProperties() }
-        override val children : List<Node> by lazy { loadChildren() }
-        override val references : List<Reference> by lazy { loadReferences() }
+        override val properties: Map<String, String> by lazy { loadProperties() }
+        override val children: List<Node> by lazy { loadChildren() }
+        override val references: List<Reference> by lazy { loadReferences() }
 
-        private fun loadProperties() : Map<String, String> {
+        private fun loadProperties(): Map<String, String> {
             val res = HashMap<String, String>()
             xmlNode.processChildren("property") { property ->
                 val role = property.getAttribute("role")
@@ -404,7 +417,7 @@ class MpsProject(val projectDir: File) {
             return res
         }
 
-        private fun loadChildren() : List<Node> {
+        private fun loadChildren(): List<Node> {
             val res = LinkedList<Node>()
             xmlNode.processChildren("node") { node ->
                 res.add(loadNode(node, registry))
@@ -412,7 +425,7 @@ class MpsProject(val projectDir: File) {
             return res
         }
 
-        private fun loadReferences() : List<Reference> {
+        private fun loadReferences(): List<Reference> {
             val res = LinkedList<Reference>()
             xmlNode.processChildren("ref") { ref ->
                 val role = ref.getAttribute("role")
@@ -433,30 +446,34 @@ class MpsProject(val projectDir: File) {
         }
     }
 
-    private class LocalReferenceImpl(override val linkName: String,
-                                     @Expose(serialize = false)
-                                     val registry: Registry, val index: String) : Reference() {
+    private class LocalReferenceImpl(
+        override val linkName: String,
+        @Expose(serialize = false)
+        val registry: Registry,
+        val index: String
+    ) : Reference() {
         override fun refString(): String = "int:${value?.id}"
 
         override val value: Node? by lazy { loadValue() }
         override val isLocalToModel: Boolean
             get() = true
 
-
         init {
             require(index.isNotBlank()) { "A valid reference index should not be blank" }
         }
 
-        private fun loadValue() : Node? {
+        private fun loadValue(): Node? {
             return registry.nodeFromIndex(index)
         }
-
     }
 
-    private class ExternalReferenceImpl(override val linkName: String,
-                                        @Expose(serialize = false)
-                                        val registry: Registry, val modelIndex: String,
-        val localIndex: String) : Reference() {
+    private class ExternalReferenceImpl(
+        override val linkName: String,
+        @Expose(serialize = false)
+        val registry: Registry,
+        val modelIndex: String,
+        val localIndex: String
+    ) : Reference() {
         // TODO use registry to translate those indexes
         override fun refString(): String = "ext:$modelIndex:$localIndex"
 
@@ -469,9 +486,8 @@ class MpsProject(val projectDir: File) {
             require(localIndex.isNotBlank())
         }
 
-        private fun loadValue() : Node? {
+        private fun loadValue(): Node? {
             TODO()
         }
-
     }
 }

@@ -12,7 +12,8 @@ import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalSolutionModule
 import com.strumenta.deprecated_mpsinterop.utils.dumpToTempFile
 import java.io.File
 import java.io.InputStream
-import java.util.*
+import java.util.HashMap
+import java.util.UUID
 import java.util.jar.JarFile
 import java.util.zip.ZipException
 
@@ -54,7 +55,7 @@ typealias SolutionLoadingInfo = LoadingInfo<PhysicalSolutionModule>
 
 class Indexer : ModelLocator {
 
-    var justPrinting : Boolean = false
+    var justPrinting: Boolean = false
 
     companion object {
         val DEFAULT = Indexer()
@@ -77,7 +78,7 @@ class Indexer : ModelLocator {
     private val languagesByUUID = HashMap<UUID, LoadingInfo<PhysicalLanguageModule>>()
     private val solutionsByUUID = HashMap<UUID, LoadingInfo<PhysicalSolutionModule>>()
 
-    private fun registerModel(uuid: UUID, loadingInfo: ModelLoadingInfo) : Boolean {
+    private fun registerModel(uuid: UUID, loadingInfo: ModelLoadingInfo): Boolean {
         if (uuid in modelsByUUID) {
 //            throw IllegalStateException(
 //                    "LoadingInfo already present for model with UUID $uuid: ${modelsByUUID[uuid]}. Attempting to replace it with $loadingInfo")
@@ -94,7 +95,7 @@ class Indexer : ModelLocator {
         return true
     }
 
-    private fun registerLanguage(uuid: UUID, loadingInfo: LanguageLoadingInfo) : Boolean {
+    private fun registerLanguage(uuid: UUID, loadingInfo: LanguageLoadingInfo): Boolean {
         if (uuid in languagesByUUID) {
             return false
 //            throw IllegalStateException(
@@ -104,7 +105,7 @@ class Indexer : ModelLocator {
         return true
     }
 
-    private fun registerSolution(uuid: UUID, loadingInfo: SolutionLoadingInfo) : Boolean {
+    private fun registerSolution(uuid: UUID, loadingInfo: SolutionLoadingInfo): Boolean {
         if (uuid in solutionsByUUID) {
             return false
 //            throw IllegalStateException(
@@ -182,7 +183,8 @@ class Indexer : ModelLocator {
                 when {
                     entry.name.endsWith(".mps") -> {
                         if (!entry.name.endsWith("descriptorclasses.mps") &&
-                                !entry.name.contains("/aspectcps")) {
+                            !entry.name.contains("/aspectcps")
+                        ) {
                             indexMps(jarFile.getInputStream(entry), source)
                         }
                     }

@@ -11,7 +11,7 @@ import java.io.InputStream
 import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 import java.lang.RuntimeException
-import java.util.*
+import java.util.* // ktlint-disable
 import java.util.function.Consumer
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
@@ -23,33 +23,42 @@ enum class ElementType {
 }
 
 fun processModelsInModule(elementLoader: Indexer.ElementLoader, document: Document, consumer: Consumer<Document>) {
-    document.documentElement.processChildren("models", { models ->
-        models.processChildren("modelRoot", { modelRoot ->
-            val contentPath = modelRoot.getAttribute("contentPath")
-            val type = modelRoot.getAttribute("type")
-            if (type == "default") {
-                modelRoot.processChildren("sourceRoot", { sourceRoot ->
-                    val location = sourceRoot.getAttribute("location")
-                    try {
-                        var combinedLocation = "$contentPath/$location"
-                        require(combinedLocation.startsWith("\${module}/"))
-                        combinedLocation = combinedLocation.removePrefix("\${module}/")
-                        val models = elementLoader.listChildrenUnder(combinedLocation)
-                        for (model in models) {
-                            val doc = model.document()
-                            consumer.accept(doc)
-                        }
-                    } catch (e: Throwable) {
-                        throw RuntimeException("Issue processing location '$location'", e)
+    document.documentElement.processChildren(
+        "models",
+        { models ->
+            models.processChildren(
+                "modelRoot",
+                { modelRoot ->
+                    val contentPath = modelRoot.getAttribute("contentPath")
+                    val type = modelRoot.getAttribute("type")
+                    if (type == "default") {
+                        modelRoot.processChildren(
+                            "sourceRoot",
+                            { sourceRoot ->
+                                val location = sourceRoot.getAttribute("location")
+                                try {
+                                    var combinedLocation = "$contentPath/$location"
+                                    require(combinedLocation.startsWith("\${module}/"))
+                                    combinedLocation = combinedLocation.removePrefix("\${module}/")
+                                    val models = elementLoader.listChildrenUnder(combinedLocation)
+                                    for (model in models) {
+                                        val doc = model.document()
+                                        consumer.accept(doc)
+                                    }
+                                } catch (e: Throwable) {
+                                    throw RuntimeException("Issue processing location '$location'", e)
+                                }
+                            }
+                        )
+                    } else if (type == "java_classes") {
+                        // ignore
+                    } else {
+                        TODO(type)
                     }
-                })
-            } else if (type == "java_classes") {
-                // ignore
-            } else {
-                TODO(type)
-            }
-        })
-    })
+                }
+            )
+        }
+    )
 }
 
 /**
@@ -61,8 +70,8 @@ class Indexer {
     private val elementsByName = mutableMapOf<String, IndexElement>()
 
     interface ElementLoader : Source {
-        fun inputStream() : InputStream
-        fun listModelsUnder(location: String) : List<InputStream>
+        fun inputStream(): InputStream
+        fun listModelsUnder(location: String): List<InputStream>
     }
 
     class JarEntryElementLoader(val jarFile: JarFile, val entry: JarEntry) : ElementLoader {
@@ -107,27 +116,36 @@ class Indexer {
         }
     }
 
-    data class IndexElement(val uuid: UUID, val name: String, val type: ElementType,
-                            val elementLoader: ElementLoader,
-                            val moduleVersion: Int? = null, val languageVersion: Int? = null) {
+    data class IndexElement(
+        val uuid: UUID,
+        val name: String,
+        val type: ElementType,
+        val elementLoader: ElementLoader,
+        val moduleVersion: Int? = null,
+        val languageVersion: Int? = null
+    ) {
         fun inputStream(): InputStream = elementLoader.inputStream()
         fun findModel(modelName: String): Document {
             val inputStream = this.inputStream()
             val document = loadDocument(inputStream)
-            var res : Document? = null
-            processModelsInModule(elementLoader, document, Consumer<Document> { doc ->
-                var ref = doc.documentElement.getAttribute("ref")
-                require(ref.startsWith("r:"))
-                ref = ref.removePrefix("r:")
-                val uuid = UUID.fromString(ref.substring(0, 36))
-                ref = ref.substring(36)
-                require(ref.startsWith("("))
-                require(ref.endsWith(")"))
-                val name = ref.substring(1, ref.length - 1)
-                if (modelName == name) {
-                    res = doc
+            var res: Document? = null
+            processModelsInModule(
+                elementLoader,
+                document,
+                Consumer<Document> { doc ->
+                    var ref = doc.documentElement.getAttribute("ref")
+                    require(ref.startsWith("r:"))
+                    ref = ref.removePrefix("r:")
+                    val uuid = UUID.fromString(ref.substring(0, 36))
+                    ref = ref.substring(36)
+                    require(ref.startsWith("("))
+                    require(ref.endsWith(")"))
+                    val name = ref.substring(1, ref.length - 1)
+                    if (modelName == name) {
+                        res = doc
+                    }
                 }
-            })
+            )
             return res ?: throw RuntimeException("Model not found")
         }
 
@@ -140,17 +158,17 @@ class Indexer {
         }
     }
 
-    fun findElement(elementName: String) : IndexElement? = elementsByName[elementName]
-    fun findElement(elementUUID: UUID) : IndexElement? = elementsByUUID[elementUUID]
+    fun findElement(elementName: String): IndexElement? = elementsByName[elementName]
+    fun findElement(elementUUID: UUID): IndexElement? = elementsByUUID[elementUUID]
 
-    fun findSolutionByName(solutionName: String) : IndexElement {
+    fun findSolutionByName(solutionName: String): IndexElement {
         val indexElement = elementsByName[solutionName] ?: throw IllegalArgumentException("Solution $solutionName not found")
         require(indexElement.type == ElementType.SOLUTION)
         return indexElement
     }
 
     private fun addIndexElement(indexElement: IndexElement) {
-        //println(" * add $indexElement")
+        // println(" * add $indexElement")
         require(!elementsByUUID.containsKey(indexElement.uuid))
         require(!elementsByName.containsKey(indexElement.name))
         elementsByUUID[indexElement.uuid] = indexElement
@@ -166,7 +184,7 @@ class Indexer {
         addIndexElement(IndexElement(uuid, name, ElementType.DEVKIT, elementLoader))
     }
 
-    fun jarEntryLoader(jarFile: JarFile, entry: JarEntry) : JarEntryElementLoader = JarEntryElementLoader(jarFile, entry)
+    fun jarEntryLoader(jarFile: JarFile, entry: JarEntry): JarEntryElementLoader = JarEntryElementLoader(jarFile, entry)
 
     private fun loadSolution(elementLoader: ElementLoader) {
         val inputStream = elementLoader.inputStream()
@@ -214,7 +232,7 @@ class Indexer {
                     entry.name.endsWith("/trace.info") -> "nothing to do"
                     entry.name.endsWith("/checkpoints") -> "nothing to do"
                     entry.isDirectory -> "nothing to do"
-                    //else -> println("ENTRY ${entry.name}")
+                    // else -> println("ENTRY ${entry.name}")
                 }
             }
         } catch (e: Throwable) {
@@ -224,12 +242,12 @@ class Indexer {
 
     private fun processFileInMpsInstallation(it: File) {
         if (it.isFile) {
-            //println("(process ${it.absolutePath})")
+            // println("(process ${it.absolutePath})")
             when {
                 it.extension == "jar" -> processJarFile(it)
                 it.extension == "xml" -> "nothing to do"
                 it.extension == "properties" -> "nothing to do"
-                //else -> println("PATH ${it.absolutePath}")
+                // else -> println("PATH ${it.absolutePath}")
             }
         }
     }
@@ -263,7 +281,7 @@ class Indexer {
         }
     }
 
-    private fun loadProjectMpsDir(mpsDir : File) {
+    private fun loadProjectMpsDir(mpsDir: File) {
         val projectDir = mpsDir.parentFile
         val modulesFile = File(mpsDir, "modules.xml")
         loadModules(modulesFile, projectDir)
@@ -285,20 +303,20 @@ class Indexer {
         }
     }
 
-    fun verifyCanSatisfyLanguages(deps: Dependencies, recursively: Boolean = false, alreadyVerified : MutableSet<LanguageDep> = mutableSetOf()) {
+    fun verifyCanSatisfyLanguages(deps: Dependencies, recursively: Boolean = false, alreadyVerified: MutableSet<LanguageDep> = mutableSetOf()) {
         deps.languages.forEach {
             verifyCanSatisfyLanguage(it, recursively, alreadyVerified)
         }
     }
 
-    private fun verifyCanSatisfyLanguage(languageDep: LanguageDep, recursively: Boolean = false, alreadyVerified : MutableSet<LanguageDep> = mutableSetOf()) {
+    private fun verifyCanSatisfyLanguage(languageDep: LanguageDep, recursively: Boolean = false, alreadyVerified: MutableSet<LanguageDep> = mutableSetOf()) {
         if (alreadyVerified.contains(languageDep)) {
             return
         }
         println("dep $languageDep")
         val el = findElement(languageDep.uuid)
         if (el == null) {
-            //throw RuntimeException("Cannot satisfy $languageDep")
+            // throw RuntimeException("Cannot satisfy $languageDep")
             println("UNSATISFIED $languageDep")
         } else {
             require(el.name == languageDep.name)
@@ -308,7 +326,7 @@ class Indexer {
                 val deps = calculateDependenciesForLanguage(el)
                 try {
                     verifyCanSatisfyLanguages(deps, true, alreadyVerified)
-                } catch (t : Throwable) {
+                } catch (t: Throwable) {
                     throw RuntimeException("Deps of $el not satisfied", t)
                 }
             }

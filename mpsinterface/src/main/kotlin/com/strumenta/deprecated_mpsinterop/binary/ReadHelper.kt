@@ -1,11 +1,15 @@
 package com.strumenta.deprecated_mpsinterop.binary
 
-import com.strumenta.deprecated_mpsinterop.logicalmodel.*
+import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsoluteConceptId
+import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsoluteContainmentLinkId
+import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsolutePropertyId
+import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsoluteReferenceLinkId
+import com.strumenta.deprecated_mpsinterop.logicalmodel.ConceptKind
+import com.strumenta.deprecated_mpsinterop.logicalmodel.LanguageId
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalConcept
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalProperty
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalRelation
 import com.strumenta.deprecated_mpsinterop.physicalmodel.RelationKind
-import java.lang.IllegalArgumentException
 
 /**
  * [jetbrains.mps.smodel.persistence.def.v9.IdInfoReadHelper] counterpart for binary persistence.
@@ -57,13 +61,16 @@ internal class ReadHelper() {
         conceptName: String,
         kind: ConceptKind
     ):
-            PhysicalConcept {
-        currentConcept = PhysicalConcept(
+        PhysicalConcept {
+            currentConcept = PhysicalConcept(
                 LanguageId(conceptId.languageId, languageName),
-                conceptId.idValue, conceptName, conceptIndex.toString())
-        myConcepts[conceptIndex] = currentConcept!!
-        return currentConcept!!
-    }
+                conceptId.idValue,
+                conceptName,
+                conceptIndex.toString()
+            )
+            myConcepts[conceptIndex] = currentConcept!!
+            return currentConcept!!
+        }
 
 //
 //    // @param stub is optional

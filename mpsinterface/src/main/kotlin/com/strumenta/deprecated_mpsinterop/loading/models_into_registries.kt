@@ -14,23 +14,24 @@ import org.w3c.dom.Element
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
-import java.util.*
+import java.util.* // ktlint-disable
 import java.util.jar.JarFile
 import java.util.zip.ZipException
 
-fun LanguageRegistry.loadMplFile(inputStream: InputStream) : PhysicalLanguageModule {
+fun LanguageRegistry.loadMplFile(inputStream: InputStream): PhysicalLanguageModule {
     val mplXML = loadDocument(inputStream)
     val uuid = UUID.fromString(mplXML.documentElement.getAttribute("uuid"))
     val name = mplXML.documentElement.getAttribute("namespace")
     val module = PhysicalLanguageModule(uuid, name)
-    mplXML.documentElement.processAllNodes { if (it.tagName == "dependency") {
-        module.dependencies.add(processDependency(it))
+    mplXML.documentElement.processAllNodes {
+        if (it.tagName == "dependency") {
+            module.dependencies.add(processDependency(it))
         }
     }
     return module
 }
 
-private fun processDependency(element: Element) : PhysicalModule.Dependency {
+private fun processDependency(element: Element): PhysicalModule.Dependency {
     val s = element.textContent
     require(s[36] == '(')
     require(s.last() == ')')
@@ -40,7 +41,7 @@ private fun processDependency(element: Element) : PhysicalModule.Dependency {
     return PhysicalModule.Dependency(uuid, name, reexport)
 }
 
-private fun processUsedLanguage(element: Element) : PhysicalModule.UsedLanguage {
+private fun processUsedLanguage(element: Element): PhysicalModule.UsedLanguage {
     val s = element.textContent
     require(s[36] == '(')
     require(s.last() == ')')
@@ -49,18 +50,20 @@ private fun processUsedLanguage(element: Element) : PhysicalModule.UsedLanguage 
     return PhysicalModule.UsedLanguage(uuid, name)
 }
 
-fun LanguageRegistry.loadMsdFile(inputStream: InputStream) : PhysicalSolutionModule {
+fun LanguageRegistry.loadMsdFile(inputStream: InputStream): PhysicalSolutionModule {
     val mplXML = loadDocument(inputStream)
     val uuid = UUID.fromString(mplXML.documentElement.getAttribute("uuid"))
     val name = mplXML.documentElement.getAttribute("name")
     val module = PhysicalSolutionModule(uuid, name)
-    mplXML.documentElement.processAllNodes { if (it.tagName == "dependency") {
-        module.dependencies.add(processDependency(it))
+    mplXML.documentElement.processAllNodes {
+        if (it.tagName == "dependency") {
+            module.dependencies.add(processDependency(it))
         }
     }
-    mplXML.documentElement.processAllNodes { if (it.tagName == "usedLanguage") {
-        module.usedLanguages.add(processUsedLanguage(it))
-    }
+    mplXML.documentElement.processAllNodes {
+        if (it.tagName == "usedLanguage") {
+            module.usedLanguages.add(processUsedLanguage(it))
+        }
     }
     return module
 }
@@ -104,7 +107,7 @@ private fun LanguageRegistry.loadJar(inputStream: InputStream): JarData {
 }
 
 // TODO return also the language for each model
-data class JarData(val models: List<PhysicalModel>, val modules : List<Pair<String, PhysicalModule>>)
+data class JarData(val models: List<PhysicalModel>, val modules: List<Pair<String, PhysicalModule>>)
 
 private fun LanguageRegistry.loadJarFromDirectory(directory: File): JarData {
     val models = LinkedList<PhysicalModel>()
@@ -114,7 +117,7 @@ private fun LanguageRegistry.loadJarFromDirectory(directory: File): JarData {
     val files = LinkedList<File>()
     dirToExplores.add(directory)
     var i = 0
-    while (i<dirToExplores.size) {
+    while (i <dirToExplores.size) {
         dirToExplores[i].listFiles().forEach {
             if (it.isFile) {
                 files.add(it)
@@ -133,20 +136,20 @@ private fun LanguageRegistry.loadJarFromDirectory(directory: File): JarData {
         val pathCovered = parts.joinToString("/") + "/languageModels/"
         modules.add(Pair(pathCovered, module))
     }
-    files.filter { it.name.endsWith(".mps") }.forEach {file ->
+    files.filter { it.name.endsWith(".mps") }.forEach { file ->
         val model = loadMpsModel(FileInputStream(file))
         models.add(model)
         val module = modules.find { file.name.startsWith(it.first) }
         if (module != null) {
             model.module = module.second
         } else {
-            //throw java.lang.RuntimeException()
+            // throw java.lang.RuntimeException()
             if (modules.size == 1) {
                 model.module = modules[0].second
             }
         }
     }
-    files.filter { it.name.endsWith(".mpb") }.forEach {file ->
+    files.filter { it.name.endsWith(".mpb") }.forEach { file ->
         val model = loadMpsModelFromBinaryFile(FileInputStream(file))
         models.add(model)
         val module = modules.find {
@@ -155,12 +158,13 @@ private fun LanguageRegistry.loadJarFromDirectory(directory: File): JarData {
                 entryName = entryName.removePrefix("module/models/")
             }
             entryName = entryName.replace("/", ".")
-            entryName.startsWith(it.first) }
+            entryName.startsWith(it.first)
+        }
         if (module != null) {
             model.module = module.second
         } else {
-            //throw java.lang.RuntimeException()
-            //println("A")
+            // throw java.lang.RuntimeException()
+            // println("A")
             if (modules.size == 1) {
                 model.module = modules[0].second
             }
@@ -211,7 +215,7 @@ private fun LanguageRegistry.loadJar(file: File): JarData {
                     if (module != null) {
                         model.module = module.second
                     } else {
-                        //throw java.lang.RuntimeException()
+                        // throw java.lang.RuntimeException()
                         if (modules.size == 1) {
                             model.module = modules[0].second
                         }
@@ -226,12 +230,13 @@ private fun LanguageRegistry.loadJar(file: File): JarData {
                             entryName = entryName.removePrefix("module/models/")
                         }
                         entryName = entryName.replace("/", ".")
-                        entryName.startsWith(it.first) }
+                        entryName.startsWith(it.first)
+                    }
                     if (module != null) {
                         model.module = module.second
                     } else {
-                        //throw java.lang.RuntimeException()
-                        //println("A")
+                        // throw java.lang.RuntimeException()
+                        // println("A")
                         if (modules.size == 1) {
                             model.module = modules[0].second
                         }

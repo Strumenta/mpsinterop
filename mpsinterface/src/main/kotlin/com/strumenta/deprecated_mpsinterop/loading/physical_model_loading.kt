@@ -2,7 +2,16 @@ package com.strumenta.deprecated_mpsinterop.loading
 
 import com.strumenta.deprecated_mpsinterop.logicalmodel.LanguageId
 import com.strumenta.deprecated_mpsinterop.logicalmodel.NodeId
-import com.strumenta.deprecated_mpsinterop.physicalmodel.*
+import com.strumenta.deprecated_mpsinterop.physicalmodel.InModelReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.NullReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.OutsideModelReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalConcept
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalModel
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalNode
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalProperty
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalReferenceValue
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalRelation
+import com.strumenta.deprecated_mpsinterop.physicalmodel.RelationKind
 import com.strumenta.deprecated_mpsinterop.utils.Base64
 import com.strumenta.deprecated_mpsinterop.utils.loadDocument
 import com.strumenta.deprecated_mpsinterop.utils.processAllNodes
@@ -13,9 +22,7 @@ import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
-import java.lang.IllegalArgumentException
-import java.lang.RuntimeException
-import java.util.*
+import java.util.UUID
 
 fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, element: Element): PhysicalNode {
     val conceptIndex = element.getAttribute("concept")
@@ -49,8 +56,9 @@ fun elementToModelNode(physicalModel: PhysicalModel, parent: PhysicalNode?, elem
                     }
                 }
                 it.hasAttribute("node") -> InModelReferenceTarget(
-                        physicalModel,
-                        it.getAttribute("node"))
+                    physicalModel,
+                    it.getAttribute("node")
+                )
                 else -> throw IllegalArgumentException("A reference should have either the to or node attributes")
             }
             val refValue = PhysicalReferenceValue(target, it.getAttribute("resolve"))
@@ -138,32 +146,41 @@ fun loadModel(document: Document): PhysicalModel {
         physicalModel.putLanguageInRegistry(languageId, languageName)
         val simpleConceptName = it.getAttribute("name").split(".").last()
         val concept = PhysicalConcept(
-                LanguageId(languageId, languageName),
-                it.getAttribute("id").toLong(),
-                simpleConceptName, it.getAttribute("index"))
+            LanguageId(languageId, languageName),
+            it.getAttribute("id").toLong(),
+            simpleConceptName,
+            it.getAttribute("index")
+        )
         physicalModel.registerConcept(concept)
         it.processChildren("property") {
-            val property = PhysicalProperty(concept,
-                    it.getAttribute("id").toLong(),
-                    it.getAttribute("name"), it.getAttribute("index"))
+            val property = PhysicalProperty(
+                concept,
+                it.getAttribute("id").toLong(),
+                it.getAttribute("name"),
+                it.getAttribute("index")
+            )
             concept.addProperty(property)
             physicalModel.registerProperty(property)
         }
         it.processChildren("child") {
-            val relation = PhysicalRelation(concept,
-                    it.getAttribute("id").toLong(),
-                    it.getAttribute("name"),
-                    it.getAttribute("index"),
-                    RelationKind.CONTAINMENT)
+            val relation = PhysicalRelation(
+                concept,
+                it.getAttribute("id").toLong(),
+                it.getAttribute("name"),
+                it.getAttribute("index"),
+                RelationKind.CONTAINMENT
+            )
             concept.addRelation(relation)
             physicalModel.registerRelation(relation)
         }
         it.processChildren("reference") {
-            val relation = PhysicalRelation(concept,
-                    it.getAttribute("id").toLong(),
-                    it.getAttribute("name"),
-                    it.getAttribute("index"),
-                    RelationKind.REFERENCE)
+            val relation = PhysicalRelation(
+                concept,
+                it.getAttribute("id").toLong(),
+                it.getAttribute("name"),
+                it.getAttribute("index"),
+                RelationKind.REFERENCE
+            )
             concept.addRelation(relation)
             physicalModel.registerRelation(relation)
         }

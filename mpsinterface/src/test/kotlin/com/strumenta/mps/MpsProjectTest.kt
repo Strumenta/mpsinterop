@@ -2,7 +2,7 @@ package com.strumenta.mps
 
 import org.junit.Test
 import java.io.File
-import java.util.*
+import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -20,10 +20,15 @@ class MpsProjectTest {
     fun solutionNames() {
         val projectDir = File("src/test/resources/mpsserver_1")
         val project = MpsProject(projectDir)
-        assertEquals(setOf("com.strumenta.businessorg.sandbox", "com.strumenta.financialcalc.sandbox",
-        "com.strumenta.mpsserver.build", "com.strumenta.mpsserver.buildmeta", "com.strumenta.mpsserver.deps",
+        assertEquals(
+            setOf(
+                "com.strumenta.businessorg.sandbox", "com.strumenta.financialcalc.sandbox",
+                "com.strumenta.mpsserver.build", "com.strumenta.mpsserver.buildmeta", "com.strumenta.mpsserver.deps",
                 "com.strumenta.mpsserver.extensionkit", "com.strumenta.mpsserver.ide", "com.strumenta.mpsserver.launcher",
-                "com.strumenta.mpsserver.operations", "com.strumenta.mpsserver.server", "com.strumenta.mpsserver.server.tests"), project.solutionNames())
+                "com.strumenta.mpsserver.operations", "com.strumenta.mpsserver.server", "com.strumenta.mpsserver.server.tests"
+            ),
+            project.solutionNames()
+        )
     }
 
     @Test
@@ -83,9 +88,17 @@ class MpsProjectTest {
         val project = MpsProject(projectDir)
         val language = project.language("com.strumenta.businessorg")
         assertNotNull(language)
-        assertEquals(setOf("com.strumenta.businessorg.behavior", "com.strumenta.businessorg.constraints",
-                "com.strumenta.businessorg.editor", "com.strumenta.businessorg.intentions",
-                "com.strumenta.businessorg.structure", "com.strumenta.businessorg.typesystem"), language.modelNames())
+        assertEquals(
+            setOf(
+                "com.strumenta.businessorg.behavior",
+                "com.strumenta.businessorg.constraints",
+                "com.strumenta.businessorg.editor",
+                "com.strumenta.businessorg.intentions",
+                "com.strumenta.businessorg.structure",
+                "com.strumenta.businessorg.typesystem"
+            ),
+            language.modelNames()
+        )
     }
 
     @Test
@@ -252,10 +265,10 @@ class MpsProjectTest {
             val superclass = node.child("superclass")
             if (superclass != null && superclass.isReferenceLocal("classifier") == true) {
                 val superclassClassifier = superclass.reference("classifier")
-                superclassClassifier?.name == "RequestMessage"
-                        || superclassClassifier?.name == "RequestAnswerMessage"
-                        || superclassClassifier?.name == "Message"
-                        || superclassClassifier?.name == "Notification"
+                superclassClassifier?.name == "RequestMessage" ||
+                    superclassClassifier?.name == "RequestAnswerMessage" ||
+                    superclassClassifier?.name == "Message" ||
+                    superclassClassifier?.name == "Notification"
             } else {
                 false
             }
@@ -352,5 +365,4 @@ class MpsProjectTest {
         val indexType = index.child("type")!!
         assertEquals("jetbrains.mps.baseLanguage.structure.IntegerType", indexType.conceptName)
     }
-
 }

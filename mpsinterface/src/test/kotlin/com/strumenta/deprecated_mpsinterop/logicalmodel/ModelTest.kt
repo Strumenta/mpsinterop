@@ -1,8 +1,8 @@
 package com.strumenta.deprecated_mpsinterop.logicalmodel
 
 import org.junit.Test
-import java.lang.IllegalArgumentException
-import java.util.*
+import java.util.LinkedList
+import java.util.UUID
 import kotlin.test.assertEquals
 
 class ModelTest {

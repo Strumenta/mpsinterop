@@ -1,8 +1,7 @@
 package com.strumenta.deprecated_mpsinterop.logicalmodel
 
 import org.junit.Test
-import java.lang.IllegalArgumentException
-import java.util.*
+import java.util.UUID
 import kotlin.test.assertEquals
 
 class ConceptTest {
@@ -14,8 +13,10 @@ class ConceptTest {
         language.add(concept)
 
         val property = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property)
 
         assertEquals(listOf(property), concept.declaredProperties)
@@ -28,8 +29,10 @@ class ConceptTest {
         language.add(concept)
 
         val property = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property)
         concept.addProperty(property)
         assertEquals(listOf(property), concept.declaredProperties)
@@ -42,13 +45,17 @@ class ConceptTest {
         language.add(concept)
 
         val property = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property)
 
         val property2 = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 1253433L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 1253433L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property2)
     }
 
@@ -59,8 +66,10 @@ class ConceptTest {
         val superConcept = Concept(12444L, "MySuperConcept")
         language.add(superConcept)
         val superProperty = Property(
-                AbsolutePropertyId(superConcept.absoluteID!!, 12534L),
-                "MySuperProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(superConcept.absoluteID!!, 12534L),
+            "MySuperProperty",
+            PrimitivePropertyType.STRING
+        )
         superConcept.addProperty(superProperty)
 
         val concept = Concept(124L, "MyConcept")
@@ -68,8 +77,10 @@ class ConceptTest {
         language.add(concept)
 
         val property = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property)
 
         assertEquals(true, concept.allProperties.contains(superProperty))
@@ -83,8 +94,10 @@ class ConceptTest {
         val superConcept = Concept(12444L, "MySuperConcept")
         language.add(superConcept)
         val superProperty = Property(
-                AbsolutePropertyId(superConcept.absoluteID!!, 12534L),
-                "MySuperProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(superConcept.absoluteID!!, 12534L),
+            "MySuperProperty",
+            PrimitivePropertyType.STRING
+        )
         superConcept.addProperty(superProperty)
 
         val concept = Concept(124L, "MyConcept")
@@ -92,8 +105,10 @@ class ConceptTest {
         language.add(concept)
 
         val property = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property)
 
         assertEquals(true, concept.allProperties.contains(property))
@@ -107,8 +122,10 @@ class ConceptTest {
         language.add(concept)
 
         val property = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property)
 
         assertEquals(true, concept.hasPropertyNamed("MyProperty"))
@@ -121,8 +138,10 @@ class ConceptTest {
         language.add(concept)
 
         val property = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property)
 
         assertEquals(false, concept.hasPropertyNamed("SomeWeirdName"))
@@ -135,8 +154,10 @@ class ConceptTest {
         language.add(concept)
 
         val property = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property)
 
         assertEquals(property, concept.findProperty("MyProperty"))
@@ -149,8 +170,10 @@ class ConceptTest {
         language.add(concept)
 
         val property = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property)
 
         assertEquals(null, concept.findProperty("SomeWeirdName"))
@@ -163,8 +186,10 @@ class ConceptTest {
         language.add(concept)
 
         val property = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property)
 
         assertEquals(property, concept.getProperty("MyProperty"))
@@ -177,8 +202,10 @@ class ConceptTest {
         language.add(concept)
 
         val property = Property(
-                AbsolutePropertyId(concept.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(concept.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         concept.addProperty(property)
 
         concept.getProperty("SomeWeirdName")

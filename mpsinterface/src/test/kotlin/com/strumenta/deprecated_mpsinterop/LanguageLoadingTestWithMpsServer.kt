@@ -1,11 +1,11 @@
 package com.strumenta.deprecated_mpsinterop
 
-import com.strumenta.deprecated_mpsinterop.loading.*
+import com.strumenta.deprecated_mpsinterop.loading.loadLanguageFromDirectory
+import com.strumenta.deprecated_mpsinterop.loading.loadLanguageFromJar
 import com.strumenta.deprecated_mpsinterop.registries.LanguageRegistry
 import org.junit.Test
 import java.io.File
 import java.io.FileInputStream
-import java.lang.RuntimeException
 
 class LanguageLoadingTestWithMpsServer {
 
@@ -64,7 +64,7 @@ class LanguageLoadingTestWithMpsServer {
         }
     }
 
-    private fun lookForLanguageIn(languageRegistry: LanguageRegistry, name: String, dir: File) : Boolean {
+    private fun lookForLanguageIn(languageRegistry: LanguageRegistry, name: String, dir: File): Boolean {
         dir.listFiles().forEach {
             if (it.isFile && it.name == "$name-src.jar") {
                 languageRegistry.loadLanguageFromJar(FileInputStream(it))

@@ -1,7 +1,7 @@
 package com.strumenta.deprecated_mpsinterop.logicalmodel
 
 import org.junit.Test
-import java.util.*
+import java.util.UUID
 import kotlin.test.assertEquals
 
 class LanguageTest {

@@ -3,9 +3,7 @@ package com.strumenta.deprecated_mpsinterop.physicalmodel
 import com.strumenta.deprecated_mpsinterop.logicalmodel.LanguageId
 import com.strumenta.deprecated_mpsinterop.logicalmodel.NodeId
 import org.junit.Test
-import java.lang.IllegalArgumentException
-import java.util.*
-import kotlin.collections.HashSet
+import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 

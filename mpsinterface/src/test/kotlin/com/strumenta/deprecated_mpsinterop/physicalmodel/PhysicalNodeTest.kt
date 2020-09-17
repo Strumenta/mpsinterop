@@ -3,7 +3,7 @@ package com.strumenta.deprecated_mpsinterop.physicalmodel
 import com.strumenta.deprecated_mpsinterop.logicalmodel.LanguageId
 import com.strumenta.deprecated_mpsinterop.logicalmodel.NodeId
 import org.junit.Test
-import java.util.*
+import java.util.UUID
 import kotlin.test.assertEquals
 
 class PhysicalNodeTest {
@@ -131,8 +131,12 @@ class PhysicalNodeTest {
     @Test
     fun childrenRelationNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
@@ -143,8 +147,12 @@ class PhysicalNodeTest {
     @Test(expected = IllegalArgumentException::class)
     fun childrenRelationPassingReference() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
@@ -154,8 +162,12 @@ class PhysicalNodeTest {
     @Test
     fun childrenRelationPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
@@ -170,8 +182,12 @@ class PhysicalNodeTest {
     @Test
     fun childrenStringNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
@@ -186,8 +202,12 @@ class PhysicalNodeTest {
     @Test
     fun childrenStringPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
@@ -202,8 +222,12 @@ class PhysicalNodeTest {
     @Test
     fun numberOfChildrenNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
@@ -218,8 +242,12 @@ class PhysicalNodeTest {
     @Test
     fun numberOfChildrenPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
@@ -234,8 +262,12 @@ class PhysicalNodeTest {
     @Test
     fun findNodeByIDNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
@@ -250,8 +282,12 @@ class PhysicalNodeTest {
     @Test
     fun findNodeByIDRootPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
@@ -266,8 +302,12 @@ class PhysicalNodeTest {
     @Test
     fun findNodeByIDNonRootPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.CONTAINMENT)
         model.registerRelation(relation)
         val node1 = PhysicalNode(null, concept, NodeId.regular(124L))
@@ -282,8 +322,12 @@ class PhysicalNodeTest {
     @Test
     fun referenceKeyNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
         model.registerRelation(relation)
 
@@ -295,8 +339,12 @@ class PhysicalNodeTest {
     @Test
     fun referenceKeyPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
         model.registerRelation(relation)
 
@@ -310,8 +358,12 @@ class PhysicalNodeTest {
     @Test
     fun referenceStringNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
         model.registerRelation(relation)
 
@@ -323,8 +375,12 @@ class PhysicalNodeTest {
     @Test
     fun referenceStringPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val relation = PhysicalRelation(concept, 54534534L, "MyRelation", "23ddd", RelationKind.REFERENCE)
         model.registerRelation(relation)
 
@@ -338,8 +394,12 @@ class PhysicalNodeTest {
     @Test
     fun propertyValueKeyNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 
@@ -351,8 +411,12 @@ class PhysicalNodeTest {
     @Test
     fun propertyValueKeyPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 
@@ -365,8 +429,12 @@ class PhysicalNodeTest {
     @Test
     fun propertyValueKeyWithDefaultNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 
@@ -378,8 +446,12 @@ class PhysicalNodeTest {
     @Test
     fun propertyValueKeyWithDefaultPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 
@@ -392,8 +464,12 @@ class PhysicalNodeTest {
     @Test
     fun propertyValueStringNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 
@@ -405,8 +481,12 @@ class PhysicalNodeTest {
     @Test
     fun propertyValueStringPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 
@@ -419,8 +499,12 @@ class PhysicalNodeTest {
     @Test
     fun booleanPropertyValueStringPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 
@@ -436,8 +520,12 @@ class PhysicalNodeTest {
     @Test
     fun booleanPropertyValueStringNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 
@@ -449,8 +537,12 @@ class PhysicalNodeTest {
     @Test
     fun longPropertyValueStringPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 
@@ -463,8 +555,12 @@ class PhysicalNodeTest {
     @Test
     fun longPropertyValueStringNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 
@@ -476,8 +572,12 @@ class PhysicalNodeTest {
     @Test
     fun stringPropertyValueStringPositiveCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 
@@ -490,8 +590,12 @@ class PhysicalNodeTest {
     @Test
     fun stringPropertyValueStringNegativeCase() {
         val model = PhysicalModel(UUID.randomUUID(), "MyModel")
-        val concept = PhysicalConcept(LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"), 123L,
-                "MyConcept", "123x")
+        val concept = PhysicalConcept(
+            LanguageId(UUID.fromString("c72da2b9-7cce-4447-8389-f407dc1158b7"), "MyLanguage"),
+            123L,
+            "MyConcept",
+            "123x"
+        )
         val property = PhysicalProperty(concept, 54534534L, "MyProperty", "23ddd")
         model.registerProperty(property)
 

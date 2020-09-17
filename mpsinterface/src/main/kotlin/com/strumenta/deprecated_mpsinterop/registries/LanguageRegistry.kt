@@ -3,12 +3,37 @@ package com.strumenta.deprecated_mpsinterop.registries
 import com.strumenta.deprecated_mpsinterop.loading.ModelLocator
 import com.strumenta.deprecated_mpsinterop.loading.NodeLocator
 import com.strumenta.deprecated_mpsinterop.loading.SimpleNodeLocator
-import com.strumenta.deprecated_mpsinterop.logicalmodel.*
-import com.strumenta.deprecated_mpsinterop.physicalmodel.*
+import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsoluteConceptId
+import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsolutePropertyId
+import com.strumenta.deprecated_mpsinterop.logicalmodel.AbstractConcept
+import com.strumenta.deprecated_mpsinterop.logicalmodel.Concept
+import com.strumenta.deprecated_mpsinterop.logicalmodel.ConstrainedPropertyType
+import com.strumenta.deprecated_mpsinterop.logicalmodel.EnumerationAlternative
+import com.strumenta.deprecated_mpsinterop.logicalmodel.EnumerationDeclarationType
+import com.strumenta.deprecated_mpsinterop.logicalmodel.EnumerationPropertyType
+import com.strumenta.deprecated_mpsinterop.logicalmodel.InterfaceConcept
+import com.strumenta.deprecated_mpsinterop.logicalmodel.Language
+import com.strumenta.deprecated_mpsinterop.logicalmodel.LanguageUUID
+import com.strumenta.deprecated_mpsinterop.logicalmodel.PrimitivePropertyType
+import com.strumenta.deprecated_mpsinterop.logicalmodel.Property
+import com.strumenta.deprecated_mpsinterop.logicalmodel.PropertyType
+import com.strumenta.deprecated_mpsinterop.physicalmodel.CONCEPT_DECLARATION_CONCEPT_NAME
+import com.strumenta.deprecated_mpsinterop.physicalmodel.CONSTRAINED_DATA_TYPE_DECLARATION_CONCEPT_NAME
+import com.strumenta.deprecated_mpsinterop.physicalmodel.ENUMERATION_DATA_TYPE_DECLARATION_CONCEPT_NAME
+import com.strumenta.deprecated_mpsinterop.physicalmodel.ENUMERATION_DECLARATION_CONCEPT_NAME
+import com.strumenta.deprecated_mpsinterop.physicalmodel.ExplicitReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.INTERFACE_CONCEPT_DECLARATION_CONCEPT_NAME
+import com.strumenta.deprecated_mpsinterop.physicalmodel.InModelReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.NullReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.OutsideModelReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PRIMITIVE_DATA_TYPE_DECLARATION_CONCEPT_NAME
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalLanguageModule
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalModel
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalNode
+import com.strumenta.deprecated_mpsinterop.physicalmodel.ReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.name
 import com.strumenta.deprecated_mpsinterop.utils.Base64
-import java.lang.RuntimeException
-import java.util.*
-import kotlin.collections.HashMap
+import java.util.UUID
 
 class LanguageRegistry : ModelLocator {
     override fun locateModel(name: String): PhysicalModel? {
@@ -170,9 +195,9 @@ class LanguageRegistry : ModelLocator {
                     loadEnumerationAlternative(it)
                 }.toList()
                 val enumerationType = EnumerationPropertyType(
-                        node.name()!!,
-                        loadPropertyTypeFromNode(baseTypeNode) as PrimitivePropertyType,
-                        alternatives
+                    node.name()!!,
+                    loadPropertyTypeFromNode(baseTypeNode) as PrimitivePropertyType,
+                    alternatives
                 )
                 return enumerationType
             }
@@ -188,8 +213,10 @@ class LanguageRegistry : ModelLocator {
     }
 
     private fun loadEnumerationAlternative(node: PhysicalNode): EnumerationAlternative {
-        return EnumerationAlternative(node.propertyValue("externalValue")!!,
-                node.propertyValue("internalValue", null))
+        return EnumerationAlternative(
+            node.propertyValue("externalValue")!!,
+            node.propertyValue("internalValue", null)
+        )
     }
 
     private fun loadConceptFromNode(it: PhysicalNode): AbstractConcept? {
@@ -202,7 +229,7 @@ class LanguageRegistry : ModelLocator {
                 return null
             }
             val l = languagesByUUID[langUUID]
-                    ?: throw RuntimeException("Language with ID $langUUID not found")
+                ?: throw RuntimeException("Language with ID $langUUID not found")
             l.add(concept)
         }
 
@@ -226,21 +253,23 @@ class LanguageRegistry : ModelLocator {
                 // implements
                 val implementsValue = it.children("implements")
                 concept.implemented.clear()
-                concept.implemented.addAll(implementsValue.map {
-                    try {
-                        val interfaceDeclaration = this.resolveAsConcept(it.reference("intfc")!!.target) as InterfaceConcept
-                        interfaceDeclaration!!
-                    } catch (e: RuntimeException) {
-                        throw RuntimeException("Issue while loading for interface for concept ${concept.qualifiedName()}", e)
+                concept.implemented.addAll(
+                    implementsValue.map {
+                        try {
+                            val interfaceDeclaration = this.resolveAsConcept(it.reference("intfc")!!.target) as InterfaceConcept
+                            interfaceDeclaration!!
+                        } catch (e: RuntimeException) {
+                            throw RuntimeException("Issue while loading for interface for concept ${concept.qualifiedName()}", e)
+                        }
                     }
-                })
+                )
 
                 it.children("propertyDeclaration").forEach {
                     val name = it.propertyValue("name")!!
                     val conceptId = concept.id
                     val idValue: Long = it.propertyValue("propertyId")!!.toLong()
                     val dataType = it.reference("dataType")
-                            ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
+                        ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
                     val propertyTypeNode = nodeLocator.resolve(dataType.target)!!
                     val propertyType = loadPropertyTypeFromNode(propertyTypeNode)
                     concept.addProperty(Property(AbsolutePropertyId(concept.absoluteID!!, idValue), name, propertyType))
@@ -259,7 +288,7 @@ class LanguageRegistry : ModelLocator {
                     val conceptId = concept.id
                     val idValue: Long = it.propertyValue("propertyId")!!.toLong()
                     val dataType = it.reference("dataType")
-                            ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
+                        ?: throw RuntimeException("Reference dataType not found in node $name of type $conceptId, in concept ${concept.name}")
                     val propertyTypeNode = nodeLocator.resolve(dataType.target)!!
                     val propertyType = loadPropertyTypeFromNode(propertyTypeNode)
                     concept.addProperty(Property(AbsolutePropertyId(concept.absoluteID!!, idValue), name, propertyType))

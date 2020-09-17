@@ -1,11 +1,11 @@
 package com.strumenta.deprecated_mpsinterop.binary
 
-import com.strumenta.deprecated_mpsinterop.logicalmodel.*
+import com.strumenta.deprecated_mpsinterop.logicalmodel.* // ktlint-disable
 import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.io.IOException
 import java.io.InputStream
-import java.util.*
+import java.util.* // ktlint-disable
 
 /**
  * Original code written by Evgeny Gryaznov

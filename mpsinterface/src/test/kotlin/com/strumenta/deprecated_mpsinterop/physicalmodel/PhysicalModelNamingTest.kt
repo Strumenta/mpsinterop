@@ -10,7 +10,8 @@ class PhysicalModelNamingTest {
     @Test
     fun physicalNodeNamePresent() {
         val model = loadMpsModel(
-                PhysicalModelNamingTest::class.java.getResourceAsStream("/formats-structure.mps"))
+            PhysicalModelNamingTest::class.java.getResourceAsStream("/formats-structure.mps")
+        )
         val field = model.findNodeByID(8160220614791809963L)
         assertNotNull(field)
         assertEquals("Field", field.name())
@@ -19,7 +20,8 @@ class PhysicalModelNamingTest {
     @Test
     fun physicalNodeNameNotPresent() {
         val model = loadMpsModel(
-                PhysicalModelNamingTest::class.java.getResourceAsStream("/formats-structure.mps"))
+            PhysicalModelNamingTest::class.java.getResourceAsStream("/formats-structure.mps")
+        )
         val anInterfaceConceptReference = model.findNodeByID(7828601061921860417L)
         assertNotNull(anInterfaceConceptReference)
         assertEquals(null, anInterfaceConceptReference.name())

@@ -5,23 +5,28 @@ import com.strumenta.deprecated_mpsinterop.logicalmodel.Concept
 import com.strumenta.deprecated_mpsinterop.logicalmodel.InterfaceConcept
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalModule
 import com.strumenta.deprecated_mpsinterop.registries.LanguageRegistry
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.*
+import java.util.UUID
 
 class LanguageLoadingTest {
 
     @Test
     fun loadBaseConcept() {
         val languageRegistry = LanguageRegistry()
-        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/jetbrains.mps.lang.core-src.jar"))
+        languageRegistry.loadLanguageFromJar(
+            LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"
+            )
+        )
         val concept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.BaseConcept")!!
         assertNotNull(concept)
         assertTrue(concept is Concept)
         assertEquals(true, concept.abstract)
-        //assertEquals(null, concept.extended)
-        //assertEquals(0, concept.implemented.size)
+        // assertEquals(null, concept.extended)
+        // assertEquals(0, concept.implemented.size)
         assertEquals("", concept.alias)
         assertEquals(2, concept.declaredProperties.size)
     }
@@ -29,11 +34,17 @@ class LanguageLoadingTest {
     @Test
     fun loadINamedConcept() {
         val languageRegistry = LanguageRegistry()
-        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/jetbrains.mps.lang.core-src.jar"))
+        languageRegistry.loadLanguageFromJar(
+            LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"
+            )
+        )
         injectIValidIdentifier(languageRegistry)
-        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/jetbrains.mps.lang.structure-src.jar"))
+        languageRegistry.loadLanguageFromJar(
+            LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.structure-src.jar"
+            )
+        )
         val concept = languageRegistry.getConcept("jetbrains.mps.lang.core.structure.INamedConcept") as InterfaceConcept
         assertNotNull(concept)
 //        assertEquals(true, concept.isInterface)
@@ -51,11 +62,17 @@ class LanguageLoadingTest {
     @Test
     fun loadConceptDeclaration() {
         val languageRegistry = LanguageRegistry()
-        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/jetbrains.mps.lang.core-src.jar"))
+        languageRegistry.loadLanguageFromJar(
+            LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"
+            )
+        )
         injectIValidIdentifier(languageRegistry)
-        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/jetbrains.mps.lang.structure-src.jar"))
+        languageRegistry.loadLanguageFromJar(
+            LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.structure-src.jar"
+            )
+        )
         val concept = languageRegistry.getConcept("jetbrains.mps.lang.structure.structure.ConceptDeclaration") as Concept
         assertNotNull(concept)
         assertEquals(false, concept.abstract)
@@ -76,8 +93,11 @@ class LanguageLoadingTest {
     fun loadConstraintConcept() {
         val inputStream = LanguageLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val languageRegistry = LanguageRegistry()
-        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/jetbrains.mps.lang.core-src.jar"))
+        languageRegistry.loadLanguageFromJar(
+            LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"
+            )
+        )
 
         // jetbrains.mps.lang.core should be registered
         assertTrue(languageRegistry.knowsLanguageUUID(UUID.fromString("ceab5195-25ea-4f22-9b92-103b95ca8c0c")))
@@ -100,8 +120,11 @@ class LanguageLoadingTest {
     fun loadConceptDeclaredProperties() {
         val inputStream = LanguageLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val languageRegistry = LanguageRegistry()
-        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/jetbrains.mps.lang.core-src.jar"))
+        languageRegistry.loadLanguageFromJar(
+            LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"
+            )
+        )
 
         val module = PhysicalModule(UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"), "Formats")
         languageRegistry.loadLanguageFromMpsInputStream(inputStream, module)
@@ -115,8 +138,11 @@ class LanguageLoadingTest {
     fun loadConceptAllProperties() {
         val inputStream = LanguageLoadingTest::class.java.getResourceAsStream("/formats-structure.mps")
         val languageRegistry = LanguageRegistry()
-        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/jetbrains.mps.lang.core-src.jar"))
+        languageRegistry.loadLanguageFromJar(
+            LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.core-src.jar"
+            )
+        )
 
         val module = PhysicalModule(UUID.fromString("040f4d08-2e19-478e-bafc-1ae65578e650"), "Formats")
         languageRegistry.loadLanguageFromMpsInputStream(inputStream, module)

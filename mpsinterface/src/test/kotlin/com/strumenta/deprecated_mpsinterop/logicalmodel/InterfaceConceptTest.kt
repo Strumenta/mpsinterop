@@ -1,8 +1,7 @@
 package com.strumenta.deprecated_mpsinterop.logicalmodel
 
 import org.junit.Test
-import java.lang.IllegalArgumentException
-import java.util.*
+import java.util.UUID
 import kotlin.test.assertEquals
 
 class InterfaceConceptTest {
@@ -14,8 +13,10 @@ class InterfaceConceptTest {
         language.add(intf)
 
         val property = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property)
 
         assertEquals(listOf(property), intf.declaredProperties)
@@ -28,8 +29,10 @@ class InterfaceConceptTest {
         language.add(intf)
 
         val property = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property)
         intf.addProperty(property)
         assertEquals(listOf(property), intf.declaredProperties)
@@ -42,13 +45,17 @@ class InterfaceConceptTest {
         language.add(intf)
 
         val property = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property)
 
         val property2 = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 1253433L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 1253433L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property2)
     }
 
@@ -59,8 +66,10 @@ class InterfaceConceptTest {
         val superIntf = InterfaceConcept(12444L, "MySuperConcept")
         language.add(superIntf)
         val superProperty = Property(
-                AbsolutePropertyId(superIntf.absoluteID!!, 12534L),
-                "MySuperProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(superIntf.absoluteID!!, 12534L),
+            "MySuperProperty",
+            PrimitivePropertyType.STRING
+        )
         superIntf.addProperty(superProperty)
 
         val intf = InterfaceConcept(124L, "MyConcept")
@@ -68,8 +77,10 @@ class InterfaceConceptTest {
         language.add(intf)
 
         val property = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property)
 
         assertEquals(true, intf.allProperties.contains(superProperty))
@@ -83,8 +94,10 @@ class InterfaceConceptTest {
         val superIntf = InterfaceConcept(12444L, "MySuperConcept")
         language.add(superIntf)
         val superProperty = Property(
-                AbsolutePropertyId(superIntf.absoluteID!!, 12534L),
-                "MySuperProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(superIntf.absoluteID!!, 12534L),
+            "MySuperProperty",
+            PrimitivePropertyType.STRING
+        )
         superIntf.addProperty(superProperty)
 
         val intf = InterfaceConcept(124L, "MyConcept")
@@ -92,8 +105,10 @@ class InterfaceConceptTest {
         language.add(intf)
 
         val property = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property)
 
         assertEquals(true, intf.allProperties.contains(property))
@@ -107,8 +122,10 @@ class InterfaceConceptTest {
         language.add(intf)
 
         val property = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property)
 
         assertEquals(true, intf.hasPropertyNamed("MyProperty"))
@@ -121,8 +138,10 @@ class InterfaceConceptTest {
         language.add(intf)
 
         val property = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property)
 
         assertEquals(false, intf.hasPropertyNamed("SomeWeirdName"))
@@ -135,8 +154,10 @@ class InterfaceConceptTest {
         language.add(intf)
 
         val property = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property)
 
         assertEquals(property, intf.findProperty("MyProperty"))
@@ -149,8 +170,10 @@ class InterfaceConceptTest {
         language.add(intf)
 
         val property = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property)
 
         assertEquals(null, intf.findProperty("SomeWeirdName"))
@@ -163,8 +186,10 @@ class InterfaceConceptTest {
         language.add(intf)
 
         val property = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property)
 
         assertEquals(property, intf.getProperty("MyProperty"))
@@ -177,8 +202,10 @@ class InterfaceConceptTest {
         language.add(intf)
 
         val property = Property(
-                AbsolutePropertyId(intf.absoluteID!!, 12534L),
-                "MyProperty", PrimitivePropertyType.STRING)
+            AbsolutePropertyId(intf.absoluteID!!, 12534L),
+            "MyProperty",
+            PrimitivePropertyType.STRING
+        )
         intf.addProperty(property)
 
         intf.getProperty("SomeWeirdName")

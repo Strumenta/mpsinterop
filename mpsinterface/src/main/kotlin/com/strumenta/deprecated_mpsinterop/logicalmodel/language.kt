@@ -1,7 +1,8 @@
 package com.strumenta.deprecated_mpsinterop.logicalmodel
 
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalLanguageModule
-import java.util.*
+import java.util.LinkedList
+import java.util.UUID
 
 typealias LanguageUUID = UUID
 

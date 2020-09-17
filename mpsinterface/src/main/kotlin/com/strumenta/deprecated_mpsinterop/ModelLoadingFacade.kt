@@ -1,11 +1,11 @@
 package com.strumenta.deprecated_mpsinterop
 
-import com.strumenta.deprecated_mpsinterop.loading.*
+import com.strumenta.deprecated_mpsinterop.loading.* // ktlint-disable
 import com.strumenta.deprecated_mpsinterop.logicalmodel.Model
 import com.strumenta.deprecated_mpsinterop.registries.LanguageRegistry
 import java.io.File
 import java.lang.RuntimeException
-import java.util.*
+import java.util.* // ktlint-disable
 
 class ModelLoadingFacade(mpsInstallation: File, projectPath: File) {
 
@@ -13,14 +13,14 @@ class ModelLoadingFacade(mpsInstallation: File, projectPath: File) {
     protected val converter = PhysicalToLogicalConverter(languageRegistry)
     private val physicalToLogicalConverter = PhysicalToLogicalConverter(languageRegistry)
 
-    private val indexer : Indexer = Indexer()
+    private val indexer: Indexer = Indexer()
 
     init {
         indexer.indexMpsDirectory(mpsInstallation)
         indexer.indexMpsProject(projectPath)
     }
 
-    fun loadModel(moduleName: String, modelName: String) : Model {
+    fun loadModel(moduleName: String, modelName: String): Model {
         val solutionIndexElement = indexer.findSolutionByName("com.strumenta.mpsserver.server")
         // first of all we need to find where the model is
         try {
@@ -350,4 +350,3 @@ class ModelLoadingFacade(mpsInstallation: File, projectPath: File) {
 //        return module.loadModel(modelName)
 //    }
 }
-

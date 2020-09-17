@@ -6,7 +6,7 @@ import com.strumenta.deprecated_mpsinterop.utils.processChildren
 import org.w3c.dom.Document
 import java.io.InputStream
 import java.lang.RuntimeException
-import java.util.*
+import java.util.* // ktlint-disable
 
 data class LanguageDep(val name: String, val uuid: UUID, val version: Int) {
     init {
@@ -18,24 +18,30 @@ class Dependencies {
     val languages = mutableListOf<LanguageDep>()
 }
 
-fun calculateDependenciesForModel(document: Document) : Dependencies {
+fun calculateDependenciesForModel(document: Document): Dependencies {
     val deps = Dependencies()
-    document.documentElement.processChildren("languages", { languages ->
-        languages.processChildren("use", { use ->
-            val uuid = UUID.fromString(use.getAttribute("id"))
-            val name = use.getAttribute("name")
-            val version = use.getAttribute("version").toInt()
-            deps.languages.add(LanguageDep(name, uuid, version))
-        })
-    })
+    document.documentElement.processChildren(
+        "languages",
+        { languages ->
+            languages.processChildren(
+                "use",
+                { use ->
+                    val uuid = UUID.fromString(use.getAttribute("id"))
+                    val name = use.getAttribute("name")
+                    val version = use.getAttribute("version").toInt()
+                    deps.languages.add(LanguageDep(name, uuid, version))
+                }
+            )
+        }
+    )
     return deps
 }
 
-fun calculateDependenciesForSolution(indexElement: Indexer.IndexElement) : Dependencies {
+fun calculateDependenciesForSolution(indexElement: Indexer.IndexElement): Dependencies {
     return calculateDependenciesForSolution(indexElement.inputStream())
 }
 
-fun calculateDependenciesForLanguage(indexElement: Indexer.IndexElement) : Dependencies {
+fun calculateDependenciesForLanguage(indexElement: Indexer.IndexElement): Dependencies {
     try {
         return calculateDependenciesForLanguage(indexElement.inputStream())
     } catch (t: Throwable) {
@@ -43,7 +49,7 @@ fun calculateDependenciesForLanguage(indexElement: Indexer.IndexElement) : Depen
     }
 }
 
-fun calculateDependenciesForSolution(inputStream: InputStream) : Dependencies {
+fun calculateDependenciesForSolution(inputStream: InputStream): Dependencies {
     val deps = Dependencies()
     val doc = loadDocument(inputStream)
     doc.documentElement.processAllNodes("language") {
@@ -58,7 +64,7 @@ fun calculateDependenciesForSolution(inputStream: InputStream) : Dependencies {
     return deps
 }
 
-fun calculateDependenciesForLanguage(inputStream: InputStream) : Dependencies {
+fun calculateDependenciesForLanguage(inputStream: InputStream): Dependencies {
     val deps = Dependencies()
     val doc = loadDocument(inputStream)
     val thisUUID = UUID.fromString(doc.documentElement.getAttribute("uuid"))

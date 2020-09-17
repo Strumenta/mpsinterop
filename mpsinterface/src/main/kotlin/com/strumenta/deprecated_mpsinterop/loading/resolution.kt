@@ -28,9 +28,10 @@ class PhysicalToLogicalConverter(
             val id = physicalNode.id // NodeId.regular(Base64.parseLong(physicalNode.id))
             val concept = this.toLogical(physicalNode.concept) as Concept
             val logicalNode = Node(
-                    /*physicalNode.parent?.toLogical(this),*/
-                    concept,
-                    id)
+                /*physicalNode.parent?.toLogical(this),*/
+                concept,
+                id
+            )
             concept.allProperties.forEach {
                 val value = physicalNode.propertyValue(it.name, null)
                 if (value != null) {
@@ -66,4 +67,4 @@ class PhysicalToLogicalConverter(
 }
 
 fun PhysicalNode.toLogical(physicalToLogicalConverter: PhysicalToLogicalConverter) =
-        physicalToLogicalConverter.toLogical(this)
+    physicalToLogicalConverter.toLogical(this)

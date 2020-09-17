@@ -2,7 +2,7 @@ package com.strumenta.deprecated_mpsinterop.physicalmodel
 
 import com.strumenta.deprecated_mpsinterop.logicalmodel.LanguageId
 import com.strumenta.deprecated_mpsinterop.utils.isSimpleName
-import java.util.*
+import java.util.LinkedList
 
 /**
  * Simplified concept, as it appears in a model
@@ -28,7 +28,7 @@ data class PhysicalConcept(
      */
     fun getPropertyByName(name: String): PhysicalProperty {
         return findPropertyByName(name)
-                ?: throw IllegalArgumentException("Property $name not found in concept $name")
+            ?: throw IllegalArgumentException("Property $name not found in concept $name")
     }
 
     fun findPropertyByName(name: String): PhysicalProperty? {
@@ -41,7 +41,7 @@ data class PhysicalConcept(
 
     fun relationByName(name: String): PhysicalRelation {
         return relations.find { it.name == name }
-                ?: throw IllegalArgumentException("Relation $name not found in concept $name")
+            ?: throw IllegalArgumentException("Relation $name not found in concept $name")
     }
 
     fun hasProperty(property: PhysicalProperty): Boolean {

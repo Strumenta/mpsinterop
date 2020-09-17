@@ -17,6 +17,7 @@ buildscript {
 
 plugins {
     id 'org.jetbrains.kotlin.jvm'
+    id 'application'
     id "org.jlleitschuh.gradle.ktlint" version "9.4.0"
 }
 
@@ -33,7 +34,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    implementation 'com.google.code.gson:gson:2.8.6'
+    compile 'com.google.code.gson:gson:2.8.6'
+    compile 'com.github.ajalt:clikt:2.1.0'
 }
 
 sourceCompatibility = 1.8
@@ -44,3 +46,18 @@ test {
         events "passed", "skipped", "failed", "standardOut", "standardError"
     }
 }
+
+application {
+    mainClassName = 'com.strumenta.mps.exporter.ExportertoolKt'
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": 'com.strumenta.mps.exporter.ExportertoolKt'
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+

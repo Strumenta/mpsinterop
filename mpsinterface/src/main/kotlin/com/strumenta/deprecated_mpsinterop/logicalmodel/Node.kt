@@ -1,7 +1,6 @@
 package com.strumenta.deprecated_mpsinterop.logicalmodel
 
-import java.util.*
-import kotlin.collections.HashMap
+import java.util.LinkedList
 
 open class Node(val concept: Concept, val nodeId: NodeId?) {
 

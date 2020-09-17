@@ -20,9 +20,12 @@ class NodeSerializationTest {
         val index = children.find { it.name == "index" }!!
         val json = index.toJsonObject()
         assertEquals(setOf("properties", "children", "references", "conceptName", "id", "containmentLinkName"), json.keySet())
-        assertEquals(JsonObject().apply {
-            addProperty("name", "index")
-        }, json.get("properties"))
+        assertEquals(
+            JsonObject().apply {
+                addProperty("name", "index")
+            },
+            json.get("properties")
+        )
         assertEquals(JsonArray(), json.get("references"))
         assertEquals(JsonPrimitive("member"), json.get("containmentLinkName"))
         assertEquals(JsonPrimitive("jetbrains.mps.baseLanguage.structure.FieldDeclaration"), json.get("conceptName"))
@@ -42,9 +45,12 @@ class NodeSerializationTest {
         val container = children.find { it.name == "container" }!!
         val json = container.toJsonObject()
         assertEquals(setOf("properties", "children", "references", "conceptName", "id", "containmentLinkName"), json.keySet())
-        assertEquals(JsonObject().apply {
-            addProperty("name", "container")
-        }, json.get("properties"))
+        assertEquals(
+            JsonObject().apply {
+                addProperty("name", "container")
+            },
+            json.get("properties")
+        )
         assertEquals(JsonArray(), json.get("references"))
         assertEquals(JsonPrimitive("member"), json.get("containmentLinkName"))
         assertEquals(JsonPrimitive("jetbrains.mps.baseLanguage.structure.FieldDeclaration"), json.get("conceptName"))
@@ -73,5 +79,4 @@ class NodeSerializationTest {
         val roots = json.get("roots").asJsonArray
         assertEquals(88, roots.size())
     }
-
 }

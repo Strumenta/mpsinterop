@@ -2,9 +2,8 @@ package com.strumenta.deprecated_mpsinterop.physicalmodel
 
 import com.strumenta.deprecated_mpsinterop.logicalmodel.LanguageUUID
 import com.strumenta.deprecated_mpsinterop.logicalmodel.NodeId
-import java.lang.IllegalArgumentException
-import java.util.*
-import kotlin.collections.HashMap
+import java.util.LinkedList
+import java.util.UUID
 
 /**
  * A model, as defined in a file.
@@ -25,7 +24,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
     private val propertiesByIndex = HashMap<String, PhysicalProperty>()
     private val explictLanguageUses_ = mutableListOf<ExplicitLanguageUse>()
 
-    val explicitLanguageUses : List<ExplicitLanguageUse>
+    val explicitLanguageUses: List<ExplicitLanguageUse>
         get() = explictLanguageUses_.toList()
 
     // /////////////////////////////////////
@@ -85,7 +84,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
 
     fun languageUuidFromName(languageName: String): LanguageUUID {
         return languages.find { it.name == languageName }?.uuid
-                ?: throw IllegalArgumentException("Unable to find UUID for language $languageName")
+            ?: throw IllegalArgumentException("Unable to find UUID for language $languageName")
     }
 
     fun putLanguageInRegistry(languageUUID: LanguageUUID, languageName: String) {
@@ -101,7 +100,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
     }
 
     fun modelUUIDFromIndex(index: String): UUID = models.find { it.index == index }?.uuid
-            ?: throw IllegalArgumentException("Unknown model index $index. Known indexes: ${models.joinToString(", ") { it.index }}")
+        ?: throw IllegalArgumentException("Unknown model index $index. Known indexes: ${models.joinToString(", ") { it.index }}")
 
     // /////////////////////////////////////
     // Concepts
@@ -131,7 +130,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
     }
 
     fun getRelationByIndex(index: String): PhysicalRelation = relationsByIndex[index]
-            ?: throw IllegalArgumentException("Relation with index $index not found")
+        ?: throw IllegalArgumentException("Relation with index $index not found")
 
     // /////////////////////////////////////
     // Properties
@@ -145,7 +144,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
     }
 
     fun getPropertyByIndex(index: String): PhysicalProperty = propertiesByIndex[index]
-            ?: throw IllegalArgumentException("Property with index $index not found")
+        ?: throw IllegalArgumentException("Property with index $index not found")
 
     fun findPropertyByName(conceptName: String, propertyName: String): PhysicalProperty? {
         return conceptsByQName[conceptName]?.findPropertyByName(propertyName)
@@ -153,7 +152,7 @@ class PhysicalModel(val uuid: UUID, val name: String) {
 
     fun getPropertyByName(conceptName: String, propertyName: String): PhysicalProperty {
         return findPropertyByName(conceptName, propertyName)
-                ?: throw IllegalArgumentException("Property $conceptName.$propertyName not found")
+            ?: throw IllegalArgumentException("Property $conceptName.$propertyName not found")
     }
 
     // /////////////////////////////////////

@@ -2,7 +2,7 @@ package com.strumenta.deprecated_mpsinterop.physicalmodel
 
 import com.strumenta.deprecated_mpsinterop.logicalmodel.NodeId
 import com.strumenta.deprecated_mpsinterop.utils.Base64
-import java.util.*
+import java.util.UUID
 
 sealed class ReferenceTarget
 

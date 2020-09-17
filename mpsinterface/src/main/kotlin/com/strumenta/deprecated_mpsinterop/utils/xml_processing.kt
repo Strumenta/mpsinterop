@@ -7,18 +7,18 @@ import java.io.InputStream
 fun Element.processAllNodes(op: (Element) -> Unit) {
     op(this)
     (0..(this.childNodes.length))
-            .asSequence()
-            .map { this.childNodes.item(it) }
-            .filterIsInstance<Element>()
-            .forEach { it.processAllNodes(op) }
+        .asSequence()
+        .map { this.childNodes.item(it) }
+        .filterIsInstance<Element>()
+        .forEach { it.processAllNodes(op) }
 }
 
 fun Element.processChildren(op: (Element) -> Unit) {
     (0..(this.childNodes.length))
-            .asSequence()
-            .map { this.childNodes.item(it) }
-            .filterIsInstance<Element>()
-            .forEach { op(it) }
+        .asSequence()
+        .map { this.childNodes.item(it) }
+        .filterIsInstance<Element>()
+        .forEach { op(it) }
 }
 
 fun Element.processAllNodes(tagName: String, op: (Element) -> Unit) {

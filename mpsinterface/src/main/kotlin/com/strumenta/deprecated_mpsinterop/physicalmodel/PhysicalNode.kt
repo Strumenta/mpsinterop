@@ -3,7 +3,7 @@ package com.strumenta.deprecated_mpsinterop.physicalmodel
 import com.strumenta.deprecated_mpsinterop.logicalmodel.NodeId
 import java.lang.IllegalStateException
 import java.lang.UnsupportedOperationException
-import java.util.*
+import java.util.* // ktlint-disable
 import kotlin.collections.HashMap
 
 class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val id: NodeId) {

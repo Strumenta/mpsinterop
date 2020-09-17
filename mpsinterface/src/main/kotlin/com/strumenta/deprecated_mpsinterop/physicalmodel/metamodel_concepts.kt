@@ -1,17 +1,17 @@
 package com.strumenta.deprecated_mpsinterop.physicalmodel
 
 const val CONCEPT_DECLARATION_CONCEPT_NAME =
-        "jetbrains.mps.lang.structure.structure.ConceptDeclaration"
+    "jetbrains.mps.lang.structure.structure.ConceptDeclaration"
 const val INTERFACE_CONCEPT_DECLARATION_CONCEPT_NAME =
-        "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration"
+    "jetbrains.mps.lang.structure.structure.InterfaceConceptDeclaration"
 const val ABSTRACT_CONCEPT_DECLARATION_CONCEPT_NAME =
-        "jetbrains.mps.lang.structure.structure.AbstractConceptDeclaration"
+    "jetbrains.mps.lang.structure.structure.AbstractConceptDeclaration"
 const val PRIMITIVE_DATA_TYPE_DECLARATION_CONCEPT_NAME =
-        "jetbrains.mps.lang.structure.structure.PrimitiveDataTypeDeclaration"
+    "jetbrains.mps.lang.structure.structure.PrimitiveDataTypeDeclaration"
 const val ENUMERATION_DATA_TYPE_DECLARATION_CONCEPT_NAME =
-        "jetbrains.mps.lang.structure.structure.EnumerationDataTypeDeclaration"
+    "jetbrains.mps.lang.structure.structure.EnumerationDataTypeDeclaration"
 const val CONSTRAINED_DATA_TYPE_DECLARATION_CONCEPT_NAME =
-        "jetbrains.mps.lang.structure.structure.ConstrainedDataTypeDeclaration"
+    "jetbrains.mps.lang.structure.structure.ConstrainedDataTypeDeclaration"
 const val ENUMERATION_DECLARATION_CONCEPT_NAME = "jetbrains.mps.lang.structure.structure.EnumerationDeclaration"
 
 const val ABSTRACT_PROP_NAME = "abstract"

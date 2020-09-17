@@ -1,8 +1,7 @@
 package com.strumenta.deprecated_mpsinterop.logicalmodel
 
-import java.lang.RuntimeException
-import java.lang.UnsupportedOperationException
-import java.util.*
+import java.util.LinkedList
+import java.util.UUID
 
 enum class ModuleType {
     LANGUAGE,
@@ -82,7 +81,9 @@ class Model(val name: String) {
 
     fun getRootByName(name: String): Node {
         return roots.find { it.name == name } ?: throw RuntimeException(
-                "No isRoot found with name $name. Roots have these names: ${roots.map { it.name
-        }.joinToString(", ")}")
+            "No isRoot found with name $name. Roots have these names: ${roots.map {
+                it.name
+            }.joinToString(", ")}"
+        )
     }
 }

@@ -1,11 +1,15 @@
 package com.strumenta.deprecated_mpsinterop
 import com.strumenta.deprecated_mpsinterop.binary.loadMpsModelFromBinaryFile
-import com.strumenta.deprecated_mpsinterop.loading.*
+import com.strumenta.deprecated_mpsinterop.loading.PhysicalToLogicalConverter
+import com.strumenta.deprecated_mpsinterop.loading.loadLanguageFromJar
+import com.strumenta.deprecated_mpsinterop.loading.loadMpsFile
 import com.strumenta.deprecated_mpsinterop.logicalmodel.Concept
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalModule
 import com.strumenta.deprecated_mpsinterop.registries.LanguageRegistry
-import java.util.*
-import kotlin.test.*
+import java.util.UUID
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class LoadingLogicalModelsFromMpsFile {
 
@@ -13,10 +17,13 @@ class LoadingLogicalModelsFromMpsFile {
         val languageRegistry = LanguageRegistry()
 
         val inputStream = LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/jetbrains.mps.lang.core-src-structure.mpb")
+            "/jetbrains.mps.lang.core-src-structure.mpb"
+        )
         val model = loadMpsModelFromBinaryFile(inputStream, languageRegistry)
-        val module = PhysicalModule(UUID.fromString("ceab5195-25ea-4f22-9b92-103b95ca8c0c"),
-                "jetbrains.mps.lang.core")
+        val module = PhysicalModule(
+            UUID.fromString("ceab5195-25ea-4f22-9b92-103b95ca8c0c"),
+            "jetbrains.mps.lang.core"
+        )
         model.module = module
         languageRegistry.loadLanguageFromModel(model)
 
@@ -65,9 +72,13 @@ class LoadingLogicalModelsFromMpsFile {
         val languageRegistry = loadBasicLanguageRegistry()
         // val physicalModelRegistry = PhysicalModelsRegistry()
         val formatsStructurePhysicalModel = languageRegistry.loadMpsFile(
-                LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream("/formats-structure.mps"))
-        languageRegistry.loadLanguageFromJar(LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
-                "/jetbrains.mps.lang.structure-src.jar"))
+            LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream("/formats-structure.mps")
+        )
+        languageRegistry.loadLanguageFromJar(
+            LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
+                "/jetbrains.mps.lang.structure-src.jar"
+            )
+        )
 
         // At this point we expect the language registry to contain the basic concepts needed for the conversion
         // of the Formats language

@@ -1,13 +1,13 @@
 package com.strumenta.deprecated_mpsinterop.binary
 
-import com.strumenta.deprecated_mpsinterop.logicalmodel.SModelReference
 import com.strumenta.deprecated_mpsinterop.logicalmodel.Node
+import com.strumenta.deprecated_mpsinterop.logicalmodel.SModelReference
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.deprecated_mpsinterop.registries.LanguageRegistry
-import java.io.*
+import java.io.* // ktlint-disable
 import java.io.IOException
 import java.sql.Types.REF
-import java.util.*
+import java.util.* // ktlint-disable
 
 // From ModelPersistence
 
@@ -212,7 +212,7 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: Langu
     val reader = NodesReader(modelHeader.getModelReference()!!, mis, rh)
     reader.readNodesInto(pModel)
 //    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
-            // TODO()
+    // TODO()
 
     if (languageRegistry != null) {
         languageLoaderHelper.loadedLanguages().forEach { languageRegistry.add(it) }

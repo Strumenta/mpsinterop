@@ -1,9 +1,9 @@
 package com.strumenta.deprecated_mpsinterop.binary
 
-import com.strumenta.deprecated_mpsinterop.logicalmodel.*
+import com.strumenta.deprecated_mpsinterop.logicalmodel.* // ktlint-disable
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalModel
 import java.io.IOException
-import java.util.*
+import java.util.* // ktlint-disable
 
 internal class LanguageLoaderHelper {
     // private val languageNamesByID = HashMap<LanguageUUID, String>()
@@ -393,9 +393,13 @@ internal class BinaryPersistence {
 
                 val conceptKind = ConceptKind.values()[flags shr 4 and 0x0f]
 
-                val concept = rh.withConcept(conceptIndex, conceptId,
-                        langName,
-                        conceptName!!, conceptKind)
+                val concept = rh.withConcept(
+                    conceptIndex,
+                    conceptId,
+                    langName,
+                    conceptName!!,
+                    conceptKind
+                )
                 model.registerConcept(concept)
 //                rh.withConcept(conceptId, conceptName, StaticScope.values()[flags and 0x0f], ConceptKind.values()[flags shr 4 and 0x0f], stubId, conceptIndex++)
 //                //

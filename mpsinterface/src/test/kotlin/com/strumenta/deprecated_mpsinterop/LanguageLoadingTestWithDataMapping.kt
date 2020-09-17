@@ -1,11 +1,15 @@
 package com.strumenta.deprecated_mpsinterop
 
-import com.strumenta.deprecated_mpsinterop.loading.*
+import com.strumenta.deprecated_mpsinterop.loading.PhysicalToLogicalConverter
+import com.strumenta.deprecated_mpsinterop.loading.loadLanguageFromDirectory
+import com.strumenta.deprecated_mpsinterop.loading.loadLanguageFromJar
+import com.strumenta.deprecated_mpsinterop.loading.loadMplFile
+import com.strumenta.deprecated_mpsinterop.loading.loadMpsFile
+import com.strumenta.deprecated_mpsinterop.loading.loadMpsModel
 import com.strumenta.deprecated_mpsinterop.registries.LanguageRegistry
 import org.junit.Test
 import java.io.File
 import java.io.FileInputStream
-import java.lang.RuntimeException
 
 class LanguageLoadingTestWithDataMapping {
 
@@ -31,7 +35,7 @@ class LanguageLoadingTestWithDataMapping {
 //        lr.loadLanguageFromModel(structureModel)
         lr.loadLanguageFromModuleAndModel(module, structureModel)
 
-        loadGescomplusLanguage(lr,"gescomplus.dsl.core")
+        loadGescomplusLanguage(lr, "gescomplus.dsl.core")
 
         val physicalModel = loadMpsModel(FileInputStream(File("/Users/federico/repos/SigiDsl/solutions/gescomplus.dsl.sandbox/models/gescomplus.dsl.mapping.mps")))
         val lm = converter.toLogical(physicalModel)
@@ -77,7 +81,7 @@ class LanguageLoadingTestWithDataMapping {
         }
     }
 
-    private fun lookForLanguageIn(languageRegistry: LanguageRegistry, name: String, dir: File) : Boolean {
+    private fun lookForLanguageIn(languageRegistry: LanguageRegistry, name: String, dir: File): Boolean {
         dir.listFiles().forEach {
             if (it.isFile && it.name == "$name-src.jar") {
                 languageRegistry.loadLanguageFromJar(FileInputStream(it))
