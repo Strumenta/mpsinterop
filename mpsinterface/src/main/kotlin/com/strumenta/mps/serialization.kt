@@ -10,22 +10,13 @@ private val gson = GsonBuilder().setPrettyPrinting()
         .setFieldNamingStrategy { f -> f.name.removeSuffix("\$delegate") }
         .registerTypeHierarchyAdapter(Reference::class.java, object : JsonSerializer<Reference> {
             override fun serialize(src: Reference?, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-                return context.serialize(src?.refString())
+                return if (src == null) {
+                    context.serialize(null)
+                } else {
+                    context.serialize(mapOf("linkName" to src.linkName, "to" to src.refString()))
+                }
             }
         })
-//        .registerTypeAdapterFactory(object : TypeAdapterFactory {
-//            override fun <T : Any?> create(gson: Gson?, type: TypeToken<T>?): TypeAdapter<T> {
-//                println(type)
-//                return super
-//            }
-//
-//        })
-//        .registerTypeHierarchyAdapter(Node::class.java, object : JsonSerializer<Lazy<*>> {
-//            override fun serialize(src: Lazy<*>?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
-//                TODO("Not yet implemented")
-//            }
-//
-//        })
         .registerTypeAdapter(Lazy::class.java, object : JsonSerializer<Lazy<*>> {
             override fun serialize(src: Lazy<*>, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
                 val value = src.value
@@ -42,9 +33,6 @@ private val gson = GsonBuilder().setPrettyPrinting()
         if (f.name == "name" && f.declaringClass.canonicalName == "com.strumenta.mps.MpsProject.NodeImpl") {
             return true
         }
-//        if (f.name == "value") {
-//
-//        }
         if (f.name == "value" && f.declaringClass.canonicalName == "com.strumenta.mps.MpsProject.ExternalReferenceImpl") {
             return true
         }
@@ -57,7 +45,6 @@ private val gson = GsonBuilder().setPrettyPrinting()
         if (f.annotations.any { it is Expose && !it.serialize }) {
             return true
         }
-        println("Serializing field ${f.declaringClass.canonicalName}.${f.name}")
         return false
     }
 

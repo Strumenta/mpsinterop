@@ -436,7 +436,7 @@ class MpsProject(val projectDir: File) {
     private class LocalReferenceImpl(override val linkName: String,
                                      @Expose(serialize = false)
                                      val registry: Registry, val index: String) : Reference() {
-        override fun refString(): String = "int:$index"
+        override fun refString(): String = "int:${value?.id}"
 
         override val value: Node? by lazy { loadValue() }
         override val isLocalToModel: Boolean
@@ -457,6 +457,7 @@ class MpsProject(val projectDir: File) {
                                         @Expose(serialize = false)
                                         val registry: Registry, val modelIndex: String,
         val localIndex: String) : Reference() {
+        // TODO use registry to translate those indexes
         override fun refString(): String = "ext:$modelIndex:$localIndex"
 
         override val value: Node? by lazy { loadValue() }
