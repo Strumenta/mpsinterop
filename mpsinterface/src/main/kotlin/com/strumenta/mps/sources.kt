@@ -28,4 +28,8 @@ class FileSource(val file: File) : Source() {
         val childrenFiles = (locationDir.listFiles() ?: throw RuntimeException("no children found for $locationDir")).filter { it.isFile }
         return childrenFiles.map { FileSource(it) }
     }
+
+    override fun toString(): String {
+        return "file(${file.path})"
+    }
 }

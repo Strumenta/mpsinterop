@@ -279,6 +279,9 @@ class MpsProject(val projectDir: File) {
         private val indexToReferenceName = HashMap<String, String>()
         private val indexToNode = HashMap<String, Node>()
         private val indexToXmlNode = HashMap<String, Element>()
+        private val indexToModelUUID = HashMap<String, UUID>()
+        private val indexToModuleUUID = HashMap<String, UUID>()
+        private val indexToModelName = HashMap<String, String>()
 
         fun nodeFromIndex(index: String): Node {
             require(index.isNotBlank()) { "a blank index should not be used" }
@@ -304,6 +307,18 @@ class MpsProject(val projectDir: File) {
             return indexToReferenceName[index] ?: throw IllegalArgumentException("No reference with index $index found")
         }
 
+        fun modelUUIDFromIndex(index: String) : UUID {
+            return indexToModelUUID[index] ?: throw IllegalArgumentException("No model with index $index found")
+        }
+
+        fun moduleUUIDFromIndex(index: String) : UUID? {
+            return indexToModuleUUID[index]
+        }
+
+        fun modelNameFromIndex(index: String) : String {
+            return indexToModelName[index] ?: throw IllegalArgumentException("No model with index $index found")
+        }
+
         fun registerConcept(index: String, name: String, id: String) {
             indexToConceptName[index] = name
         }
@@ -327,6 +342,14 @@ class MpsProject(val projectDir: File) {
         fun registerNode(index: String, node: Node) {
             indexToNode[index] = node
         }
+
+        fun registerModelImport(index: String, modelUUID: UUID, name: String, moduleUUID: UUID? = null) {
+            indexToModelUUID[index] = modelUUID
+            indexToModelName[index] = name
+            if (moduleUUID != null) {
+                indexToModuleUUID[index] = moduleUUID;
+            }
+        }
     }
 
     private class ModelImpl(
@@ -342,23 +365,53 @@ class MpsProject(val projectDir: File) {
         }
 
         private fun loadRegistry(doc: Document): Registry {
-            val registry = Registry()
-            doc.documentElement.processAllNodes("node") { node ->
-                registry.registerXmlNode(node.getAttribute("id"), node)
+            try {
+                val registry = Registry()
+                doc.documentElement.processAllNodes("node") { node ->
+                    registry.registerXmlNode(node.getAttribute("id"), node)
+                }
+                doc.documentElement.processAllNodes("import") { import ->
+                    val index = import.getAttribute("index")
+                    val ref = import.getAttribute("ref")
+                    if (ref.startsWith("r:")) {
+                        // <import index="tpck" ref="r:00000000-0000-4000-0000-011c89590288(jetbrains.mps.lang.core.structure)" implicit="true" />
+                        require(ref.startsWith("r:")) { "Ref value '$ref'" }
+                        require(ref[38] == '(') { "Ref value '$ref'" }
+                        require(ref.endsWith(")")) { "Ref value '$ref'" }
+                        val uuid = UUID.fromString(ref.substring(2, 38))
+                        val name = ref.substring(39, ref.length - 1)
+                        registry.registerModelImport(index, uuid, name)
+                    } else {
+                        // <import index="kwxp" ref="b4d28e19-7d2d-47e9-943e-3a41f97a0e52/r:4903509f-5416-46ff-9a8b-44b5a178b568(com.mbeddr.mpsutil.plantuml.node/com.mbeddr.mpsutil.plantuml.node.structure)" />
+                        require(ref[36] == '/') { "Ref value '$ref'" }
+                        val restRef = ref.substring(37)
+                        require(restRef.startsWith("r:")) { "Ref value '$ref'" }
+                        require(restRef[38] == '(') { "Ref value '$ref'" }
+                        require(restRef.endsWith(")")) { "Ref value '$ref'" }
+                        val moduleUUID = UUID.fromString(ref.substring(0, 36))
+                        val uuid = UUID.fromString(restRef.substring(2, 38))
+                        val combinedName = ref.substring(39, restRef.length - 1)
+                        val nameParts = combinedName.split("/")
+                        require(nameParts.size == 2) { "Ref value '$ref'" }
+                        registry.registerModelImport(index, uuid, name, moduleUUID)
+                    }
+                }
+                doc.documentElement.child("registry").processAllNodes("concept") { concept ->
+                    registry.registerConcept(concept.getAttribute("index"), concept.getAttribute("name"), concept.getAttribute("id"))
+                    concept.processAllNodes("property") { property ->
+                        registry.registerProperty(property.getAttribute("index"), property.getAttribute("name"), property.getAttribute("id"))
+                    }
+                    concept.processAllNodes("child") { child ->
+                        registry.registerContainment(child.getAttribute("index"), child.getAttribute("name"), child.getAttribute("id"))
+                    }
+                    concept.processAllNodes("reference") { reference ->
+                        registry.registerReference(reference.getAttribute("index"), reference.getAttribute("name"), reference.getAttribute("id"))
+                    }
+                }
+                return registry
+            } catch (t : Throwable) {
+                throw java.lang.RuntimeException("Issue loading registry for model coming from $source", t)
             }
-            doc.documentElement.child("registry").processAllNodes("concept") { concept ->
-                registry.registerConcept(concept.getAttribute("index"), concept.getAttribute("name"), concept.getAttribute("id"))
-                concept.processAllNodes("property") { property ->
-                    registry.registerProperty(property.getAttribute("index"), property.getAttribute("name"), property.getAttribute("id"))
-                }
-                concept.processAllNodes("child") { child ->
-                    registry.registerContainment(child.getAttribute("index"), child.getAttribute("name"), child.getAttribute("id"))
-                }
-                concept.processAllNodes("reference") { reference ->
-                    registry.registerReference(reference.getAttribute("index"), reference.getAttribute("name"), reference.getAttribute("id"))
-                }
-            }
-            return registry
         }
 
         private fun loadRoots(): List<Node> {
@@ -436,7 +489,10 @@ class MpsProject(val projectDir: File) {
                     val to = ref.getAttribute("to")
                     val parts = to.split(":")
                     require(parts.size == 2)
-                    val ref = ExternalReferenceImpl(relationName, registry, parts[0], parts[1])
+                    val modelIndex = parts[0]
+                    val modelUUID = registry.modelUUIDFromIndex(modelIndex)
+                    val moduleUUID = registry.modelUUIDFromIndex(modelIndex)
+                    val ref = ExternalReferenceImpl(relationName, registry, modelUUID, parts[1], moduleUUID)
                     res.add(ref)
                 } else {
                     val ref = LocalReferenceImpl(relationName, registry, index)
@@ -468,22 +524,24 @@ class MpsProject(val projectDir: File) {
         }
     }
 
+
+
     private class ExternalReferenceImpl(
         override val linkName: String,
         @Expose(serialize = false)
         val registry: Registry,
-        val modelIndex: String,
-        val localIndex: String
+        val modelUUID: UUID,
+        val localIndex: String,
+        val module: UUID?
     ) : Reference() {
         // TODO use registry to translate those indexes
-        override fun refString(): String = "ext:$modelIndex:$localIndex"
+        override fun refString(): String = "ext:$modelUUID:$localIndex"
 
         override val value: Node? by lazy { loadValue() }
         override val isLocalToModel: Boolean
             get() = false
 
         init {
-            require(modelIndex.isNotBlank())
             require(localIndex.isNotBlank())
         }
 
