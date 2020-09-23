@@ -111,6 +111,7 @@ class MpsProject(val projectDir: File) {
             when (path.extension) {
                 "mpl" -> loadLanguage(FileSource(path))
                 "msd" -> loadSolution(FileSource(path))
+                "devkit" -> null
                 else -> throw IllegalStateException("Unable to process module file $path")
             }
         }
