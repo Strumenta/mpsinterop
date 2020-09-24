@@ -1,5 +1,5 @@
 package com.strumenta.deprecated_mpsinterop
-import com.strumenta.deprecated_mpsinterop.binary.loadMpsModelFromBinaryFile
+//import com.strumenta.mps.binary.loadMpsModelFromBinaryFile
 import com.strumenta.deprecated_mpsinterop.loading.PhysicalToLogicalConverter
 import com.strumenta.deprecated_mpsinterop.loading.loadLanguageFromJar
 import com.strumenta.deprecated_mpsinterop.loading.loadMpsFile
@@ -19,17 +19,18 @@ class LoadingLogicalModelsFromMpsFile {
         val inputStream = LoadingLogicalModelsFromMpsFile::class.java.getResourceAsStream(
             "/jetbrains.mps.lang.core-src-structure.mpb"
         )
-        val model = loadMpsModelFromBinaryFile(inputStream, languageRegistry)
-        val module = PhysicalModule(
-            UUID.fromString("ceab5195-25ea-4f22-9b92-103b95ca8c0c"),
-            "jetbrains.mps.lang.core"
-        )
-        model.module = module
-        languageRegistry.loadLanguageFromModel(model)
-
-        injectIValidIdentifier(languageRegistry)
-
-        return languageRegistry
+//        val model = loadMpsModelFromBinaryFile(inputStream, languageRegistry)
+//        val module = PhysicalModule(
+//            UUID.fromString("ceab5195-25ea-4f22-9b92-103b95ca8c0c"),
+//            "jetbrains.mps.lang.core"
+//        )
+//        model.module = module
+//        languageRegistry.loadLanguageFromModel(model)
+//
+//        injectIValidIdentifier(languageRegistry)
+//
+//        return languageRegistry
+        TODO()
     }
 
     @Test

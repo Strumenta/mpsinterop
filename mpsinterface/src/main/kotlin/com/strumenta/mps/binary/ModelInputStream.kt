@@ -1,4 +1,4 @@
-package com.strumenta.deprecated_mpsinterop.binary
+package com.strumenta.mps.binary
 
 import com.strumenta.deprecated_mpsinterop.logicalmodel.* // ktlint-disable
 import java.io.BufferedInputStream
@@ -38,7 +38,7 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
     @Throws(IOException::class)
     fun readString(): String? {
         var c = readByte()
-        if (c == NULL) {
+        if (c == com.strumenta.deprecated_mpsinterop.binary.NULL) {
             return null
         } else if (c == 1.toByte()) {
             val index = readInt()
@@ -66,15 +66,15 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
 
     fun readModuleReference(): SModuleReference? {
         val c = readByte()
-        if (c == NULL) {
+        if (c == com.strumenta.deprecated_mpsinterop.binary.NULL) {
             return null
-        } else if (c == MODULEREF_INDEX) {
+        } else if (c == com.strumenta.deprecated_mpsinterop.binary.MODULEREF_INDEX) {
             val index = readInt()
             return myModuleRefs[index]
         }
 
         var id: ModuleId? = null
-        if (c == MODULEREF_MODULEID) {
+        if (c == com.strumenta.deprecated_mpsinterop.binary.MODULEREF_MODULEID) {
             id = readModuleID()
         }
         val ref = SModuleReference(readString()!!, id!!)
@@ -84,12 +84,12 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
 
     fun readModuleID(): ModuleId? {
         val c = readByte()
-        return if (c == NULL) {
+        return if (c == com.strumenta.deprecated_mpsinterop.binary.NULL) {
             null
-        } else if (c == MODULEID_REGULAR) {
+        } else if (c == com.strumenta.deprecated_mpsinterop.binary.MODULEID_REGULAR) {
             val uuid = UUID(readLong(), readLong())
             ModuleId.regular(uuid)
-        } else if (c == MODULEID_FOREIGN) {
+        } else if (c == com.strumenta.deprecated_mpsinterop.binary.MODULEID_FOREIGN) {
             ModuleId.foreign(readString()!!)
         } else {
             throw IOException("unknown id")
@@ -98,9 +98,9 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
 
     fun readModelReference(): SModelReference? {
         val c = readByte()
-        if (c == NULL) {
+        if (c == com.strumenta.deprecated_mpsinterop.binary.NULL) {
             return null
-        } else if (c == MODELREF_INDEX) {
+        } else if (c == com.strumenta.deprecated_mpsinterop.binary.MODELREF_INDEX) {
             val index = readInt()
             return myModelRefs[index]
         }
@@ -115,15 +115,15 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
 
     fun readModelID(): SModelId? {
         val c = readByte()
-        return if (c == NULL) {
+        return if (c == com.strumenta.deprecated_mpsinterop.binary.NULL) {
             null
-        } else if (c == MODELID_REGULAR) {
+        } else if (c == com.strumenta.deprecated_mpsinterop.binary.MODELID_REGULAR) {
             SModelId.regular(readUUID())
-        } else if (c == MODELID_FOREIGN) {
+        } else if (c == com.strumenta.deprecated_mpsinterop.binary.MODELID_FOREIGN) {
             SModelId.foreign(readString()!!)
-        } else if (c == MODELID_STRING) {
+        } else if (c == com.strumenta.deprecated_mpsinterop.binary.MODELID_STRING) {
             createModelId(readString()!!)
-        } else if (c == MODELID_INTEGER) {
+        } else if (c == com.strumenta.deprecated_mpsinterop.binary.MODELID_INTEGER) {
             IntegerSModelId(readInt())
         } else {
             throw IOException("unknown id")
@@ -140,9 +140,9 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
     fun readNodeId(): NodeId? {
         val c = readByte()
         return when (c) {
-            NULL -> null
-            NODEID_LONG -> NodeId.regular(readLong())
-            NODEID_STRING -> NodeId.fromString(readString()!!)
+            com.strumenta.deprecated_mpsinterop.binary.NULL -> null
+            com.strumenta.deprecated_mpsinterop.binary.NODEID_LONG -> NodeId.regular(readLong())
+            com.strumenta.deprecated_mpsinterop.binary.NODEID_STRING -> NodeId.fromString(readString()!!)
 
             else -> throw IOException("no id")
         }
@@ -185,13 +185,13 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
 //    @Throws(IOException::class)
     fun readConcept(): Concept? {
         val b = readByte()
-        if (b == NULL) {
+        if (b == com.strumenta.deprecated_mpsinterop.binary.NULL) {
             return null
         }
-        if (b == CONCEPT_INDEX) {
+        if (b == com.strumenta.deprecated_mpsinterop.binary.CONCEPT_INDEX) {
             return myConcepts[readShort().toInt()]
         }
-        if (b != CONCEPT) {
+        if (b != com.strumenta.deprecated_mpsinterop.binary.CONCEPT) {
             throw IOException(Integer.toHexString(b.toInt()))
         }
         readLong()
@@ -208,13 +208,13 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
     fun readProperty(): Property? {
         val b = readByte()
         println("readProperty $b")
-        if (b == NULL) {
+        if (b == com.strumenta.deprecated_mpsinterop.binary.NULL) {
             return null
         }
-        if (b == PROPERTY_INDEX) {
+        if (b == com.strumenta.deprecated_mpsinterop.binary.PROPERTY_INDEX) {
             return myProperties[readShort().toInt()]
         }
-        if (b != PROPERTY) {
+        if (b != com.strumenta.deprecated_mpsinterop.binary.PROPERTY) {
             throw IOException(Integer.toHexString(b.toInt()))
         }
         val c = readConcept()
@@ -230,14 +230,14 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
     @Throws(IOException::class)
     fun readReferenceLink(): ReferenceLink? {
         val b = readByte()
-        if (b == NULL) {
+        if (b == com.strumenta.deprecated_mpsinterop.binary.NULL) {
             return null
         }
-        if (b == ASSOCIATION_INDEX) {
+        if (b == com.strumenta.deprecated_mpsinterop.binary.ASSOCIATION_INDEX) {
             TODO()
             // return myAssociations[readShort()]
         }
-        if (b != ASSOCIATION) {
+        if (b != com.strumenta.deprecated_mpsinterop.binary.ASSOCIATION) {
             throw IOException(Integer.toHexString(b.toInt()))
         }
         val c = readConcept()
@@ -250,14 +250,14 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
     @Throws(IOException::class)
     fun readContainmentLink(): ContainmentLink? {
         val b = readByte()
-        if (b == NULL) {
+        if (b == com.strumenta.deprecated_mpsinterop.binary.NULL) {
             return null
         }
-        if (b == AGGREGATION_INDEX) {
+        if (b == com.strumenta.deprecated_mpsinterop.binary.AGGREGATION_INDEX) {
             TODO()
             // return myAggregations[readShort()]
         }
-        if (b != AGGREGATION) {
+        if (b != com.strumenta.deprecated_mpsinterop.binary.AGGREGATION) {
             throw IOException(Integer.toHexString(b.toInt()))
         }
         val c = readConcept()

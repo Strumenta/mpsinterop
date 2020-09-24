@@ -29,7 +29,6 @@ class MpsInstallation(val rootDir: File) : ModulesContainer() {
         // The module.xml is a simplified version of the msd or mpl file
         // we want to look for those files
         if (entry != null) {
-            println("module found $file")
             val doc = loadDocument(jarFile.getInputStream(entry))
             val type = doc.documentElement.getAttribute("type")
             when (type) {

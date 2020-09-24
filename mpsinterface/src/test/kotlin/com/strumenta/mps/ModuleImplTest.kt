@@ -16,4 +16,11 @@ class ModuleImplTest {
         val language = loadLanguage(JarEntrySource(langCoreJar, "module/jetbrains.mps.lang.core.mpl"))
         assertTrue(language.models().isNotEmpty())
     }
+
+    @Test
+    fun modelsForToolCommon() {
+        val jar = File("src/test/resources/mps2019_3_1/languages/tools/jetbrains.mps.tool.common-src.jar")
+        val solution = loadSolution(JarEntrySource(jar, "module/jetbrains.mps.tool.common.msd"))
+        assertTrue(solution.models().isNotEmpty())
+    }
 }

@@ -1,14 +1,10 @@
-package com.strumenta.deprecated_mpsinterop.binary
+package com.strumenta.mps.binary
 
+import com.strumenta.deprecated_mpsinterop.binary.SModelHeader
 import com.strumenta.deprecated_mpsinterop.logicalmodel.Node
 import com.strumenta.deprecated_mpsinterop.logicalmodel.SModelReference
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.deprecated_mpsinterop.registries.LanguageRegistry
-import com.strumenta.mps.binary.BinaryPersistence
-import com.strumenta.mps.binary.LanguageLoaderHelper
-import com.strumenta.mps.binary.ModelInputStream
-import com.strumenta.mps.binary.NodesReader
-import com.strumenta.mps.binary.SModelHeader
 import java.io.* // ktlint-disable
 import java.io.IOException
 import java.sql.Types.REF
@@ -204,28 +200,27 @@ class SModelHeader {
 //    }
 }
 
-fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: LanguageRegistry? = null): PhysicalModel {
-    val mis = ModelInputStream(inputStream)
-    val modelHeader = com.strumenta.mps.binary.loadHeader(mis)
-    // val model = SModel(modelHeader.getModelReference(), modelHeader)
-    val pModel = PhysicalModel(modelHeader.getModelReference()!!.id.uuid()!!, modelHeader.getModelReference()!!.name)
-    val bp = BinaryPersistence()
-    val languageLoaderHelper = LanguageLoaderHelper()
-    val rh = bp.loadModelProperties(mis, languageLoaderHelper)//, pModel)
-//    rh.requestInterfaceOnly(interfaceOnly)
+//fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: LanguageRegistry? = null): PhysicalModel {
+//    val mis = ModelInputStream(inputStream)
+//    val modelHeader = loadHeader(mis)
+//    // val model = SModel(modelHeader.getModelReference(), modelHeader)
+//    val pModel = PhysicalModel(modelHeader.getModelReference()!!.id.uuid()!!, modelHeader.getModelReference()!!.name)
+//    val bp = BinaryPersistence()
+//    val languageLoaderHelper = LanguageLoaderHelper()
+//    val rh = bp.loadModelProperties(mis, languageLoaderHelper)//, pModel)
+////    rh.requestInterfaceOnly(interfaceOnly)
+////
+//    val reader = NodesReader(modelHeader.getModelReference()!!, mis, rh)
+//    reader.readNodesInto(pModel)
+////    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
+//    // TODO()
 //
-    val reader = com.strumenta.deprecated_mpsinterop.binary.NodesReader(modelHeader.getModelReference()!!, mis, rh)
-    TODO()
-    //reader.readNodesInto(pModel)
-//    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
-    // TODO()
-
-    if (languageRegistry != null) {
-        languageLoaderHelper.loadedLanguages().forEach { languageRegistry.add(it) }
-    }
-
-    return pModel
-}
+//    if (languageRegistry != null) {
+//        languageLoaderHelper.loadedLanguages().forEach { languageRegistry.add(it) }
+//    }
+//
+//    return pModel
+//}
 
 class SModel(modelReference: SModelReference?, val modelHeader: SModelHeader) {
     val numberOfRoots: Int

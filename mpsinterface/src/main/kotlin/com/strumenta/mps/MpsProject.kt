@@ -36,6 +36,7 @@ abstract class Solution : Module()
 abstract class Model : Serializable {
     abstract val name: String
     abstract val uuid: UUID
+    abstract val source: Source
 
     abstract fun roots(): List<Node>
     fun roots(conceptName: String): List<Node> = roots().filter { it.conceptName == conceptName }

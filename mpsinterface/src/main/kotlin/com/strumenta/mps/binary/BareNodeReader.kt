@@ -1,9 +1,8 @@
-package com.strumenta.deprecated_mpsinterop.binary
+package com.strumenta.mps.binary
+import com.strumenta.deprecated_mpsinterop.binary.ExternalReference
+import com.strumenta.deprecated_mpsinterop.binary.ForeignReference
 import com.strumenta.deprecated_mpsinterop.logicalmodel.* // ktlint-disable
 import com.strumenta.deprecated_mpsinterop.physicalmodel.* // ktlint-disable
-import com.strumenta.mps.binary.ExternalReference
-import com.strumenta.mps.binary.ForeignReference
-import com.strumenta.mps.binary.ModelInputStream
 import java.io.IOException
 import java.util.*
 
@@ -27,10 +26,6 @@ internal abstract class BareNodeReader(
     companion object {
         private const val REF_THIS_MODEL: Byte = 17
         private const val REF_OTHER_MODEL: Byte = 18
-    }
-
-    fun readNodesInto(modelData: PhysicalModel) {
-        readChildren(null).forEach { modelData.addRoot(it) }
     }
 
     fun readNodes() : List<PhysicalNode> {

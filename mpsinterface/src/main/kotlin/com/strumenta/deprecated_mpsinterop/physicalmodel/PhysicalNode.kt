@@ -65,6 +65,10 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         }
     }
 
+    fun allChildren(): List<PhysicalNode> {
+        return children.values.fold(emptyList(), {acc, el -> acc + el})
+    }
+
     fun numberOfChildren(relationName: String): Int {
         val rs = children.keys.filter { it.name == relationName }
         return when (rs.size) {
@@ -93,6 +97,8 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     // References
     // //////////////////////////////////////////
 
+    fun allReferenceNames() = references.keys.map { it.name }
+
     fun addReference(relation: PhysicalRelation, node: PhysicalReferenceValue) {
         references[relation] = node
     }
@@ -116,6 +122,8 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     // //////////////////////////////////////////
     // Properties
     // //////////////////////////////////////////
+
+    fun propertyNames() : Set<String> = this.properties.keys.map { it.name }.toSet()
 
     fun propertyValue(property: PhysicalProperty): String? {
         return properties[property]
@@ -178,4 +186,15 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
             properties[prop]!!
         }
     }
+
+    fun containingLinkFor(child: PhysicalNode): String? {
+        this.children.forEach {
+            if (it.value.contains(child)) {
+                return it.key.name
+            }
+        }
+        return null
+    }
+
+
 }

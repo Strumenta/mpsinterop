@@ -1,4 +1,4 @@
-package com.strumenta.deprecated_mpsinterop.binary
+package com.strumenta.mps.binary
 
 import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsoluteConceptId
 import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsoluteContainmentLinkId
@@ -10,7 +10,6 @@ import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalConcept
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalProperty
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalRelation
 import com.strumenta.deprecated_mpsinterop.physicalmodel.RelationKind
-import java.lang.IllegalStateException
 
 /**
  * [jetbrains.mps.smodel.persistence.def.v9.IdInfoReadHelper] counterpart for binary persistence.

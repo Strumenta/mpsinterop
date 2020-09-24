@@ -18,7 +18,16 @@ abstract class Source {
     abstract fun inputStream(): InputStream
     abstract fun listChildrenUnder(location: String): List<Source>
 
-    val document: Document by lazy { loadDocument(inputStream()) }
+    abstract val isFile: Boolean
+    val document: Document by lazy {
+        try {
+            loadDocument(inputStream())
+        } catch (t: Throwable) {
+            throw RuntimeException("Issue while loading XML document from $this", t)
+        }
+    }
+
+    abstract fun extension() : String
 }
 
 class FileSource(val file: File) : Source() {
@@ -35,15 +44,24 @@ class FileSource(val file: File) : Source() {
         return childrenFiles.map { FileSource(it) }
     }
 
+    override val isFile: Boolean
+        get() = file.isFile
+
+    override fun extension(): String = file.extension
+
     override fun toString(): String {
         return "file(${file.path})"
     }
 }
 
 class JarEntrySource(val file: File, val entryPath: String) : Source() {
+
     override fun inputStream(): InputStream {
         val jarFile = JarFile(file)
         val entry = jarFile.getJarEntry(entryPath)
+        if (entry == null) {
+            throw RuntimeException("Entry $entryPath not found in JAR $file")
+        }
         return jarFile.getInputStream(entry)
     }
     override fun listChildrenUnder(location: String): List<Source> {
@@ -58,6 +76,23 @@ class JarEntrySource(val file: File, val entryPath: String) : Source() {
         }
         val childrenEntries = jarFile.directChildrenOf(locationEntry)
         return childrenEntries.map { JarEntrySource(file, it.name) }
+    }
+
+    override val isFile: Boolean
+        get() {
+            val jarFile = JarFile(file)
+            val entry = jarFile.getJarEntry(entryPath)
+            return !entry.isDirectory
+        }
+
+    override fun extension(): String {
+        val simpleName = entryPath.split('/').last()
+        val parts = simpleName.split('.')
+        return if (parts.size == 1) {
+            ""
+        } else {
+            parts.last()
+        }
     }
 
     override fun toString(): String {

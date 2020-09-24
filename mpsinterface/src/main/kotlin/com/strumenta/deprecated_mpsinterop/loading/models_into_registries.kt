@@ -1,6 +1,5 @@
 package com.strumenta.deprecated_mpsinterop.loading
 
-import com.strumenta.deprecated_mpsinterop.binary.loadMpsModelFromBinaryFile
 import com.strumenta.deprecated_mpsinterop.logicalmodel.Language
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalLanguageModule
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalModel
@@ -110,67 +109,68 @@ private fun LanguageRegistry.loadJar(inputStream: InputStream): JarData {
 data class JarData(val models: List<PhysicalModel>, val modules: List<Pair<String, PhysicalModule>>)
 
 private fun LanguageRegistry.loadJarFromDirectory(directory: File): JarData {
-    val models = LinkedList<PhysicalModel>()
-    val modules = LinkedList<Pair<String, PhysicalModule>>()
-
-    val dirToExplores = LinkedList<File>()
-    val files = LinkedList<File>()
-    dirToExplores.add(directory)
-    var i = 0
-    while (i <dirToExplores.size) {
-        dirToExplores[i].listFiles().forEach {
-            if (it.isFile) {
-                files.add(it)
-            } else if (it.isDirectory) {
-                dirToExplores.add(it)
-            }
-        }
-        i++
-    }
-
-    files.filter { it.name.endsWith(".mpl") }.forEach {
-        val module = loadMplFile(FileInputStream(it))
-        var parts = it.name.split("/")
-        parts = parts.dropLast(1)
-        // TODO read path from XML
-        val pathCovered = parts.joinToString("/") + "/languageModels/"
-        modules.add(Pair(pathCovered, module))
-    }
-    files.filter { it.name.endsWith(".mps") }.forEach { file ->
-        val model = loadMpsModel(FileInputStream(file))
-        models.add(model)
-        val module = modules.find { file.name.startsWith(it.first) }
-        if (module != null) {
-            model.module = module.second
-        } else {
-            // throw java.lang.RuntimeException()
-            if (modules.size == 1) {
-                model.module = modules[0].second
-            }
-        }
-    }
-    files.filter { it.name.endsWith(".mpb") }.forEach { file ->
-        val model = loadMpsModelFromBinaryFile(FileInputStream(file))
-        models.add(model)
-        val module = modules.find {
-            var entryName = file.name
-            if (entryName.startsWith("module/models/")) {
-                entryName = entryName.removePrefix("module/models/")
-            }
-            entryName = entryName.replace("/", ".")
-            entryName.startsWith(it.first)
-        }
-        if (module != null) {
-            model.module = module.second
-        } else {
-            // throw java.lang.RuntimeException()
-            // println("A")
-            if (modules.size == 1) {
-                model.module = modules[0].second
-            }
-        }
-    }
-    return JarData(models, modules)
+//    val models = LinkedList<PhysicalModel>()
+//    val modules = LinkedList<Pair<String, PhysicalModule>>()
+//
+//    val dirToExplores = LinkedList<File>()
+//    val files = LinkedList<File>()
+//    dirToExplores.add(directory)
+//    var i = 0
+//    while (i <dirToExplores.size) {
+//        dirToExplores[i].listFiles().forEach {
+//            if (it.isFile) {
+//                files.add(it)
+//            } else if (it.isDirectory) {
+//                dirToExplores.add(it)
+//            }
+//        }
+//        i++
+//    }
+//
+//    files.filter { it.name.endsWith(".mpl") }.forEach {
+//        val module = loadMplFile(FileInputStream(it))
+//        var parts = it.name.split("/")
+//        parts = parts.dropLast(1)
+//        // TODO read path from XML
+//        val pathCovered = parts.joinToString("/") + "/languageModels/"
+//        modules.add(Pair(pathCovered, module))
+//    }
+//    files.filter { it.name.endsWith(".mps") }.forEach { file ->
+//        val model = loadMpsModel(FileInputStream(file))
+//        models.add(model)
+//        val module = modules.find { file.name.startsWith(it.first) }
+//        if (module != null) {
+//            model.module = module.second
+//        } else {
+//            // throw java.lang.RuntimeException()
+//            if (modules.size == 1) {
+//                model.module = modules[0].second
+//            }
+//        }
+//    }
+//    files.filter { it.name.endsWith(".mpb") }.forEach { file ->
+//        val model = loadMpsModelFromBinaryFile(FileInputStream(file))
+//        models.add(model)
+//        val module = modules.find {
+//            var entryName = file.name
+//            if (entryName.startsWith("module/models/")) {
+//                entryName = entryName.removePrefix("module/models/")
+//            }
+//            entryName = entryName.replace("/", ".")
+//            entryName.startsWith(it.first)
+//        }
+//        if (module != null) {
+//            model.module = module.second
+//        } else {
+//            // throw java.lang.RuntimeException()
+//            // println("A")
+//            if (modules.size == 1) {
+//                model.module = modules[0].second
+//            }
+//        }
+//    }
+//    return JarData(models, modules)
+    TODO()
 }
 
 private fun LanguageRegistry.loadJar(file: File): JarData {
@@ -222,25 +222,26 @@ private fun LanguageRegistry.loadJar(file: File): JarData {
                     }
                 }
                 entry.name.endsWith(".mpb") -> {
-                    val model = loadMpsModelFromBinaryFile(jarFile.getInputStream(entry))
-                    models.add(model)
-                    val module = modules.find {
-                        var entryName = entry.name
-                        if (entryName.startsWith("module/models/")) {
-                            entryName = entryName.removePrefix("module/models/")
-                        }
-                        entryName = entryName.replace("/", ".")
-                        entryName.startsWith(it.first)
-                    }
-                    if (module != null) {
-                        model.module = module.second
-                    } else {
-                        // throw java.lang.RuntimeException()
-                        // println("A")
-                        if (modules.size == 1) {
-                            model.module = modules[0].second
-                        }
-                    }
+                    TODO()
+                    // val model = loadMpsModelFromBinaryFile(jarFile.getInputStream(entry))
+//                    models.add(model)
+//                    val module = modules.find {
+//                        var entryName = entry.name
+//                        if (entryName.startsWith("module/models/")) {
+//                            entryName = entryName.removePrefix("module/models/")
+//                        }
+//                        entryName = entryName.replace("/", ".")
+//                        entryName.startsWith(it.first)
+//                    }
+//                    if (module != null) {
+//                        model.module = module.second
+//                    } else {
+//                        // throw java.lang.RuntimeException()
+//                        // println("A")
+//                        if (modules.size == 1) {
+//                            model.module = modules[0].second
+//                        }
+//                    }
                 }
             }
         }

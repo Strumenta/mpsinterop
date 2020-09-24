@@ -1,6 +1,13 @@
 package com.strumenta.mps
 
 import com.google.gson.annotations.Expose
+import com.strumenta.mps.binary.*
+import com.strumenta.mps.binary.BinaryPersistence
+import com.strumenta.mps.binary.LanguageLoaderHelper
+import com.strumenta.mps.binary.NodesReader
+import com.strumenta.deprecated_mpsinterop.physicalmodel.ExplicitReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalModel
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mps.utils.Base64
 import org.w3c.dom.Document
 import org.w3c.dom.Element
@@ -61,13 +68,32 @@ private class ModuleImpl(val indexElement: IndexElement) {
                         }
                     }
             )
-            return modelSources.map { loadModel(it) }.toSet()
+            return modelSources.filter { it.isFile }.map { loadModel(it) }.toSet()
         } catch (t: Throwable) {
             throw java.lang.RuntimeException("Issue loading models from $indexElement", t)
         }
     }
 
     private fun loadModel(source: Source): Model {
+        val extension = source.extension()
+        if (extension == "mpb") {
+            return loadModelFromBinary(source)
+        }
+        if (extension == "mps") {
+            return loadModelFromXml(source)
+        }
+        TODO("Extension $extension for source $source")
+    }
+
+    private fun loadModelFromBinary(source: Source): Model {
+        val mis = ModelInputStream(source.inputStream())
+        val modelHeader = loadHeader(mis)
+        val name = modelHeader.modelRef!!.name
+        val uuid = modelHeader.modelRef!!.id.uuid()!!
+        return ModelImpl(source, name, uuid)
+    }
+
+    private fun loadModelFromXml(source: Source): Model {
         val doc = source.document
         require(doc.documentElement.tagName == "model")
         val ref = doc.documentElement.getAttribute("ref")
@@ -84,7 +110,7 @@ private class ModuleImpl(val indexElement: IndexElement) {
 
 private class ModelImpl(
         @Expose(serialize = false)
-        val source: Source,
+        override val source: Source,
         override val name: String,
         override val uuid: UUID
 ) : Model() {
@@ -157,12 +183,64 @@ private class ModelImpl(
     }
 
     private fun loadRoots(): List<Node> {
-        val doc = source.document
-        val registry = loadRegistry(doc)
-        return doc.documentElement.children("node").map { node ->
-            NodeImpl.loadNode(node, registry)
+        if (source.extension() == "mpb") {
+            val mis = ModelInputStream(source.inputStream())
+            val modelHeader = loadHeader(mis)
+            val bp = BinaryPersistence()
+            val languageLoaderHelper = LanguageLoaderHelper()
+            val rh = bp.loadModelProperties(mis, languageLoaderHelper)
+
+            val reader = NodesReader(modelHeader.getModelReference()!!, mis, rh)
+            try {
+                val nodes = reader.readNodes()
+
+                return nodes.map { PhysicalNodeWrapper(it) }
+            } catch (t : Throwable) {
+                throw java.lang.RuntimeException("Issue reading nodes for model $name loaded from $source", t)
+            }
+        }
+        if (source.extension() == "mps") {
+            val doc = source.document
+            val registry = loadRegistry(doc)
+            return doc.documentElement.children("node").map { node ->
+                NodeImpl.loadNode(node, registry)
+            }
+        }
+        TODO(source.extension())
+    }
+}
+
+private class PhysicalNodeWrapper(
+        @Expose(serialize = false)
+        val physicalNode: PhysicalNode) : Node() {
+    override val name: String?
+        get() = property("name")
+    override val conceptName: String by lazy { physicalNode.concept.qualifiedName }
+    override val id: NodeID by lazy { physicalNode.id.toStringRepresentation() }
+    override val properties: Map<String, String> by lazy { convertProperties() }
+    override val containmentLinkName: String? by lazy { calculateContainmentLinkName() }
+
+    private fun calculateContainmentLinkName() : String? {
+        val parent = this.physicalNode.parent
+        if (parent == null) {
+            return null
+        } else {
+            return parent.containingLinkFor(this.physicalNode)!!
         }
     }
+
+    override val children: List<Node> by lazy { physicalNode.allChildren().map { PhysicalNodeWrapper(it) } }
+    override val references: List<Reference> by lazy { physicalNode.allReferenceNames().map { toReference(it) } }
+
+    private fun toReference(refName: String) : Reference {
+        val value = physicalNode.reference(refName)
+        when (value!!.target) {
+            is ExplicitReferenceTarget -> return ExternalReferenceImpl(refName, (value.target as ExplicitReferenceTarget).model, (value.target as ExplicitReferenceTarget).nodeId.toStringRepresentation())
+        }
+        TODO("Value is $value")
+    }
+
+    private fun convertProperties() : Map<String, String> = physicalNode.propertyNames().map { it to physicalNode.propertyValue(it) }.filter { it.second != null }.map { it as Pair<String, String> }.toMap()
 }
 
 private class SolutionImpl(val indexElement: IndexElement) : Solution() {
@@ -265,7 +343,7 @@ private class NodeImpl(
                 val modelIndex = parts[0]
                 val modelUUID = registry.modelUUIDFromIndex(modelIndex)
                 val moduleUUID = registry.modelUUIDFromIndex(modelIndex)
-                val ref = ExternalReferenceImpl(relationName, registry, modelUUID, parts[1], moduleUUID)
+                val ref = ExternalReferenceImpl(relationName, modelUUID, parts[1], moduleUUID)
                 res.add(ref)
             } else {
                 val ref = LocalReferenceImpl(relationName, registry, index)
@@ -301,11 +379,9 @@ private class LocalReferenceImpl(
 
 private class ExternalReferenceImpl(
         override val linkName: String,
-        @Expose(serialize = false)
-        val registry: Registry,
         val modelUUID: UUID,
         val localIndex: String,
-        val module: UUID?
+        val module: UUID? = null
 ) : Reference() {
     // TODO use registry to translate those indexes
     override fun refString(): String = "ext:$modelUUID:$localIndex"
@@ -452,4 +528,8 @@ abstract class ModulesContainer {
     }
 
     fun findModule(moduleName: String) : Module? = modules.find { it.name == moduleName }
+
+    fun listModels() : Set<Model> {
+        return modules.fold(emptySet(), { acc, module ->  acc + module.models() })
+    }
 }

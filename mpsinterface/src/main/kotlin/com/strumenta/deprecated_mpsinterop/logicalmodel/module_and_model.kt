@@ -13,8 +13,12 @@ open class SModelId {
         fun regular(uuid: UUID): SModelId = RegularSModelId(uuid)
         fun foreign(id: String): SModelId = ForeignSModelId(id)
     }
-    open fun uuid(): UUID {
+    fun hasUUID() = uuid() != null
+    open fun uuid(): UUID? {
         throw UnsupportedOperationException("No UUID for ${this.javaClass.canonicalName}")
+    }
+    open fun toSerializedString() : String {
+        return uuid().toString() ?: throw java.lang.UnsupportedOperationException()
     }
 }
 
@@ -23,8 +27,12 @@ internal class RegularSModelId(val uuid: UUID) : SModelId() {
 }
 
 internal class ForeignSModelId(val id: String) : SModelId() {
-    override fun uuid(): UUID {
-        TODO("FOREIGN SModelID $id")
+    override fun uuid(): UUID? {
+        return null
+    }
+
+    override fun toSerializedString(): String {
+        return id
     }
 }
 

@@ -1,6 +1,6 @@
 package com.strumenta.deprecated_mpsinterop.registries
 
-import com.strumenta.deprecated_mpsinterop.binary.loadMpsModelFromBinaryFile
+//import com.strumenta.mps.binary.loadMpsModelFromBinaryFile
 import com.strumenta.deprecated_mpsinterop.loading.ModelLocator
 import com.strumenta.deprecated_mpsinterop.loading.loadLanguage
 import com.strumenta.deprecated_mpsinterop.loading.loadMpsModel
@@ -162,11 +162,12 @@ class Indexer : ModelLocator {
     }
 
     private fun indexMpb(inputStream: InputStream, modelSource: Source) {
-        val model = loadMpsModelFromBinaryFile(inputStream)
-        if (justPrinting) {
-            println("MODEL ${model.uuid} from $modelSource")
-        }
-        registerModel(model.uuid, HolderLoadingInfo(model, modelSource, SourceType.MPB))
+//        val model = loadMpsModelFromBinaryFile(inputStream)
+//        if (justPrinting) {
+//            println("MODEL ${model.uuid} from $modelSource")
+//        }
+//        registerModel(model.uuid, HolderLoadingInfo(model, modelSource, SourceType.MPB))
+        TODO()
     }
 
     fun indexJar(inputStream: InputStream) {

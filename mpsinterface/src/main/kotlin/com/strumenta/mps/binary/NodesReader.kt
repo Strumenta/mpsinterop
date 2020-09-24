@@ -1,10 +1,7 @@
-package com.strumenta.deprecated_mpsinterop.binary
+package com.strumenta.mps.binary
 
 import com.strumenta.deprecated_mpsinterop.logicalmodel.SModelReference
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalNode
-import com.strumenta.mps.binary.BareNodeReader
-import com.strumenta.mps.binary.ModelInputStream
-import com.strumenta.mps.binary.ReadHelper
 
 internal class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, private val myReadHelper: ReadHelper) : BareNodeReader(modelReference, `is`) {
 //    private var myExternalRefs: MutableCollection<NodeId>? = null

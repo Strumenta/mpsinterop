@@ -6,6 +6,7 @@ import com.google.gson.JsonPrimitive
 import org.junit.Test
 import java.io.File
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class NodeSerializationTest {
 
@@ -78,5 +79,40 @@ class NodeSerializationTest {
         assert(json.get("roots").isJsonArray)
         val roots = json.get("roots").asJsonArray
         assertEquals(88, roots.size())
+    }
+
+    @Test
+    fun serializationFromBinaryModel() {
+        val jar = File("src/test/resources/mps2019_3_1/languages/languageDesign/jetbrains.mps.lang.core-src.jar")
+        val language = loadLanguage(JarEntrySource(jar, "module/jetbrains.mps.lang.core.mpl"))
+        val models = language.models()
+        assertEquals(12, models.size)
+        val model = models.iterator().next()
+        val structureModel = language.findModel("jetbrains.mps.lang.core.structure")
+        assertNotNull(structureModel)
+        val roots = structureModel.roots()
+        assertEquals(43, roots.size)
+        val baseConcept = roots.find { it.name == "BaseConcept" }
+        assertNotNull(baseConcept)
+        assertEquals("BaseConcept", baseConcept.name)
+
+        val json = baseConcept.toJsonObject()
+        assertEquals(setOf("properties", "children", "references", "conceptName", "id"), json.keySet())
+        val child = baseConcept.children.first()
+        val childJson = child.toJsonObject()
+        assertEquals(setOf("properties", "children", "references", "conceptName", "id", "containmentLinkName"), childJson.keySet())
+    }
+
+    @Test
+    fun serializationOfEnvironmentCommon() {
+        val jar = File("src/test/resources/mps2019_3_1/languages/tools/jetbrains.mps.tool.common-src.jar")
+        val module = loadSolution(JarEntrySource(jar, "module/jetbrains.mps.tool.common.msd"))
+        val models = module.models()
+        assertEquals(1, models.size)
+        val model = module.findModel("jetbrains.mps.core.tool.environment.common")
+        assertNotNull(model)
+
+        val json = model.toJsonObject()
+        // We want to verify this does not crash
     }
 }
