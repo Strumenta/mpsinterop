@@ -96,19 +96,18 @@ internal abstract class BareNodeReader(
                 resolveInfo
             )
             try {
-//                val value = when (targetModelKind) {
-//                    REF_OTHER_MODEL.toInt() -> ExplicitReferenceTarget(
-//                        modelRef.id.uuid(),
-//                        targetNodeId!!
-//                    )
-//                    REF_THIS_MODEL.toInt() -> ExplicitReferenceTarget(
-//                        modelRef.id.uuid(),
-//                        targetNodeId!!
-//                    )
-//                    else -> throw UnsupportedOperationException()
-//                }
-//                node.addReference(sref, PhysicalReferenceValue(value, resolveInfo!!))
-                TODO()
+                val value = when (targetModelKind) {
+                    REF_OTHER_MODEL.toInt() -> ExplicitReferenceTarget(
+                        modelRef.id.uuid()!!,
+                        targetNodeId!!
+                    )
+                    REF_THIS_MODEL.toInt() -> ExplicitReferenceTarget(
+                        modelRef.id.uuid()!!,
+                        targetNodeId!!
+                    )
+                    else -> throw UnsupportedOperationException()
+                }
+                node.addReference(sref, PhysicalReferenceValue(value, resolveInfo!!))
             } catch (e: Throwable) {
                 if (result != null) {
                     //node.addReference(sref, PhysicalReferenceValue(result!!, resolveInfo))

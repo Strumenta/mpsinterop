@@ -249,7 +249,7 @@ class MpsProjectTest {
         val roots = model.roots("jetbrains.mps.baseLanguage.structure.ClassConcept")
         assertEquals(86, roots.size)
         val addChild = roots.find { it.name == "AddChild" }!!
-        val superclassClassifier = addChild.child("superclass")!!.reference("classifier")
+        val superclassClassifier = addChild.child("superclass")!!.resolveReference("classifier")
         assertNotNull(superclassClassifier)
         assertEquals("RequestMessage", superclassClassifier.name)
     }
@@ -264,7 +264,7 @@ class MpsProjectTest {
         val isMessageClass = { node: Node ->
             val superclass = node.child("superclass")
             if (superclass != null && superclass.isReferenceLocal("classifier") == true) {
-                val superclassClassifier = superclass.reference("classifier")
+                val superclassClassifier = superclass.resolveReference("classifier")
                 superclassClassifier?.name == "RequestMessage" ||
                     superclassClassifier?.name == "RequestAnswerMessage" ||
                     superclassClassifier?.name == "Message" ||
@@ -336,7 +336,7 @@ class MpsProjectTest {
         val container = children.find { it.name == "container" }!!
         val containerType = container.child("type")!!
         assertEquals("jetbrains.mps.baseLanguage.structure.ClassifierType", containerType.conceptName)
-        val containerTypeClassifier = containerType.reference("classifier")!!
+        val containerTypeClassifier = containerType.resolveReference("classifier")!!
         assertEquals("NodeIDInModel", containerTypeClassifier.name)
     }
 

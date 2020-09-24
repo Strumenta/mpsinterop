@@ -63,11 +63,24 @@ class ExporterTool : CliktCommand() {
             return
         }
         if (models.contains("all")) {
+            val failed = mutableListOf<String>()
+            var succedeed = 0
             if (models.size != 1) {
                 System.err.println("all should not be used with other models")
                 exitProcess(-1)
             }
-            modulesContainer.listModels().forEach { exportModel(modulesContainer, it.name) }
+            modulesContainer.listModels().forEach {
+                try {
+                    exportModel(modulesContainer, it.name)
+                    succedeed++
+                } catch (t: Throwable) {
+                    failed.add(it.name)
+                }
+            }
+            println("Serialized successfully $succedeed models. Failed ${failed.size}")
+            failed.forEach {
+                println("FAILED $it")
+            }
         } else {
             models.forEach { modelName ->
                 exportModel(modulesContainer, modelName)

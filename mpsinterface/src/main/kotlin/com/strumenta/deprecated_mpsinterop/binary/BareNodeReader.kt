@@ -118,7 +118,8 @@ internal abstract class BareNodeReader(
                 if (result != null) {
                     //node.addReference(sref, PhysicalReferenceValue(result!!, resolveInfo))
                 } else {
-                    node.addReference(sref, PhysicalReferenceValue(FailedLoadingReferenceTarget(e), resolveInfo))
+                    //node.addReference(sref, PhysicalReferenceValue(FailedLoadingReferenceTarget(e), resolveInfo))
+                    TODO()
                 }
             }
             //return reference

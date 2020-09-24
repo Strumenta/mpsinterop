@@ -7,6 +7,7 @@ import org.w3c.dom.Element
 import java.io.File
 import java.io.FileInputStream
 import java.io.FilenameFilter
+import java.sql.Ref
 import java.util.LinkedList
 import java.util.UUID
 
@@ -41,6 +42,15 @@ abstract class Model : Serializable {
     abstract fun roots(): List<Node>
     fun roots(conceptName: String): List<Node> = roots().filter { it.conceptName == conceptName }
     fun numberOfRoots(): Int = roots().size
+    fun findNodeByID(nodeId: NodeID): Node? {
+        for (r in roots()) {
+            val res = r.findNodeByID(nodeId)
+            if (res != null) {
+                return res
+            }
+        }
+        return null
+    }
 }
 
 typealias NodeID = String
@@ -64,8 +74,12 @@ abstract class Node : Serializable {
         return children.filter { it.containmentLinkName == relationName }
     }
 
-    fun reference(relationName: String): Node? {
+    fun resolveReference(relationName: String): Node? {
         return references.find { it.linkName == relationName }?.value
+    }
+
+    fun reference(relationName: String): Reference? {
+        return references.find { it.linkName == relationName }
     }
 
     fun isReferenceLocal(relationName: String): Boolean? {
@@ -73,6 +87,18 @@ abstract class Node : Serializable {
     }
 
     fun property(propertyName: String): String? = properties[propertyName]
+    fun findNodeByID(nodeId: NodeID): Node? {
+        if (nodeId == id) {
+            return this
+        }
+        for (c in children) {
+            val res = c.findNodeByID(nodeId)
+            if (res != null) {
+                return res
+            }
+        }
+        return null
+    }
 
     abstract val name: String?
     abstract val conceptName: String

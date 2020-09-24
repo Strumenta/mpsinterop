@@ -216,7 +216,7 @@ private class PhysicalNodeWrapper(
     override val name: String?
         get() = property("name")
     override val conceptName: String by lazy { physicalNode.concept.qualifiedName }
-    override val id: NodeID by lazy { physicalNode.id.toStringRepresentation() }
+    override val id: NodeID by lazy { physicalNode.id.toString() }
     override val properties: Map<String, String> by lazy { convertProperties() }
     override val containmentLinkName: String? by lazy { calculateContainmentLinkName() }
 
@@ -233,11 +233,15 @@ private class PhysicalNodeWrapper(
     override val references: List<Reference> by lazy { physicalNode.allReferenceNames().map { toReference(it) } }
 
     private fun toReference(refName: String) : Reference {
-        val value = physicalNode.reference(refName)
-        when (value!!.target) {
-            is ExplicitReferenceTarget -> return ExternalReferenceImpl(refName, (value.target as ExplicitReferenceTarget).model, (value.target as ExplicitReferenceTarget).nodeId.toStringRepresentation())
+        try {
+            val value = physicalNode.reference(refName)
+            when (value!!.target) {
+                is ExplicitReferenceTarget -> return ExternalReferenceImpl(refName, (value.target as ExplicitReferenceTarget).model, (value.target as ExplicitReferenceTarget).nodeId.toStringRepresentation())
+            }
+            TODO("Value is $value")
+        } catch (t: Throwable) {
+            throw java.lang.RuntimeException("Issue loading reference $refName for node ${physicalNode.id}", t)
         }
-        TODO("Value is $value")
     }
 
     private fun convertProperties() : Map<String, String> = physicalNode.propertyNames().map { it to physicalNode.propertyValue(it) }.filter { it.second != null }.map { it as Pair<String, String> }.toMap()
