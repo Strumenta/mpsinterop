@@ -28,3 +28,10 @@ The goal of this project is to permit interoperability with MPS model from outsi
 ## Supported platforms
 
 For now we target the JVM but we could in the future convert to a Kotlin multi-platform project, so that it can be run in the browser and in all the platforms supported by Kotlin/native.
+
+## Export examples
+
+```shell script
+../gradlew run --args='--destination /Users/federico/repos/mps-web-editor/build/generated_json /Users/federico/repos/SigiDsl gescomplus.dsl.core.structure'
+../gradlew run --args='-i /Users/federico/repos/mpsinterop/mpsinterface/src/test/resources/mps2019_3_1  --destination /Users/federico/repos/mps-web-editor/build/generated_json /Users/federico/repos/SigiDsl all'
+```
