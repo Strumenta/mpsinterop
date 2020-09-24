@@ -1,0 +1,1 @@
+Apache Ant 1.9.4 license is located in Ant distribution root folder lib/ant under MPS installation home.

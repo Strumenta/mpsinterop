@@ -1,0 +1,124 @@
+<!--
+  ~ Copyright 2003-2014 JetBrains s.r.o.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
+  <id>jetbrains.mps.vcs</id>
+  <name>VCS Integration for MPS</name>
+  <description>VCS features in MPS</description>
+  <vendor url="http://www.jetbrains.com/mps/">JetBrains</vendor>
+
+  <depends optional="true">Subversion</depends>
+  <depends optional="true">Git4Idea</depends>
+  <depends optional="true">jetbrains.mps.ide.make</depends>
+  <depends optional="true" config-file="langDesignOptional.xml">jetbrains.mps.ide.devkit</depends>
+
+  <xi:include href="MPSVcs.xml" xpointer="xpointer(/components/*)"/>
+
+  <project-components>
+    <component>
+      <implementation-class>jetbrains.mps.vcs.changesmanager.CurrentDifferenceRegistry</implementation-class>
+      <skipForDefaultProject/>
+    </component>
+    <component>
+      <implementation-class>jetbrains.mps.vcs.changesmanager.editor.EditorHighlighterFactory</implementation-class>
+      <skipForDefaultProject/>
+    </component>
+  </project-components>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <diff.DiffTool implementation="jetbrains.mps.vcs.platform.integration.ModelDiffTool"/>
+    <diff.merge.MergeTool implementation="jetbrains.mps.vcs.platform.integration.ModelMergeTool"/>
+  </extensions>
+
+  <application-components>
+    <component>
+      <implementation-class>jetbrains.mps.vcs.suspicious.SuspiciousModelIndex</implementation-class>
+    </component>
+    <component>
+      <implementation-class>jetbrains.mps.vcs.MergeDriverPackerImpl</implementation-class>
+    </component>
+    <component>
+      <implementation-class>jetbrains.mps.vcs.platform.integration.PluginVCSManager</implementation-class>
+    </component>
+  </application-components>
+
+  <project-components>
+    <component>
+      <implementation-class>com.intellij.platform.PlatformVcsDetector</implementation-class>
+      <skipForDefaultProject/>
+    </component>
+    <component>
+      <implementation-class>jetbrains.mps.vcs.MPSVcsManager</implementation-class>
+    </component>
+    <component>
+      <interface-class>jetbrains.mps.vcs.changesmanager.NodeFileStatusMapping</interface-class>
+      <implementation-class>jetbrains.mps.vcs.changesmanager.roots.NodeFileStatusMappingExt</implementation-class>
+      <skipForDefaultProject/>
+    </component>
+    <component>
+      <implementation-class>jetbrains.mps.vcs.changesmanager.tree.FeatureForestMapSupport</implementation-class>
+      <skipForDefaultProject/>
+    </component>
+    <component>
+      <implementation-class>jetbrains.mps.vcs.changesmanager.tree.TreeHighlighterFactory</implementation-class>
+    </component>
+    <component>
+      <implementation-class>jetbrains.mps.vcs.integration.GeneratedFileConflictResolving</implementation-class>
+    </component>
+  </project-components>
+
+  <actions>
+    <group id="EditorFixAddition">
+      <separator/>
+      <action id="ShowInLogicalView" class="jetbrains.mps.vcs.actions.ShowInLogicalView"
+              text="Show In Logical View"/>
+      <action id="ShowInFileView" class="jetbrains.mps.vcs.actions.ShowInFileView"
+              text="Show In File System View"/>
+      <add-to-group group-id="ChangesViewPopupMenu" anchor="last"/>
+      <add-to-group anchor="before" relative-to-action="SearchMenu" group-id="EditMenu"/>
+    </group>
+    <action id="LocalHistory.ShowHistory" class="jetbrains.mps.history.integration.ui.actions.ShowMpsHistoryAction">
+      <add-to-group group-id="LocalHistory" anchor="before" relative-to-action="LocalHistory.PutLabel"/>
+    </action>
+  </actions>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <mps.LanguageLibrary dir="/"/>
+
+    <vcs.fileStatusProvider implementation="jetbrains.mps.vcs.changesmanager.NodeFileStatusProvider"/>
+    <mps.TabColorProvider implementation="jetbrains.mps.vcs.changesmanager.roots.NodeTabColorProvider"/>
+    <mps.treeCreationHandler implementation="jetbrains.mps.vcs.changesmanager.tree.ChangesTreeCreationHandler"/>
+    <checkoutListener implementation="jetbrains.mps.vcs.integration.ProjectCheckoutListener"/>
+    <checkoutListener implementation="jetbrains.mps.vcs.integration.ProjectDirCheckoutListener"/>
+    <checkinHandlerFactory implementation="jetbrains.mps.vcs.platform.integration.OptimizeImportsCheckinHandler$OptimizeImportsCheckinHandlerFactory"/>
+    <mps.editorWarningsProvider implementation="jetbrains.mps.vcs.platform.integration.ConflictingModelsWarnings"/>
+
+    <projectService serviceInterface="com.intellij.openapi.vcs.AbstractVcsHelper"
+                    serviceImplementation="jetbrains.mps.vcs.platform.integration.MPSVcsHelper" overrides="true"/>
+
+    <projectService serviceInterface="com.intellij.openapi.vcs.impl.VcsPathPresenter"
+                    serviceImplementation="jetbrains.mps.vcs.integration.ModuleVcsPathPresenter"/>
+
+    <errorHandler implementation="jetbrains.mps.ide.blame.CharismaReporter"/>
+    <mps.PluginComponentContributor application="jetbrains.mps.vcs.plugin.Vcs_ApplicationPlugin" />
+
+    <obsoleteStorage file="$WORKSPACE_FILE$" isProjectLevel="true">
+      <components>
+        <component>MPSVcsConfiguration</component>
+      </components>
+    </obsoleteStorage>
+  </extensions>
+</idea-plugin>

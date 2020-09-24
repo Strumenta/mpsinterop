@@ -1,0 +1,28 @@
+<!DOCTYPE idea-plugin
+        PUBLIC
+        "Plugin/DTD"
+        "http://plugins.intellij.net/plugin.dtd"
+        >
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
+  <id>jetbrains.mps.ide.mpsmigration</id>
+  <name>Migration 2019.3</name>
+  <description>Provides actions to migrate models and languages developed using previous versions of MPS</description>
+  <version>2019.3.1</version>
+  <vendor url="http://www.jetbrains.com/mps/" logo="/MPS_16.png">JetBrains</vendor>
+  <idea-version since-build="193.1" until-build="201.1"/>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <mps.LanguageLibrary dir="/solution"/>
+    <errorHandler implementation="jetbrains.mps.ide.blame.CharismaReporter"></errorHandler>
+  </extensions>
+
+  <application-components>
+    <component>
+      <implementation-class>jetbrains.mps.ide.mpsmigration.v_2017_1.Migrations_2017_1</implementation-class>
+      <implementation-class>jetbrains.mps.ide.mpsmigration.v_2017_2.Migrations_2017_2</implementation-class>
+      <implementation-class>jetbrains.mps.ide.mpsmigration.v_2018_2.Migrations_2018_2</implementation-class>
+      <implementation-class>jetbrains.mps.ide.mpsmigration.v_2019_1.Migrations_2019_1</implementation-class>
+      <implementation-class>jetbrains.mps.ide.mpsmigration.v_2019_3.Migrations_2019_3</implementation-class>
+    </component>
+  </application-components>
+</idea-plugin>

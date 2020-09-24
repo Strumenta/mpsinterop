@@ -1,0 +1,5 @@
+<idea-plugin>
+  <extensions defaultExtensionNs="com.intellij">
+    <mps.PluginComponentContributor project="jetbrains.mps.vcs.mergehints.plugin.plugin.Plugin_ProjectPlugin" />
+  </extensions>
+</idea-plugin>

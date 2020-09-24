@@ -38,7 +38,7 @@ fun Element.processChildren(tagName: String, op: (Element) -> Unit) {
 
 fun Element.child(tagName: String): Element {
     val matching = childrenSequence().filter { it.tagName == tagName }.toList()
-    require(matching.size == 1)
+    require(matching.size == 1) { "Expected one child with tag '$tagName'. Found: ${matching.size}" }
     return matching.first()
 }
 

@@ -1,0 +1,137 @@
+<components>
+  <actions>
+    <action id="jetbrains.mps.ide.java.actions.ExtractMethod_Action" class="jetbrains.mps.ide.java.actions.ExtractMethod_Action">
+      <keyboard-shortcut first-keystroke="ctrl alt M" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.GenerateConstructor_Action" class="jetbrains.mps.ide.java.actions.GenerateConstructor_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.GenerateEqualsAndHashCode_Action" class="jetbrains.mps.ide.java.actions.GenerateEqualsAndHashCode_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.GenerateGettersAndSetters_Action" class="jetbrains.mps.ide.java.actions.GenerateGettersAndSetters_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.GenerateGetters_Action" class="jetbrains.mps.ide.java.actions.GenerateGetters_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.GenerateMainMethod_Action" class="jetbrains.mps.ide.java.actions.GenerateMainMethod_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.GenerateSetters_Action" class="jetbrains.mps.ide.java.actions.GenerateSetters_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.GenerateToString_Action" class="jetbrains.mps.ide.java.actions.GenerateToString_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.GetModelContentsFromSource_Action" class="jetbrains.mps.ide.java.actions.GetModelContentsFromSource_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.GoToImplementationClassMethod_Action" class="jetbrains.mps.ide.java.actions.GoToImplementationClassMethod_Action">
+      <keyboard-shortcut first-keystroke="ctrl alt B" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.GoToInheritedClassifier_Action" class="jetbrains.mps.ide.java.actions.GoToInheritedClassifier_Action">
+      <keyboard-shortcut first-keystroke="ctrl alt B" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.GoToSuperClassMethod_Action" class="jetbrains.mps.ide.java.actions.GoToSuperClassMethod_Action">
+      <keyboard-shortcut first-keystroke="ctrl U" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.ImplementMethod_Action" class="jetbrains.mps.ide.java.actions.ImplementMethod_Action">
+      <keyboard-shortcut first-keystroke="ctrl I" keymap="$default" />
+      <keyboard-shortcut first-keystroke="ctrl I" keymap="Mac OS X 10.5+" replace-all="true" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.ImplementMethodsAsIntention_Action" class="jetbrains.mps.ide.java.actions.ImplementMethodsAsIntention_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.InlineField_Action" class="jetbrains.mps.ide.java.actions.InlineField_Action">
+      <keyboard-shortcut first-keystroke="ctrl alt N" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.InlineLocalVariable_Action" class="jetbrains.mps.ide.java.actions.InlineLocalVariable_Action">
+      <keyboard-shortcut first-keystroke="ctrl alt N" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.InlineMethod_Action" class="jetbrains.mps.ide.java.actions.InlineMethod_Action">
+      <keyboard-shortcut first-keystroke="ctrl alt N" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.IntroduceConstant_Action" class="jetbrains.mps.ide.java.actions.IntroduceConstant_Action">
+      <keyboard-shortcut first-keystroke="ctrl alt C" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.IntroduceField_Action" class="jetbrains.mps.ide.java.actions.IntroduceField_Action">
+      <keyboard-shortcut first-keystroke="ctrl alt F" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.IntroduceVariable_Action" class="jetbrains.mps.ide.java.actions.IntroduceVariable_Action">
+      <keyboard-shortcut first-keystroke="ctrl alt V" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.MakeFieldFinal_Action" class="jetbrains.mps.ide.java.actions.MakeFieldFinal_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.MakeFieldStatic_Action" class="jetbrains.mps.ide.java.actions.MakeFieldStatic_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.OverrideMethod_Action" class="jetbrains.mps.ide.java.actions.OverrideMethod_Action">
+      <keyboard-shortcut first-keystroke="ctrl O" keymap="$default" />
+      <keyboard-shortcut first-keystroke="ctrl O" keymap="Mac OS X 10.5+" replace-all="true" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.OverrideMethodsAsIntention_Action" class="jetbrains.mps.ide.java.actions.OverrideMethodsAsIntention_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.PasteAsJavaClass_Action" class="jetbrains.mps.ide.java.actions.PasteAsJavaClass_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.PasteAsJavaMethods_Action" class="jetbrains.mps.ide.java.actions.PasteAsJavaMethods_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.PasteAsJavaStatements_Action" class="jetbrains.mps.ide.java.actions.PasteAsJavaStatements_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.RenameMethod_Action" class="jetbrains.mps.ide.java.actions.RenameMethod_Action">
+      <keyboard-shortcut first-keystroke="shift F6" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.RenameVariable_Action" class="jetbrains.mps.ide.java.actions.RenameVariable_Action">
+      <keyboard-shortcut first-keystroke="shift F6" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.ResolveStubReferencesToMPS_Action" class="jetbrains.mps.ide.java.actions.ResolveStubReferencesToMPS_Action"></action>
+    <action id="jetbrains.mps.ide.java.actions.SafeDeleteConceptMethod_Action" class="jetbrains.mps.ide.java.actions.SafeDeleteConceptMethod_Action">
+      <keyboard-shortcut first-keystroke="alt DELETE" keymap="$default" />
+      <keyboard-shortcut first-keystroke="meta DELETE" keymap="Mac OS X 10.5+" replace-all="true" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.ShowMembers_Action" class="jetbrains.mps.ide.java.actions.ShowMembers_Action">
+      <keyboard-shortcut first-keystroke="ctrl F12" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.ide.java.actions.UncommentStatements_Action" class="jetbrains.mps.ide.java.actions.UncommentStatements_Action">
+      <keyboard-shortcut first-keystroke="ctrl shift SLASH" keymap="$default" />
+    </action>
+    <group id="jetbrains.mps.ide.java.actions.RefactoringAdditions_ActionGroup">
+      <reference ref="jetbrains.mps.ide.java.actions.ExtractMethod_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.InlineLocalVariable_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.InlineField_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.InlineMethod_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.IntroduceConstant_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.IntroduceField_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.IntroduceVariable_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.MakeFieldFinal_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.MakeFieldStatic_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.RenameMethod_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.RenameVariable_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.SafeDeleteConceptMethod_Action" />
+      <add-to-group group-id="jetbrains.mps.ide.platform.actions.NodeRefactoring_ActionGroup" anchor="last" />
+    </group>
+    <group id="jetbrains.mps.ide.java.actions.ModelActions_ActionGroup">
+      <reference ref="jetbrains.mps.ide.java.actions.PasteAsJavaClass_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.GetModelContentsFromSource_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.ResolveStubReferencesToMPS_Action" />
+    </group>
+    <group id="jetbrains.mps.ide.java.actions.EditorPopup_ActionGroup">
+      <reference ref="jetbrains.mps.ide.java.actions.GoToImplementationClassMethod_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.GoToSuperClassMethod_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.GoToInheritedClassifier_Action" />
+      <add-to-group group-id="GoToEditorPopupAddition_ActionGroupother" anchor="last" />
+    </group>
+    <group id="jetbrains.mps.ide.java.actions.ShowMembersInMenu_ActionGroup">
+      <reference ref="jetbrains.mps.ide.java.actions.ShowMembers_Action" />
+      <add-to-group group-id="jetbrains.mps.ide.editor.actions.EditorPopup_ActionGroup" anchor="last" />
+    </group>
+    <group id="jetbrains.mps.ide.java.actions.EditorPopup_paste_ActionGroup">
+      <reference ref="jetbrains.mps.ide.java.actions.PasteAsJavaStatements_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.PasteAsJavaMethods_Action" />
+      <add-to-group group-id="EditorPopup_ActionGrouppaste" anchor="last" />
+      <add-to-group group-id="EditMenu" anchor="last" />
+    </group>
+    <group id="jetbrains.mps.ide.java.actions.GenerateActions_ActionGroup">
+      <reference ref="jetbrains.mps.ide.java.actions.GenerateConstructor_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.GenerateGetters_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.GenerateSetters_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.GenerateGettersAndSetters_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.GenerateEqualsAndHashCode_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.GenerateMainMethod_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.GenerateToString_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.ImplementMethod_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.OverrideMethod_Action" />
+      <add-to-group group-id="jetbrains.mps.ide.editor.actions.GenerationActions_ActionGroup" anchor="last" />
+    </group>
+    <group id="jetbrains.mps.ide.java.actions.CodeOverrideImplementMenu_ActionGroup">
+      <reference ref="jetbrains.mps.ide.java.actions.OverrideMethod_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.ImplementMethod_Action" />
+      <add-to-group group-id="Code_ActionGroupoverrideImplement" anchor="last" />
+    </group>
+    <group id="jetbrains.mps.ide.java.actions.CodeCommentMenu_ActionGroup">
+      <reference ref="jetbrains.mps.ide.java.actions.UncommentStatements_Action" />
+      <reference ref="jetbrains.mps.ide.editor.actions.Comment_Action" />
+      <add-to-group group-id="Code_ActionGroupcomments" anchor="last" />
+    </group>
+    <group id="jetbrains.mps.ide.java.actions.ShowAsIntentions_ActionGroup">
+      <reference ref="jetbrains.mps.ide.java.actions.ImplementMethodsAsIntention_Action" />
+      <reference ref="jetbrains.mps.ide.java.actions.OverrideMethodsAsIntention_Action" />
+      <add-to-group group-id="jetbrains.mps.ide.editor.actions.ActionsAsIntentions_ActionGroup" anchor="last" />
+    </group>
+  </actions>
+</components>

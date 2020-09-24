@@ -1,0 +1,104 @@
+<!--
+  ~ Copyright 2003-2016 JetBrains s.r.o.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<idea-plugin>
+  <id>jetbrains.mps.ide.devkit</id>
+  <name>Languages DevKit</name>
+  <description>Allows to develop new MPS languages</description>
+  <vendor url="http://www.jetbrains.com/mps/">JetBrains</vendor>
+  <depends>jetbrains.mps.ide.make</depends>
+  <depends>jetbrains.mps.testing</depends>
+
+  <project-components>
+    <component>
+      <implementation-class>jetbrains.mps.ide.devkit.generator.GenerationTracerViewTool</implementation-class>
+    </component>
+
+    <component>
+      <implementation-class>jetbrains.mps.ide.devkit.editorMenuTrace.EditorMenuTraceTool</implementation-class>
+    </component>
+
+    <component>
+      <implementation-class>jetbrains.mps.ide.devkit.cellExplorer.CellExplorerTool</implementation-class>
+    </component>
+  </project-components>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <mps.LanguageLibrary dir="/"/>
+    <errorHandler implementation="jetbrains.mps.ide.blame.CharismaReporter"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.analyzers.*"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.build.*"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.dataFlow\.runtime"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.devkit\.bootstrap-languages"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.devkit\.language-design"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.devkit\.aspect\..*"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.devkit\.templates"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.editor\.runtime"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.execution\.api"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.findUsages.*"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.generator"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.ide.*"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.kernel"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.lang.*"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.make.*"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.core\.xml.*"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.refactoring\.runtime"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.runtime"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.smodel\.resources"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.traceInfo.*"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.typechecking.*"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.typesystemEngine"/>
+    <mps.VisibleModuleMask mask="MPS.*"/>
+    <mps.VisibleModuleMask mask="stubUtils"/>
+    <mps.VisibleModuleMask mask="Testbench"/>
+    <mps.VisibleModuleMask mask="typesystemIntegration"/>
+    <mps.IntentionActionsProvider implementation="jetbrains.mps.ide.devkit.actions.IntentionActionsProviderImpl" />
+    <mps.projectGroupTemplateEP implementation="jetbrains.mps.workbench.dialogs.project.newproject.LanguageProjectsGroup"/>
+    <mps.languageProjectTemplateEP implementation="jetbrains.mps.workbench.dialogs.project.newproject.DefaultLanguageProjectTemplate"/>
+    <mps.PluginComponentContributor application="jetbrains.mps.ide.devkit.actions.Mpsdevkit_ApplicationPlugin" project="jetbrains.mps.ide.devkit.actions.Mpsdevkit_ProjectPlugin" />
+  </extensions>
+  <actions>
+    <group id="MPSWelcomeDocumentationMenu">
+      <reference id="OnlineDocAction"/>
+      <add-to-group group-id="WelcomeScreen.Documentation" anchor="first"/>
+    </group>
+    <group id="MPSHelpMenu">
+      <separator/>
+      <action id="ShowHomepage"
+              class="jetbrains.mps.ide.devkit.help.ShowHomepageAction"
+              text="Homepage"/>
+      <action id="ShowMPSTutorial"
+              class="jetbrains.mps.workbench.actions.ShowTutorialAction"
+              text="Tutorial"/>
+      <action id="ShowUserGuide"
+              class="jetbrains.mps.ide.devkit.help.ShowUserGuideAction"
+              text="User Guide for Language Designers"/>
+      <action id="ShowMPSBlogAction"
+              class="jetbrains.mps.ide.devkit.help.ShowBlogAction"
+              text="Blog"/>
+      <action id="ShowCommunitySite"
+              class="jetbrains.mps.ide.devkit.help.ShowCommunitySiteAction"
+              text="Community Site"/>
+      <action id="ShowTrackerAction"
+              class="jetbrains.mps.ide.devkit.help.ShowTrackerAction"
+              text="Issue Tracker"/>
+      <separator/>
+      <add-to-group group-id="HelpMenu" relative-to-action="ProductivityGuide" anchor="after"/>
+    </group>
+  </actions>
+
+
+</idea-plugin>

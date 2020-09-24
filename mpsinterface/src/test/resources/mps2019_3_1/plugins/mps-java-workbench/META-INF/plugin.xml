@@ -1,0 +1,56 @@
+<!--
+  ~ Copyright 2003-2017 JetBrains s.r.o.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
+  <id>jetbrains.mps.ide.java</id>
+  <name>MPS Java Integration IDE</name>
+  <description>Allows importing sources from Java into MPS</description>
+  <vendor url="http://www.jetbrains.com/mps/">JetBrains</vendor>
+  <depends>com.intellij.modules.mps</depends>
+
+  <xi:include href="workbench/actions/JavaWorkbenchActions.xml" xpointer="xpointer(/components/*)"/>
+  <xi:include href="JavaPlatform.xml" xpointer="xpointer(/components/*)"/>
+
+  <application-components>
+    <component>
+      <implementation-class>jetbrains.mps.ide.java.sourceStubs.EmptyJavaSourcetubsFindUsages</implementation-class>
+    </component>
+  </application-components>
+
+  <project-components>
+    <component>
+      <implementation-class>jetbrains.mps.ide.java.JavaExtensionComponent</implementation-class>
+    </component>
+  </project-components>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <mps.LanguageLibrary dir=""/>
+    <mps.VisibleModuleMask mask="Ant"/>
+    <mps.VisibleModuleMask mask="DiffUtils"/>
+    <mps.VisibleModuleMask mask="Hamcrest"/>
+    <mps.VisibleModuleMask mask="JUnit"/>
+    <mps.VisibleModuleMask mask="closures.*"/>
+    <mps.VisibleModuleMask mask="collections.*"/>
+    <mps.VisibleModuleMask mask="JDK.*"/>
+    <mps.VisibleModuleMask mask="Annotations"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.ant"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.baseLanguage.*"/>
+    <mps.VisibleModuleMask mask="jetbrains\.mps\.devkit\.general-purpose"/>
+    <mps.modelRootFactory rootType="java_source_stubs" className="jetbrains.mps.ide.java.sourceStubs.JavaSourceStubModelRootFactory"/>
+    <mps.modelRootSettings rootType="java_source_stubs" className="jetbrains.mps.ide.java.sourceStubsUI.JavaSourceStubModelRootSettingsProvider"/>
+    <mps.modelRootEntry rootType="java_source_stubs" title="Java &amp;Sources" className="jetbrains.mps.ide.java.workbench.extensions.JavaSourceStubsModelRootEntryFactory"/>
+  </extensions>
+</idea-plugin>

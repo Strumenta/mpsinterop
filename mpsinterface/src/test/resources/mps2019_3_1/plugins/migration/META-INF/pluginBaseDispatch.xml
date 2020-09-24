@@ -1,0 +1,5 @@
+<!DOCTYPE idea-plugin PUBLIC "Plugin/DTD" "http://plugins.intellij.net/plugin.dtd">
+<!--This file is a workaround for MPS-27504. See the issue for details.-->
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
+  <xi:include href="pluginBase.xml" xpointer="xpointer(/idea-plugin/*)"/>
+</idea-plugin>

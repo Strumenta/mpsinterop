@@ -1,0 +1,28 @@
+<components>
+  <actions>
+    <action id="jetbrains.mps.java.workbench.actions.AddWordToDictionary_Action" class="jetbrains.mps.java.workbench.actions.AddWordToDictionary_Action"></action>
+    <action id="jetbrains.mps.java.workbench.actions.AnalyzeClasspath_Action" class="jetbrains.mps.java.workbench.actions.AnalyzeClasspath_Action"></action>
+    <action id="jetbrains.mps.java.workbench.actions.ChangeMethodSignature_Action" class="jetbrains.mps.java.workbench.actions.ChangeMethodSignature_Action">
+      <keyboard-shortcut first-keystroke="ctrl F6" keymap="$default" />
+    </action>
+    <action id="jetbrains.mps.java.workbench.actions.MigrateSourcesToMPS_Action" class="jetbrains.mps.java.workbench.actions.MigrateSourcesToMPS_Action"></action>
+    <action id="jetbrains.mps.java.workbench.actions.NewModelFromSource_Action" class="jetbrains.mps.java.workbench.actions.NewModelFromSource_Action"></action>
+    <group id="jetbrains.mps.java.workbench.actions.AnalyzeJavaActions_ActionGroup">
+      <reference ref="jetbrains.mps.java.workbench.actions.AnalyzeClasspath_Action" />
+    </group>
+    <group id="jetbrains.mps.java.workbench.actions.RefactoringAdditions_ActionGroup">
+      <reference ref="jetbrains.mps.java.workbench.actions.ChangeMethodSignature_Action" />
+      <add-to-group group-id="jetbrains.mps.ide.platform.actions.NodeRefactoring_ActionGroup" anchor="last" />
+    </group>
+    <group id="jetbrains.mps.java.workbench.actions.ModelNewActions_ActionGroup">
+      <reference ref="jetbrains.mps.java.workbench.actions.NewModelFromSource_Action" />
+    </group>
+    <group id="jetbrains.mps.java.workbench.actions.SolutionActionsEx_ActionGroup">
+      <reference ref="jetbrains.mps.java.workbench.actions.MigrateSourcesToMPS_Action" />
+    </group>
+    <group id="jetbrains.mps.java.workbench.actions.SpellcheckEditorContribution_ActionGroup">
+      <reference ref="jetbrains.mps.java.workbench.actions.AddWordToDictionary_Action" />
+      <add-to-group group-id="EditorPopup_ActionGroupnew" anchor="last" />
+    </group>
+  </actions>
+</components>

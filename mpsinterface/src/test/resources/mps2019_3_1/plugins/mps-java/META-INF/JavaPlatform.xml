@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<components xmlns:xi="http://www.w3.org/2001/XInclude"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.w3.org/2001/XInclude
+                                http://www.w3.org/2001/XInclude.xsd">
+  <xi:include href="JavaPlatformActions.xml" xpointer="xpointer(/components/*)"/>
+
+  <application-components>
+    <component>
+      <implementation-class>jetbrains.mps.java.platform.index.ClassifierSuccessorsFinder</implementation-class>
+    </component>
+  </application-components>
+
+  <project-components>
+    <component>
+      <implementation-class>jetbrains.mps.java.platform.actions.OverrideImplementMethodComponent</implementation-class>
+    </component>
+    <component>
+      <implementation-class>jetbrains.mps.java.platform.highlighters.JavaHighlighters</implementation-class>
+    </component>
+  </project-components>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <fileBasedIndex implementation="jetbrains.mps.java.platform.index.ClassifierSuccessorsIndexer"/>
+    <errorHandler implementation="jetbrains.mps.ide.blame.CharismaReporter"/>
+  </extensions>
+</components>
