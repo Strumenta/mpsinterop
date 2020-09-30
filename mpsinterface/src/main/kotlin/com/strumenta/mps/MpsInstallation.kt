@@ -5,21 +5,15 @@ import java.io.File
 import java.lang.IllegalArgumentException
 import java.util.jar.JarFile
 
-class MpsInstallation(val rootDir: File) : ModulesContainer() {
-    private val solutions = mutableListOf<Solution>()
-    private val languages = mutableListOf<Language>()
+abstract class ModulesLoader : ModulesContainer() {
+    protected val solutions = mutableListOf<Solution>()
+    protected val languages = mutableListOf<Language>()
 
     override val modules: List<Module>
         get() = solutions + languages
 
-    init {
-        require(rootDir.exists())
-        require(rootDir.isDirectory)
-        loadModules(File(rootDir, "languages"))
-        loadModules(File(rootDir, "plugins"))
-    }
-
-    private fun loadModuleFromJar(file: File) {
+    protected fun loadModuleFromJar(file: File) {
+        println("loadModuleFromJar ${file.absolutePath}")
         val jarFile = JarFile(file)
 
         // JAR files other than the -src.jar files have the META-INF/module.xml
@@ -61,7 +55,12 @@ class MpsInstallation(val rootDir: File) : ModulesContainer() {
                             languages.add(loadLanguage(JarEntrySource(file, it.name)))
                         }
                         it.name.endsWith(".msd") -> {
-                            solutions.add(loadSolution(JarEntrySource(file, it.name)))
+                            val source = JarEntrySource(file, it.name)
+                            try {
+                                solutions.add(loadSolution(source))
+                            } catch (t: Throwable) {
+                                System.err.println("ignoring $source because of errors: ${t.message}")
+                            }
                         }
                     }
                 }
@@ -69,7 +68,11 @@ class MpsInstallation(val rootDir: File) : ModulesContainer() {
         }
     }
 
-    private fun loadModules(modulesDir: File) {
+    fun loadLibrary(libraryDir: File) {
+        loadModules(libraryDir)
+    }
+
+    protected fun loadModules(modulesDir: File) {
         require(modulesDir.exists())
         require(modulesDir.isDirectory)
         modulesDir.listFiles().forEach {
@@ -94,4 +97,15 @@ class MpsInstallation(val rootDir: File) : ModulesContainer() {
 //            }
 //        }
     }
+}
+
+class MpsInstallation(val rootDir: File) : ModulesLoader() {
+
+    init {
+        require(rootDir.exists())
+        require(rootDir.isDirectory)
+        loadModules(File(rootDir, "languages"))
+        loadModules(File(rootDir, "plugins"))
+    }
+
 }

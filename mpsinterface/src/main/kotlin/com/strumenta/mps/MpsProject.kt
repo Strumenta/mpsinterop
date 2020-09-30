@@ -1,14 +1,8 @@
 package com.strumenta.mps
 
-import com.google.gson.annotations.Expose
-import com.strumenta.mps.utils.Base64
-import org.w3c.dom.Document
-import org.w3c.dom.Element
 import java.io.File
 import java.io.FileInputStream
 import java.io.FilenameFilter
-import java.sql.Ref
-import java.util.LinkedList
 import java.util.UUID
 
 enum class ElementType {
@@ -109,10 +103,7 @@ abstract class Node : Serializable {
     abstract val references: List<Reference>
 }
 
-class MpsProject(val projectDir: File, val mpsInstallation: MpsInstallation? = null) : ModulesContainer() {
-
-    private val solutions = mutableListOf<Solution>()
-    private val languages = mutableListOf<Language>()
+class MpsProject(val projectDir: File, val mpsInstallation: MpsInstallation? = null, includingLibraries : Boolean = true) : ModulesLoader() {
 
     val projectModules: List<Module>
         get() = solutions + languages
@@ -127,10 +118,26 @@ class MpsProject(val projectDir: File, val mpsInstallation: MpsInstallation? = n
         require(mpsDirs.size == 1)
         val mpsDir = mpsDirs.first()
         val modulesFile = File(mpsDir, "modules.xml")
-        loadModules(modulesFile)
+        loadModulesFromXml(modulesFile)
+        if (includingLibraries) {
+            val librariesFile = File(mpsDir, "libraries.xml")
+            if (librariesFile.exists()) {
+                val doc = loadDocument(librariesFile)
+                doc.documentElement.processAllNodes("Library") { library ->
+                    val option = library.children("option").filter { it.getAttribute("name") == "path" }.first()
+                    var path = option.getAttribute("value")
+                    require(path.startsWith("\$PROJECT_DIR\$/"))
+                    path = path.removePrefix("\$PROJECT_DIR\$/")
+                    val completePath = File(projectDir, path)
+                    require(completePath.exists())
+                    require(completePath.isDirectory)
+                    loadLibrary(completePath)
+                }
+            }
+        }
     }
 
-    private fun loadModules(modulesFile: File) {
+    private fun loadModulesFromXml(modulesFile: File) {
         require(modulesFile.exists())
         require(modulesFile.isFile)
         val doc = loadDocument(FileInputStream(modulesFile))

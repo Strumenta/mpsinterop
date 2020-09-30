@@ -16,7 +16,30 @@ import java.util.jar.JarFile
  */
 abstract class Source {
     abstract fun inputStream(): InputStream
-    abstract fun listChildrenUnder(location: String): List<Source>
+    abstract fun listChildrenUnder(location: String, includingDir: Boolean = false): List<Source>
+    abstract fun listChildren() : List<Source>
+    fun listChildrenRecursively(): List<Source> {
+        val sources = mutableListOf<Source>()
+        for (c in listChildren()) {
+            if (c.isFile) {
+                sources.add(c)
+            } else {
+                sources.addAll(c.listChildrenRecursively())
+            }
+        }
+        return sources
+    }
+    fun listChildrenUnderRecursively(location: String): List<Source> {
+        val sources = mutableListOf<Source>()
+        for (c in listChildrenUnder(location, includingDir = true)) {
+            if (c.isFile) {
+                sources.add(c)
+            } else {
+                sources.addAll(c.listChildrenRecursively())
+            }
+        }
+        return sources
+    }
 
     abstract val isFile: Boolean
     val document: Document by lazy {
@@ -32,7 +55,7 @@ abstract class Source {
 
 class FileSource(val file: File) : Source() {
     override fun inputStream(): InputStream = FileInputStream(file)
-    override fun listChildrenUnder(location: String): List<Source> {
+    override fun listChildrenUnder(location: String, includingDir: Boolean): List<Source> {
         val parent = file.parentFile
         val locationDir = File(parent, location)
         if (!locationDir.exists()) {
@@ -40,7 +63,12 @@ class FileSource(val file: File) : Source() {
             // maybe because the module imports just jars
             return emptyList()
         }
-        val childrenFiles = (locationDir.listFiles() ?: throw RuntimeException("no children found for $locationDir")).filter { it.isFile }
+        val childrenFiles = (locationDir.listFiles() ?: throw RuntimeException("no children found for $locationDir")).filter { it.isFile || includingDir }
+        return childrenFiles.map { FileSource(it) }
+    }
+
+    override fun listChildren(): List<Source> {
+        val childrenFiles = (file.listFiles() ?: throw RuntimeException("no children found for $file"))
         return childrenFiles.map { FileSource(it) }
     }
 
@@ -64,7 +92,7 @@ class JarEntrySource(val file: File, val entryPath: String) : Source() {
         }
         return jarFile.getInputStream(entry)
     }
-    override fun listChildrenUnder(location: String): List<Source> {
+    override fun listChildrenUnder(location: String, includingDir: Boolean): List<Source> {
         val jarFile = JarFile(file)
         val entry = jarFile.getJarEntry(entryPath)
         val parentEntry = jarFile.parent(entry)
@@ -76,6 +104,12 @@ class JarEntrySource(val file: File, val entryPath: String) : Source() {
         }
         val childrenEntries = jarFile.directChildrenOf(locationEntry)
         return childrenEntries.map { JarEntrySource(file, it.name) }
+    }
+
+    override fun listChildren(): List<Source> {
+        val jarFile = JarFile(file)
+        val entry = jarFile.getJarEntry(entryPath)
+        return jarFile.directChildrenOf(entry).map { JarEntrySource(file, it.name) }
     }
 
     override val isFile: Boolean

@@ -52,7 +52,7 @@ private class ModuleImpl(val indexElement: IndexElement) {
                                                 var combinedLocation = "$contentPath/$location"
                                                 require(combinedLocation.startsWith("\${module}/"))
                                                 combinedLocation = combinedLocation.removePrefix("\${module}/")
-                                                modelSources.addAll(indexElement.source.listChildrenUnder(combinedLocation))
+                                                modelSources.addAll(indexElement.source.listChildrenUnderRecursively(combinedLocation))
                                             } catch (e: Throwable) {
                                                 throw RuntimeException("Issue processing location '$location'", e)
                                             }
@@ -68,19 +68,25 @@ private class ModuleImpl(val indexElement: IndexElement) {
                         }
                     }
             )
-            return modelSources.filter { it.isFile }.map { loadModel(it) }.toSet()
+            return modelSources.filter { it.isFile }.map { loadModel(it) }.filterNotNull().toSet()
         } catch (t: Throwable) {
             throw java.lang.RuntimeException("Issue loading models from $indexElement", t)
         }
     }
 
-    private fun loadModel(source: Source): Model {
+    private fun loadModel(source: Source): Model? {
         val extension = source.extension()
         if (extension == "mpb") {
             return loadModelFromBinary(source)
         }
         if (extension == "mps") {
             return loadModelFromXml(source)
+        }
+        if (extension == "model") {
+            return null
+        }
+        if (extension == "mpsr") {
+            return null
         }
         TODO("Extension $extension for source $source")
     }
@@ -409,7 +415,13 @@ private class ExternalReferenceImpl(
 
 fun loadSolution(source: Source) : Solution {
     val document = source.document
-    val uuid = UUID.fromString(document.documentElement.getAttribute("uuid"))
+    val uuidStr = document.documentElement.getAttribute("uuid")
+    val uuid : UUID
+    try {
+        uuid = UUID.fromString(uuidStr)
+    } catch (t: Throwable) {
+        throw java.lang.RuntimeException("Failed to load UUID from $uuidStr, loading solution from $source", t)
+    }
     val name = document.documentElement.getAttribute("name")
     val moduleVersion = document.documentElement.getAttribute("moduleVersion").toInt()
     require(name.isNotBlank()) { "name is blank. Source: $source" }

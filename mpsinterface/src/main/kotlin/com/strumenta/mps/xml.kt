@@ -2,6 +2,8 @@ package com.strumenta.mps
 
 import org.w3c.dom.Document
 import org.w3c.dom.Element
+import java.io.File
+import java.io.FileInputStream
 import java.io.InputStream
 
 private val builderFactory = javax.xml.parsers.DocumentBuilderFactory.newInstance()
@@ -10,6 +12,8 @@ private val builder = builderFactory.newDocumentBuilder()
 fun loadDocument(data: InputStream): Document {
     return builder.parse(data)
 }
+
+fun loadDocument(file: File): Document = loadDocument(FileInputStream(file))
 
 fun Element.childrenSequence(): Sequence<Element> {
     return (0..(this.childNodes.length))
