@@ -240,7 +240,7 @@ private class PhysicalNodeWrapper(
             }
             TODO("Value is $value")
         } catch (t: Throwable) {
-            throw java.lang.RuntimeException("Issue loading reference $refName for node ${physicalNode.id}", t)
+            throw java.lang.RuntimeException("Issue loading reference $refName for node ${physicalNode.id} having concept ${physicalNode.concept.qualifiedName} and properties ${physicalNode.propertiesMap()}", t)
         }
     }
 
@@ -384,11 +384,14 @@ private class LocalReferenceImpl(
 private class ExternalReferenceImpl(
         override val linkName: String,
         val modelUUID: UUID,
+        @Expose(serialize = false)
         val localIndex: String,
         val module: UUID? = null
 ) : Reference() {
+    val nodeID : Long by lazy { Base64.parseLong(localIndex) }
+
     // TODO use registry to translate those indexes
-    override fun refString(): String = "ext:$modelUUID:$localIndex"
+    override fun refString(): String = "ext:$modelUUID:$nodeID"
 
     override val value: Node? by lazy { loadValue() }
     override val isLocalToModel: Boolean

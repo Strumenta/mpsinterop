@@ -107,7 +107,7 @@ internal abstract class BareNodeReader(
                     )
                     else -> throw UnsupportedOperationException()
                 }
-                node.addReference(sref, PhysicalReferenceValue(value, resolveInfo!!))
+                node.addReference(sref, PhysicalReferenceValue(value, resolveInfo))
             } catch (e: Throwable) {
                 if (result != null) {
                     //node.addReference(sref, PhysicalReferenceValue(result!!, resolveInfo))

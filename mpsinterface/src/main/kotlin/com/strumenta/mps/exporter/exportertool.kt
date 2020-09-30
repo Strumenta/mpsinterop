@@ -24,20 +24,21 @@ class ExporterTool : CliktCommand() {
     }
 
     private fun modulesContainer() : ModulesContainer {
+        var partialModulesContainer : MpsInstallation? = null
         if (installation != null) {
             val installationDir = File(installation)
             if (!installationDir.exists() || !installationDir.isDirectory) {
                 System.err.println("not a valid installation dir: $installation")
                 exitProcess(-1)
             }
-            return MpsInstallation(installationDir)
+            partialModulesContainer = MpsInstallation(installationDir)
         }
         val projectDir = File(projectPath)
         if (!projectDir.exists() || !projectDir.isDirectory) {
             System.err.println("not a valid project dir: $projectPath")
             exitProcess(-1)
         }
-        return MpsProject(projectDir)
+        return MpsProject(projectDir, partialModulesContainer)
     }
 
     private fun exportModel(modulesContainer: ModulesContainer, modelName: String) {
@@ -46,7 +47,8 @@ class ExporterTool : CliktCommand() {
             System.err.println("model not found in project: $model")
             exitProcess(-1)
         } else {
-            val outputFile = if (destinationPath == null) File("${model.name}.json") else File(File(destinationPath), "${model.name}.json")
+            val simpleName = "${model.uuid}-${model.name}.json"
+            val outputFile = if (destinationPath == null) File(simpleName) else File(File(destinationPath), simpleName)
             serializeModel(model, outputFile)
             println("model ${model.name} exported to ${outputFile.absolutePath}")
         }
