@@ -3,11 +3,6 @@ package com.strumenta.deprecated_mpsinterop.logicalmodel
 import java.util.LinkedList
 import java.util.UUID
 
-enum class ModuleType {
-    LANGUAGE,
-    MODULE
-}
-
 open class SModelId {
     companion object {
         fun regular(uuid: UUID): SModelId = RegularSModelId(uuid)

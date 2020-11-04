@@ -204,28 +204,6 @@ class SModelHeader {
 //    }
 }
 
-fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: LanguageRegistry? = null): PhysicalModel {
-    val mis = ModelInputStream(inputStream)
-    val modelHeader = com.strumenta.mps.binary.loadHeader(mis)
-    // val model = SModel(modelHeader.getModelReference(), modelHeader)
-    val pModel = PhysicalModel(modelHeader.getModelReference()!!.id.uuid()!!, modelHeader.getModelReference()!!.name)
-    val bp = BinaryPersistence()
-    val languageLoaderHelper = LanguageLoaderHelper()
-    val rh = bp.loadModelProperties(mis, languageLoaderHelper) // , pModel)
-//    rh.requestInterfaceOnly(interfaceOnly)
-//
-    val reader = com.strumenta.deprecated_mpsinterop.binary.NodesReader(modelHeader.getModelReference()!!, mis, rh)
-    TODO()
-    // reader.readNodesInto(pModel)
-//    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
-    // TODO()
-
-    if (languageRegistry != null) {
-        languageLoaderHelper.loadedLanguages().forEach { languageRegistry.add(it) }
-    }
-
-    return pModel
-}
 
 class SModel(modelReference: SModelReference?, val modelHeader: SModelHeader) {
     val numberOfRoots: Int
@@ -241,42 +219,3 @@ class SModel(modelReference: SModelReference?, val modelHeader: SModelHeader) {
         get() = modelHeader.modelRef!!.name
 }
 
-fun loadHeader(mis: ModelInputStream): SModelHeader {
-    if (mis.readInt() != HEADER_START) {
-        throw IOException("bad stream, no header")
-    }
-
-    val streamId = mis.readInt()
-    if (streamId == STREAM_ID_V1) {
-        throw IOException(String.format("Can't read old binary persistence version (%x), please re-save models", streamId))
-    }
-    if (streamId != STREAM_ID) {
-        throw IOException(String.format("bad stream, unknown version: %x", streamId))
-    }
-
-    val modelRef = mis.readModelReference()
-    val result = SModelHeader()
-    result.modelRef = modelRef
-    mis.readInt() // left for compatibility: old version was here
-    mis.mark(4)
-    if (mis.readByte() == HEADER_ATTRIBUTES) {
-        result.setDoNotGenerate(mis.readBoolean())
-        var propsCount = mis.readShort()
-        while (propsCount > 0) {
-            val key = mis.readString()
-            val value = mis.readString()
-            result.setOptionalProperty(key, value)
-            propsCount--
-        }
-    } else {
-        mis.reset()
-    }
-    assertSyncToken(mis, HEADER_END)
-    return result
-}
-
-private fun assertSyncToken(`is`: ModelInputStream, token: Int) {
-    if (`is`.readInt() != token) {
-        throw IOException("bad stream, no sync token")
-    }
-}

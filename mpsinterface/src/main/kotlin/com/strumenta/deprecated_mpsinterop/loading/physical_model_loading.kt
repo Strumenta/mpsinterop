@@ -195,9 +195,3 @@ fun loadModel(document: Document): PhysicalModel {
 fun loadMpsModel(data: InputStream): PhysicalModel {
     return loadModel(loadDocument(data))
 }
-
-fun loadMpsModel(file: File): PhysicalModel {
-    return loadMpsModel(FileInputStream(file))
-}
-
-fun loadMpsModel(data: ByteArray) = loadMpsModel(ByteArrayInputStream(data))

@@ -206,11 +206,6 @@ class Indexer : ModelLocator {
     }
 }
 
-fun ModelLocator.findConceptDeclaration(qname: String): PhysicalNode? {
-    val modelName = qname.parentName
-    val model = this.locateModel(modelName)
-    return model?.findConceptDeclaration(qname)
-}
 
 fun main() {
     val indexer = Indexer()
