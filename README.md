@@ -16,8 +16,12 @@ The goal of this project is to permit interoperability with MPS model from outsi
 * Logical model, testing [DOING]
 * Loading physical model
 * Loading logical model
-* Work with heterogeneous API, based on Manifold
 * Example with visualization of a model
+
+### Ideas
+
+* Work with heterogeneous API, based on Manifold
+* Generate Kotlin classes
 
 ## Planned features
 
