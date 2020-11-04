@@ -8,6 +8,8 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import com.google.gson.annotations.Expose
+import com.strumenta.mps.organization.Reference
+import com.strumenta.mps.organization.Serializable
 import org.w3c.dom.Element
 import java.lang.reflect.Type
 
@@ -41,16 +43,16 @@ private val gson = GsonBuilder().setPrettyPrinting()
             }
 
             override fun shouldSkipField(f: FieldAttributes): Boolean {
-                if (f.name == "name" && f.declaringClass.canonicalName == "com.strumenta.mps.MpsProject.NodeImpl") {
+                if (f.name == "name" && f.declaringClass.canonicalName == "com.strumenta.mps.organization.MpsProject.NodeImpl") {
                     return true
                 }
-                if (f.name == "value" && f.declaringClass.canonicalName == "com.strumenta.mps.MpsProject.ExternalReferenceImpl") {
+                if (f.name == "value" && f.declaringClass.canonicalName == "com.strumenta.mps.organization.MpsProject.ExternalReferenceImpl") {
                     return true
                 }
                 if (f.declaredClass == Element::class.java) {
                     return true
                 }
-                if (f.declaredClass?.canonicalName == "com.strumenta.mps.MpsProject.Registry") {
+                if (f.declaredClass?.canonicalName == "com.strumenta.mps.organization.MpsProject.Registry") {
                     return true
                 }
                 if (f.annotations.any { it is Expose && !it.serialize }) {

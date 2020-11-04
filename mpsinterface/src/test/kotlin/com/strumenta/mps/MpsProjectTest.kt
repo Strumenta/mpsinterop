@@ -1,5 +1,8 @@
 package com.strumenta.mps
 
+import com.strumenta.mps.organization.ModulesLoader
+import com.strumenta.mps.organization.MpsProject
+import com.strumenta.mps.organization.Node
 import org.junit.Test
 import java.io.File
 import java.util.UUID

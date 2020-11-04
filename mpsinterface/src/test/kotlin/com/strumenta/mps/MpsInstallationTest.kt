@@ -1,5 +1,6 @@
 package com.strumenta.mps
 
+import com.strumenta.mps.organization.MpsInstallation
 import java.io.File
 import java.util.*
 import kotlin.test.Test

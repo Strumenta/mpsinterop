@@ -5,6 +5,9 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.strumenta.mps.*
+import com.strumenta.mps.organization.Model
+import com.strumenta.mps.organization.MpsInstallation
+import com.strumenta.mps.organization.MpsProject
 import java.io.File
 import java.lang.RuntimeException
 import kotlin.system.exitProcess

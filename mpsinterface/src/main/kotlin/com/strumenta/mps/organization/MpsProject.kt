@@ -1,5 +1,9 @@
-package com.strumenta.mps
+package com.strumenta.mps.organization
 
+import com.strumenta.mps.FileSource
+import com.strumenta.mps.Source
+import com.strumenta.mps.loadLanguage
+import com.strumenta.mps.loadSolution
 import com.strumenta.utils.children
 import com.strumenta.utils.loadDocument
 import com.strumenta.utils.processAllNodes

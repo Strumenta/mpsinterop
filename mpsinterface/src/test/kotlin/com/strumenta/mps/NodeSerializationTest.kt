@@ -3,6 +3,7 @@ package com.strumenta.mps
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
+import com.strumenta.mps.organization.MpsProject
 import org.junit.Test
 import java.io.File
 import kotlin.test.assertEquals

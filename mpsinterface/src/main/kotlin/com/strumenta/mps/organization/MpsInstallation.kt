@@ -1,5 +1,9 @@
-package com.strumenta.mps
+package com.strumenta.mps.organization
 
+import com.strumenta.mps.JarEntrySource
+import com.strumenta.mps.ModulesContainer
+import com.strumenta.mps.loadLanguage
+import com.strumenta.mps.loadSolution
 import com.strumenta.mps.utils.directChildrenOf
 import com.strumenta.utils.loadDocument
 import java.io.File
