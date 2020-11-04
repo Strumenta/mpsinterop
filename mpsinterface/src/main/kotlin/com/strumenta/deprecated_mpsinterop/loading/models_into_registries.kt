@@ -11,7 +11,6 @@ import com.strumenta.deprecated_mpsinterop.utils.loadDocument
 import com.strumenta.deprecated_mpsinterop.utils.processAllNodes
 import org.w3c.dom.Element
 import java.io.File
-import java.io.FileInputStream
 import java.io.InputStream
 import java.util.* // ktlint-disable
 import java.util.jar.JarFile

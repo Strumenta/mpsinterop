@@ -211,12 +211,12 @@ fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: Langu
     val pModel = PhysicalModel(modelHeader.getModelReference()!!.id.uuid()!!, modelHeader.getModelReference()!!.name)
     val bp = BinaryPersistence()
     val languageLoaderHelper = LanguageLoaderHelper()
-    val rh = bp.loadModelProperties(mis, languageLoaderHelper)//, pModel)
+    val rh = bp.loadModelProperties(mis, languageLoaderHelper) // , pModel)
 //    rh.requestInterfaceOnly(interfaceOnly)
 //
     val reader = com.strumenta.deprecated_mpsinterop.binary.NodesReader(modelHeader.getModelReference()!!, mis, rh)
     TODO()
-    //reader.readNodesInto(pModel)
+    // reader.readNodesInto(pModel)
 //    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
     // TODO()
 

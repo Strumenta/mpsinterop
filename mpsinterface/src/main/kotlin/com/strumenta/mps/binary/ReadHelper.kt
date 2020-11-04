@@ -80,5 +80,4 @@ internal class ReadHelper() {
         require(index >= 0) { "Index should be equal or greater to 0" }
         return myAggregations[index] ?: throw IllegalArgumentException("Aggregation with index $index not found. Known indexes: ${myAggregations.keys.joinToString(separator = ", ")}")
     }
-
 }

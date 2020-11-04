@@ -17,7 +17,7 @@ open class SModelId {
     open fun uuid(): UUID? {
         throw UnsupportedOperationException("No UUID for ${this.javaClass.canonicalName}")
     }
-    open fun toSerializedString() : String {
+    open fun toSerializedString(): String {
         return uuid().toString() ?: throw java.lang.UnsupportedOperationException()
     }
 }

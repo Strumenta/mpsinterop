@@ -108,5 +108,4 @@ class MpsInstallation(val rootDir: File) : ModulesLoader() {
         loadModules(File(rootDir, "languages"))
         loadModules(File(rootDir, "plugins"))
     }
-
 }

@@ -17,7 +17,7 @@ import java.util.jar.JarFile
 abstract class Source {
     abstract fun inputStream(): InputStream
     abstract fun listChildrenUnder(location: String, includingDir: Boolean = false): List<Source>
-    abstract fun listChildren() : List<Source>
+    abstract fun listChildren(): List<Source>
     fun listChildrenRecursively(): List<Source> {
         val sources = mutableListOf<Source>()
         for (c in listChildren()) {
@@ -50,7 +50,7 @@ abstract class Source {
         }
     }
 
-    abstract fun extension() : String
+    abstract fun extension(): String
 }
 
 class FileSource(val file: File) : Source() {
@@ -133,4 +133,3 @@ class JarEntrySource(val file: File, val entryPath: String) : Source() {
         return "jarEntry(${file.path}#$entryPath)"
     }
 }
-

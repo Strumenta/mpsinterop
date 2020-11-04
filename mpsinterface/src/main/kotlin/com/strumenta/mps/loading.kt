@@ -1,12 +1,12 @@
 package com.strumenta.mps
 
 import com.google.gson.annotations.Expose
+import com.strumenta.deprecated_mpsinterop.physicalmodel.ExplicitReferenceTarget
+import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mps.binary.*
 import com.strumenta.mps.binary.BinaryPersistence
 import com.strumenta.mps.binary.LanguageLoaderHelper
 import com.strumenta.mps.binary.NodesReader
-import com.strumenta.deprecated_mpsinterop.physicalmodel.ExplicitReferenceTarget
-import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mps.utils.Base64
 import com.strumenta.utils.child
 import com.strumenta.utils.children
@@ -18,12 +18,12 @@ import java.lang.IllegalStateException
 import java.util.*
 
 data class IndexElement(
-        val uuid: UUID,
-        val name: String,
-        val type: ElementType,
-        val source: Source,
-        val moduleVersion: Int? = null,
-        val languageVersion: Int? = null
+    val uuid: UUID,
+    val name: String,
+    val type: ElementType,
+    val source: Source,
+    val moduleVersion: Int? = null,
+    val languageVersion: Int? = null
 ) {
     val document: Document
         get() = source.document
@@ -41,35 +41,35 @@ private class ModuleImpl(val indexElement: IndexElement) {
             val document = indexElement.document
             val modelSources = mutableListOf<Source>()
             document.documentElement.child("models").processChildren(
-                    "modelRoot",
-                    { modelRoot ->
-                        val contentPath = modelRoot.getAttribute("contentPath")
-                        val type = modelRoot.getAttribute("type")
-                        when (type) {
-                            "default" -> {
-                                modelRoot.processChildren(
-                                        "sourceRoot",
-                                        { sourceRoot ->
-                                            val location = sourceRoot.getAttribute("location")
-                                            try {
-                                                var combinedLocation = "$contentPath/$location"
-                                                require(combinedLocation.startsWith("\${module}/"))
-                                                combinedLocation = combinedLocation.removePrefix("\${module}/")
-                                                modelSources.addAll(indexElement.source.listChildrenUnderRecursively(combinedLocation))
-                                            } catch (e: Throwable) {
-                                                throw RuntimeException("Issue processing location '$location'", e)
-                                            }
-                                        }
-                                )
-                            }
-                            "java_classes" -> {
-                                // ignore
-                            }
-                            else -> {
-                                throw UnsupportedOperationException("modelRoot of type $type is not supported")
-                            }
+                "modelRoot",
+                { modelRoot ->
+                    val contentPath = modelRoot.getAttribute("contentPath")
+                    val type = modelRoot.getAttribute("type")
+                    when (type) {
+                        "default" -> {
+                            modelRoot.processChildren(
+                                "sourceRoot",
+                                { sourceRoot ->
+                                    val location = sourceRoot.getAttribute("location")
+                                    try {
+                                        var combinedLocation = "$contentPath/$location"
+                                        require(combinedLocation.startsWith("\${module}/"))
+                                        combinedLocation = combinedLocation.removePrefix("\${module}/")
+                                        modelSources.addAll(indexElement.source.listChildrenUnderRecursively(combinedLocation))
+                                    } catch (e: Throwable) {
+                                        throw RuntimeException("Issue processing location '$location'", e)
+                                    }
+                                }
+                            )
+                        }
+                        "java_classes" -> {
+                            // ignore
+                        }
+                        else -> {
+                            throw UnsupportedOperationException("modelRoot of type $type is not supported")
                         }
                     }
+                }
             )
             return modelSources.filter { it.isFile }.map { loadModel(it) }.filterNotNull().toSet()
         } catch (t: Throwable) {
@@ -118,10 +118,10 @@ private class ModuleImpl(val indexElement: IndexElement) {
 }
 
 private class ModelImpl(
-        @Expose(serialize = false)
-        override val source: Source,
-        override val name: String,
-        override val uuid: UUID
+    @Expose(serialize = false)
+    override val source: Source,
+    override val name: String,
+    override val uuid: UUID
 ) : Model() {
     private val roots: List<Node> by lazy { loadRoots() }
 
@@ -186,7 +186,7 @@ private class ModelImpl(
                 }
             }
             return registry
-        } catch (t : Throwable) {
+        } catch (t: Throwable) {
             throw java.lang.RuntimeException("Issue loading registry for model coming from $source", t)
         }
     }
@@ -204,7 +204,7 @@ private class ModelImpl(
                 val nodes = reader.readNodes()
 
                 return nodes.map { PhysicalNodeWrapper(it) }
-            } catch (t : Throwable) {
+            } catch (t: Throwable) {
                 throw java.lang.RuntimeException("Issue reading nodes for model $name loaded from $source", t)
             }
         }
@@ -220,8 +220,9 @@ private class ModelImpl(
 }
 
 private class PhysicalNodeWrapper(
-        @Expose(serialize = false)
-        val physicalNode: PhysicalNode) : Node() {
+    @Expose(serialize = false)
+    val physicalNode: PhysicalNode
+) : Node() {
     override val name: String?
         get() = property("name")
     override val conceptName: String by lazy { physicalNode.concept.qualifiedName }
@@ -229,7 +230,7 @@ private class PhysicalNodeWrapper(
     override val properties: Map<String, String> by lazy { convertProperties() }
     override val containmentLinkName: String? by lazy { calculateContainmentLinkName() }
 
-    private fun calculateContainmentLinkName() : String? {
+    private fun calculateContainmentLinkName(): String? {
         val parent = this.physicalNode.parent
         if (parent == null) {
             return null
@@ -241,7 +242,7 @@ private class PhysicalNodeWrapper(
     override val children: List<Node> by lazy { physicalNode.allChildren().map { PhysicalNodeWrapper(it) } }
     override val references: List<Reference> by lazy { physicalNode.allReferenceNames().map { toReference(it) } }
 
-    private fun toReference(refName: String) : Reference {
+    private fun toReference(refName: String): Reference {
         try {
             val value = physicalNode.reference(refName)
             when (value!!.target) {
@@ -253,7 +254,7 @@ private class PhysicalNodeWrapper(
         }
     }
 
-    private fun convertProperties() : Map<String, String> = physicalNode.propertyNames().map { it to physicalNode.propertyValue(it) }.filter { it.second != null }.map { it as Pair<String, String> }.toMap()
+    private fun convertProperties(): Map<String, String> = physicalNode.propertyNames().map { it to physicalNode.propertyValue(it) }.filter { it.second != null }.map { it as Pair<String, String> }.toMap()
 }
 
 private class SolutionImpl(val indexElement: IndexElement) : Solution() {
@@ -287,15 +288,15 @@ private class LanguageImpl(val indexElement: IndexElement) : Language() {
 }
 
 private class NodeImpl(
-        override val conceptName: String,
-        override val id: NodeID,
-        override val containmentLinkName: String?,
-        @Expose(serialize = false)
-        override val name: String?,
-        @Expose(serialize = false)
-        val xmlNode: Element,
-        @Expose(serialize = false)
-        val registry: Registry
+    override val conceptName: String,
+    override val id: NodeID,
+    override val containmentLinkName: String?,
+    @Expose(serialize = false)
+    override val name: String?,
+    @Expose(serialize = false)
+    val xmlNode: Element,
+    @Expose(serialize = false)
+    val registry: Registry
 ) : Node() {
 
     companion object {
@@ -368,10 +369,10 @@ private class NodeImpl(
 }
 
 private class LocalReferenceImpl(
-        override val linkName: String,
-        @Expose(serialize = false)
-        val registry: Registry,
-        val index: String
+    override val linkName: String,
+    @Expose(serialize = false)
+    val registry: Registry,
+    val index: String
 ) : Reference() {
     override fun refString(): String = "int:${value?.id}"
 
@@ -388,16 +389,14 @@ private class LocalReferenceImpl(
     }
 }
 
-
-
 private class ExternalReferenceImpl(
-        override val linkName: String,
-        val modelUUID: UUID,
-        @Expose(serialize = false)
-        val localIndex: String,
-        val module: UUID? = null
+    override val linkName: String,
+    val modelUUID: UUID,
+    @Expose(serialize = false)
+    val localIndex: String,
+    val module: UUID? = null
 ) : Reference() {
-    val nodeID : Long by lazy { Base64.parseLong(localIndex) }
+    val nodeID: Long by lazy { Base64.parseLong(localIndex) }
 
     // TODO use registry to translate those indexes
     override fun refString(): String = "ext:$modelUUID:$nodeID"
@@ -415,11 +414,10 @@ private class ExternalReferenceImpl(
     }
 }
 
-
-fun loadSolution(source: Source) : Solution {
+fun loadSolution(source: Source): Solution {
     val document = source.document
     val uuidStr = document.documentElement.getAttribute("uuid")
-    val uuid : UUID
+    val uuid: UUID
     try {
         uuid = UUID.fromString(uuidStr)
     } catch (t: Throwable) {
@@ -431,7 +429,7 @@ fun loadSolution(source: Source) : Solution {
     return SolutionImpl(IndexElement(uuid, name, ElementType.SOLUTION, source, moduleVersion))
 }
 
-fun loadLanguage(source: Source) : Language {
+fun loadLanguage(source: Source): Language {
     try {
         val document = source.document
         val uuid = UUID.fromString(document.documentElement.getAttribute("uuid"))
@@ -480,15 +478,15 @@ private class Registry {
         return indexToReferenceName[index] ?: throw IllegalArgumentException("No reference with index $index found")
     }
 
-    fun modelUUIDFromIndex(index: String) : UUID {
+    fun modelUUIDFromIndex(index: String): UUID {
         return indexToModelUUID[index] ?: throw IllegalArgumentException("No model with index $index found")
     }
 
-    fun moduleUUIDFromIndex(index: String) : UUID? {
+    fun moduleUUIDFromIndex(index: String): UUID? {
         return indexToModuleUUID[index]
     }
 
-    fun modelNameFromIndex(index: String) : String {
+    fun modelNameFromIndex(index: String): String {
         return indexToModelName[index] ?: throw IllegalArgumentException("No model with index $index found")
     }
 
@@ -520,14 +518,13 @@ private class Registry {
         indexToModelUUID[index] = modelUUID
         indexToModelName[index] = name
         if (moduleUUID != null) {
-            indexToModuleUUID[index] = moduleUUID;
+            indexToModuleUUID[index] = moduleUUID
         }
     }
 }
 
 abstract class ModulesContainer {
     abstract val modules: List<Module>
-
 
     fun findModel(modelName: String): Model? {
         for (m in modules) {
@@ -549,9 +546,9 @@ abstract class ModulesContainer {
         return null
     }
 
-    fun findModule(moduleName: String) : Module? = modules.find { it.name == moduleName }
+    fun findModule(moduleName: String): Module? = modules.find { it.name == moduleName }
 
-    fun listModels() : Set<Model> {
-        return modules.fold(emptySet(), { acc, module ->  acc + module.models() })
+    fun listModels(): Set<Model> {
+        return modules.fold(emptySet(), { acc, module -> acc + module.models() })
     }
 }

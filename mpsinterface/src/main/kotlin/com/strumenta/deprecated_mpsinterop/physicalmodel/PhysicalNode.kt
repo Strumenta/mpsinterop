@@ -66,7 +66,7 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     }
 
     fun allChildren(): List<PhysicalNode> {
-        return children.values.fold(emptyList(), {acc, el -> acc + el})
+        return children.values.fold(emptyList(), { acc, el -> acc + el })
     }
 
     fun numberOfChildren(relationName: String): Int {
@@ -123,11 +123,11 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
     // Properties
     // //////////////////////////////////////////
 
-    fun propertiesMap() : Map<String, String?> {
+    fun propertiesMap(): Map<String, String?> {
         return propertyNames().map { it to propertyValue(it, null) }.toMap()
     }
 
-    fun propertyNames() : Set<String> = this.properties.keys.map { it.name }.toSet()
+    fun propertyNames(): Set<String> = this.properties.keys.map { it.name }.toSet()
 
     fun propertyValue(property: PhysicalProperty): String? {
         return properties[property]
@@ -199,6 +199,4 @@ class PhysicalNode(val parent: PhysicalNode?, val concept: PhysicalConcept, val 
         }
         return null
     }
-
-
 }

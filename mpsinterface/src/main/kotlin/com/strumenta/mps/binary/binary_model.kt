@@ -116,7 +116,6 @@ class SModelHeader {
     fun removeOptionalProperty(key: String) {
         myOptionalProperties.remove(key)
     }
-
 }
 
 class SModel(modelReference: SModelReference?, val modelHeader: SModelHeader) {

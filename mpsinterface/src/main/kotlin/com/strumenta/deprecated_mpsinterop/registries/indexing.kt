@@ -1,6 +1,6 @@
 package com.strumenta.deprecated_mpsinterop.registries
 
-//import com.strumenta.mps.binary.loadMpsModelFromBinaryFile
+// import com.strumenta.mps.binary.loadMpsModelFromBinaryFile
 import com.strumenta.deprecated_mpsinterop.loading.ModelLocator
 import com.strumenta.deprecated_mpsinterop.loading.loadLanguage
 import com.strumenta.deprecated_mpsinterop.loading.loadMpsModel

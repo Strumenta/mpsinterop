@@ -37,13 +37,11 @@ internal class BinaryPersistence {
     private val STUB_NONE: Byte = 0x12
     private val STUB_ID: Byte = 0x13
 
-
-
     internal fun loadModelProperties(
-            mis: ModelInputStream,
-            languageLoaderHelper: LanguageLoaderHelper
+        mis: ModelInputStream,
+        languageLoaderHelper: LanguageLoaderHelper
     ): ReadHelper {
-        val readHelper = loadRegistry(mis, languageLoaderHelper)//, model)
+        val readHelper = loadRegistry(mis, languageLoaderHelper) // , model)
 
         loadUsedLanguages(mis, languageLoaderHelper)
         for (ref in loadModuleRefList(mis)) {
@@ -60,9 +58,9 @@ internal class BinaryPersistence {
     }
 
     private fun loadRegistry(
-            mis: ModelInputStream,
-            languageLoaderHelper: LanguageLoaderHelper,
-        //model: PhysicalModel
+        mis: ModelInputStream,
+        languageLoaderHelper: LanguageLoaderHelper,
+        // model: PhysicalModel
     ): ReadHelper {
         assertSyncToken(mis, REGISTRY_START)
         // see #saveRegistry, we use position of an element in persistence as its index

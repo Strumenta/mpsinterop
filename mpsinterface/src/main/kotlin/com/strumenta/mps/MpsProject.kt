@@ -106,7 +106,7 @@ abstract class Node : Serializable {
     abstract val references: List<Reference>
 }
 
-class MpsProject(val projectDir: File, val mpsInstallation: MpsInstallation? = null, includingLibraries : Boolean = true) : ModulesLoader() {
+class MpsProject(val projectDir: File, val mpsInstallation: MpsInstallation? = null, includingLibraries: Boolean = true) : ModulesLoader() {
 
     val projectModules: List<Module>
         get() = solutions + languages
@@ -200,6 +200,4 @@ class MpsProject(val projectDir: File, val mpsInstallation: MpsInstallation? = n
     fun solution(solutionName: String): Solution? {
         return solutions.find { it.name == solutionName }
     }
-
-
 }

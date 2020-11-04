@@ -23,8 +23,8 @@ class ExporterTool : CliktCommand() {
         }
     }
 
-    private fun modulesContainer() : ModulesContainer {
-        var partialModulesContainer : MpsInstallation? = null
+    private fun modulesContainer(): ModulesContainer {
+        var partialModulesContainer: MpsInstallation? = null
         if (installation != null) {
             val installationDir = File(installation)
             if (!installationDir.exists() || !installationDir.isDirectory) {

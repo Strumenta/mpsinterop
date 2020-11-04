@@ -27,7 +27,7 @@ internal abstract class BareNodeReader(
         private const val REF_OTHER_MODEL: Byte = 18
     }
 
-    fun readNodes() : List<PhysicalNode> {
+    fun readNodes(): List<PhysicalNode> {
         return readChildren(null)
     }
 
@@ -72,7 +72,7 @@ internal abstract class BareNodeReader(
         val targetModelKind = modelInputStream.readByte().toInt()
         assert(targetModelKind == REF_OTHER_MODEL.toInt() || targetModelKind == REF_THIS_MODEL.toInt())
         val modelRef: SModelReference?
-        var result : Reference? = null
+        var result: Reference? = null
         if (targetModelKind == REF_OTHER_MODEL.toInt()) {
             modelRef = modelInputStream.readModelReference()!!
             result = if (modelRef.id.hasUUID()) {
@@ -89,7 +89,7 @@ internal abstract class BareNodeReader(
             val reference = StaticReference(
                 sref,
                 node,
-                    modelRef,
+                modelRef,
                 targetNodeId,
                 resolveInfo
             )
