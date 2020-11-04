@@ -3,9 +3,6 @@ package com.strumenta.mps.binary
 import com.strumenta.deprecated_mpsinterop.binary.SModelHeader
 import com.strumenta.deprecated_mpsinterop.logicalmodel.Node
 import com.strumenta.deprecated_mpsinterop.logicalmodel.SModelReference
-import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalModel
-import com.strumenta.deprecated_mpsinterop.registries.LanguageRegistry
-import java.io.* // ktlint-disable
 import java.io.IOException
 import java.sql.Types.REF
 import java.util.* // ktlint-disable
@@ -80,7 +77,6 @@ class SModelHeader {
     private var myPersistenceVersion = -1
     private var doNotGenerate = false
     private val myOptionalProperties = HashMap<String, String>()
-    // private val myMetaInfoProvider: MetaModelInfoProvider? = null
 
     fun getPersistenceVersion(): Int {
         return myPersistenceVersion
@@ -108,18 +104,6 @@ class SModelHeader {
         return modelRef
     }
 
-//    fun setModelReference(@Nullable modelRef: SModelReference?) {
-//        myModelRef = modelRef
-//    }
-//
-//    fun getOptionalProperties(): Map<String, String> {
-//        return Collections.unmodifiableMap(myOptionalProperties)
-//    }
-//
-//    fun getOptionalProperty(key: String): String {
-//        return myOptionalProperties[key]
-//    }
-//
     fun setOptionalProperty(key: String?, value: String?) {
         assert(!DO_NOT_GENERATE.equals(key))
         assert(!REF.equals(key))
@@ -133,94 +117,7 @@ class SModelHeader {
         myOptionalProperties.remove(key)
     }
 
-    /**
-     * PROVISIONAL, DO NOT USE (unless your name starts with 'A' and you know what you're doing)
-     *
-     * This is per-model mechanism to alter meta-model (aka structure model) information used in persistence.
-     * Generally, this mechanism shall not be in use, and `null` value is legitimate default, which means
-     * native MPS mechanism of Concept (and ConceptDescriptors) would be in use.
-     * However, certain scenarios (command-line merge and ant task to convert models to binary) can't yet afford starting whole
-     * MPS and thus shall rely on meta-information read from model files (which is generally sufficient to write the files back).
-     *
-     * For these scenarios, we used to have global [jetbrains.mps.persistence.ModelEnvironmentInfo], which is global and a bit
-     * outdated for modern persistence, hence it has been replaced with MetaModelInfoProvider, although this solution is provisional
-     * and likely to get changed in future (perhaps, class known now as IdInfoCollector would replace it).
-     */
-//    fun setMetaInfoProvider(@Nullable mmiProvider: MetaModelInfoProvider) {
-//        myMetaInfoProvider = mmiProvider
-//    }
-//
-//    fun getMetaInfoProvider(): MetaModelInfoProvider? {
-//        return myMetaInfoProvider
-//    }
-//
-//    fun create(persistenceVersion: Int): SModelHeader {
-//        val header = SModelHeader()
-//        header.setPersistenceVersion(persistenceVersion)
-//        return header
-//    }
-//
-//    // FIXME move save and load into respective class (binary persistence)
-//    @Throws(IOException::class)
-//    fun save(stream: ModelOutputStream) {
-//        stream.writeByte(77)
-//        stream.writeString(if (myModelRef == null) null else PersistenceFacade.getInstance().asString(myModelRef))
-//        stream.writeInt(myPersistenceVersion)
-//        stream.writeInt(0) //version was here
-//        stream.writeBoolean(doNotGenerate)
-//        stream.writeInt(myOptionalProperties.size())
-//        for (ss in myOptionalProperties.entrySet()) {
-//            stream.writeString(ss.key)
-//            stream.writeString(ss.value)
-//        }
-//    }
-//
-//    @Throws(IOException::class)
-//    fun load(stream: ModelInputStream): SModelHeader {
-//        if (stream.readByte().toInt() != 77) throw IOException("bad stream: no model header start marker")
-//        val result = SModelHeader()
-//        val s = stream.readString()
-//        result.setModelReference(if (s == null) null else PersistenceFacade.getInstance().createModelReference(s))
-//        result.setPersistenceVersion(stream.readInt())
-//        stream.readInt() //old model version was here
-//        result.setDoNotGenerate(stream.readBoolean())
-//        for (size in stream.readInt() downTo 1) {
-//            result.setOptionalProperty(stream.readString(), stream.readString())
-//        }
-//        return result
-//    }
-//
-//    fun createCopy(): SModelHeader {
-//        val copy = SModelHeader()
-//        copy.myModelRef = myModelRef
-//        copy.myPersistenceVersion = myPersistenceVersion
-//        copy.doNotGenerate = doNotGenerate
-//        copy.myOptionalProperties.putAll(myOptionalProperties)
-//        return copy
-//    }
 }
-
-//fun loadMpsModelFromBinaryFile(inputStream: InputStream, languageRegistry: LanguageRegistry? = null): PhysicalModel {
-//    val mis = ModelInputStream(inputStream)
-//    val modelHeader = loadHeader(mis)
-//    // val model = SModel(modelHeader.getModelReference(), modelHeader)
-//    val pModel = PhysicalModel(modelHeader.getModelReference()!!.id.uuid()!!, modelHeader.getModelReference()!!.name)
-//    val bp = BinaryPersistence()
-//    val languageLoaderHelper = LanguageLoaderHelper()
-//    val rh = bp.loadModelProperties(mis, languageLoaderHelper)//, pModel)
-////    rh.requestInterfaceOnly(interfaceOnly)
-////
-//    val reader = NodesReader(modelHeader.getModelReference()!!, mis, rh)
-//    reader.readNodesInto(pModel)
-////    return ModelLoadResult(model, if (reader.hasSkippedNodes()) ModelLoadingState.INTERFACE_LOADED else ModelLoadingState.FULLY_LOADED)
-//    // TODO()
-//
-//    if (languageRegistry != null) {
-//        languageLoaderHelper.loadedLanguages().forEach { languageRegistry.add(it) }
-//    }
-//
-//    return pModel
-//}
 
 class SModel(modelReference: SModelReference?, val modelHeader: SModelHeader) {
     val numberOfRoots: Int
