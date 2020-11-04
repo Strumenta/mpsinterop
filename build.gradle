@@ -15,19 +15,4 @@ buildscript {
     }
 }
 
-// plugins {
-//     id "org.jlleitschuh.gradle.ktlint" version "8.2.0"
-// }
-
-//apply plugin: 'kotlin'
-
 group = 'com.strumenta.mpsinterop'
-
-// sourceCompatibility = 1.8
-// targetCompatibility = 1.8
-
-// test {
-//     testLogging {
-//         events "passed", "skipped", "failed", "standardOut", "standardError"
-//     }
-// }
