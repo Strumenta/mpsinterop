@@ -3,12 +3,12 @@ package com.strumenta.mps
 import com.strumenta.mps.utils.directChildrenOf
 import com.strumenta.mps.utils.parent
 import com.strumenta.mps.utils.subDirectory
+import com.strumenta.utils.loadDocument
 import org.w3c.dom.Document
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
 import java.lang.RuntimeException
-import java.util.jar.JarEntry
 import java.util.jar.JarFile
 
 /**

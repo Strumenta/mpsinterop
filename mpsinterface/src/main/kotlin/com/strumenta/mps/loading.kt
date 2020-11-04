@@ -6,9 +6,12 @@ import com.strumenta.mps.binary.BinaryPersistence
 import com.strumenta.mps.binary.LanguageLoaderHelper
 import com.strumenta.mps.binary.NodesReader
 import com.strumenta.deprecated_mpsinterop.physicalmodel.ExplicitReferenceTarget
-import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalModel
 import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalNode
 import com.strumenta.mps.utils.Base64
+import com.strumenta.utils.child
+import com.strumenta.utils.children
+import com.strumenta.utils.processAllNodes
+import com.strumenta.utils.processChildren
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import java.lang.IllegalStateException

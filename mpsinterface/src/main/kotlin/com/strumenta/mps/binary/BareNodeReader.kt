@@ -1,4 +1,5 @@
 package com.strumenta.mps.binary
+
 import com.strumenta.deprecated_mpsinterop.binary.ExternalReference
 import com.strumenta.deprecated_mpsinterop.binary.ForeignReference
 import com.strumenta.deprecated_mpsinterop.logicalmodel.* // ktlint-disable
@@ -6,9 +7,7 @@ import com.strumenta.deprecated_mpsinterop.physicalmodel.* // ktlint-disable
 import java.io.IOException
 import java.util.*
 
-class ExternalReference(val modelUUID: UUID, val nodeId: String) : Reference {
-
-}
+class ExternalReference(val modelUUID: UUID, val nodeId: String) : Reference
 
 class ForeignReference(val modelUUID: String, val nodeId: String) : Reference
 
@@ -69,7 +68,6 @@ internal abstract class BareNodeReader(
         val kind = modelInputStream.readByte().toInt()
         assert(kind in 1..3)
         val targetNodeId = if (kind == 1) modelInputStream.readNodeId() else null
-        // val origin = if (kind == 3) DynamicReferenceOrigin(modelInputStream.readNodePointer(), modelInputStream.readNodePointer()) else null
         val origin = if (kind == 3) TODO() else null
         val targetModelKind = modelInputStream.readByte().toInt()
         assert(targetModelKind == REF_OTHER_MODEL.toInt() || targetModelKind == REF_THIS_MODEL.toInt())
@@ -77,10 +75,10 @@ internal abstract class BareNodeReader(
         var result : Reference? = null
         if (targetModelKind == REF_OTHER_MODEL.toInt()) {
             modelRef = modelInputStream.readModelReference()!!
-            if (modelRef.id.hasUUID()) {
-                result = ExternalReference(modelRef!!.id.uuid()!!, targetNodeId!!.toStringRepresentation())
+            result = if (modelRef.id.hasUUID()) {
+                ExternalReference(modelRef.id.uuid()!!, targetNodeId!!.toStringRepresentation())
             } else {
-                result = ForeignReference(modelRef!!.id.toSerializedString(), targetNodeId!!.toStringRepresentation())
+                ForeignReference(modelRef.id.toSerializedString(), targetNodeId!!.toStringRepresentation())
             }
         } else {
             modelRef = modelReference
@@ -91,7 +89,7 @@ internal abstract class BareNodeReader(
             val reference = StaticReference(
                 sref,
                 node,
-                modelRef!!,
+                    modelRef,
                 targetNodeId,
                 resolveInfo
             )
@@ -110,38 +108,23 @@ internal abstract class BareNodeReader(
                 node.addReference(sref, PhysicalReferenceValue(value, resolveInfo))
             } catch (e: Throwable) {
                 if (result != null) {
-                    //node.addReference(sref, PhysicalReferenceValue(result!!, resolveInfo))
+                    // node.addReference(sref, PhysicalReferenceValue(result!!, resolveInfo))
                 } else {
                     node.addReference(sref, PhysicalReferenceValue(FailedLoadingReferenceTarget(e), resolveInfo))
                 }
             }
-            //return reference
             return result ?: reference
         } else if (kind == 2 || kind == 3) {
             TODO()
-//                val reference = DynamicReference(
-//                        relation,
-//                        node,
-//                        modelRef,
-//                        resolveInfo)
-//                if (origin != null) {
-//                    reference.setOrigin(origin)
-//                }
-//                node.setReference(relation, reference)
-            // return reference
         } else {
             throw IOException("unknown reference type")
         }
     }
-//
+
     protected fun localNodeReferenceRead(nodeId: NodeId?) {
         // no-op, left for subclasses  to override
     }
-//
-//    protected fun externalNodeReferenceRead(targetModel: SModelReference?, nodeId: NodeId?) {
-//        // no-op, left for subclasses  to override
-//    }
-//
+
     protected fun readUserObjects(node: PhysicalNode) {
         val userObjectCount = modelInputStream.readShort().toInt()
         var i = 0
@@ -156,26 +139,6 @@ internal abstract class BareNodeReader(
     }
 
     private fun readUserObject(): Any? {
-        val id = modelInputStream.readByte().toInt()
-        when (id) {
-//            BareNodeWriter.USER_NODE_POINTER -> return modelInputStream.readNodePointer()
-//            BareNodeWriter.USER_STRING -> return modelInputStream.readString()
-//            BareNodeWriter.USER_NULL -> return null
-//            BareNodeWriter.USER_NODE_ID -> return modelInputStream.readNodeId()
-//            BareNodeWriter.USER_MODEL_ID -> return modelInputStream.readModelID()
-//            BareNodeWriter.USER_MODEL_REFERENCE -> return modelInputStream.readModelReference()
-//            BareNodeWriter.USER_SERIALIZABLE -> {
-//                val stream = ObjectInputStream(modelInputStream)
-//                try {
-//                    return stream.readObject()
-//                } catch (ignore: ClassNotFoundException) {
-//                    // class could be loaded by the other classloader
-//                    return null
-//                }
-//
-//            }
-            else -> TODO()
-        }
-        throw IOException("Could not read user object")
+        TODO("Reading user objects is not supported")
     }
 }

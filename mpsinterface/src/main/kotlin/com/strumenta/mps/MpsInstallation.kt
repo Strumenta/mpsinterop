@@ -1,6 +1,7 @@
 package com.strumenta.mps
 
 import com.strumenta.mps.utils.directChildrenOf
+import com.strumenta.utils.loadDocument
 import java.io.File
 import java.lang.IllegalArgumentException
 import java.util.jar.JarFile

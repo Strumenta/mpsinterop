@@ -1,4 +1,8 @@
-package com.strumenta.mps
+package com.strumenta.utils
+
+/**
+ * This file contains facilities to work with XML documents
+ */
 
 import org.w3c.dom.Document
 import org.w3c.dom.Element
