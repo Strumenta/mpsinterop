@@ -15,11 +15,8 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
     private val myStrings = ArrayList<String>(2048)
     private val myModelRefs = ArrayList<SModelReference>(1024)
     private val myModuleRefs = ArrayList<SModuleReference>(128)
-//    private val myLanguages = ArrayList<SLanguage>(128)
     private val myConcepts = ArrayList<Concept>(128)
     private val myProperties = ArrayList<Property>(128)
-//    private val myAssociations = ArrayList<ReferenceLink>(128)
-//    private val myAggregations = ArrayList<ContainmentLink>(128)
 
     @Throws(IOException::class)
     fun readStrings(): Collection<String>? {
@@ -147,16 +144,6 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
             else -> throw IOException("no id")
         }
     }
-//
-//    @Throws(IOException::class)
-//    fun readNodePointer(): SNodeReference? {
-//        val b = readByte()
-//        return if (b == NULL) {
-//            null
-//        } else {
-//            jetbrains.mps.smodel.SNodePointer(readModelReference(), readNodeId())
-//        }
-//    }
 
     @Throws(IOException::class)
     fun readUUID(): UUID {
@@ -165,24 +152,6 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
         return UUID(headBits, tailBits)
     }
 
-//    @Throws(IOException::class)
-//    fun readLanguage(): SLanguage? {
-//        val b = readByte()
-//        if (b == NULL) {
-//            return null
-//        }
-//        if (b == LANGUAGE_INDEX) {
-//            return myLanguages[readShort()]
-//        }
-//        if (b != LANGUAGE) {
-//            throw IOException(Integer.toHexString(b.toInt()))
-//        }
-//        val l = MetaAdapterFactory.getLanguage(readLong(), readLong(), readString())
-//        myLanguages.add(l)
-//        return l
-//    }
-//
-//    @Throws(IOException::class)
     fun readConcept(): Concept? {
         val b = readByte()
         if (b == com.strumenta.deprecated_mpsinterop.binary.NULL) {
@@ -199,12 +168,8 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
         readLong()
         readString()
         TODO()
-        // val c = MetaAdapterFactory.getConcept(readLong(), readLong(), readLong(), readString())
-        // myConcepts.add(c)
-        // return c
     }
-//
-//    @Throws(IOException::class)
+
     fun readProperty(): Property? {
         val b = readByte()
         println("readProperty $b")
@@ -221,7 +186,6 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
         val propertyId = readLong()
         val propertyName = readString()
         val propertyType = TODO()
-        // val p = MetaAdapterFactory.getPropertyByName(AbsolutePropertyId(MetaIdHelper.getConcept(c), readLong()), readString())
         val p = Property(AbsolutePropertyId(c!!.absoluteID!!, propertyId), propertyName!!, propertyType)
         myProperties.add(p)
         return p
@@ -241,9 +205,6 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
             throw IOException(Integer.toHexString(b.toInt()))
         }
         val c = readConcept()
-//        val l = MetaAdapterFactory.getReferenceLink(AbsoluteReferenceLinkId(MetaIdHelper.getConcept(c), readLong()), readString())
-//        myAssociations.add(l)
-//        return l
         TODO()
     }
 
@@ -261,9 +222,6 @@ class ModelInputStream(val inputStream: InputStream) : DataInputStream(BufferedI
             throw IOException(Integer.toHexString(b.toInt()))
         }
         val c = readConcept()
-//        val l = MetaAdapterFactory.getContainmentLink(AbsoluteContainmentLinkId(MetaIdHelper.getConcept(c), readLong()), readString())
-//        myAggregations.add(l)
-//        return l
         TODO()
     }
 }
