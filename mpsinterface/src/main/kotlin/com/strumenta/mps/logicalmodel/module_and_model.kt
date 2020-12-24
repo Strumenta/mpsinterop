@@ -1,4 +1,4 @@
-package com.strumenta.deprecated_mpsinterop.logicalmodel
+package com.strumenta.mps.logicalmodel
 
 import java.util.LinkedList
 import java.util.UUID

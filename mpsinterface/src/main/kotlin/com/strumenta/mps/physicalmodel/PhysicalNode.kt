@@ -1,6 +1,6 @@
-package com.strumenta.deprecated_mpsinterop.physicalmodel
+package com.strumenta.mps.physicalmodel
 
-import com.strumenta.deprecated_mpsinterop.logicalmodel.NodeId
+import com.strumenta.mps.logicalmodel.NodeId
 import java.lang.IllegalStateException
 import java.lang.UnsupportedOperationException
 import java.util.* // ktlint-disable

@@ -1,7 +1,7 @@
 package com.strumenta.mps.binary
 
-import com.strumenta.deprecated_mpsinterop.logicalmodel.SModelReference
-import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalNode
+import com.strumenta.mps.logicalmodel.SModelReference
+import com.strumenta.mps.physicalmodel.PhysicalNode
 
 internal class NodesReader(modelReference: SModelReference, `is`: ModelInputStream, private val myReadHelper: ReadHelper) : BareNodeReader(modelReference, `is`) {
 

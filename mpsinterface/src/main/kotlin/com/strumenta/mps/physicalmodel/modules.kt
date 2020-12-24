@@ -1,4 +1,4 @@
-package com.strumenta.deprecated_mpsinterop.physicalmodel
+package com.strumenta.mps.physicalmodel
 
 import java.io.InputStream
 import java.util.LinkedList

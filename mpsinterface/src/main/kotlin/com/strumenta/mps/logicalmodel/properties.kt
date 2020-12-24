@@ -1,4 +1,4 @@
-package com.strumenta.deprecated_mpsinterop.logicalmodel
+package com.strumenta.mps.logicalmodel
 
 interface PropertyType {
     val defaultValue: Any

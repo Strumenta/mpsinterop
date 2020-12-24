@@ -1,4 +1,4 @@
-package com.strumenta.deprecated_mpsinterop.physicalmodel
+package com.strumenta.mps.physicalmodel
 
 const val CONCEPT_DECLARATION_CONCEPT_NAME =
     "jetbrains.mps.lang.structure.structure.ConceptDeclaration"

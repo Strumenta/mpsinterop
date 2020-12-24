@@ -1,8 +1,8 @@
 package com.strumenta.mps.binary
 
-import com.strumenta.deprecated_mpsinterop.binary.SModelHeader
-import com.strumenta.deprecated_mpsinterop.logicalmodel.Node
-import com.strumenta.deprecated_mpsinterop.logicalmodel.SModelReference
+import com.strumenta.mps.binary.SModelHeader
+import com.strumenta.mps.logicalmodel.Node
+import com.strumenta.mps.logicalmodel.SModelReference
 import java.io.IOException
 import java.sql.Types.REF
 import java.util.* // ktlint-disable

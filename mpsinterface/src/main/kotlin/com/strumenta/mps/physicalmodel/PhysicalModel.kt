@@ -1,7 +1,7 @@
-package com.strumenta.deprecated_mpsinterop.physicalmodel
+package com.strumenta.mps.physicalmodel
 
-import com.strumenta.deprecated_mpsinterop.logicalmodel.LanguageUUID
-import com.strumenta.deprecated_mpsinterop.logicalmodel.NodeId
+import com.strumenta.mps.logicalmodel.LanguageUUID
+import com.strumenta.mps.logicalmodel.NodeId
 import java.util.LinkedList
 import java.util.UUID
 

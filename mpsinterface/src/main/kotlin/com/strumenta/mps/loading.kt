@@ -1,8 +1,8 @@
 package com.strumenta.mps
 
 import com.google.gson.annotations.Expose
-import com.strumenta.deprecated_mpsinterop.physicalmodel.ExplicitReferenceTarget
-import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalNode
+import com.strumenta.mps.physicalmodel.ExplicitReferenceTarget
+import com.strumenta.mps.physicalmodel.PhysicalNode
 import com.strumenta.mps.binary.*
 import com.strumenta.mps.binary.BinaryPersistence
 import com.strumenta.mps.binary.LanguageLoaderHelper

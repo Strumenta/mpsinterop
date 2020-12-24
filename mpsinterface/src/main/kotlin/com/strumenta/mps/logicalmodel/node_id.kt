@@ -1,6 +1,6 @@
-package com.strumenta.deprecated_mpsinterop.logicalmodel
+package com.strumenta.mps.logicalmodel
 
-import com.strumenta.deprecated_mpsinterop.utils.Base64
+import com.strumenta.mps.utils.Base64
 
 abstract class NodeId {
     abstract fun toStringRepresentation(): String

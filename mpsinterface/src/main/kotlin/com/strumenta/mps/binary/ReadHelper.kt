@@ -1,15 +1,15 @@
 package com.strumenta.mps.binary
 
-import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsoluteConceptId
-import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsoluteContainmentLinkId
-import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsolutePropertyId
-import com.strumenta.deprecated_mpsinterop.logicalmodel.AbsoluteReferenceLinkId
-import com.strumenta.deprecated_mpsinterop.logicalmodel.ConceptKind
-import com.strumenta.deprecated_mpsinterop.logicalmodel.LanguageId
-import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalConcept
-import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalProperty
-import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalRelation
-import com.strumenta.deprecated_mpsinterop.physicalmodel.RelationKind
+import com.strumenta.mps.logicalmodel.AbsoluteConceptId
+import com.strumenta.mps.logicalmodel.AbsoluteContainmentLinkId
+import com.strumenta.mps.logicalmodel.AbsolutePropertyId
+import com.strumenta.mps.logicalmodel.AbsoluteReferenceLinkId
+import com.strumenta.mps.logicalmodel.ConceptKind
+import com.strumenta.mps.logicalmodel.LanguageId
+import com.strumenta.mps.physicalmodel.PhysicalConcept
+import com.strumenta.mps.physicalmodel.PhysicalProperty
+import com.strumenta.mps.physicalmodel.PhysicalRelation
+import com.strumenta.mps.physicalmodel.RelationKind
 
 /**
  * [jetbrains.mps.smodel.persistence.def.v9.IdInfoReadHelper] counterpart for binary persistence.

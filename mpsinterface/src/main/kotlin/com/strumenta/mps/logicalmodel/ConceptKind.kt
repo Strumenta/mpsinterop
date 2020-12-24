@@ -1,4 +1,4 @@
-package com.strumenta.deprecated_mpsinterop.logicalmodel
+package com.strumenta.mps.logicalmodel
 
 internal enum class ConceptKind {
     NORMAL,

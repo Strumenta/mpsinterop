@@ -1,7 +1,7 @@
-package com.strumenta.deprecated_mpsinterop.logicalmodel
+package com.strumenta.mps.logicalmodel
 
-import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalNode
-import com.strumenta.deprecated_mpsinterop.physicalmodel.PhysicalRelation
+import com.strumenta.mps.physicalmodel.PhysicalNode
+import com.strumenta.mps.physicalmodel.PhysicalRelation
 
 interface AbsoluteLinkId {
     val conceptId: AbsoluteConceptId

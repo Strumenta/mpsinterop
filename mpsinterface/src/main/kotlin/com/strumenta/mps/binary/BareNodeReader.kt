@@ -1,7 +1,7 @@
 package com.strumenta.mps.binary
 
-import com.strumenta.deprecated_mpsinterop.logicalmodel.* // ktlint-disable
-import com.strumenta.deprecated_mpsinterop.physicalmodel.* // ktlint-disable
+import com.strumenta.mps.logicalmodel.* // ktlint-disable
+import com.strumenta.mps.physicalmodel.* // ktlint-disable
 import java.io.IOException
 import java.util.*
 

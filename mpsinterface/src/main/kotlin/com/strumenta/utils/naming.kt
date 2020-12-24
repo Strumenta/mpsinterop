@@ -1,4 +1,4 @@
-package com.strumenta.deprecated_mpsinterop.utils
+package com.strumenta.utils
 
 val String.isSimpleName: Boolean
     get() = this.indexOf('.') == -1
