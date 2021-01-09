@@ -2,23 +2,20 @@ package com.strumenta.mps
 
 import org.junit.Test
 import java.io.File
-import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 class ModelImplTest {
 
-    @Test
-    fun loadRootsForToolCommon() {
-        val jar = File("src/test/resources/mps2019_3_1/languages/tools/jetbrains.mps.tool.common-src.jar")
-        val solution = loadSolution(JarEntrySource(jar, "module/jetbrains.mps.tool.common.msd"))
-        val models = solution.models()
-        assertEquals(1, models.size)
-        val model = models.iterator().next()
-        val roots = model.roots()
-    }
+//    @Test
+//    fun loadRootsForToolCommon() {
+//        val jar = File("src/test/resources/mps2019_3_1/languages/tools/jetbrains.mps.tool.common-src.jar")
+//        val solution = loadSolution(JarEntrySource(jar, "module/jetbrains.mps.tool.common.msd"))
+//        val models = solution.models()
+//        assertEquals(1, models.size)
+//        val model = models.iterator().next()
+//        val roots = model.roots()
+//    }
 
     @Test
     fun loadRootsForLangCore() {

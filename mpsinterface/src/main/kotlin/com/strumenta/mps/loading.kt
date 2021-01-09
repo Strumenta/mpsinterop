@@ -1,13 +1,13 @@
 package com.strumenta.mps
 
 import com.google.gson.annotations.Expose
-import com.strumenta.mps.physicalmodel.ExplicitReferenceTarget
-import com.strumenta.mps.physicalmodel.PhysicalNode
 import com.strumenta.mps.binary.*
 import com.strumenta.mps.binary.BinaryPersistence
 import com.strumenta.mps.binary.LanguageLoaderHelper
 import com.strumenta.mps.binary.NodesReader
 import com.strumenta.mps.organization.*
+import com.strumenta.mps.physicalmodel.ExplicitReferenceTarget
+import com.strumenta.mps.physicalmodel.PhysicalNode
 import com.strumenta.mps.utils.Base64
 import com.strumenta.utils.child
 import com.strumenta.utils.children
@@ -19,12 +19,12 @@ import java.lang.IllegalStateException
 import java.util.*
 
 data class IndexElement(
-        val uuid: UUID,
-        val name: String,
-        val type: ElementType,
-        val source: Source,
-        val moduleVersion: Int? = null,
-        val languageVersion: Int? = null
+    val uuid: UUID,
+    val name: String,
+    val type: ElementType,
+    val source: Source,
+    val moduleVersion: Int? = null,
+    val languageVersion: Int? = null
 ) {
     val document: Document
         get() = source.document
@@ -289,14 +289,14 @@ private class LanguageImpl(val indexElement: IndexElement) : Language() {
 }
 
 private class NodeImpl(
-        override val conceptName: String,
-        override val id: NodeID,
-        override val containmentLinkName: String?,
-        @Expose(serialize = false)
+    override val conceptName: String,
+    override val id: NodeID,
+    override val containmentLinkName: String?,
+    @Expose(serialize = false)
     override val name: String?,
-        @Expose(serialize = false)
+    @Expose(serialize = false)
     val xmlNode: Element,
-        @Expose(serialize = false)
+    @Expose(serialize = false)
     val registry: Registry
 ) : Node() {
 

@@ -78,8 +78,8 @@ abstract class ModulesLoader : ModulesContainer() {
     }
 
     protected fun loadModules(modulesDir: File) {
-        require(modulesDir.exists())
-        require(modulesDir.isDirectory)
+        require(modulesDir.exists()) { "modules dir exist: ${modulesDir.absolutePath}" }
+        require(modulesDir.isDirectory) { "modules dir is a directory" }
         modulesDir.listFiles().forEach {
             if (it.isDirectory) {
                 loadModules(it)

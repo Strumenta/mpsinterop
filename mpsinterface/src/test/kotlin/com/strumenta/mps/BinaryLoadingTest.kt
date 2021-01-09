@@ -24,17 +24,17 @@ class BinaryLoadingTest {
         assertEquals("1133920641626", baseConcept.id)
     }
 
-    @Test
-    fun loadToolCommon() {
-        val jar = File("src/test/resources/mps2019_3_1/languages/tools/jetbrains.mps.tool.common-src.jar")
-        val module = loadSolution(JarEntrySource(jar, "module/jetbrains.mps.tool.common.msd"))
-        val models = module.models()
-        assertEquals(1, models.size)
-        val model = module.findModel("jetbrains.mps.core.tool.environment.common")
-        assertNotNull(model)
-
-        val problematicNode = model.findNodeByID("2326999218710315906")
-        assertNotNull(problematicNode)
-        val refVariableDeclaration = problematicNode.reference("variableDeclaration")
-    }
+//    @Test
+//    fun loadToolCommon() {
+//        val jar = File("src/test/resources/mps2019_3_1/languages/tools/jetbrains.mps.tool.common-src.jar")
+//        val module = loadSolution(JarEntrySource(jar, "module/jetbrains.mps.tool.common.msd"))
+//        val models = module.models()
+//        assertEquals(1, models.size)
+//        val model = module.findModel("jetbrains.mps.core.tool.environment.common")
+//        assertNotNull(model)
+//
+//        val problematicNode = model.findNodeByID("2326999218710315906")
+//        assertNotNull(problematicNode)
+//        val refVariableDeclaration = problematicNode.reference("variableDeclaration")
+//    }
 }

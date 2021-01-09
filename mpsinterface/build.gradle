@@ -61,3 +61,8 @@ jar {
     }
 }
 
+ktlint {
+    disabledRules = ["no-wildcard-imports"]
+}
+
+

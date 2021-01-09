@@ -1,6 +1,5 @@
 package com.strumenta.mps.binary
 
-import com.strumenta.mps.binary.SModelHeader
 import com.strumenta.mps.logicalmodel.Node
 import com.strumenta.mps.logicalmodel.SModelReference
 import java.io.IOException

@@ -70,17 +70,17 @@ class NodeSerializationTest {
         assertEquals(JsonPrimitive("int:5270253970128191709"), referenceJson.get("to"))
     }
 
-    @Test
-    fun modelSerialization() {
-        val projectDir = File("src/test/resources/mpsserver_2")
-        val project = MpsProject(projectDir)
-        val model = project.findModel("com.strumenta.mpsserver.logic")!!
-        val json = model.toJsonObject()
-        assertEquals(setOf("roots", "name", "uuid"), json.keySet())
-        assert(json.get("roots").isJsonArray)
-        val roots = json.get("roots").asJsonArray
-        assertEquals(88, roots.size())
-    }
+//    @Test
+//    fun modelSerialization() {
+//        val projectDir = File("src/test/resources/mpsserver_2")
+//        val project = MpsProject(projectDir)
+//        val model = project.findModel("com.strumenta.mpsserver.logic")!!
+//        val json = model.toJsonObject()
+//        assertEquals(setOf("roots", "name", "uuid"), json.keySet())
+//        assert(json.get("roots").isJsonArray)
+//        val roots = json.get("roots").asJsonArray
+//        assertEquals(88, roots.size())
+//    }
 
     @Test
     fun serializationFromBinaryModel() {
@@ -104,16 +104,16 @@ class NodeSerializationTest {
         assertEquals(setOf("properties", "children", "references", "conceptName", "id", "containmentLinkName"), childJson.keySet())
     }
 
-    @Test
-    fun serializationOfEnvironmentCommon() {
-        val jar = File("src/test/resources/mps2019_3_1/languages/tools/jetbrains.mps.tool.common-src.jar")
-        val module = loadSolution(JarEntrySource(jar, "module/jetbrains.mps.tool.common.msd"))
-        val models = module.models()
-        assertEquals(1, models.size)
-        val model = module.findModel("jetbrains.mps.core.tool.environment.common")
-        assertNotNull(model)
-
-        val json = model.toJsonObject()
-        // We want to verify this does not crash
-    }
+//    @Test
+//    fun serializationOfEnvironmentCommon() {
+//        val jar = File("src/test/resources/mps2019_3_1/languages/tools/jetbrains.mps.tool.common-src.jar")
+//        val module = loadSolution(JarEntrySource(jar, "module/jetbrains.mps.tool.common.msd"))
+//        val models = module.models()
+//        assertEquals(1, models.size)
+//        val model = module.findModel("jetbrains.mps.core.tool.environment.common")
+//        assertNotNull(model)
+//
+//        val json = model.toJsonObject()
+//        // We want to verify this does not crash
+//    }
 }

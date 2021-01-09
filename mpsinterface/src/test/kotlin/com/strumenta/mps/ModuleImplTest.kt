@@ -2,10 +2,6 @@ package com.strumenta.mps
 
 import org.junit.Test
 import java.io.File
-import java.util.UUID
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class ModuleImplTest {

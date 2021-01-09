@@ -16,3 +16,4 @@ buildscript {
 }
 
 group = 'com.strumenta.mpsinterop'
+

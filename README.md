@@ -39,3 +39,17 @@ For now we target the JVM but we could in the future convert to a Kotlin multi-p
 ../gradlew run --args='--destination /Users/federico/repos/mps-web-editor/build/generated_json /Users/federico/repos/SigiDsl gescomplus.dsl.core.structure'
 ../gradlew run --args='-i /Users/federico/repos/mpsinterop/mpsinterface/src/test/resources/mps2019_3_1  --destination /Users/federico/repos/mps-web-editor/build/generated_json /Users/federico/repos/SigiDsl all'
 ```
+
+## How to build
+
+Run:
+
+```
+./gradlew jar
+```
+
+## How to run tests
+
+```
+./gradlew check
+```

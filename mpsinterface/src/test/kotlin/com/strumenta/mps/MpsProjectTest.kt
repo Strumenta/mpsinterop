@@ -1,6 +1,5 @@
 package com.strumenta.mps
 
-import com.strumenta.mps.organization.ModulesLoader
 import com.strumenta.mps.organization.MpsProject
 import com.strumenta.mps.organization.Node
 import org.junit.Test
@@ -369,16 +368,16 @@ class MpsProjectTest {
         assertEquals("jetbrains.mps.baseLanguage.structure.IntegerType", indexType.conceptName)
     }
 
-    @Test
-    fun loadLibrary() {
-        val libraryDir = File("src/test/resources/artifacts_1/org.iets3.opensource")
-        val modulesLoader = object : ModulesLoader() { }
-        modulesLoader.loadLibrary(libraryDir)
-        val module = modulesLoader.findModule("org.iets3.core.expr.toplevel")
-        assertNotNull(module)
-        val models = module.models()
-        assertEquals(10, models.size)
-        val model = modulesLoader.listModels().find { it.uuid == UUID.fromString("da65683e-ff6f-430d-ab68-32a77df72c93") }
-        assertNotNull(model)
-    }
+//    @Test
+//    fun loadLibrary() {
+//        val libraryDir = File("src/test/resources/artifacts_1/org.iets3.opensource")
+//        val modulesLoader = object : ModulesLoader() { }
+//        modulesLoader.loadLibrary(libraryDir)
+//        val module = modulesLoader.findModule("org.iets3.core.expr.toplevel")
+//        assertNotNull(module)
+//        val models = module.models()
+//        assertEquals(10, models.size)
+//        val model = modulesLoader.listModels().find { it.uuid == UUID.fromString("da65683e-ff6f-430d-ab68-32a77df72c93") }
+//        assertNotNull(model)
+//    }
 }
