@@ -3,6 +3,7 @@ package com.strumenta.mps.exporter
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.multiple
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.strumenta.mps.*
 import com.strumenta.mps.organization.Model
@@ -14,6 +15,7 @@ import kotlin.system.exitProcess
 
 class ExporterTool : CliktCommand() {
     val installation by option("-i", "--installation")
+    val verbose by option("-v", "--verbose").flag()
     val destinationPath by option("-d", "--destination", help = "destination for generated files")
     val projectPath by argument("projectPath")
     val models by argument("models", "models to be exported").multiple(required = false)
@@ -59,6 +61,17 @@ class ExporterTool : CliktCommand() {
 
     override fun run() {
         val modulesContainer = modulesContainer()
+        if (verbose) {
+            println("== MODULES CONTAINER - START ==")
+            for (module in modulesContainer.modules) {
+                println()
+                println("Module ${module.name} [${module.uuid}]")
+                for (model in module.models()) {
+                    println("  model ${model.name} [${model.uuid}]")
+                }
+            }
+            println("== MODULES CONTAINER - END ==")
+        }
         if (destinationPath != null && (!File(destinationPath).exists() || !File(destinationPath).isDirectory)) {
             System.err.println("not a valid destination path: $destinationPath")
             exitProcess(-1)
@@ -68,6 +81,9 @@ class ExporterTool : CliktCommand() {
             return
         }
         if (models.contains("all")) {
+            if (verbose) {
+                println("dumping all models")
+            }
             val failed = mutableListOf<String>()
             var succedeed = 0
             if (models.size != 1) {
@@ -79,6 +95,9 @@ class ExporterTool : CliktCommand() {
                     exportModel(modulesContainer, it.name)
                     succedeed++
                 } catch (t: Throwable) {
+                    if (verbose) {
+                        println("FAILED TO EXPORT MODEL ${it.name}: ${t.message} ${t.javaClass.canonicalName}")
+                    }
                     failed.add(it.name)
                 }
             }
